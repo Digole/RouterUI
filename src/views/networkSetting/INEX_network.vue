@@ -123,7 +123,7 @@
               <el-form :model="form" label-position="left" size="small">
 
                 <el-form-item label="工作模式" :label-width="formLabelWidth">
-                  <el-select v-model="form.mode" placeholder="请选择" style="width: 100%;" >
+                  <el-select v-model="form.mode" placeholder="请选择" value="" style="width: 100%;">
                     <el-option
                       v-for="item in modeOptions"
                       :key="item.value"
@@ -134,7 +134,7 @@
                 </el-form-item>
 
                 <el-form-item label="网卡速率" :label-width="formLabelWidth">
-                  <el-select v-model="form.rate" placeholder="请选择" style="width: 100%;">
+                  <el-select v-model="form.rate" placeholder="请选择" value="" style="width: 100%;">
                     <el-option
                       v-for="item in rateOptions"
                       :key="item.value"
@@ -166,7 +166,7 @@
         append-to-body>
         <el-form :model="form" label-position="left" size="small">
           <el-form-item label="接入方式" :label-width="formLabelWidth">
-            <el-select v-model="form.accessMethod" placeholder="请选择" style="width: 100%;" @change="onSelect">
+            <el-select v-model="form.accessMethod" placeholder="请选择" value="" style="width: 100%;" @change="onSelect">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -187,7 +187,7 @@
               <el-button type="primary" @click="dialUp" style="margin-left: 20px">连接</el-button>
             </el-form-item>
           </el-form>
-          <el-form-item label="IP地址" :label-width="formLabelWidth">
+          <el-form-item label="IP地址" :label-width="formLabelWidth" value="">
             <el-input v-model="form.IP" :disabled="ifASDLVisible" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="子网掩码" :label-width="formLabelWidth">
@@ -206,10 +206,10 @@
 
         <!--components of collapse-->
         <el-collapse class="advancedSetting">
-          <el-collapse-item title="高级设置" name="1" >
+          <el-collapse-item title="高级设置" name="1">
             <el-form :model="form" label-position="left" size="small">
               <el-form-item label="工作模式" :label-width="formLabelWidth">
-                <el-select v-model="form.mode" placeholder="请选择" style="width: 100%;">
+                <el-select v-model="form.mode" placeholder="请选择" style="width: 100%;" value="">
                   <el-option
                     v-for="item in modeOptions"
                     :key="item.value"
@@ -219,7 +219,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="网卡速率" :label-width="formLabelWidth">
-                <el-select v-model="form.rate" placeholder="请选择" style="width: 100%;">
+                <el-select v-model="form.rate" placeholder="请选择" style="width: 100%;" value="">
                   <el-option
                     v-for="item in rateOptions"
                     :key="item.value"
@@ -241,7 +241,7 @@
       <!--outer dialog-->
       <el-form :model="form" label-position="left" size="small">
         <el-form-item label="选择功能" :label-width="formLabelWidth">
-          <el-select v-model="form.id" placeholder="请选择内外网">
+          <el-select v-model="form.id" placeholder="请选择内外网" value="">
             <el-option label="LAN（内网）" value="LAN"></el-option>
             <el-option label="WAN（外网）" value="WAN"></el-option>
           </el-select>
@@ -277,7 +277,7 @@
           mode:'1',                       //工作模式
           rate:'1',                       //网卡速率 lan
           control:'',                     //lan互访控制
-          accessMethod:'1',               //接入方式
+          accessMethod: 1,               //接入方式
           primaryDNS:'',                  //首选DNS
           secondaryDNS:'',                //备选DNS
           status:'未连接'                 //连接状态，ASDL使用该属性
@@ -347,7 +347,7 @@
           },
         ],
         ports: [{
-          "id":"0", "category":"", imgUrl:"static/port3.png"
+          "index":"0", "category":"", imgUrl:"static/port3.png"
         }],
 
         formLabelWidth: '100px',
@@ -358,7 +358,7 @@
     },
     methods: {
       selectUrl(para) {
-        if(para == "空闲")
+        if(para === "空闲")
         {
           return "static/port2.png"
         }
@@ -375,23 +375,25 @@
         this.formDialUp.handle = 1;
 
         let para = Object.assign({}, this.formDialUp);
-        console.log(" in process of dialUp submit")
+        console.log("in process of dialUp submit");
         console.log(para);
         console.log(typeof(para));
 
-        dialUp(para).then((res) => {
+        dialUp(para).then(res);
+
+        function res() {
           this.$message({
             message: '提交成功',
             type: 'success'
           });
-        });
+        }
 
         this.stopSignal = setInterval( () =>{
           dialUp().then((res) => {
             console.log("response res:"+res);
             console.log("response res.data:"+res.data);
             console.log("response res.data.status:"+res.data.status);
-            if(res.data.status == 200) {
+            if(res.data.status === 200) {
               this.$refs['formDialUp'].resetFields();
               clearInterval( this.stopSignal );
 
@@ -402,7 +404,7 @@
               return true;
             }
           })
-        }, 1000)
+        }, 1000);
         // keep dialog alive
         this.WANInnerVisible = true;
         this.dialogFormVisible = true;
@@ -431,10 +433,10 @@
       },
 
       NextStep: function() {
-        if(this.form.id == "LAN"){
+        if(this.form.id === "LAN"){
           this.LANInnerVisible = true;
         }
-        else if(this.form.id == "WAN"){
+        else if(this.form.id === "WAN"){
           this.WANInnerVisible = true;
         }
       },
@@ -475,7 +477,7 @@
 
         let para = Object.assign({}, this.formDialUp);
         console.log("in form unbind "+this.formDialUp.handle);
-        dialUp(para).then((res) => {
+        dialUp(para).then(() => {
           this.$message({
             message: '解绑成功',
             type: 'success'
@@ -485,7 +487,7 @@
       },
 
       onSelect: function() {
-        if(this.form.accessMethod == 3)
+        if(this.form.accessMethod === 3)
         {
           console.log("select ASDL");
           this.ifASDLVisible = true;
@@ -605,7 +607,7 @@
   }
   .text{
     font-weight: bold;
-    margin: 0px;
+    margin: 0;
   }
 
   .advancedSetting{
@@ -617,7 +619,7 @@
   }
 
   h2{
-    font-family: Roboto-Thin;
+    font-family: Roboto-Thin,serif;
   }
 
   @font-face{
