@@ -498,7 +498,7 @@
 
       getPortsInfo: function() {
         getPorts().then((res) => {
-          this.ports = res.interfaces;
+          this.ports = res.data.ports;
           console.log("ports response "+res);
           console.log("ports response data"+res.interfaces);
           console.log(this.ports);
