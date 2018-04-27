@@ -27,7 +27,7 @@
             <el-submenu :index="index+''" v-if="!item.leaf">
               <template slot="title">
                 <i :class="item.iconCls"></i>
-                <span solt="title" style="color:#aabba1;">{{item.name}}</span>
+                <span style="color:#aabba1;">{{item.name}}</span>
               </template>
               <el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden" @click="$router.push(child.path)">
                 {{child.name}}
@@ -35,7 +35,7 @@
             </el-submenu>
             <el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path" @click="$router.push(item.children[0].path)">
               <i :class="item.iconCls"></i>
-              <span solt="title" style="color:#aabba1;">{{item.children[0].name}}</span>
+              <span style="color:#aabba1;">{{item.children[0].name}}</span>
             </el-menu-item>
           </template>
         </el-menu>
@@ -136,7 +136,7 @@
       },
 
       startSystem: function(){
-        /*
+
         setInterval(() => {
           getSystem().then((res) => {
             this.system = res.data.system;
@@ -147,7 +147,7 @@
             //console.log(this.$store.state.RAMRate);
           })
         },1000);
-        */
+
       },
     },
 
@@ -177,8 +177,8 @@
   }
   .container {
     position: absolute;
-    top: 0px;
-    bottom: 0px;
+    top: 0;
+    bottom: 0;
     width: 100%;
     .header {
       height: 60px;
@@ -196,7 +196,7 @@
             width: 40px;
             height: 40px;
             border-radius: 20px;
-            margin: 10px 0px 10px 10px;
+            margin: 10px 0 10px 10px;
             float: right;
           }
         }
@@ -226,7 +226,7 @@
         width:65px
       }
       .tools{
-        padding: 0px 23px;
+        padding: 0 23px;
         width:14px;
         height: 60px;
         line-height: 60px;
@@ -238,7 +238,7 @@
       // background: #324057;
       position: absolute;
       top: 60px;
-      bottom: 0px;
+      bottom: 0;
       overflow: hidden;
       aside {
         flex:0 0 200px;
@@ -256,7 +256,7 @@
           }
           .submenu{
             position:absolute;
-            top:0px;
+            top:0;
             left:65px;
             z-index:99999;
             height:auto;
