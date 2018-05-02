@@ -19,8 +19,7 @@
             </el-form>
         </el-col>
 
-        <el-table :data="users" @selection-change="selsChange" style="width: 100%;"
-                  :header-cell-style="headerStyle">
+        <el-table style="width: 100%;" :header-cell-style="headerStyle">
             <el-table-column prop="line" label="线路" min-width="120" >
             </el-table-column>
             <el-table-column prop="targetAddress" label="目的地址" min-width="180">
@@ -85,11 +84,7 @@
         },
         methods: {
           headerStyle() {
-            return {
-              "background-color": "#626c91",
-              "color": "white",
-              "font-weight": "normal",
-            };
+            return this.header();
           },
             //显示新增界面
             handleAdd: function () {

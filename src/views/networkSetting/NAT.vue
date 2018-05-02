@@ -51,11 +51,7 @@
         name: "NAT",
       methods:{
         headerStyle() {
-          return {
-            "background-color": "#626c91",
-            "color": "white",
-            "font-weight": "normal",
-          };
+          return this.header();
         },
       }
     }

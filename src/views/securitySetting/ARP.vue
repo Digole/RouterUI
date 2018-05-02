@@ -23,12 +23,7 @@
     name: "ARP",
     methods:{
       headerStyle() {
-        return {
-          "background-color": "#626c91",
-          "color": "white",
-          "font-weight": "normal",
-          "height":"10px",
-        };
+        return this.header();
       },
     }
   }
