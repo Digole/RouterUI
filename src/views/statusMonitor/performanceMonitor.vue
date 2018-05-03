@@ -42,7 +42,6 @@
     },
 
     methods: {
-
       headerStyle() {
         return this.header();
       },

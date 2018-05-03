@@ -107,8 +107,13 @@
           <el-form-item label="子网掩码" :label-width="formLabelWidth">
             <el-input v-model="form.mask" auto-complete="off" placeholder="255.255.255.0"></el-input>
           </el-form-item>
+          <el-form-item label="网关" :label-width="formLabelWidth">
+            <el-input v-model="form.gateway" auto-complete="off" placeholder=""></el-input>
+          </el-form-item>
+
 
           <!--router pic in LAN setting-->
+          <!--
           <div class="routerInDialog">
             <div v-for="(item, index) in ports" class="portInDialog">
               <div>
@@ -116,6 +121,7 @@
               </div>
             </div>
           </div>
+          -->
 
           <!--components of collapse-->
           <el-collapse class="advancedSetting">
@@ -274,10 +280,11 @@
           use: '',                        //选择功能LAN/WAN
           IP:'',
           mask:'',                        //子网掩码
+          gateway:'',                     //网关
           mode:'1',                       //工作模式
           rate:'1',                       //网卡速率 lan
           control:'',                     //lan互访控制
-          accessMethod: 1,               //接入方式
+          accessMethod: "1",              //接入方式
           primaryDNS:'',                  //首选DNS
           secondaryDNS:'',                //备选DNS
           status:'未连接'                 //连接状态，ASDL使用该属性
@@ -287,7 +294,7 @@
           account: '',
           passwd: '',
           status: '未连接',
-          handle: 0,
+          handle: 0,            //后台用,勿删
         },
         tooltip: {
           number: ''
@@ -304,14 +311,6 @@
           {
             value:'3',
             label:'ASDL/PPPoE拨号'
-          },
-          {
-            value:'4',
-            label:'基于物理网卡的混合模式'
-          },
-          {
-            value:'5',
-            label:'基于物理网卡的混合模式'
           }
         ],
         modeOptions:[
@@ -455,7 +454,8 @@
         //dataBind();
         this.formDialUp.handle = 1;
         let index = this.form.number;
-        this.ports[index].imgUrl = "static/port3.png";
+        //change icon status, need to finish
+        this.ports[index].category = "1";
         clearInterval( this.stopSignal );
         //buttonChange();
         this.loading = false;
@@ -472,7 +472,7 @@
         this.loading = false;
         //dataBind
         let index = this.form.number;
-        this.ports[index].imgUrl = "static/port2.png";
+        this.ports[index].category = "空闲";    //change icon status
         this.formDialUp.handle = 0;
 
         let para = Object.assign({}, this.formDialUp);
@@ -487,7 +487,7 @@
       },
 
       onSelect: function() {
-        if(this.form.accessMethod === 3)
+        if(this.form.accessMethod === "3")
         {
           console.log("select ASDL");
           this.ifASDLVisible = true;

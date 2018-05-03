@@ -1,7 +1,19 @@
 <template>
   <div>
     <div class="line_02"><span>ARP绑定</span></div>
-    <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;" :header-cell-style="headerStyle">
+
+    <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
+      <el-form :inline="true">
+        <el-form-item>
+          <el-button type="primary" @click="handleAdd">添加</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="danger">删除</el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+
+    <el-table style="width: 100%;" :header-cell-style="headerStyle">
       <el-table-column prop="IP" label="IP" min-width="120" >
       </el-table-column>
       <el-table-column prop="MAC" label="MAC" min-width="180">

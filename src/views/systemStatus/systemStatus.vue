@@ -78,7 +78,7 @@
             </div>
             <div class="middleBottom">
               <div class="router">
-                <div v-for="(item, index) in ports" class="port">
+                <div v-for="(item, index) in ports" class="port"  @click="pushToINEX">
                   <div>
                     <el-tooltip class="item" effect="light">
                       <img style="width: 50px; height: 50px; border-radius: 5px;" :src=selectUrl(item.category) />
@@ -158,7 +158,7 @@
                 <p>协议流量分布</p>
               </div>
               <div style="float: right; margin: 10px 10px; width: 100px;">
-                <el-select v-model="value" placeholder="请选择" size="mini">
+                <el-select v-model="value" placeholder="请选择" size="mini" value="">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -228,6 +228,10 @@
           console.log(res);
           console.log(this.ports);
         });
+      },
+
+      pushToINEX: function() {
+        this.$router.push({ path: '../INEX_network' });
       },
 
       drawLineChart1: function(){

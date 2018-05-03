@@ -1,7 +1,10 @@
 <template>
   <div class="backgroundDiv">
-    <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
-      <h1 class="title">OpenRT</h1>
+    <div class="pic">
+      <img src="../../static/logo.png" />
+    </div>
+    <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0" class="demo-ruleForm login-container">
+      <p class="title">OpenRT</p>
       <el-form-item prop="account">
         <el-input style="color: #ffffff" type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
@@ -53,7 +56,7 @@
       handleReset2() {
         this.$refs.ruleForm2.resetFields();
       },
-      handleSubmit2(ev) {
+      handleSubmit2() {
         const user = [
           {
             id: 1,
@@ -62,15 +65,15 @@
             avatar: 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png',
             name: 'OpenRT'
           }
-      ];
-          sessionStorage.setItem('user', JSON.stringify(user));
-        var _this = this;
+        ];
+        sessionStorage.setItem('user', JSON.stringify(user));
+        //let _this = this;
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
             //_this.$router.replace('/table');
             this.logining = true;
             //NProgress.start();
-            var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
+            let loginParams = {username: this.ruleForm2.account, password: this.ruleForm2.checkPass};
             requestLogin(loginParams).then(data => {
               console.log("login response:"+data);
               this.logining = false;
@@ -104,19 +107,26 @@
 <style lang="scss" scoped>
   .backgroundDiv {
     position: absolute;
-    top: 0px;
-    bottom: 0px;
-    height: 100%;
+    top: 0;
+    bottom: 0;
     width: 100%;
-    background: url(../../static/bg+logo.jpg);
+    background: url(../../static/bg.jpg);
+    background-size: 100% 100%;
   }
+
+  .pic{
+    opacity:0.7;
+    text-align: center;
+    margin-top: 180px;
+  }
+
   .login-container {
     /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
     -webkit-border-radius: 5px;
     border-radius: 5px;
     -moz-border-radius: 5px;
     background-clip: padding-box;
-    margin: 280px auto;
+    margin: 20px auto;
     width: 320px;
     padding: 35px 35px 15px 35px;
     //background: #fff;
@@ -126,14 +136,15 @@
     opacity:0.7;
     color: white;
     .title {
-      margin: 0px auto 40px auto;
+      margin: 20px auto;
       text-align: center;
       //color: #505458;
       color: white;
+      font-size: 20px;
       font-weight: bold;
     }
     .remember {
-      margin: 0px 0px 35px 0px;
+      margin: 0 0 35px 0;
       width: 75%;
       color: white;
     }

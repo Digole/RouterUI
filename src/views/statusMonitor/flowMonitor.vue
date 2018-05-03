@@ -193,11 +193,11 @@
 
       drawLineChart2: function(){
         let myChart = flowMonitor.init(document.getElementById('chartLine2'),"walden");
-        console.log("timeInterval123： "+timeInterval);
+        //console.log("timeInterval123： "+timeInterval);
 
         function randomData() {
           now = new Date(+now + timeInterval);
-          console.log("timeInterval： "+timeInterval);
+          //console.log("timeInterval： "+timeInterval);
           value = Math.random()*100;
           return {
             name: now.toString(),

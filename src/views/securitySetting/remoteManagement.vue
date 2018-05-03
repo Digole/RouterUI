@@ -7,17 +7,17 @@
       </div>
       -->
     <div>
-      <el-col :span="24" class="toolbar" style="padding-bottom: 0px; background-color: #EEF6F6">
-        <el-form :inline="true" :model="filters">
+      <el-col :span="24" class="toolbar">
+        <el-form :inline="true">
           <el-form-item>
-            <el-button type="danger" >添加</el-button>
+            <el-button type="primary" >添加</el-button>
           </el-form-item>
           <el-form-item>
             <el-button type="danger" right>删除</el-button>
           </el-form-item>
         </el-form>
       </el-col>
-      <el-table :data="hardwareInfo" style="width: 100%">
+      <el-table style="width: 100%" :header-cell-style="headerStyle">
         <el-table-column prop="IP"  label="IP" min-width="180">
         </el-table-column>
         <el-table-column prop="time"  label="时间" min-width="180">
@@ -37,17 +37,17 @@
       </div>
       -->
     <div>
-      <el-col :span="24" class="toolbar" style="padding-bottom: 0px; background-color: #EEF6F6">
-        <el-form :inline="true" :model="filters">
+      <el-col :span="24" class="toolbar">
+        <el-form :inline="true">
           <el-form-item>
-            <el-button type="danger" >添加</el-button>
+            <el-button type="primary" >添加</el-button>
           </el-form-item>
           <el-form-item>
             <el-button type="danger" right>删除</el-button>
           </el-form-item>
         </el-form>
       </el-col>
-      <el-table :data="hardwareInfo" style="width: 100%">
+      <el-table style="width: 100%" :header-cell-style="headerStyle">
         <el-table-column prop="IP"  label="IP" min-width="180">
         </el-table-column>
         <el-table-column prop="time"  label="时间" min-width="180">
@@ -61,11 +61,16 @@
       </el-table>
     </div>
   </div>
-</template>
+</template>s
 
 <script>
   export default {
-    name: "remoteManage"
+    name: "remoteManage",
+    methods:{
+      headerStyle() {
+        return this.header();
+      },
+    }
   }
 </script>
 

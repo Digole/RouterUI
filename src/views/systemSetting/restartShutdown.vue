@@ -2,7 +2,7 @@
     <section>
       <div class="line_02"><span>重启关机</span></div>
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-            <el-form :inline="true" :model="filters">
+            <el-form :inline="true">
                 <el-form-item>
                     <el-button type="danger" >立即重启</el-button>
                 </el-form-item>
@@ -17,7 +17,7 @@
                 </el-form-item>
             </el-form>
         </el-col>
-        <el-table :data="hardwareInfo" style="width: 100%">
+        <el-table style="width: 100%">
             <el-table-column prop="behaviour"  label="事件" min-width="180">
             </el-table-column>
             <el-table-column prop="time"  label="预设时间" min-width="360">
