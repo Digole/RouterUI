@@ -52,10 +52,14 @@
           <el-input v-model="addForm.gateway" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="类型" prop="category">
-          <el-checkbox-group v-model="addForm.category">
-            <el-checkbox label="-host"></el-checkbox>
-            <el-checkbox label="-net"></el-checkbox>
-          </el-checkbox-group>
+          <el-select v-model="addForm.category" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="metric" prop="metric">
           <el-input v-model="addForm.primaryDNS" auto-complete="off"></el-input>
@@ -85,10 +89,17 @@
           address: '',
           subnetMask: '',
           gateway: '',
-          category:[],
+          category:'',
           metric: '',
           note: ''
-        }
+        },
+        options: [{
+          value: '选项1',
+          label: '-host'
+        }, {
+          value: '选项2',
+          label: '-net'
+        }],
       }
     },
     methods: {
@@ -98,15 +109,6 @@
       //显示新增界面
       handleAdd: function () {
         this.addFormVisible = true;
-        this.addForm = {
-          line: '',
-          address: '',
-          subnetMask: '',
-          gateway: '',
-          category:[],
-          metric: '',
-          note: ''
-        };
       },
     }
   }

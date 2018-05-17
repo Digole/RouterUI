@@ -2,10 +2,13 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { LoginUsers, Users } from './data/user';
 import { ports, dialUp } from './data/ports';
+import { alias, mapping } from './data/system';
 import Mock from "mockjs";
 let _Users = Users;
 let _ports = ports;
-let _dialUp = dialUp;
+let _alias = alias;
+let _mapping = mapping;
+//let _dialUp = dialUp;
 
 // console.log(Users);
 // console.log(system);
@@ -14,7 +17,7 @@ export default {
   /**
    * mock bootstrap
    */
-  bootstrap() {
+  bootstrap: function () {
     let mock = new MockAdapter(axios);
 
     // mock success request
@@ -42,9 +45,9 @@ export default {
           });
 
           if (hasUser) {
-            resolve([200, { code: 200, msg: '请求成功', user }]);
+            resolve([200, {code: 200, msg: '请求成功', user}]);
           } else {
-            resolve([200, { code: 500, msg: '账号或密码错误' }]);
+            resolve([200, {code: 500, msg: '账号或密码错误'}]);
           }
         }, 1000);
       });
@@ -54,8 +57,7 @@ export default {
     mock.onGet('/user/list').reply(config => {
       let {name} = config.params;
       let mockUsers = _Users.filter(user => {
-        if (name && user.name.indexOf(name) == -1) return false;
-        return true;
+        return (name && user.name.indexOf(name) === -1)
       });
       return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -70,8 +72,7 @@ export default {
     mock.onGet('/user/listpage').reply(config => {
       let {page, name} = config.params;
       let mockUsers = _Users.filter(user => {
-        if (name && user.name.indexOf(name) == -1) return false;
-        return true;
+        return (name && user.name.indexOf(name) === -1)
       });
       let total = mockUsers.length;
       mockUsers = mockUsers.filter((u, index) => index < 20 * page && index >= 20 * (page - 1));
@@ -87,7 +88,7 @@ export default {
 
     //删除用户
     mock.onGet('/user/remove').reply(config => {
-      let { id } = config.params;
+      let {id} = config.params;
       _Users = _Users.filter(u => u.id !== id);
       return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -101,7 +102,7 @@ export default {
 
     //批量删除用户
     mock.onGet('/user/batchremove').reply(config => {
-      let { ids } = config.params;
+      let {ids} = config.params;
       ids = ids.split(',');
       _Users = _Users.filter(u => !ids.includes(u.id));
       return new Promise((resolve, reject) => {
@@ -116,7 +117,7 @@ export default {
 
     //编辑用户
     mock.onGet('/user/edit').reply(config => {
-      let { id, name, addr, age, birth, sex } = config.params;
+      let {id, name, addr, age, birth, sex} = config.params;
       _Users.some(u => {
         console.log(u);
         if (u.id === id) {
@@ -140,7 +141,7 @@ export default {
 
     //新增用户
     mock.onGet('/user/add').reply(config => {
-      let { name, addr, age, birth, sex } = config.params;
+      let {name, addr, age, birth, sex} = config.params;
       _Users.push({
         name: name,
         addr: addr,
@@ -162,21 +163,22 @@ export default {
       let mockSystem = [
         Mock.mock(
           {
-            'CPURate|20-80.1':1,
-            'RAMRate|20-80.1':1,
+            'CPURate|20-80.1': 1,
+            'RAMRate|20-80.1': 1,
           }
         )
       ];
       // console.log(_system);
-      return new Promise((resolve, reject) =>{
+      return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve([200, {
-          system: mockSystem
+            system: mockSystem
           }]);
         }, 100);
       });
     });
 
+    //ports info
     mock.onPost('/api/ports').reply(config => {
       let ports = _ports;
 
@@ -184,12 +186,12 @@ export default {
         resolve([200, {
           ports: ports
         }]);
-      },500);
+      }, 500);
     });
 
     //dialup
     mock.onPost('/api/dialUp').reply(config => {
-      let{ index, account, passwd, status } = config.data;
+      let {index, account, passwd, status} = config.data;
       console.log(index)
       console.log(config);
       console.log(typeof(config))
@@ -199,7 +201,177 @@ export default {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve([200, {
-          form: config.data
+            form: config.data
+          }]);
+        }, 500);
+      });
+    });
+
+    //alias info
+    mock.onPost('/api/alias').reply(config => {
+      console.log("config.data is "+config.data);
+      config.data = JSON.parse(config.data);
+
+      let {page} = config.data;
+
+      let total = _alias.length;
+      let mockAlias = _alias.filter((a, id) => id < 5 * page && id >= 5 * (page - 1));
+
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            total: total,
+            alias: mockAlias,
+          }]);
+        }, 1000);
+      });
+    })
+
+    //edit alias info
+    mock.onPost('/api/editAlias').reply(config => {
+      console.log("config.data is "+config.data);
+      config.data = JSON.parse(config.data);
+
+      let { id, aliasAddress, initialAddress, endAddress } = config.data;
+      _alias.some(a => {
+        console.log("let see what a is:"+a);
+        if (a.id === id) {
+          a.aliasAddress = aliasAddress;
+          a.initialAddress = initialAddress;
+          a.endAddress = endAddress;
+          return true;
+        }
+      });
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '编辑成功'
+          }]);
+        }, 500);
+      });
+
+    })
+
+    //add alias info
+    mock.onPost('/api/addAlias').reply(config => {
+      console.log("in add  config.data is "+config.data);
+
+      config.data = JSON.parse(config.data);
+      _alias.unshift({
+        id: Mock.Random.guid(),
+        aliasAddress: config.data.aliasAddress,
+        initialAddress:config.data.initialAddress,
+        endAddress: config.data.endAddress
+      });
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '新增成功'
+          }]);
+        }, 500);
+      });
+    });
+
+    //del alias info
+    mock.onPost('/api/delAlias').reply(config => {
+      config.data = JSON.parse(config.data);
+      console.log("in del config.data is "+config.data.ids);
+      let {ids} = config.data;
+      //ids = ids.split(',');
+      _alias = _alias.filter(u => !ids.includes(u.id));
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '删除成功'
+          }]);
+        }, 500);
+      });
+    });
+
+    //mapping info
+    mock.onPost('/api/mapping').reply(config => {
+      config.data = JSON.parse(config.data);
+      let {page} = config.data;
+
+      let total = _mapping.length;
+      let mockMapping = _mapping.filter((a, id) => id < 5 * page && id >= 5 * (page - 1));
+
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            total: total,
+            mapping: mockMapping,
+          }]);
+        }, 1000);
+      });
+    })
+
+    //edit mapping info
+    mock.onPost('/api/editMapping').reply(config => {
+      console.log("config.data is "+config.data);
+      config.data = JSON.parse(config.data);
+
+      let { id, outerPort, innerPort, innerInitialIP, numOfInner, protocol } = config.data;
+      _mapping.some(m => {
+        if (m.id === id) {
+          console.log("find it! id is: "+id);
+          m.outerPort = outerPort;
+          m.innerPort = innerPort;
+          m.innerInitialIP = innerInitialIP;
+          m.numOfInner = numOfInner;
+          m.protocol = protocol;
+          return true;
+        }
+      });
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '编辑成功'
+          }]);
+        }, 500);
+      });
+
+    })
+
+    //add mapping info
+    mock.onPost('/api/addMapping').reply(config => {
+      console.log("in add  config.data is "+config.data);
+
+      config.data = JSON.parse(config.data);
+      _mapping.unshift({
+        id: Mock.Random.guid(),
+        outerPort: config.data.outerPort,
+        innerPort:config.data.innerPort,
+        innerInitialIP: config.data.innerInitialIP,
+        numOfInner: config.data.numOfInner,
+        protocol: config.data.protocol,
+      });
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '新增成功'
+          }]);
+        }, 500);
+      });
+    });
+
+    //del mapping info
+    mock.onPost('/api/delMapping').reply(config => {
+      config.data = JSON.parse(config.data);
+      console.log("in del config.data is "+config.data.ids);
+      let {ids} = config.data;
+      //ids = ids.split(',');
+      _mapping = _mapping.filter(u => !ids.includes(u.id));
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '删除成功'
           }]);
         }, 500);
       });

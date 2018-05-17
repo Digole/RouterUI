@@ -298,7 +298,7 @@
       this.drawCharts()
     },
     updated: function () {
-      this.drawCharts()
+      //this.drawCharts()
     }
   }
 </script>

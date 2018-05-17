@@ -27,19 +27,19 @@
             <p>连接状态</p>
             <div class="topRightBottom">
               <div class="topRightBottomText">
-                <p style="font-size: 30px;">1</p>
+                <p style="font-size: 36px;">1</p>
                 <p>终端在线</p>
               </div>
               <div class="topRightBottomText">
-                <p style="font-size: 30px">0</p>
+                <p style="font-size: 36px">0</p>
                 <p>终端在线</p>
               </div>
               <div class="topRightBottomText">
-                <p style="font-size: 30px">0</p>
+                <p style="font-size: 36px">0</p>
                 <p>终端在线</p>
               </div>
               <div class="topRightBottomText">
-                <p style="font-size: 30px">0</p>
+                <p style="font-size: 36px">0</p>
                 <p>终端在线</p>
               </div>
 
@@ -59,19 +59,19 @@
               </div>
               <div class="middleLeftTopText">
                 <div class="middleLeftTopTextChild">
-                  <p style="font-size: 30px">1</p>
+                  <p style="font-size: 36px">1</p>
                   <p>Kbps接入带宽</p>
                 </div>
                 <div class="middleLeftTopTextChild">
-                  <p style="font-size: 30px">0</p>
+                  <p style="font-size: 36px">0</p>
                   <p>WAN已启用</p>
                 </div>
                 <div class="middleLeftTopTextChild">
-                  <p style="font-size: 30px">0</p>
+                  <p style="font-size: 36px">0</p>
                   <p>LAN已启用</p>
                 </div>
                 <div class="middleLeftTopTextChild">
-                  <p style="font-size: 30px">0</p>
+                  <p style="font-size: 36px">0</p>
                   <p>DHCP池剩余</p>
                 </div>
               </div>
@@ -109,7 +109,9 @@
                       </div>
                     </el-tooltip>
                     <div class="textArea">
-                      <p class="text">en{{index}}</p>
+                      <p class="text">
+                        <span v-show="item.category !== '空闲'"><svg class="icon"><use :xlink:href=selectIcon(item.category)></use></svg></span>
+                        en{{index}}</p>
                     </div>
                   </div>
                 </div>
@@ -122,25 +124,28 @@
           <div class="middleRight">
             <div style="height: 20%;">
               <p style="float: left;">带宽平均使用率</p>
-              <el-select v-model="value" placeholder="请选择" size="mini" style="width: 100px; float: right; margin: 10px;">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-              <el-select v-model="value" placeholder="请选择" size="mini" style="width: 100px; float: right; margin: 10px;">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
+
+
+
+              <!--<el-select v-model="value" placeholder="请选择" size="mini" style="width: 100px; float: right; margin: 10px;">-->
+                <!--<el-option-->
+                  <!--v-for="item in options"-->
+                  <!--:key="item.value"-->
+                  <!--:label="item.label"-->
+                  <!--:value="item.value">-->
+                <!--</el-option>-->
+              <!--</el-select>-->
+              <!--<el-select v-model="value" placeholder="请选择" size="mini" style="width: 100px; float: right; margin: 10px;">-->
+                <!--<el-option-->
+                  <!--v-for="item in options"-->
+                  <!--:key="item.value"-->
+                  <!--:label="item.label"-->
+                  <!--:value="item.value">-->
+                <!--</el-option>-->
+              <!--</el-select>-->
             </div>
             <div>
-              <span style="font-size: 30px; margin-left: 20px;">0</span><span>%</span>
+              <span style="font-size: 36px; margin-left: 20px;">0</span><span>%</span>
             </div>
 
           </div>
@@ -155,7 +160,7 @@
           <div class="bottomLeft">
             <div style="width:100%; margin: 0; display: inline-block;">
               <div style="float:left;">
-                <p>协议流量分布</p>
+                <p style="margin-left: 20px;">协议流量分布</p>
               </div>
               <div style="float: right; margin: 10px 10px; width: 100px;">
                 <el-select v-model="value" placeholder="请选择" size="mini" value="">
@@ -191,6 +196,7 @@
     name: "systemStatus",
     data() {
       return {
+
         ports: [{
           "id":"0", "category":"", imgUrl:"static/port3.png"
         }],
@@ -213,7 +219,8 @@
 
     methods: {
       selectUrl(para) {
-        if(para == "空闲")
+        // if(para === "空闲")
+        if(para === "NORMAL")
         {
           return "static/port2.png"
         }
@@ -222,12 +229,31 @@
         }
       },
 
+      selectIcon(para) {
+        if (para === "WAN") {
+          return "#icon-zaixian"
+        }
+        else if(para === "LAN") {
+          return "#icon-pc"
+        }
+        else {
+          return "#";
+        }
+      },
+
       getPortsInfo: function() {
+        // getPorts().then((res) => {
+        //   this.ports = res.data.ports;
+        //   console.log(res);
+        //   console.log(this.ports);
+        // });
+
         getPorts().then((res) => {
-          this.ports = res.data.ports;
-          console.log(res);
-          console.log(this.ports);
+          console.log("get feedback, res.data.interfaces is: "+res.data.interfaces);
+          this.ports = JSON.parse(JSON.stringify(res.data.interfaces));
+          console.log("after parse, the port[] is: "+this.ports);
         });
+
       },
 
       pushToINEX: function() {
@@ -429,7 +455,7 @@
             {
               name:'协议流量分布',
               type:'pie',
-              radius: ['50%', '70%'],
+              radius: ['70%', '80%'],
               avoidLabelOverlap: false,
               label: {
                 normal: {
@@ -439,7 +465,7 @@
                 emphasis: {
                   show: true,
                   textStyle: {
-                    fontSize: '30',
+                    fontSize: '20',
                     fontWeight: 'bold'
                   }
                 }
@@ -560,8 +586,13 @@
   #bottom {
     margin-top: 20px;
     .bottomLeft{
-      height: 330px;
+      height: 350px;
       width: 100%;
+      border: 1px solid lightgrey;
+    }
+    .bottomRight {
+      border: 1px solid lightgrey;
+      height: 350px;
     }
   }
 
@@ -579,11 +610,22 @@
       display: inline-flex;
       text-align: center;
       margin: 10px 10px;
+      img:hover {
+        cursor: pointer;
+      }
     }
-    @font-face{
-      font-family:Roboto-Thin;
-      src: url("../../assets/font/Roboto-Thin.ttf");
-    }
+  }
+
+  .icon {
+    width: 1em; height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+  }
+
+  @font-face{
+    font-family:Roboto-Thin;
+    src: url("../../assets/font/Roboto-Thin.ttf");
   }
 
 </style>

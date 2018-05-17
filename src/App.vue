@@ -16,7 +16,7 @@ export default {
 
 </script>
 
-<style>
+<style lang="scss">
 body {
 	margin: 0px;
 	padding: 0px;
@@ -46,12 +46,9 @@ body {
 }
 
 .toolbar {
-	background: #fff;
-	padding: 10px;
-
-	margin-top: 10px;
+	margin-top: 5px;
 	.el-form-item {
-		margin-bottom: 10px;
+		margin: 5px 10px;
 	}
 }
 

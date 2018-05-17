@@ -17,9 +17,9 @@ import './assets/iconfont/iconfont.js'
 
 
 
-Vue.use(ElementUI)
-Vue.use(VueRouter)
-Vue.use(Vuex)
+Vue.use(ElementUI);
+Vue.use(VueRouter);
+Vue.use(Vuex);
 
 //NProgress.configure({ showSpinner: false });
 
@@ -53,7 +53,7 @@ router.beforeEach((to, from, next) => {
   else{
     next()
   }
-  //next();
+  next();
 })
 //设置一些全局函数
 Vue.prototype.header = function (){

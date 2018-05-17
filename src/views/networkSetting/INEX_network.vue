@@ -56,7 +56,7 @@
           <div v-for="(item, index) in ports" class="port" @click="dialog(index)">
             <div>
               <el-tooltip class="item" effect="light">
-                <img style="width: 60px; height: 50px; border-radius: 5px;" :src=selectUrl(item.category) />
+                <img style="width: 60px; height: 50px; border-radius: 5px;" :src=selectUrl(item.function) />
                 <div slot="content" class="tooltip-content">
                   <h3>en{{index}}</h3>
                   <el-form label-position="left" size="mini">
@@ -157,8 +157,8 @@
           </el-collapse>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="danger" @click="formPrevious">上一步</el-button>
           <el-button type="danger" @click="formCancel">退  出</el-button>
+          <el-button type="danger" @click="formPrevious">上一步</el-button>
           <el-button type="primary" @click="formSubmit">确  定</el-button>
         </div>
       </el-dialog>
@@ -203,10 +203,12 @@
             <el-input v-model="form.gateway" :disabled="ifASDLVisible" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="首选DNS" :label-width="formLabelWidth">
-            <el-input v-model="form.primaryDNS" :disabled="ifASDLVisible" auto-complete="off"></el-input>
+            <el-input v-model="form.primaryDNS" :disabled="ifASDLVisible" auto-complete="off" style="width: 70%;"></el-input>
+            <el-button type="primary" :disabled="ifASDLVisible" @click="pushDNS">设置</el-button>
           </el-form-item>
           <el-form-item label="备选DNS" :label-width="formLabelWidth">
-            <el-input v-model="form.secondaryDNS" :disabled="ifASDLVisible" auto-complete="off"></el-input>
+            <el-input v-model="form.secondaryDNS" :disabled="ifASDLVisible" auto-complete="off" style="width: 70%;"></el-input>
+            <el-button type="primary" :disabled="ifASDLVisible" @click="$router.push({ path: '../DNS' })">设置</el-button>
           </el-form-item>
         </el-form>
 
@@ -254,7 +256,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="danger" @click="formCancel">解 绑</el-button>
+        <el-button type="danger" @click="unbind">解 绑</el-button>
         <el-button type="primary" @click="NextStep">下一步</el-button>
       </div>
     </el-dialog>
@@ -346,7 +348,14 @@
           },
         ],
         ports: [{
-          "index":"0", "category":"", imgUrl:"static/port3.png"
+          ename: "",
+          devname: "",
+          linkstatus: "",
+          function: "",
+          ip: "",
+          netmask: "",
+          mac: "",
+          speed: "",
         }],
 
         formLabelWidth: '100px',
@@ -357,7 +366,8 @@
     },
     methods: {
       selectUrl(para) {
-        if(para === "空闲")
+        // if(para === "空闲")
+        if(para === "NORMAL")
         {
           return "static/port2.png"
         }
@@ -374,9 +384,9 @@
         this.formDialUp.handle = 1;
 
         let para = Object.assign({}, this.formDialUp);
-        console.log("in process of dialUp submit");
-        console.log(para);
-        console.log(typeof(para));
+        // console.log("in process of dialUp submit");
+        // console.log(para);
+        // console.log(typeof(para));
 
         dialUp(para).then(res);
 
@@ -389,9 +399,9 @@
 
         this.stopSignal = setInterval( () =>{
           dialUp().then((res) => {
-            console.log("response res:"+res);
-            console.log("response res.data:"+res.data);
-            console.log("response res.data.status:"+res.data.status);
+            // console.log("response res:"+res);
+            // console.log("response res.data:"+res.data);
+            // console.log("response res.data.status:"+res.data.status);
             if(res.data.status === 200) {
               this.$refs['formDialUp'].resetFields();
               clearInterval( this.stopSignal );
@@ -426,7 +436,7 @@
       },
 
       dialog: function(para){
-        console.log(para);
+        //console.log(para);
         this.form.number = para;
         this.dialogFormVisible = true;
       },
@@ -470,13 +480,24 @@
         //buttonChange
         this.ifButtonVisible = true;
         this.loading = false;
+      },
+
+      unbind: function() {
+        clearInterval( this.stopSignal );
+        //dialogDisappear
+        this.dialogFormVisible = false;
+        this.LANInnerVisible = false;
+        this.WANInnerVisible = false;
+        //buttonChange
+        this.ifButtonVisible = true;
+        this.loading = false;
         //dataBind
         let index = this.form.number;
         this.ports[index].category = "空闲";    //change icon status
         this.formDialUp.handle = 0;
 
         let para = Object.assign({}, this.formDialUp);
-        console.log("in form unbind "+this.formDialUp.handle);
+        // console.log("in form unbind "+this.formDialUp.handle);
         dialUp(para).then(() => {
           this.$message({
             message: '解绑成功',
@@ -489,7 +510,7 @@
       onSelect: function() {
         if(this.form.accessMethod === "3")
         {
-          console.log("select ASDL");
+          // console.log("select ASDL");
           this.ifASDLVisible = true;
           this.formDialUp.index = this.form.number;
         }
@@ -500,11 +521,22 @@
 
       getPortsInfo: function() {
         getPorts().then((res) => {
-          this.ports = res.data.ports;
-          console.log("ports response "+res);
-          console.log("ports response data"+res.interfaces);
-          console.log(this.ports);
+
+          //this.ports = res.data.ports;
+
+          console.log("get feedback, res.data.interfaces is: "+res.data.interfaces);
+          this.ports = JSON.parse(JSON.stringify(res.data.interfaces));
+          console.log("after parse, the port[] is: "+this.ports);
+
+          // console.log("ports response "+res);
+          // console.log("ports response data"+res.interfaces);
+          // console.log(this.ports);
         });
+      },
+
+      pushDNS: function() {
+        this.$store.commit('changeRoutePush', true);
+        this.$router.push({ path: '../DNS' });
       },
 
     },
@@ -522,7 +554,7 @@
     color: #909399;
   }
 
-  .left, .right{
+  .left, .right {
     border: 1px solid lightgrey;
     display: flex;
     padding: 0 20px;
@@ -531,48 +563,51 @@
     align-items: center;
   }
 
-  .icon{
+  .icon {
     width: 10%;
     background-color: green;
   }
 
-  .tip{
+  .tip {
     display: inline-flex;
     width: 30%;
   }
-  .tip1{
+  .tip1 {
     display: inline-flex;
     width: 45%;
   }
 
-  .bottomLine{
+  .bottomLine {
     line-height: 50px;
   }
 
-  .wholeRouter{
-    width: 800px;
+  .wholeRouter {
+    width: 65%;
     border: 1px solid lightgrey;
     background-color: ghostwhite;
     color: #909399;
     display: flex;
   }
-  .power{
+  .power {
     border: 1px solid lightgrey;
     border-radius: 10px;
     text-align: center;
-    margin: auto 20px;
+    margin: auto;
     background-color: dodgerblue;
   }
-  .powerButton{
+  .powerButton {
     width: 60px;
     height:50px;
     margin: 25px 20px;
   }
-  .router{
+  .router {
+    width: 75%;
     border: 1px solid lightgrey;
     border-radius: 10px;
     margin: 10px 20px;
     background-color: lightgoldenrodyellow;
+    display: flex;
+    flex-wrap: wrap;
   }
 
   .routerInDialog {
@@ -583,17 +618,20 @@
     text-align: center;
   }
 
-  .port{
+  .port {
     width: 60px;
     height:50px;
-    border-radius: 5px;
-    background-color: grey;
-    display: inline-flex;
     text-align: center;
-    margin: 25px 20px;
+    margin: 25px auto;
+    flex-grow: 1;
+    border-radius: 5px;
   }
 
-  .portInDialog{
+  .port img:hover {
+    cursor: pointer;
+  }
+
+  .portInDialog {
     width: 60px;
     height:50px;
     border-radius: 5px;
@@ -602,27 +640,28 @@
     margin: 25px 10px;
   }
 
-  .textArea{
+  .textArea {
     margin-top: 0;
   }
-  .text{
+
+  .text {
     font-weight: bold;
     margin: 0;
   }
 
-  .advancedSetting{
+  .advancedSetting {
     margin-bottom: 20px;
   }
-  .tooltip-content{
+  .tooltip-content {
     min-width: 150px;
     border: 0;
   }
 
-  h2{
+  h2 {
     font-family: Roboto-Thin,serif;
   }
 
-  @font-face{
+  @font-face {
     font-family:Roboto-Thin;
     src: url("../../assets/font/Roboto-Thin.ttf");
   }

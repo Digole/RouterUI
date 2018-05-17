@@ -8,7 +8,8 @@ Vue.use(Vuex)
 // 应用初始状态
 const state = {
   count: 10,
-  systemInfo:[{"CPURate":"", "RAMRate":""}]
+  systemInfo:[{"CPURate":"", "RAMRate":""}],
+  routePush: false,
 }
 
 // 定义所需的 mutations
@@ -25,8 +26,8 @@ const mutations = {
   newRAMRate(state, msg){
     state.systemInfo[0].RAMRate = msg;
   },
-  getCPURate(state, msg){
-    msg = state.systemInfo[0].CPURate;
+  changeRoutePush(state, msg){
+    state.routePush = msg;
   }
 }
 

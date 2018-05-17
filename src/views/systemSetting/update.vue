@@ -18,7 +18,7 @@
         <p style="margin-left: 100px;">3.0.6</p>
       </div>
       <p style="display: flex">
-        <span style="margin-left: 50px; width:180px;">SylinuxOS操作系统版本：</span>
+        <span style="margin-left: 50px; width:180px;">SylixOS操作系统版本：</span>
         <span style="margin-left: 100px;">2.0.23</span>
       </p>
     </div>
@@ -38,7 +38,10 @@
 
     <!--检测页面-->
     <el-dialog title="检测" :visible.sync="versionVisual">
-      <p>当前版本为:</p>
+      <p>最新版本为:</p>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary">立即升级</el-button>
+      </div>
     </el-dialog>
 
     <el-dialog title="上传完成" :visible.sync="uploadVisual">
