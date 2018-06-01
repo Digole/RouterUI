@@ -81,7 +81,9 @@
           subnetMask: '',
           gateway: '',
           note: ''
-        }
+        },
+
+        sels: [],
       }
     },
     methods:{
@@ -90,7 +92,10 @@
       },
       handleAdd: function () {
         this.addFormVisible = true;
-      }
+      },
+      selsChange: function (sels) {
+        this.sels = sels;
+      },
     }
   }
 </script>

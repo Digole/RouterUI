@@ -1,14 +1,27 @@
 <template>
   <el-row class="container">
+
     <el-col :span="24" class="header">
-      <el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
+      <el-col :span="5" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
         {{collapsed?'':sysName}}
       </el-col>
-      <el-col :span="10">
+      <el-col :span="11">
         <div class="tools" @click.prevent="collapse" v-model="isCollapse">
           <i class="fa fa-align-justify"></i>
         </div>
       </el-col>
+
+
+      <el-col :span="4">
+      <div>
+        <el-radio-group v-model="lang" size="small">
+          <el-radio label="zh" border>简体中文</el-radio>
+          <el-radio label="en" border>English</el-radio>
+        </el-radio-group>
+      </div>
+      </el-col>
+
+
       <el-col :span="4" class="userinfo">
         <el-dropdown trigger="hover">
           <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
@@ -27,15 +40,15 @@
             <el-submenu :index="index+''" v-if="!item.leaf">
               <template slot="title">
                 <i :class="item.iconCls"></i>
-                <span style="color:#aabba1;">{{item.name}}</span>
+                <span style="color:#aabba1;">{{generateTitle(item.meta.title)}}</span>
               </template>
               <el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden" @click="$router.push(child.path)">
-                {{child.name}}
+                {{generateTitle(child.meta.title)}}
               </el-menu-item>
             </el-submenu>
             <el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path" @click="$router.push(item.children[0].path)">
               <i :class="item.iconCls"></i>
-              <span style="color:#aabba1;">{{item.children[0].name}}</span>
+              <span style="color:#aabba1;">{{generateTitle(item.children[0].meta.title)}}</span>
             </el-menu-item>
           </template>
         </el-menu>
@@ -82,8 +95,10 @@
 
 <script>
   import { getSystem } from '../api/api';
+  import { generateTitle } from '@/utils/i18n';
 
   export default {
+    name: 'home',
     data() {
       return {
         sysName:'OpenRT v0.1',
@@ -142,15 +157,18 @@
             this.system = res.data.system;
             //console.log("in home");
             //console.log(this.system);
-            this.$store.commit('newRAMRate', this.system[0].RAMRate);
-            this.$store.commit('newCPURate', this.system[0].CPURate);
+            //this.$store.commit('newRAMRate', this.system[0].RAMRate);
+            //this.$store.commit('newCPURate', this.system[0].CPURate);
             //console.log(this.$store.state.RAMRate);
           })
         },1000);
-
       },
+
+      generateTitle
     },
 
+    created() {
+    },
     mounted() {
       let user = sessionStorage.getItem('user');
       if (user) {
@@ -158,7 +176,22 @@
         this.sysUserName = user.name || '';
         this.sysUserAvatar = user.avatar || '';
       }
-      this.startSystem();
+      this.sysUserName = "翼辉";
+      this.sysUserAvatar = "static/logo.png";
+      // this.startSystem();
+    },
+    computed: {
+      lang: {
+        get() {
+          console.log('get')
+          return this.$store.state.app.language
+        },
+        set(lang) {
+          console.log('set')
+          this.$i18n.locale = lang
+          this.$store.dispatch('setLanguage', lang)
+        }
+      }
     }
   }
 </script>

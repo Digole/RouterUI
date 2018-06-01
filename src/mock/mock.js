@@ -8,6 +8,7 @@ let _Users = Users;
 let _ports = ports;
 let _alias = alias;
 let _mapping = mapping;
+let code = 500;
 //let _dialUp = dialUp;
 
 // console.log(Users);
@@ -134,7 +135,7 @@ export default {
           resolve([200, {
             code: 200,
             msg: '编辑成功'
-          }]);
+          },]);
         }, 500);
       });
     });
@@ -184,7 +185,8 @@ export default {
 
       return new Promise((resolve, reject) => {
         resolve([200, {
-          ports: ports
+          code: code,
+          interfaces: ports
         }]);
       }, 500);
     });
@@ -376,6 +378,40 @@ export default {
         }, 500);
       });
     });
+
+    //
+    mock.onPost('/api/intAdaHandleAction').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          let data1 = JSON.parse(config.data);
+          console.log("the config.data.flag is "+data1.flag);
+          if(data1.flag === 'last'){
+            code = 200;
+          }
+          else{
+            code = 500;
+          }
+          resolve([200, {
+            code: 200,
+          }]);
+          reject([500,{
+            code: 500,
+          }]);
+        }, 300);
+      });
+    });
+
+    mock.onPost('/action/natAssNodeUseAction').reply(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200,{
+            percent: Math.random()*50,
+            usenode: Math.random()*1000,
+            totalnode: 12228
+          }]);
+        }, 100);
+      })
+    })
 
   }
 };

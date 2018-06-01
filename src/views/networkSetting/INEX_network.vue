@@ -588,6 +588,7 @@
     color: #909399;
     display: flex;
   }
+
   .power {
     border: 1px solid lightgrey;
     border-radius: 10px;

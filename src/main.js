@@ -1,23 +1,29 @@
-//import babelpolyfill from 'babel-polyfill'
 import Vue from 'vue'
+
+import ElementUI from 'element-ui'                            //引用Element-ui
+import 'element-ui/lib/theme-chalk/index.css'                 //引用Element-ui 主题
+
 import App from './App'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
 import VueRouter from 'vue-router'
-import store from './vuex/store'
-import Vuex from 'vuex'
-//import NProgress from 'nprogress'
-//import 'nprogress/nprogress.css'
 import routes from './routes'
+
+import store from './store'
+import Vuex from 'vuex'
+
+// import NProgress from 'nprogress'
+// import 'nprogress/nprogress.css'
 import 'font-awesome/css/font-awesome.min.css'
-import Mock from './mock'
-Mock.bootstrap();
+// import Mock from './mock'
+// Mock.bootstrap();
+
+import i18n from './lang' // Internationalization
+
 import 'font-awesome/css/font-awesome.min.css'
 import './assets/iconfont/iconfont.js'
 
-
-
-Vue.use(ElementUI);
+Vue.use(ElementUI, {
+  i18n: (key, value) => i18n.t(key, value)
+  });
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
@@ -55,6 +61,7 @@ router.beforeEach((to, from, next) => {
   }
   next();
 })
+
 //设置一些全局函数
 Vue.prototype.header = function (){
   return {
@@ -64,6 +71,7 @@ Vue.prototype.header = function (){
     "padding":"3px",
   };
 }
+
 //router.afterEach(transition => {
 //NProgress.done();
 //});
@@ -73,6 +81,7 @@ new Vue({
   template: '<App/>',
   router,
   store,
+  i18n,
   //components: { App }
   render: h => h(App)
 }).$mount('#app')
