@@ -20,7 +20,7 @@
 
 <script>
     export default {
-        name: "current_router"
+      name: 'current_router'
     }
 </script>
 

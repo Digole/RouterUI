@@ -44,10 +44,15 @@
 
 <script>
   export default {
-    name: "BMDisplay",
+    name: 'BMDisplay',
+    data (){
+      return{
+        hardwareInfo: [],
+      }
+    },
     methods:{
       headerStyle() {
-        return this.header();
+        return this.header()
       },
     }
   }

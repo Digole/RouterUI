@@ -27,14 +27,14 @@
 </template>
 
 <script>
-  import flowMonitor from 'echarts';
-  require('echarts/theme/walden');
+  import flowMonitor from 'echarts'
+require('echarts/theme/walden')
 
 
-  let stopSignal = 0;
-  let timeInterval = 1000;
+let stopSignal = 0
+let timeInterval = 1000
 
-  export default {
+export default {
     data() {
       return {
         timeInterval: 1000,
@@ -60,7 +60,7 @@
     methods: {
 
       drawLineChart1: function () {
-        let myChart = flowMonitor.init(document.getElementById('chartLine1'),"light");
+        let myChart = flowMonitor.init(document.getElementById('chartLine1'),'light')
 
         let option = {
           title: {
@@ -102,14 +102,14 @@
               type: 'category',
               boundaryGap: true,
               data: (function (){
-                let now = new Date();
-                let res = [];
-                let len = 12;
+                let now = new Date()
+                let res = []
+                let len = 12
                 while (len--) {
-                  res.unshift(now.toLocaleTimeString().replace(/^\D*/,''));
-                  now = new Date(now - 2000);
+                  res.unshift(now.toLocaleTimeString().replace(/^\D*/,''))
+                  now = new Date(now - 2000)
                 }
-                return res;
+                return res
               })()
             },
           yAxis: [
@@ -138,12 +138,12 @@
               //xAxisIndex: 1,
               yAxisIndex: 1,
               data:(function (){
-                let res = [];
-                let len = 12;
+                let res = []
+                let len = 12
                 while (len--) {
-                  res.push(Math.round(Math.random() * 1000));
+                  res.push(Math.round(Math.random() * 1000))
                 }
-                return res;
+                return res
               })()
             },
             {
@@ -151,54 +151,54 @@
               type:'line',
               smooth: true ,
               data:(function (){
-                let res = [];
-                let len = 0;
+                let res = []
+                let len = 0
                 while (len < 12) {
-                  res.push(Math.round(Math.random() * 1000));
-                  len++;
+                  res.push(Math.round(Math.random() * 1000))
+                  len++
                 }
-                return res;
+                return res
               })()
             }
           ]
-        };
+        }
 
-        app.count = 11;
+        // app.count = 11
 
-        myChart.setOption(option);
+        myChart.setOption(option)
 
         setInterval(function (){
-          let axisData = (new Date()).toLocaleTimeString().replace(/^\D*/,'');
+          let axisData = (new Date()).toLocaleTimeString().replace(/^\D*/,'')
 
-          let data0 = option.series[0].data;
-          let data1 = option.series[1].data;
-          data0.shift();
-          data0.push(Math.round(Math.random() * 1000));
-          data1.shift();
-          data1.push(Math.round(Math.random() * 1000));
+          let data0 = option.series[0].data
+          let data1 = option.series[1].data
+          data0.shift()
+          data0.push(Math.round(Math.random() * 1000))
+          data1.shift()
+          data1.push(Math.round(Math.random() * 1000))
 
-          option.xAxis.data.shift();
-          option.xAxis.data.push(axisData);
+          option.xAxis.data.shift()
+          option.xAxis.data.push(axisData)
           //option.xAxis[1].data.shift();
           //option.xAxis[1].data.push(app.count++);
           //option.xAxis[1].data.push(axisData);
 
-          myChart.setOption(option);
-        }, 2100);
+          myChart.setOption(option)
+        }, 2100)
 
         window.onresize = function() {
-          myChart.resize();
+          myChart.resize()
         }
       },
 
       drawLineChart2: function(){
-        let myChart = flowMonitor.init(document.getElementById('chartLine2'),"walden");
+        let myChart = flowMonitor.init(document.getElementById('chartLine2'),'walden')
         //console.log("timeInterval123： "+timeInterval);
 
         function randomData() {
-          now = new Date(+now + timeInterval);
+          now = new Date(+now + timeInterval)
           //console.log("timeInterval： "+timeInterval);
-          value = Math.random()*100;
+          value = Math.random()*100
           return {
             name: now.toString(),
             value: [
@@ -207,12 +207,12 @@
             ]
           }
         }
-        let data = [];
-        let now = new Date();
-        let value = 0;
+        let data = []
+        let now = new Date()
+        let value = 0
         for (let i = 0; i < this.duration/60; i++) {
-          console.log("duration:"+this.duration);
-          data.push(randomData());
+          console.log('duration:'+this.duration)
+          data.push(randomData())
         }
 
         let option = {
@@ -222,9 +222,9 @@
           tooltip: {
             trigger: 'axis',
             formatter: function (params) {
-              params = params[0];
-              let date = new Date(params.name);
-              return date.getHours() + ':' + date.getMinutes() + ' : ' + params.value[1];
+              params = params[0]
+              let date = new Date(params.name)
+              return date.getHours() + ':' + date.getMinutes() + ' : ' + params.value[1]
             },
             axisPointer: {
               animation: false
@@ -261,36 +261,36 @@
             hoverAnimation: false,
             data: data
           }]
-        };
+        }
         /*
-                data.shift();
-                data.push(randomData());
-                myChart.setOption(option);
-        */
+              data.shift();
+              data.push(randomData());
+              myChart.setOption(option);
+      */
         stopSignal = setInterval(function () {
-          console.log("in interval "+stopSignal);
-          data.shift();
-          data.push(randomData());
-          myChart.setOption(option);
-        }, 2000);
-        window.addEventListener("resize",function() {
-          myChart.resize();
-        });
+          console.log('in interval '+stopSignal)
+          data.shift()
+          data.push(randomData())
+          myChart.setOption(option)
+        }, 2000)
+        window.addEventListener('resize',function() {
+          myChart.resize()
+        })
       },
 
       onSelect: function(){
-        this.duration = this.value;
+        this.duration = this.value
         timeInterval = this.value
-        console.log("in clear "+stopSignal);
-        clearInterval(stopSignal);
-        this.drawLineChart2();
-        console.log("in select");
-        console.log("in select"+ timeInterval);
+        console.log('in clear '+stopSignal)
+        clearInterval(stopSignal)
+        this.drawLineChart2()
+        console.log('in select')
+        console.log('in select'+ timeInterval)
       },
 
       drawCharts() {
-        this.drawLineChart1();
-        this.drawLineChart2();
+        this.drawLineChart1()
+        this.drawLineChart2()
       },
     },
 

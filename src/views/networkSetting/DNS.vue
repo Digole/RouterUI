@@ -19,7 +19,7 @@
 
 <script>
   export default {
-    name: "DNS",
+    name: 'DNS',
     data() {
       return {
         buttonValue: '',
@@ -37,33 +37,33 @@
     },
     methods: {
       changeValue: function() {
-        let value = '';
-        console.log(this.$store.state.routePush);
+        let value = ''
+        console.log(this.$store.state.routePush)
         if(this.$store.state.routePush) {
-          value = "保存并返回"
+          value = '保存并返回'
         }
         else{
-          value = "保存"
+          value = '保存'
         }
-        console.log("value is: "+value);
-        return value;
+        console.log('value is: '+value)
+        return value
       },
 
       handle: function() {
-        if(this.buttonValue === "保存"){
-          console.log(this.buttonValue);
-          //待添加dns请求
+        if(this.buttonValue === '保存'){
+          console.log(this.buttonValue)
+        //待添加dns请求
         }
         else{
           //待添加dns请求
           console.log(this.buttonValue)
-          this.$router.push({ path: '../INEX_network' });
+          this.$router.push({ path: '../INEX_network' })
         }
       }
     },
 
     mounted() {
-      this.buttonValue = this.changeValue();
+      this.buttonValue = this.changeValue()
 
     },
   }

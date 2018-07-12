@@ -7,40 +7,40 @@
           <div class="topLeft">
             <div class="topLeftLeft">
               <p style="padding-top: 20px;">OpenRT</p>
-              <p style="font-size: 30px; margin: 10px 20px;">未配置</p>
-              <p>外网</p>
-              <p>已运行:</p>
+              <p style="font-size: 30px; margin: 10px 20px;">{{$t('systemStatus.top.title1')}}</p>
+              <p>{{$t('systemStatus.top.subtitle')}}</p>
+              <p>{{$t('systemStatus.top.subtitle2')}}:</p>
             </div>
             <div class="topLeftText">
-              <p>速率状态</p>
+              <p>{{$t('systemStatus.top.rate')}}</p>
               <div class="rate">
-                <p>上行:</p><p style="font-size: 18px;">{{this.$store.state.systemInfo[0].CPURate}}</p><p>B/s</p>
+                <p>{{$t('systemStatus.top.upstream')}}:</p><p style="font-size: 18px;"></p><p>B/s</p>
               </div>
               <div class="rate">
-                <p>上行:</p><p style="font-size: 18px;">{{this.$store.state.systemInfo[0].CPURate}}</p><p>B/s</p>
+                <p>{{$t('systemStatus.top.downstream')}}:</p><p style="font-size: 18px;"></p><p>B/s</p>
               </div>
             </div>
           </div>
         </el-col>
         <el-col :md="14" :lg="14" :xl="14">
           <div class="topRight">
-            <p>连接状态</p>
+            <p>{{$t('systemStatus.top.status')}}</p>
             <div class="topRightBottom">
               <div class="topRightBottomText">
                 <p style="font-size: 36px;">1</p>
-                <p>终端在线</p>
+                <p>{{$t('systemStatus.top.terminal')}}</p>
               </div>
               <div class="topRightBottomText">
                 <p style="font-size: 36px">0</p>
-                <p>终端在线</p>
+                <p>{{$t('systemStatus.top.terminal')}}</p>
               </div>
               <div class="topRightBottomText">
                 <p style="font-size: 36px">0</p>
-                <p>终端在线</p>
+                <p>{{$t('systemStatus.top.terminal')}}</p>
               </div>
               <div class="topRightBottomText">
                 <p style="font-size: 36px">0</p>
-                <p>终端在线</p>
+                <p>{{$t('systemStatus.top.terminal')}}</p>
               </div>
 
             </div>
@@ -55,55 +55,55 @@
           <div class="middleLeft">
             <div class="middleLeftTop">
               <div>
-                <p>接口状态</p>
+                <p>{{$t('systemStatus.middle.status')}}</p>
               </div>
               <div class="middleLeftTopText">
                 <div class="middleLeftTopTextChild">
                   <p style="font-size: 36px">1</p>
-                  <p>Kbps接入带宽</p>
+                  <p>Kbps{{$t('systemStatus.middle.bandWidth')}}</p>
                 </div>
                 <div class="middleLeftTopTextChild">
                   <p style="font-size: 36px">0</p>
-                  <p>WAN已启用</p>
+                  <p>{{$t('systemStatus.middle.WAN')}}</p>
                 </div>
                 <div class="middleLeftTopTextChild">
                   <p style="font-size: 36px">0</p>
-                  <p>LAN已启用</p>
+                  <p>{{$t('systemStatus.middle.LAN')}}</p>
                 </div>
                 <div class="middleLeftTopTextChild">
                   <p style="font-size: 36px">0</p>
-                  <p>DHCP池剩余</p>
+                  <p>{{$t('systemStatus.middle.DHCP')}}</p>
                 </div>
               </div>
             </div>
             <div class="middleBottom">
               <div class="router">
-                <div v-for="(item, index) in ports" class="port"  @click="pushToINEX">
+                <div v-for="(item, index) in ports" class="port"  @click="pushToINEX" :key="index">
                   <div>
                     <el-tooltip class="item" effect="light">
-                      <img style="width: 50px; height: 50px; border-radius: 5px;" :src=selectUrl(item.category) />
+                      <img style="width: 50px; height: 50px; border-radius: 5px;" :src=selectUrl(item.linkstatus) />
                       <div slot="content" class="tooltip-content">
                         <p>en{{index}}</p>
                         <el-form label-position="left" size="mini">
                           <el-form-item label="连接状态:" :label-width="tooltipLabelWidth" style="margin: 0;">
-                            {{ports[index].category}}
+                            {{ports[index].linkstatus}}
                           </el-form-item>
                           <el-form-item label="LAN IP:" :label-width="tooltipLabelWidth" style="margin: 0;">
-
+                            {{ports[index].ip}}
                           </el-form-item>
                           <el-form-item label="子网掩码:" :label-width="tooltipLabelWidth">
-
+                            {{ports[index].netmask}}
                           </el-form-item>
                         </el-form>
                         <el-form label-position="left" size="small">
-                          <el-form-item label="绑定设备:" :label-width="tooltipLabelWidth" style="margin: 0;">
-
+                          <el-form-item label="设备名称:" :label-width="tooltipLabelWidth" style="margin: 0;">
+                            {{ports[index].devname}}
                           </el-form-item>
                           <el-form-item label="MAC地址:" :label-width="tooltipLabelWidth" style="margin: 0;">
-
+                            {{ports[index].mac}}
                           </el-form-item>
                           <el-form-item label="网卡速率:" :label-width="tooltipLabelWidth" style="margin: 0;">
-
+                            {{ports[index].speed}}
                           </el-form-item>
                         </el-form>
                       </div>
@@ -123,26 +123,7 @@
         <el-col :md="10" :lg="10" :xl="10">
           <div class="middleRight">
             <div style="height: 20%;">
-              <p style="float: left;">带宽平均使用率</p>
-
-
-
-              <!--<el-select v-model="value" placeholder="请选择" size="mini" style="width: 100px; float: right; margin: 10px;">-->
-                <!--<el-option-->
-                  <!--v-for="item in options"-->
-                  <!--:key="item.value"-->
-                  <!--:label="item.label"-->
-                  <!--:value="item.value">-->
-                <!--</el-option>-->
-              <!--</el-select>-->
-              <!--<el-select v-model="value" placeholder="请选择" size="mini" style="width: 100px; float: right; margin: 10px;">-->
-                <!--<el-option-->
-                  <!--v-for="item in options"-->
-                  <!--:key="item.value"-->
-                  <!--:label="item.label"-->
-                  <!--:value="item.value">-->
-                <!--</el-option>-->
-              <!--</el-select>-->
+              <p style="float: left;">{{$t('systemStatus.middle.average')}}</p>
             </div>
             <div>
               <span style="font-size: 36px; margin-left: 20px;">0</span><span>%</span>
@@ -160,7 +141,7 @@
           <div class="bottomLeft">
             <div style="width:100%; margin: 0; display: inline-block;">
               <div style="float:left;">
-                <p style="margin-left: 20px;">协议流量分布</p>
+                <p style="margin-left: 20px;">{{$t('systemStatus.bottom.chartsTitle')}}</p>
               </div>
               <div style="float: right; margin: 10px 10px; width: 100px;">
                 <el-select v-model="value" placeholder="请选择" size="mini" value="">
@@ -188,322 +169,379 @@
 </template>
 
 <script>
-  import systemStatus from 'echarts';
-  import { getPorts } from '../../api/api';
-  require('echarts/theme/walden');
+import systemStatus from 'echarts'
+import { getPorts } from '../../api/api'
+require('echarts/theme/walden')
 
-  export default {
-    name: "systemStatus",
-    data() {
-      return {
+let option = {}
+let myPieChart
+let myChart1, option1 = {}
+let myChart2, option2 = {}
+export default {
+  name: 'systemStatus',
+  data() {
+    return {
+      ports: [{
+        'id':'0', 'category':'', imgUrl:'static/port3.png'
+      }],
+      options: [{
+        value:'选项1',
+        label:'近30分钟'
+      },{
+        value:'选项2',
+        label:'近1小时'
+      },
+      {
+        value:'选项3',
+        label:'近1天'
+      }
+      ],
+      value: '',
+      tooltipLabelWidth: '80px'
+    }
+  },
+  watch: {
+    '$store.state.app.language': function() {
+      console.log(this.$store.state.app.language)
+      this.translate()
+    }
+  },
 
-        ports: [{
-          "id":"0", "category":"", imgUrl:"static/port3.png"
-        }],
-        options: [{
-          value:'选项1',
-          label:'近30分钟'
-        },{
-          value:'选项2',
-          label:'近1小时'
-        },
-          {
-            value:'选项3',
-            label:'近1天'
-          }
-        ],
-        value: '',
-        tooltipLabelWidth: '80px',
+  methods: {
+    //选择LAN,WAN口对应图标
+    selectUrl(para) {
+      // if(para === "空闲")
+      if(para === 'off')
+      {
+        return 'static/port2.png'
+      }
+      else{
+        return 'static/port3.png'
       }
     },
 
-    methods: {
-      selectUrl(para) {
-        // if(para === "空闲")
-        if(para === "NORMAL")
-        {
-          return "static/port2.png"
-        }
-        else{
-          return "static/port3.png"
-        }
-      },
+    selectIcon(para) {
+      if (para === 'WAN') {
+        return '#icon-wan'
+      }
+      else if(para === 'LAN') {
+        return '#icon-pc'
+      }
+      else {
+        return '#'
+      }
+    },
 
-      selectIcon(para) {
-        if (para === "WAN") {
-          return "#icon-zaixian"
-        }
-        else if(para === "LAN") {
-          return "#icon-pc"
-        }
-        else {
-          return "#";
-        }
-      },
+    getPortsInfo: function() {
+      // getPorts().then((res) => {
+      //   this.ports = res.data.ports;
+      //   console.log(res);
+      //   console.log(this.ports);
+      // });
 
-      getPortsInfo: function() {
-        // getPorts().then((res) => {
-        //   this.ports = res.data.ports;
-        //   console.log(res);
-        //   console.log(this.ports);
-        // });
+      getPorts().then((res) => {
+        this.ports = JSON.parse(JSON.stringify(res.data.interfaces))
+      })
 
-        getPorts().then((res) => {
-          console.log("get feedback, res.data.interfaces is: "+res.data.interfaces);
-          this.ports = JSON.parse(JSON.stringify(res.data.interfaces));
-          console.log("after parse, the port[] is: "+this.ports);
-        });
+    },
 
-      },
+    pushToINEX: function() {
+      this.$router.push({ path: '../INEX_network' })
+    },
 
-      pushToINEX: function() {
-        this.$router.push({ path: '../INEX_network' });
-      },
+    drawLineChart1: function(){
+      myChart1 = systemStatus.init(document.getElementById('chartLine1'),'walden')
 
-      drawLineChart1: function(){
-        let myChart = systemStatus.init(document.getElementById('chartLine1'),"walden");
-
-        function randomData() {
-          now = new Date(+now + 1000);
-          //console.log("now "+now+"and "+now.toTimeString());
-          value = Math.random()*100;
-          return {
-            name: now.toString(),
-            value: [
-              //[now.getHours(), now.getMinutes(), now.getSeconds()].join(':'),
-              now,
-              Math.round(value)
-            ]
-          }
-        }
-
-        let data = [];
-        let now = new Date();
-        let value = 0;
-        for (let i = 0; i < 300; i++) {
-          data.push(randomData());
-        }
-
-        let option = {
-          title: {
-            text: '近5分钟上下行速率',
-            subtext: '上行速率',
-            textStyle: {
-              fontWeight: 'normal',
-              fontSize: 14,
-            },
-          },
-          tooltip: {
-            trigger: 'axis',
-            formatter: function (params) {
-              params = params[0];
-              let date = new Date(params.name);
-              return date.getHours() + ':' + date.getMinutes() + ' : ' + params.value[1];
-            },
-            axisPointer: {
-              animation: false
-            }
-          },
-          grid: {
-            left: '5%',
-            right: '2%',
-            bottom: '12%',
-            containLabel: false
-          },
-          xAxis: {
-            type: 'time',
-            splitLine: {
-              show: false
-            },
-            axisLine: {
-              lineStyle: {
-                color: '#CD0000',
-              }
-            },
-          },
-          yAxis: {
-            type: 'value',
-            boundaryGap: [0, '0%'],
-            splitLine: {
-              show: false
-            }
-          },
-          series: [{
-            name: '模拟数据',
-            type: 'line',
-            lineStyle: {
-              width: 0.5,
-              type: 'dotted',
-            },
-            showSymbol: false,
-            hoverAnimation: false,
-            data: data
-          }],
-        };
-
-        data.shift();
-        data.push(randomData());
-        myChart.setOption(option);
-
-        setInterval(function () {
-          data.shift();
-          data.push(randomData());
-          myChart.setOption(option);
-        }, 2000);
-        window.addEventListener("resize",function() {
-          myChart.resize();
-        });
-      },
-
-      drawLineChart2: function(){
-        let myChart = systemStatus.init(document.getElementById('chartLine2'),"walden");
-
-        function randomData() {
-          now = new Date(+now + 1000);
-          value = Math.random()*100;
-          return {
-            name: now.toString(),
-            value: [
-              now,
-              Math.round(value)
-            ]
-          }
-        }
-        let data = [];
-        let now = new Date();
-        let value = 0;
-        for (let i = 0; i < 300; i++) {
-          data.push(randomData());
-        }
-
-        let option = {
-          title: {
-            subtext: '上行速率',
-          },
-          tooltip: {
-            trigger: 'axis',
-            formatter: function (params) {
-              params = params[0];
-              let date = new Date(params.name);
-              return date.getHours() + ':' + date.getMinutes() + ' : ' + params.value[1];
-            },
-            axisPointer: {
-              animation: false
-            }
-          },
-          grid: {
-            left: '5%',
-            right: '2%',
-            bottom: '12%',
-            containLabel: false
-          },
-          xAxis: {
-            type: 'time',
-            splitLine: {
-              show: false
-            },
-            axisLine: {
-              lineStyle: {
-                color: '#7CCD7C',
-              }
-            },
-          },
-          yAxis: {
-            type: 'value',
-            boundaryGap: [0, '0%'],
-            splitLine: {
-              show: false
-            }
-          },
-          series: [{
-            name: '模拟数据',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: data
-          }]
-        };
-
-        data.shift();
-        data.push(randomData());
-        myChart.setOption(option);
-
-        setInterval(function () {
-          data.shift();
-          data.push(randomData());
-          myChart.setOption(option);
-        }, 2000);
-        window.addEventListener("resize",function() {
-          myChart.resize();
-        });
-      },
-
-      drawPieChart: function(){
-        let myChart = systemStatus.init(document.getElementById('chartPie'),"walden");
-
-        let option = {
-          tooltip: {
-            trigger: 'item',
-            formatter: "{a} <br/>{b}: {c} ({d}%)"
-          },
-          legend: {
-            orient: 'vertical',
-            x: 'left',
-            data:['HTTP协议','网络视频','网络游戏','网络下载','文件传输']
-          },
-          series: [
-            {
-              name:'协议流量分布',
-              type:'pie',
-              radius: ['70%', '80%'],
-              avoidLabelOverlap: false,
-              label: {
-                normal: {
-                  show: false,
-                  position: 'center'
-                },
-                emphasis: {
-                  show: true,
-                  textStyle: {
-                    fontSize: '20',
-                    fontWeight: 'bold'
-                  }
-                }
-              },
-              labelLine: {
-                normal: {
-                  show: false
-                }
-              },
-              data:[
-                {value:335, name:'HTTP协议'},
-                {value:310, name:'网络视频'},
-                {value:234, name:'网络游戏'},
-                {value:135, name:'网络下载'},
-                {value:1548, name:'文件传输'}
-              ]
-            }
+      function randomData() {
+        now = new Date(+now + 1000)
+        // console.log("now "+now+"and "+now.toTimeString());
+        value = Math.random()*100/10+50
+        return {
+          name: now.toString(),
+          value: [
+            //[now.getHours(), now.getMinutes(), now.getSeconds()].join(':'),
+            now,
+            Math.round(value)
           ]
-        };
-        myChart.setOption(option);
+        }
+      }
 
-        window.addEventListener("resize",function() {
-          myChart.resize();
-        });
-      },
+      let data = []
+      let now = new Date()
+      let value = 0
+      for (let i = 0; i < 300; i++) {
+        data.push(randomData())
+      }
 
-      drawCharts() {
-        this.drawLineChart1();
-        this.drawLineChart2();
-        this.drawPieChart();
-      },
+      option1 = {
+        title: {
+          text: '近5分钟上下行速率',
+          subtext: '上行速率',
+          textStyle: {
+            fontWeight: 'normal',
+            fontSize: 14,
+          },
+        },
+        tooltip: {
+          trigger: 'axis',
+          formatter: function (params) {
+            params = params[0]
+            let date = new Date(params.name)
+            return date.getHours() + ':' + date.getMinutes() + ' : ' + params.value[1]
+          },
+          axisPointer: {
+            animation: false
+          }
+        },
+        grid: {
+          left: '5%',
+          right: '2%',
+          bottom: '12%',
+          containLabel: false
+        },
+        xAxis: {
+          type: 'time',
+          splitLine: {
+            show: false
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#CD0000',
+            }
+          },
+        },
+        yAxis: {
+          type: 'value',
+          boundaryGap: [0, '0%'],
+          splitLine: {
+            show: false
+          }
+        },
+        series: [{
+          name: '模拟数据',
+          type: 'line',
+          lineStyle: {
+            width: 0.5,
+            type: 'dotted',
+          },
+          showSymbol: false,
+          hoverAnimation: false,
+          data: data
+        }],
+      }
+
+      data.shift()
+      data.push(randomData())
+      myChart1.setOption(option1)
+
+      setInterval(function () {
+        data.shift()
+        data.push(randomData())
+        myChart1.setOption(option1)
+      }, 2000)
+      window.addEventListener('resize',function() {
+        myChart1.resize()
+      })
     },
 
-    mounted: function () {
-      this.drawCharts();
-      this.getPortsInfo();
+    drawLineChart2: function(){
+      myChart2 = systemStatus.init(document.getElementById('chartLine2'),'walden')
+
+      function randomData() {
+        now = new Date(+now + 1000)
+        value = Math.random()*100/10+50
+        return {
+          name: now.toString(),
+          value: [
+            now,
+            Math.round(value)
+          ]
+        }
+      }
+      let data = []
+      let now = new Date()
+      let value = 0
+      for (let i = 0; i < 300; i++) {
+        data.push(randomData())
+      }
+
+      option2 = {
+        title: {
+          subtext: '上行速率',
+        },
+        tooltip: {
+          trigger: 'axis',
+          formatter: function (params) {
+            params = params[0]
+            let date = new Date(params.name)
+            return date.getHours() + ':' + date.getMinutes() + ' : ' + params.value[1]
+          },
+          axisPointer: {
+            animation: false
+          }
+        },
+        grid: {
+          left: '5%',
+          right: '2%',
+          bottom: '12%',
+          containLabel: false
+        },
+        xAxis: {
+          type: 'time',
+          splitLine: {
+            show: false
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#7CCD7C',
+            }
+          },
+        },
+        yAxis: {
+          type: 'value',
+          boundaryGap: [0, '0%'],
+          splitLine: {
+            show: false
+          }
+        },
+        series: [{
+          name: '模拟数据',
+          type: 'line',
+          showSymbol: false,
+          hoverAnimation: false,
+          data: data
+        }]
+      }
+
+      data.shift()
+      data.push(randomData())
+      myChart2.setOption(option2)
+
+      setInterval(function () {
+        data.shift()
+        data.push(randomData())
+        myChart2.setOption(option2)
+      }, 2000)
+      window.addEventListener('resize',function() {
+        myChart2.resize()
+      })
     },
-  }
+
+    drawPieChart: function(){
+      myPieChart = systemStatus.init(document.getElementById('chartPie'),'walden')
+      
+      option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+        legend: {
+          orient: 'vertical',
+          x: 'left',
+          data:['HTTP协议','网络视频','网络游戏','网络下载','文件传输']
+        },
+        series: [
+          {
+            name:'协议流量分布',
+            type:'pie',
+            radius: ['70%', '80%'],
+            avoidLabelOverlap: false,
+            label: {
+              normal: {
+                show: false,
+                position: 'center'
+              },
+              emphasis: {
+                show: true,
+                textStyle: {
+                  fontSize: '20',
+                  fontWeight: 'bold'
+                }
+              }
+            },
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            data:[
+              {value:335, name:'HTTP协议'},
+              {value:310, name:'网络视频'},
+              {value:234, name:'网络游戏'},
+              {value:135, name:'网络下载'},
+              {value:1548, name:'文件传输'}
+            ]
+          }
+        ]
+      }
+
+      myPieChart.setOption(option)
+
+      window.addEventListener('resize',function() {
+        myPieChart.resize()
+      })
+    },
+
+    drawCharts() {
+      this.drawLineChart1()
+      this.drawLineChart2()
+      this.drawPieChart()
+    },
+
+    translate() {
+      if(this.$store.state.app.language === 'en') {
+        option.legend =
+         {
+           orient: 'vertical',
+           x: 'left',
+           data: ['HTTP','Vedio','Game','Download','Transmission']
+         },
+        option.series[0].name = 'Protocol traffic distribution'
+        option.series[0].data = [
+          {value:335, name:'HTTP'},
+          {value:310, name:'Vedio'},
+          {value:234, name:'Game'},
+          {value:135, name:'Download'},
+          {value:1548, name:'Transmission'}
+        ]
+
+        option1.title.text = 'Up/Downlink Rate'
+        option1.title.subtext = 'Uplink Rate'
+
+        option2.title.subtext = 'Downlink Rate'
+      }
+      if(this.$store.state.app.language === 'zh') {
+        option.legend =
+        {
+          orient: 'vertical',
+          x: 'left',
+          data:['HTTP协议','网络视频','网络游戏','网络下载','文件传输']
+        },
+        option.series[0].name = '流量协议分布'
+        option.series[0].data = [
+          {value:335, name:'HTTP协议'},
+          {value:310, name:'网络视频'},
+          {value:234, name:'网络游戏'},
+          {value:135, name:'网络下载'},
+          {value:1548, name:'文件传输'}
+        ]
+
+        option1.title.text = '上下行速率'
+        option1.title.subtext = '上行速率'
+
+        option2.title.subtext = '下行速率'
+      }
+      myPieChart.setOption(option)
+      myChart1.setOption(option1)
+      myChart2.setOption(option2)
+    }
+  },
+
+  mounted: function () {
+    this.drawCharts()
+    this.getPortsInfo()
+  },
+}
 </script>
 
 <style scoped lang="scss">

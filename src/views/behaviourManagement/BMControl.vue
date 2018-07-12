@@ -15,9 +15,14 @@
 </template>
 
 <script>
-    export default {
-        name: "BMControl"
+export default {
+  name: 'BMControl',
+  data() {
+    return{
+      checked: '',
     }
+  }
+}
 </script>
 
 <style scoped>

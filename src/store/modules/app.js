@@ -1,20 +1,20 @@
-import Cookies from  'js-cookie';
+import Cookies from  'js-cookie'
 
 const app = {
   state: {
-    language: Cookies.get('language') || 'en'
+    language: Cookies.get('language') || 'zh'
   },
   mutations: {
     SET_LANGUAGE: (state, language) => {
-      state.language = language;
-      Cookies.set('language', language);
+      state.language = language
+      Cookies.set('language', language)
     }
   },
   actions: {
     setLanguage({ commit }, language) {
-      commit('SET_LANGUAGE', language);
+      commit('SET_LANGUAGE', language)
     }
   }
-};
+}
 
-export default  app;
+export default app

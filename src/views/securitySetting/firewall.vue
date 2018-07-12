@@ -3,9 +3,9 @@
 </template>
 
 <script>
-    export default {
-        name: "firewall"
-    }
+	export default {
+	  name: 'firewall'
+	}
 </script>
 
 <style scoped>

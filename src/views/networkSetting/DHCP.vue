@@ -80,65 +80,40 @@
 
 <script>
     export default{
-        name: "DHCP",
-        data(){
-            return {
-                addFormVisible: false,//新增界面是否显示
-                addLoading: false,
+      name: 'DHCP',
+      data(){
+        return {
+          addFormVisible: false,//新增界面是否显示
+          addLoading: false,
 
-                addForm: {
-                    port: '',
-                    address: '',
-                    subnetMask: '',
-                    gateway: '',
-                    primaryDNS: '',
-                    secondaryDNS: '',
-                    rentTime: ''
-                }
-            }
-        },
-        methods: {
-          headerStyle() {
-            return this.header();
-          },
-            //显示新增界面
-            handleAdd: function () {
-                this.addFormVisible = true;
-                this.addForm = {
-                    port: '',
-                    address: '',
-                    subnetMask: '',
-                    gateway: '',
-                    primaryDNS: '',
-                    secondaryDNS: '',
-                    rentTime: ''
-                };
-            },
-        },
-
-      //新增
-      addSubmit: function () {
-        this.$refs.addForm.validate((valid) => {
-          if (valid) {
-            this.$confirm('确认提交吗？', '提示', {}).then(() => {
-              this.addLoading = true;
-              //NProgress.start();
-              let para = Object.assign({}, this.addForm);
-              para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-              addUser(para).then((res) => {
-                this.addLoading = false;
-                //NProgress.done();
-                this.$message({
-                  message: '提交成功',
-                  type: 'success'
-                });
-                this.$refs['addForm'].resetFields();
-                this.addFormVisible = false;
-                this.getUsers();
-              });
-            });
+          addForm: {
+            port: '',
+            address: '',
+            subnetMask: '',
+            gateway: '',
+            primaryDNS: '',
+            secondaryDNS: '',
+            rentTime: ''
           }
-        });
+        }
+      },
+      methods: {
+        headerStyle() {
+          return this.header()
+        },
+        //显示新增界面
+        handleAdd: function () {
+          this.addFormVisible = true
+          this.addForm = {
+            port: '',
+            address: '',
+            subnetMask: '',
+            gateway: '',
+            primaryDNS: '',
+            secondaryDNS: '',
+            rentTime: ''
+          }
+        },
       },
     }
 </script>

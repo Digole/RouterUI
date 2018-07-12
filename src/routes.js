@@ -26,11 +26,11 @@ import performanceMonitor from './views/statusMonitor/performanceMonitor.vue'
 // import currentRouter from './views/networkSetting/currentRouter.vue'
 import DHCP from './views/networkSetting/DHCP.vue'
 import DNS from './views/networkSetting/DNS.vue'
-import INEX_network from './views/networkSetting/INEX_network.vue'
-import kidVPN from './views/networkSetting/kidVPN.vue'
-import NAT from './views/networkSetting/NAT.vue'
+import INEX_network from './views/networkSetting/INEX_network/index.vue'
+import kidVPN from './views/networkSetting/kidVPN'
+import NAT from './views/networkSetting/nat/'
 import VLAN from './views/networkSetting/VLAN.vue'
-import staticRouter from './views/networkSetting/staticRouter.vue'
+import staticRouter from './views/networkSetting/staticRouter/staticRouter.vue'
 /*
 *systemSetting
  */
@@ -59,7 +59,7 @@ import remoteManagement from './views/securitySetting/remoteManagement.vue'
  */
 import systemStatus from './views/systemStatus/systemStatus.vue'
 
-import routerSetting from './views/routerSetting/routerSetting.vue'
+// import routerSetting from './views/routerSetting/routerSetting.vue'
 
 let routes = [
   {
@@ -227,25 +227,25 @@ let routes = [
       { path: '/systemStatus', component: systemStatus, name: '系统概况', meta: { title: 'systemStatus'} },
     ]
   },
-  {
-    path:'/',
-    component: Home,
-    name: '动态路由配置简介',
-    iconCls: 'fa fa-bar-chart',
-    leaf: true,//只有一个节点
-    meta: {
-      title: 'dynamicRoutingConfiguration',
-    },
-    children: [
-      { path: '/routerSetting', component: routerSetting, name: '动态路由配置', meta: { title: 'dynamicRoutingConfiguration'} },
-
-    ]
-  },
+  // {
+  //   path:'/',
+  //   component: Home,
+  //   name: '动态路由配置简介',
+  //   iconCls: 'fa fa-bar-chart',
+  //   leaf: true,//只有一个节点
+  //   meta: {
+  //     title: 'dynamicRoutingConfiguration',
+  //   },
+  //   children: [
+  //     { path: '/routerSetting', component: routerSetting, name: '动态路由配置', meta: { title: 'dynamicRoutingConfiguration'} },
+  //
+  //   ]
+  // },
   {
     path: '*',
     hidden: true,
     redirect: { path: '/404' }
   }
-];
+]
 
-export default routes;
+export default routes

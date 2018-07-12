@@ -18,10 +18,10 @@
         </div>
 
         <div class="router">
-          <div v-for="(item, index) in ports" class="port" @click="dialog(index)">
+          <div v-for="(item, index) in ports" class="port" :key="index" @click="dialog(index)">
             <div>
               <el-tooltip class="item" effect="light">
-                <img style="width: 60px; height: 50px; border-radius: 5px;" :src=selectUrl(item.function) />
+                <img style="width: 60px; height: 50px; border-radius: 5px;" :src=selectUrl(item.linkstatus) />
                 <div slot="content" class="tooltip-content">
                   <h3></h3>
                   <el-form label-position="left" size="mini">
@@ -36,8 +36,8 @@
                     </el-form-item>
                   </el-form>
                   <el-form label-position="left" size="mini">
-                    <el-form-item label="绑定设备:" :label-width="tooltipLabelWidth" style="margin: 0;">
-                      {{}}
+                    <el-form-item label="设备名称:" :label-width="tooltipLabelWidth" style="margin: 0;">
+                      {{ports[index].devname}}
                     </el-form-item>
                     <el-form-item label="MAC地址:" :label-width="tooltipLabelWidth" style="margin: 0;">
                       {{ports[index].mac}}
@@ -58,6 +58,7 @@
         </div>
 
         <div v-if="checked !== '200'" class="mask">
+        <!--<div v-if="false" class="mask">-->
           <!--<div class="mask">-->
           <el-button class="button" type="primary" @click="sortingHandle">{{$t('NAT.adaptive.maskTip')}}</el-button>
         </div>
@@ -73,6 +74,7 @@
     <div>
       <div class="line_02"><span>{{$t('NAT.dividingLine.title2')}}</span></div>
     </div>
+
     <!--随机端口折线图-->
     <div class="echarts">
       <div id="chartLine1" style="width:100%; height:200px; margin-top: 10px"></div>
@@ -103,13 +105,13 @@
         </el-table-column>
         <el-table-column type="index" width="60">
         </el-table-column>
-        <el-table-column prop="aliasip"  label="别名地址" min-width="120">
+        <el-table-column prop="aliasip"  :label="$t('NAT.alias.aliasAddress')" min-width="120">
         </el-table-column>
-        <el-table-column prop="lanstart"  label="LAN起始地址" min-width="120">
+        <el-table-column prop="lanstart"  :label="$t('NAT.alias.initialAddress')" min-width="120">
         </el-table-column>
-        <el-table-column prop="lanend"  label="LAN结束地址" min-width="120">
+        <el-table-column prop="lanend"  :label="$t('NAT.alias.endAddress')" min-width="120">
         </el-table-column>
-        <el-table-column label="操作" min-width="120">
+        <el-table-column :label="$t('operation.operation')" min-width="120">
           <template slot-scope="scope">
             <!--<el-button size="small" @click="handleAliasEdit(scope.$index, scope.row)">编辑</el-button>-->
             <el-button size="small" @click="signalDelAliasHandle(scope.$index, scope.row)">{{$t('operation.delete')}}</el-button>
@@ -121,7 +123,7 @@
     <div>
       <div class="line_02"><span>{{$t('NAT.dividingLine.title4')}}</span></div>
     </div>
-    <!--端口映射工具栏-->
+    <!--端口映射工具栏和表格-->
     <div class="table">
       <el-col :span="24" class="toolbar" style="padding-bottom: 0;">
         <el-form :inline="true">
@@ -265,18 +267,20 @@
     </el-dialog>
 
     <!--WAN,LAN outer dialogue-->
-    <el-dialog title="LAN,WAN口设置" :visible.sync="dialogFormVisible" width="30%">
+    <el-dialog title="LAN/WAN口设置" :visible.sync="dialogFormVisible" width="30%">
       <el-form :model="WANForm" label-position="left" size="small">
-        <el-form-item label="选择功能" :label-width="formLabelWidth">
-          <el-select v-model="WANForm.use" placeholder="请选择内外网" value="">
-            <el-option label="LAN（内网）" value="LAN"></el-option>
-            <el-option label="WAN（外网）" value="WAN"></el-option>
+        <el-form-item label="选择功能" :label-width="formLabelWidth" v-loading="WANLANLoading">
+          <el-select v-model="WANForm.use" placeholder="请选择内外网">
+            <el-option :disabled="this.lanLimit <= this.lanCount" label="LAN（内网）" value="LAN"></el-option>
+            <el-option :disabled="this.wanLimit <= this.wanCount" label="WAN（外网）" value="WAN"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
+      <p v-if="this.lanLimit <= this.lanCount && !WANLANLoading" style="color: red;">LAN口数量到达上限</p>
+      <p v-if="this.wanLimit <= this.wanCount && !WANLANLoading" style="color: red;">WAN口数量到达上限</p>
       <div slot="footer" class="dialog-footer">
-        <el-button type="danger" @click="unbind">解 绑</el-button>
-        <el-button type="primary" @click="WANLANSubmit">提 交</el-button>
+        <el-button :disabled="unbindEnable" type="danger" @click="unbind">解 绑</el-button>
+        <el-button :disabled="WANForm.use === ''" type="primary" @click="WANLANSubmit">提 交</el-button>
       </div>
     </el-dialog>
 
@@ -296,7 +300,7 @@
           </div>
 
           <div class="router">
-            <div v-for="(item, index) in ports" class="port">
+            <div v-for="(item, index) in ports" :key="index" class="port">
               <img style="width: 60px; height: 50px; border-radius: 5px;" src="static/port2.png" />
               <div :class="{ 'triangular': index === portsName.index }"></div>
               <div class="textArea">
@@ -349,15 +353,16 @@
     sendWANLAN,
     sortingCancel,
     getUsage
-  } from '../../api/api';
-  import NAT from 'echarts';
+  } from '../../api/api'
+import NAT from 'echarts'
 
-  require('echarts/theme/walden');
+require('echarts/theme/walden')
 
-  let stopSignal = '';
+let stopSignal1, stopSignal2, stopSignal3, stopSignal4
 
-  export default {
-    name: "NAT",
+
+export default {
+    name: 'NAT',
 
     data() {
       return{
@@ -382,7 +387,7 @@
           mode:'1',                       //工作模式
           rate:'1',                       //网卡速率 lan
           control:'',                     //lan互访控制
-          accessMethod: "1",              //接入方式
+          accessMethod: '1',              //接入方式
           primaryDNS:'',                  //首选DNS
           secondaryDNS:'',                //备选DNS
           status:'未连接'                 //连接状态，ASDL使用该属性
@@ -391,6 +396,7 @@
         WANForm: {
           index: '',                     //端口编号，唯一，通过index确认端口
           use: '',                        //选择功能LAN/WAN
+          handle: '',                      //添加为1，解绑为0
         },
 
         aliasForm:{
@@ -459,22 +465,27 @@
         formLabelWidth: '130px',
         powerButton: 'static/port3.png',
         tips: [
-          "请只接通第",
-          "个网口，并为其设置网口名",
-          "请接通第" ,
-          "个网口",
-          "请插入网线，连通当前网口",
+          '请只接通第',
+          '个网口，并为其设置网口名',
+          '请接通第' ,
+          '个网口',
+          '请插入网线，连通当前网口',
         ],
-        tip1: "请接通第",
-        tip2: "个网口，并为其设置网口名",
+        tip1: '请接通第',
+        tip2: '个网口，并为其设置网口名',
 
         fragmentForm: {
           fragtype: '',
           handle: '',
         },
 
-        max: '',
+        wanLimit: '',
+        lanLimit: '',
+        wanCount: 0,
+        lanCount: 0,
+        unbindEnable: false,
 
+        WANLANLoading: false,
       }
     },
 
@@ -483,22 +494,32 @@
       sortingVisible:{
         handler: function () {
           if(this.sortingVisible === false) {
-            clearInterval(stopSignal);
-            this.sortLoading = false;
+            if( stopSignal3 !== undefined){
+              clearInterval(stopSignal3)
+            }
+            else {
+              clearInterval(stopSignal4)
+            }
+            this.sortLoading = false
           }
         }
       }
     },
 
     methods: {
+      interval() {
+        stopSignal1 = setInterval(this.getPortsInfo, 3000)
+      },
+
       /**
        *页面设置的一些函数
        */
       headerStyle() {
-        return this.header();
+        return this.header()
       },
+
       drawLineChart1: function(){
-        let myChart = NAT.init(document.getElementById('chartLine1'),"walden");
+        let myChart = NAT.init(document.getElementById('chartLine1'),'walden')
 
         // function getPercentData() {
         //   now = new Date(+now + 5000);
@@ -523,14 +544,14 @@
         // }
 
         async function getPercentData() {
-          now = new Date(+now + 5000);
-          let percent;
+          now = new Date(+now + 5000)
+          let percent
           await getUsage().then((res) => {
             return res.data.percent
           }).then((val) => {
-            percent = val;
+            percent = val
           })
-          console.log("reponse percent! the value is "+ percent);
+          // console.log("reponse percent! the value is "+ percent);
           return {
             name: now.toString(),
             value: [
@@ -541,21 +562,21 @@
         }
 
         async function getUseNode() {
-          let usage;
+          let usage
           await getUsage().then((res) => {
-            return res.data.usenode;
+            return res.data.usenode
           }).then((val) => {
-            usage = val;
+            usage = val
           })
-          console.log("reponse usenode! the value is "+ usage);
-          return usage;
+          // console.log("reponse usenode! the value is "+ usage);
+          return usage
         }
 
         function randomData() {
-          now = new Date(+now + 5000);
+          now = new Date(+now + 5000)
           //console.log("now "+now+"and "+now.toTimeString());
           // value = Math.random()*100;
-          value = 0;
+          value = 0
           return {
             name: now.toString(),
             value: [
@@ -566,12 +587,11 @@
           }
         }
 
-
-        let data = [];
-        let now = new Date();
-        let value = 0;
+        let data = []
+        let now = new Date()
+        let value = 0
         for (let i = 0; i <36; i++) {
-          data.push(randomData());
+          data.push(randomData())
         }
 
         let option = {
@@ -586,9 +606,9 @@
           tooltip: {
             trigger: 'none',
             formatter: function (params) {
-              params = params[0];
-              let date = new Date(params.name);
-              return date.getHours() + ':' + date.getMinutes() + ' : ' + params.value[1];
+              params = params[0]
+              let date = new Date(params.name)
+              return date.getHours() + ':' + date.getMinutes() + ' : ' + params.value[1]
             },
             axisPointer: {
               animation: false
@@ -618,12 +638,12 @@
             {
               type: 'category',
               data: (function (){
-                let res = [];
-                let len = 36;
+                let res = []
+                let len = 36
                 while (len--) {
-                  res.push(36 - len - 1);
+                  res.push(36 - len - 1)
                 }
-                return res;
+                return res
               })()
             }
           ],
@@ -641,12 +661,6 @@
               type: 'value',
               scale: true,
               name: '使用数量',
-              // max: (function (){
-              //   getUsage().then((res) => {
-              //     console.log(res.data.totalnode)
-              //     return res.data.totalnode;
-              //   })
-              // })(),
               min: 0,
               boundaryGap: [0.2, 0]
             }
@@ -669,33 +683,34 @@
               xAxisIndex: 1,
               yAxisIndex: 1,
               data:(function (){
-                let res = [];
-                let len = 36;
+                let res = []
+                let len = 36
                 while (len--) {
                   // res.push(Math.round(Math.random() * 1000));
-                  res.push(0);
+                  res.push(0)
                 }
-                return res;
+                return res
               })()
             }
           ],
-        };
+        }
 
         // data.shift();
         // data.push(randomData());
-        myChart.setOption(option);
+        myChart.setOption(option)
 
         async function update(){
-          let resultData = await getPercentData();
-          let resultUsage = await getUseNode();
-          data.shift();
-          data.push(resultData);
-          let usage = option.series[1].data;
-          usage.shift();
-          usage.push(resultUsage);
-          myChart.setOption(option);
+          let resultData = await getPercentData()
+          let resultUsage = await getUseNode()
+          data.shift()
+          data.push(resultData)
+          let usage = option.series[1].data
+          usage.shift()
+          usage.push(resultUsage)
+          myChart.setOption(option)
         }
-        setInterval(update, 5000);
+        stopSignal2 = setInterval(update, 5000)
+        clearInterval(stopSignal2)
 
         // setInterval(function () {
         //   //插入时间和百分比数据
@@ -717,9 +732,9 @@
         // }, 5000);
 
 
-        window.addEventListener("resize",function() {
-          myChart.resize();
-        });
+        window.addEventListener('resize',function() {
+          myChart.resize()
+        })
       },
 
 
@@ -735,133 +750,176 @@
         //     console.log(this.ports);
 
         getPorts().then((res) => {
-          console.log("get feedback, res.data.interfaces is: "+res.data.interfaces);
-          this.checked = JSON.parse(JSON.stringify(res.data.code));
-          console.log("code is "+JSON.stringify(res.data.code));
-          this.ports = JSON.parse(JSON.stringify(res.data.interfaces));
-          console.log("after parse, the port[] is: "+JSON.stringify(res.data.interfaces));
-          console.log("after parse, the port[] is: "+res.data.interfaces);
-        });
+          this.wanLimit = res.data.wancount
+          this.lanLimit = res.data.lancount
+          let lanCount = 0
+          let wanCount = 0
+          for(let i = 0; i<res.data.interfaces.length; i++){
+            if(res.data.interfaces[i].function.toLowerCase() === 'wan'){
+              wanCount++
+              console.log('wanCount is '+wanCount)
+            }
+            if(res.data.interfaces[i].function.toLowerCase() === 'lan'){
+              lanCount++
+              console.log('lanCount is '+lanCount)
+            }
+          }
+          this.lanCount = lanCount
+          this.wanCount = wanCount
+
+          //根据webindex排序，确保端口顺序正确
+          function sortNumber(a, b){
+            return a.webindex-b.webindex
+          }
+          res.data.interfaces.sort(sortNumber)
+
+          // console.log("get feedback, res.data.interfaces is: "+res.data.interfaces);
+          this.checked = JSON.parse(JSON.stringify(res.data.code))
+          // console.log("code is "+JSON.stringify(res.data.code));
+          this.ports = JSON.parse(JSON.stringify(res.data.interfaces))
+          console.log('after parse, the port[] is: '+JSON.stringify(res.data.interfaces))
+        })
       },
       //显示选择功能的dialog
       dialog: function(para){
-        console.log(para);
-        this.WANForm.index = para;
-        this.dialogFormVisible = true;
+        console.log(para)
+        this.WANForm.index = para
+        this.WANForm.use = ''
+        this.dialogFormVisible = true
+        this.unbindEnable = this.ports[para].function === 'NORMAL'
       },
       //选择LAN,WAN口对应图标
       selectUrl(para) {
         // if(para === "空闲")
-        if(para === "NORMAL")
+        if(para === 'off')
         {
-          return "static/port2.png"
+          return 'static/port2.png'
         }
         else{
-          return "static/port3.png"
+          return 'static/port3.png'
         }
       },
       //选择router页面里的图标
       selectIcon(para) {
-        if (para === "WAN") {
-          return "#icon-zaixian"
+        if (para === 'WAN') {
+          return '#icon-wan'
         }
-        else if(para === "LAN") {
-          return "#icon-pc"
+        else if(para === 'LAN') {
+          return '#icon-pc'
         }
         else {
-          return false;
+          return false
         }
       },
       //选择端口对应名称
       name: function() {
-        return ("eth"+this.portsName.index);
+        return ('eth'+this.portsName.index)
       },
       //WANLAN绑定
       WANLANSubmit: function() {
-        this.dialogFormVisible = false;
-        let para = Object.assign({}, this.WANForm);
-        console.log(para);
-        console.log(typeof(para.index));
-        sendWANLAN(para).then(() => {
-          this.$message({
-            message: '发送成功',
-            type: 'success'
-          });
+        this.WANForm.handle = 1
+        let para = Object.assign({}, this.WANForm)
+        console.log(para)
+        this.WANLANLoading = true
+        // console.log(typeof(para.index));
+        sendWANLAN(para).then((res) => {
+          if( res.data.code === 200 ) {
+            this.$message({
+              message: '发送成功',
+              type: 'success'
+            })
+          }
+          else{
+            this.WANLANLoading = true
+          }
+        }).then(this.getPortsInfo()).then(() => {
+          this.dialogFormVisible = false
+          this.WANLANLoading = false
         })
       },
       //WAN,LAN口解绑功能
       unbind: function()  {
-        this.dialogFormVisible = false;
-        /***
-         * 联调时补充
-         */
+        let index = this.WANForm.index
+        this.WANForm.use = this.ports[index].function
+        this.WANForm.handle = 0
+        this.WANLANLoading = true
+        let para = Object.assign({}, this.WANForm)
+        sendWANLAN(para).then(() => {
+          this.$message({
+            message: '发送成功',
+            type: 'success'
+          })
+        }).then(this.getPortsInfo()).then(() => {
+          this.dialogFormVisible = false
+          this.WANLANLoading = false
+        })
       },
 
 
       /**
        * 页面右上角分片功能
        */
-      //分片包功能星系获取
+      //分片包功能信息获取
       getFragmentPackageInfo: function() {
         getFragmentInfo().then((res) => {
-          this.TCP = !!res.data.tcp;
-          this.UDP = !!res.data.udp;
-          this.ICMP = !!res.data.icmp;
-          console.log("the value of fragment are "+this.TCP+" "+this.UDP+" "+this.ICMP);
+          this.TCP = !!res.data.tcp
+          this.UDP = !!res.data.udp
+          this.ICMP = !!res.data.icmp
+        // console.log("the value of fragment are "+this.TCP+" "+this.UDP+" "+this.ICMP);
         })
       },
       //处理分片包选择
       handleTCPChange: function(val) {
-        let para = {};
+        let para = {}
         if(val){
-          para.handle = 1;
+          para.handle = 1
         }
         else{
-          para.handle = 0;
+          para.handle = 0
         }
-        para.fragtype = 'tcp';
+        para.fragtype = 'tcp'
         sendFragment(para).then(() => {
           this.$message({
             message: '提交成功',
             type: 'success'
-          });
-        });
-        this.getFragmentPackageInfo();
+          })
+        })
+        this.getFragmentPackageInfo()
 
       },
       handleUDPChange: function(val) {
-        let para = {};
+        let para = {}
         if(val){
-          para.handle = 1;
+          para.handle = 1
         }
         else{
-          para.handle = 0;
+          para.handle = 0
         }
-        para.fragtype = 'udp';
+        para.fragtype = 'udp'
         sendFragment(para).then(() => {
           this.$message({
             message: '提交成功',
             type: 'success'
-          });
-        });
-        this.getFragmentPackageInfo();
+          })
+        })
+        this.getFragmentPackageInfo()
       },
       handleICMPChange: function(val) {
-        let para = {};
+        let para = {}
         if(val){
-          para.handle = 1;
+          para.handle = 1
         }
         else{
-          para.handle = 0;
+          para.handle = 0
         }
-        para.fragtype = 'icmp';
+        para.fragtype = 'icmp'
         sendFragment(para).then(() => {
           this.$message({
             message: '提交成功',
             type: 'success'
-          });
-        });
-        this.getFragmentPackageInfo();
+          })
+        })
+        this.getFragmentPackageInfo()
       },
 
       /**
@@ -871,79 +929,80 @@
       getAliasInfo: function() {
         let para = {
           page: this.aliasPage,
-        };
+        }
         getAlias(para).then((res) => {
           if(this.aliasPage === res.data.page) {
-            this.aliasTotal = res.data.total;
-            this.alias = res.data.data;
+            this.aliasTotal = res.data.total
+            this.alias = res.data.data
           }
           //let alias1 = JSON.stringify(res.data.alias);
           //console.log("alias is "+alias1);
-        });
+        })
       },
       //别名表格编辑
       handleAliasEdit: function(index, row) {
-        this.aliasEditFormVisible = true;
-        this.aliasForm = Object.assign({}, row);
+        this.aliasEditFormVisible = true
+        this.aliasForm = Object.assign({}, row)
       },
       //别名表格编辑提交
       editAliasSubmit: function() {
-        let para = Object.assign({}, this.aliasForm);
-        console.log("aliasForm is"+this.aliasForm);
+        let para = Object.assign({}, this.aliasForm)
+        // console.log("aliasForm is"+this.aliasForm);
         editAlias(para).then(() => {
           this.$message({
             message: '提交成功',
             type: 'success'
-          });
-          this.$refs['aliasForm'].resetFields();
-          this.aliasEditFormVisible = false;
-          this.getAliasInfo();
-        });
+          })
+          this.$refs['aliasForm'].resetFields()
+          this.aliasEditFormVisible = false
+          this.getAliasInfo()
+        })
       },
       //别名表 编辑取消
       aliasCancel() {
-        this.aliasFormVisible = false;
-        this.aliasEditFormVisible = false;
-        this.aliasForm = this.aliasFormOriginal;
+        this.aliasFormVisible = false
+        this.aliasEditFormVisible = false
+        this.aliasForm = this.aliasFormOriginal
       },
       //别名表格添加处理
       addAliasHandle: function() {
-        this.aliasForm = this.aliasFormOriginal;
-        this.aliasFormVisible = true;
+        this.aliasForm = this.aliasFormOriginal
+        this.aliasFormVisible = true
       },
       //别名表格添加提交
       addAliasSubmit: function() {
-        let para = Object.assign({}, this.aliasForm);
-        para.handle = 0;
+        let para = Object.assign({}, this.aliasForm)
+        para.handle = 0
 
-        console.log(para);
+        console.log(para)
         addAlias(para).then(() => {
           this.$message({
             message: '提交成功',
             type: 'success'
-          });
-          this.$refs['aliasForm'].resetFields();
-          this.aliasFormVisible = false;
-          this.getAliasInfo();
-        });
+          })
+          this.$refs['aliasForm'].resetFields()
+          this.aliasFormVisible = false
+          this.getAliasInfo()
+        })
       },
       //别名表格批量删除
       delAliasHandle: function() {
         this.$confirm('确认删除选中记录吗？', '提示', {
           type: 'warning'
-        });
-        this.aliasSelections.map(item => del(item));
-        function del(item){
-          item.handle = 1;
-          let para = Object.assign({}, item);
-          delAlias(para);
-        }
-        this.getAliasInfo();
+        }).then(() => {
+          this.aliasSelections.map(item => del(item))
+          function del(item) {
+            item.handle = 1
+            let para = Object.assign({}, item)
+            delAlias(para)
+          }
+        })
+        this.getAliasInfo()
       },
       //单独删除一个网络别名
       signalDelAliasHandle: function(index, row) {
-        row.handle = 1;
-        let para = Object.assign({}, row);
+        row.handle = 1
+        let para = Object.assign({}, row)
 
         this.$confirm('确认删除选中记录吗？', '提示', {
           type: 'warning'
@@ -952,20 +1011,20 @@
             this.$message({
               message: '删除成功',
               type: 'success'
-            });
-            this.getAliasInfo();
-          });
+            })
+            this.getAliasInfo()
+          })
         }).catch(() => {
-        });
+        })
       },
       //别名表格 分页选择 跳到选中页面
       aliasHandleCurrentChange(val) {
-        this.aliasPage = val;
-        this.getAliasInfo();
+        this.aliasPage = val
+        this.getAliasInfo()
       },
       //别名表格 多选 确定选中选项
       aliasSelChange: function(sels) {
-        this.aliasSelections = sels;
+        this.aliasSelections = sels
       },
 
 
@@ -976,79 +1035,87 @@
       getMappingInfo: function() {
         let para = {
           page: this.mappingPage,
-        };
+        }
         getMapping(para).then((res) => {
           if(this.mappingPage === res.data.page ) {
-            this.mappingTotal = res.data.total;
-            this.mapping = res.data.data;
-            return;
+            this.mappingTotal = res.data.total
+            this.mapping = res.data.data
+            return
           }
           else{
-            this.getMappingInfo();
+            this.getMappingInfo()
           }
-        });
+        })
       },
       //映射表格编辑
       handleMappingEdit: function(index, row) {
-        this.mappingEditFormVisible = true;
-        this.mappingForm = Object.assign({}, row);
+        this.mappingEditFormVisible = true
+        this.mappingForm = Object.assign({}, row)
       },
       //映射表格编辑提交
       editMappingSubmit: function() {
-        this.mappingForm.handle = 0;
-        let para = Object.assign({}, this.mappingForm);
-        console.log("mappingForm is"+this.mappingForm);
+        this.mappingForm.handle = 0
+        let para = Object.assign({}, this.mappingForm)
+        console.log('mappingForm is'+this.mappingForm)
         editMapping(para).then(() => {
           this.$message({
             message: '提交成功',
             type: 'success'
-          });
-          this.$refs['mappingForm'].resetFields();
-          this.mappingEditFormVisible = false;
-          this.getMappingInfo();
-        });
+          })
+          this.$refs['mappingForm'].resetFields()
+          this.mappingEditFormVisible = false
+          this.getMappingInfo()
+        })
       },
       //映射表格编辑取消
       mappingCancel() {
-        this.mappingFormVisible = false;
-        this.mappingEditFormVisible = false;
+        this.mappingFormVisible = false
+        this.mappingEditFormVisible = false
+        this.mappingForm = this.mappingFormOriginal
       },
       //映射表格添加处理 显示端口dialogue
       addMappingHandle: function() {
-        this.mappingForm = this.mappingFormOriginal;
-        this.mappingFormVisible = true;
+        this.mappingForm = this.mappingFormOriginal
+        this.mappingFormVisible = true
       },
       //映射表格添加提交
       addMappingSubmit: function() {
-        this.mappingForm.handle = 0;
-        let para = Object.assign({}, this.mappingForm);
+        let para = Object.assign({}, this.mappingForm)
+        para.handle = 0
         addMapping(para).then(() => {
           this.$message({
             message: '提交成功',
             type: 'success'
-          });
-          this.$refs['mappingForm'].resetFields();
-          this.mappingFormVisible = false;
-          this.getMappingInfo();
-        });
+          })
+          this.$refs['mappingForm'].resetFields()
+          this.mappingFormVisible = false
+          this.getMappingInfo()
+        })
       },
       //映射表格删除
       delMappingHandle: function() {
         this.$confirm('确认删除选中记录吗？', '提示', {
           type: 'warning'
-        });
-        this.mappingSelections.map(item => del(item));
-        function del(item) {
-          item.handle = 1;
-          let para = Object.assign({}, item);
-          delMapping(para);
-        }
-        this.getMappingInfo();
+        }).then(() => {
+          this.mappingSelections.map(item => del(item))
+
+          function del(item) {
+            item.handle = 1
+            let para = Object.assign({}, item)
+            delMapping(para)
+          }
+        })
+        this.getMappingInfo()
       },
       //单独删除一个映射表格
       signalDelMappingHandle: function(index, row) {
-        row.handle = 1;
-        let para = Object.assign({}, row);
+        row.handle = 1
+        row.assport = String(row.assport)
+        row.ipcnt = String(row.ipcnt)
+        row.localport = String(row.localport)
+        let para = Object.assign({}, row)
+        console.log('the row is '+row)
+
 
         this.$confirm('确认删除选中记录吗？', '提示', {
           type: 'warning'
@@ -1057,19 +1124,19 @@
             this.$message({
               message: '删除成功',
               type: 'success'
-            });
-            this.getMappingInfo();
-          });
-        });
+            })
+            this.getMappingInfo()
+          })
+        })
       },
       //映射表格 分页选择 跳到选中页面
       mappingHandleCurrentChange(val) {
-        this.mappingPage = val;
-        this.getMappingInfo();
+        this.mappingPage = val
+        this.getMappingInfo()
       },
       //映射表格 多选 确定选中选项
       mappingSelChange: function(sels) {
-        this.mappingSelections = sels;
+        this.mappingSelections = sels
       },
 
 
@@ -1079,129 +1146,141 @@
        */
       //显示端口自适应排序页面
       sortingHandle: function() {
-        this.sortingVisible = true;
+        this.sortingVisible = true
 
-        this.portsName.index = 0;
-        this.portsName.name = '';
-        this.portsName.flag = '';
+        this.portsName.index = 0
+        this.portsName.name = ''
+        this.portsName.flag = ''
       },
       //网口自适应功能 “下一步”按钮调用函数
       sortingNextStep: function() {
         //form validate
         if(this.portsName.name.length > 10){
           this.$message({
-            message: "名称长度请控制在10个字以内",
+            message: '名称长度请控制在10个字以内',
             type: 'error'
-          });
-          return;
+          })
+          return
         }
         else if(this.portsName.name.length === 0){
           this.$message({
-            message: "请输入名称",
+            message: '请输入名称',
             type: 'error'
-          });
-          return;
+          })
+          return
         }
 
-        this.sortLoading = true;
-        this.tip = this.tips[5];
+        this.sortLoading = true
+        this.tip = this.tips[5]
 
-        if(this.portsName.flag !== "middle")
+        if(this.portsName.flag !== 'middle')
         {
-          this.portsName.flag = "first";
+          this.portsName.flag = 'first'
         }
-        let para = Object.assign({}, this.portsName);
-        console.log("name is: "+JSON.stringify(this.portsName));
+        let para = Object.assign({}, this.portsName)
+        console.log('name is: '+JSON.stringify(this.portsName))
 
-        stopSignal = setInterval( () =>{
+        stopSignal3 = setInterval( () =>{
           sendSorting(para).then((res) => {
-            if(res.data.code === 200) {
-                clearInterval(stopSignal);
-                console.log("interval stop: " + stopSignal);
+            if (this.portsName.index === res.data.index) {
+              if (res.data.code === 200) {
+                clearInterval(stopSignal3)
+                console.log('interval stop: ' + stopSignal1)
 
-                this.localName[res.data.index] = this.portsName.name;
+                this.localName[res.data.index] = this.portsName.name
 
-                this.sortLoading = false;
-                this.portsName.index = res.data.index + 1;
+                this.sortLoading = false
+                this.portsName.index = res.data.index + 1
                 // this.portsName.index++;
-                this.portsName.flag = 'middle';
-                this.tip1 = this.tips[0];
-                this.tip2 = this.tips[1];
-                console.log("in sorting interval: http status is " + res.status + " and the index is " + this.portsName.index);
-                console.log(res);
+                this.portsName.flag = 'middle'
+                this.tip1 = this.tips[0]
+                this.tip2 = this.tips[1]
+
+                console.log('in sorting interval: http status is ' + res.status + ' and the index is ' + this.portsName.index)
+                console.log(res)
+              }
+              else if (res.data.code === 500) {
+                this.tip1 = this.tips[2]
+                this.tip2 = this.tips[3]
+                console.log('in sorting interval: http status is ' + res.status + ' and the index is ' + this.portsName.index)
+                console.log(res)
+              }
             }
-            else if(res.data.code === 500){
-              this.tip1 = this.tips[2];
-              this.tip2 = this.tips[3];
-              console.log("in sorting interval: http status is "+res.status+" and the index is "+this.portsName.index);
-              console.log(res);
-            }
-          });
-        }, 1000);
+          })
+        }, 1000)
 
       },
       //网口自适应功能 “完成”按钮调用函数
       sortingFinish: function() {
-        this.sortLoading = true;
+        this.sortLoading = true
+        this.portsName.flag = 'last'
+        this.portsName.index += 1 
+        let para = Object.assign({}, this.portsName)
 
-        this.portsName.flag = "last";
-        let para = Object.assign({}, this.portsName);
-
-        stopSignal = setInterval( () =>{
+        stopSignal4 = setInterval( () =>{
           sendSorting(para).then((res) => {
-            if(res.data.code === 200) {
-              this.sortLoading = false;
-              this.portsName.name = '';
-              this.portsName.flag = '';
-              this.portsName.index = 0;
-              clearInterval(stopSignal);
-              console.log("in cancel interval: "+res.status);
-              console.log(res);
-              this.sortingVisible = false;
+            if(res.data.index === this.portsName.index) {
+              if (res.data.code === 200) {
+                this.sortLoading = false
+                this.portsName.name = ''
+                this.portsName.flag = ''
+                this.portsName.index = 0
+                clearInterval(stopSignal4)
+                console.log('in cancel interval: ' + res.status)
+                console.log(res)
+                this.sortingVisible = false
 
-              this.tip1 = this.tips[0];
-              this.tip2 = this.tips[1];
+                this.tip1 = this.tips[0]
+                this.tip2 = this.tips[1]
 
-              this.getPortsInfo();
+                this.getPortsInfo()
 
-              setTimeout((() => {
-                this.getPortsInfo();
-              }),1000);
-            }
-            else if(res.data.code === 500){
-              this.tip1 = this.tips[2];
-              this.tip2 = this.tips[3];
-              console.log("in sorting interval: http status is "+res.status+" and the index is "+this.portsName.index);
-              console.log(res);
+                setTimeout((() => {
+                  this.getPortsInfo()
+                }), 1000)
+              }
+              else if (res.data.code === 500) {
+                this.tip1 = this.tips[2]
+                this.tip2 = this.tips[3]
+                console.log('in sorting interval: http status is ' + res.status + ' and the index is ' + this.portsName.index)
+                console.log(res)
+              }
             }
           })
-        }, 1000);
+        }, 1000)
 
       },
       //网口自适应功能 “取消”按钮调用函数
       sortingCancel: function() {
-        clearInterval(stopSignal);
-        this.sortingVisible = false;
+        if (stopSignal3 != null) {
+          clearInterval(stopSignal3)
+        }
+        else {
+          clearInterval(stopSignal4)
+        }
+        this.sortingVisible = false
         sortingCancel().then((res) => {
           if(res.status === 200) {
+            return true
           }
-        });
-        this.sortLoading = false;
-        this.portsName.index = 0;
-        this.portsName.name = '';
-        this.portsName.flag = '';
+        })
+        this.sortLoading = false
+        this.portsName.index = 0
+        this.portsName.name = ''
+        this.portsName.flag = ''
 
-        this.tip1 = this.tips[0];
-        this.tip2 = this.tips[1];
+        this.tip1 = this.tips[0]
+        this.tip2 = this.tips[1]
       },
     },
 
     mounted() {
-      this.getPortsInfo();
-      this.getAliasInfo();
-      this.getMappingInfo();
-      this.getFragmentPackageInfo();
-      this.drawLineChart1();
+      this.getPortsInfo()
+      this.getAliasInfo()
+      this.getMappingInfo()
+      this.getFragmentPackageInfo()
+      this.drawLineChart1()
+      this.interval()
     }
   }
 </script>

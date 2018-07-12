@@ -68,8 +68,8 @@
         terminal:[
           {
             name: '1',
-            IP: "0.0.0.0",
-            MAC: "00-00-00-00-00-00-00-00",
+            IP: '0.0.0.0',
+            MAC: '00-00-00-00-00-00-00-00',
             linkNumber: 0,
             uplinkRate: 0,
             downlinkRate: 0,
@@ -77,8 +77,8 @@
           },
           {
             name:'2',
-            IP: "0.0.0.0",
-            MAC: "00-00-00-00-00-00-00-00",
+            IP: '0.0.0.0',
+            MAC: '00-00-00-00-00-00-00-00',
             linkNumber: 0,
             uplinkRate: 0,
             downlinkRate: 0,
@@ -89,13 +89,13 @@
     },
     methods: {
       headerStyle() {
-        return this.header();
+        return this.header()
       },
       speedLimit(row) {
-        console.log(row);
+        console.log(row)
       },
-      ChangeName(row){
-        this.addFormVisible = true;
+      ChangeName(){
+        this.addFormVisible = true
       },
     }
   }

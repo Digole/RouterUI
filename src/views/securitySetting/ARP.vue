@@ -5,7 +5,7 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true">
         <el-form-item>
-          <el-button type="primary" @click="handleAdd">添加</el-button>
+          <el-button type="primary" @click="addHandle">添加</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="danger">删除</el-button>
@@ -27,17 +27,60 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog title="新增端口映射" :visible.sync="formVisible" width="30%">
+      <el-form :model="ARPForm" label-position="left" ref="ARPForm" size="mini">
+        <el-form-item :label="$t('ARP.IP')" :label-width="labelWidth">
+          <el-input :model="ARPForm.IP"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('ARP.MAC')" :label-width="labelWidth">
+          <el-input :model="ARPForm.MAC"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('ARP.name')" :label-width="labelWidth">
+          <el-input :model="ARPForm.name"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button type="danger" @click="formCancel">{{$t('operation.cancel')}}</el-button>
+        <el-button type="primary" @click="formSubmit">{{$t('operation.submit')}}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   export default {
-    name: "ARP",
+    name: 'ARP',
+    data() {
+      return{
+        formVisible: false,
+
+        ARPForm: {
+          IP: '',
+          MAC: '',
+          name: '',
+        },
+
+        labelWidth: '80px'
+      }
+    },
     methods:{
       headerStyle() {
-        return this.header();
+        return this.header()
       },
-    }
+
+      addHandle: function(){
+        this.formVisible = true
+      },
+
+      formCancel: function(){
+        this.formVisible = false
+      },
+      formSubmit: function(){
+        this.formVisible = false
+      }
+    },
+
   }
 </script>
 

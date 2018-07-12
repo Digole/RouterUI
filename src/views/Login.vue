@@ -28,9 +28,9 @@
 </template>
 
 <script>
-  import { requestLogin } from '../api/api';
-  //import NProgress from 'nprogress'
-  export default {
+  // import { requestLogin } from '../api/api'
+//import NProgress from 'nprogress'
+export default {
     data() {
       return {
         logining: false,
@@ -50,55 +50,68 @@
         },
         checked: true
 
-      };
+      }
     },
     methods: {
       handleReset2() {
-        this.$refs.ruleForm2.resetFields();
+        this.$refs.ruleForm2.resetFields()
       },
-      handleSubmit2() {
+      // handleSubmit2() {
+      //   const user = [
+      //     {
+      //       id: 1,
+      //       username: 'admin',
+      //       password: '123456',
+      //       // avatar: 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png',
+      //       name: 'OpenRT'
+      //     }
+      //   ];
+      //   sessionStorage.setItem('user', JSON.stringify(user));
+      //   //let _this = this;
+      //   this.$refs.ruleForm2.validate((valid) => {
+      //     if (valid) {
+      //       //_this.$router.replace('/table');
+      //       this.logining = true;
+      //       //NProgress.start();
+      //       let loginParams = {username: this.ruleForm2.account, password: this.ruleForm2.checkPass};
+      //       requestLogin(loginParams).then(data => {
+      //         console.log("login response:"+data);
+      //         this.logining = false;
+      //         //NProgress.done();
+      //         //let { msg, code, user } = data;
+      //         let { msg, code } = data;
+      //         if (code !== 200) {
+      //           this.$message({
+      //             message: msg,
+      //             type: 'error'
+      //           });
+      //         }
+      //         else {
+      //           sessionStorage.setItem('user', JSON.stringify(user));
+      //           //this.$router.push({ path: '/table' });
+      //           this.$router.push({ path: '/modeChoose' });
+      //         }
+
+      //       });
+      //     } else {
+      //       console.log('error submit!!');
+      //       return false;
+      //     }
+      //   });
+      // },
+      handleSubmit2 () {
         const user = [
           {
             id: 1,
             username: 'admin',
             password: '123456',
-            avatar: 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png',
+            // avatar: 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png',
             name: 'OpenRT'
           }
-        ];
-        sessionStorage.setItem('user', JSON.stringify(user));
-        //let _this = this;
-        this.$refs.ruleForm2.validate((valid) => {
-          if (valid) {
-            //_this.$router.replace('/table');
-            this.logining = true;
-            //NProgress.start();
-            let loginParams = {username: this.ruleForm2.account, password: this.ruleForm2.checkPass};
-            requestLogin(loginParams).then(data => {
-              console.log("login response:"+data);
-              this.logining = false;
-              //NProgress.done();
-              //let { msg, code, user } = data;
-              let { msg, code } = data;
-              if (code !== 200) {
-                this.$message({
-                  message: msg,
-                  type: 'error'
-                });
-              }
-              else {
-                sessionStorage.setItem('user', JSON.stringify(user));
-                //this.$router.push({ path: '/table' });
-                this.$router.push({ path: '/modeChoose' });
-              }
-
-            });
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
+        ]
+        sessionStorage.setItem('user', JSON.stringify(user))
+        this.$router.push('/ModeChoose')
+      }
     }
   }
 

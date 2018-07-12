@@ -5,18 +5,19 @@
       <el-col :span="5" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
         {{collapsed?'':sysName}}
       </el-col>
-      <el-col :span="11">
-        <div class="tools" @click.prevent="collapse" v-model="isCollapse">
+      <el-col :span="6">
+        <!-- <div class="tools" @click.prevent="collapse" v-model="isCollapse"> -->
+        <div class="tools" @click.prevent="collapse">
           <i class="fa fa-align-justify"></i>
         </div>
       </el-col>
 
 
-      <el-col :span="4">
+      <el-col :span="9">
       <div>
-        <el-radio-group v-model="lang" size="small">
-          <el-radio label="zh" border>简体中文</el-radio>
-          <el-radio label="en" border>English</el-radio>
+        <el-radio-group v-model="lang" size="mini">
+          <el-radio label="zh">简体中文</el-radio>
+          <el-radio label="en">English</el-radio>
         </el-radio-group>
       </div>
       </el-col>
@@ -26,7 +27,7 @@
         <el-dropdown trigger="hover">
           <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
+            <el-dropdown-item @click.native="logout">{{$t('home.logout')}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-col>
@@ -37,7 +38,7 @@
       <aside :class="collapsed?'menu-collapsed':'menu-expanded'">
         <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :collapse="isCollapse" :collapse-transition="false" background-color="#222d32" text-color="#aabba1">
           <template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
-            <el-submenu :index="index+''" v-if="!item.leaf">
+            <el-submenu :index="index+''" v-if="!item.leaf" :key="index">
               <template slot="title">
                 <i :class="item.iconCls"></i>
                 <span style="color:#aabba1;">{{generateTitle(item.meta.title)}}</span>
@@ -46,7 +47,7 @@
                 {{generateTitle(child.meta.title)}}
               </el-menu-item>
             </el-submenu>
-            <el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path" @click="$router.push(item.children[0].path)">
+            <el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path" @click="$router.push(item.children[0].path)" :key="index">
               <i :class="item.iconCls"></i>
               <span style="color:#aabba1;">{{generateTitle(item.children[0].meta.title)}}</span>
             </el-menu-item>
@@ -65,11 +66,11 @@
             </el-breadcrumb >
 
             <el-breadcrumb class="breadcrumb-inner-right" v-model="system">
-              <svg class="icon"><use xlink:href="#icon-xiazai1"></use></svg>下行速率:{{system[0].CPURate}}
+              <svg class="icon"><use xlink:href="#icon-xiazai1"></use></svg>{{$t('home.down')}}:{{system[0].CPURate}}
             </el-breadcrumb>
 
             <el-breadcrumb class="breadcrumb-inner-right" v-model="system">
-              <svg class="icon"><use xlink:href="#icon-shangchuan1"></use></svg>上行速率:{{system[0].RAMRate}}
+              <svg class="icon"><use xlink:href="#icon-shangchuan1"></use></svg>{{$t('home.up')}}:{{system[0].RAMRate}}
             </el-breadcrumb>
 
             <el-breadcrumb class="breadcrumb-inner-right" v-model="system">
@@ -77,7 +78,7 @@
             </el-breadcrumb>
 
             <el-breadcrumb class="breadcrumb-inner-right" v-model="system">
-              <svg class="icon"><use xlink:href="#icon-shuju"></use></svg>内存:{{system[0].RAMRate}}%
+              <svg class="icon"><use xlink:href="#icon-shuju"></use></svg>{{$t('home.ram')}}:{{system[0].RAMRate}}%
             </el-breadcrumb>
           </el-col>
           <el-col :span="24" class="content-wrapper">
@@ -94,10 +95,10 @@
 
 
 <script>
-  import { getSystem } from '../api/api';
-  import { generateTitle } from '@/utils/i18n';
+  import { getSystem } from '../api/api'
+import { generateTitle } from '@/utils/i18n'
 
-  export default {
+export default {
     name: 'home',
     data() {
       return {
@@ -106,25 +107,25 @@
         isCollapse: false,
         sysUserName: '',
         sysUserAvatar: '',
-        system:[{"CPURate":"0","RAMRate":"0"}],
+        system:[{'CPURate':'0','RAMRate':'0'}],
       }
     },
 
     methods: {
       onSubmit() {
-        console.log('submit!');
+        console.log('submit!')
       },
 
       //退出登录
       logout: function () {
-        let _this = this;
+        let _this = this
         this.$confirm('确认退出吗?', '提示', {
           //type: 'warning'
         }).then(() => {
-          sessionStorage.removeItem('user');
-          _this.$router.push('/login');
+          sessionStorage.removeItem('user')
+          _this.$router.push('/login')
         }).catch(() => {
-        });
+        })
       },
       //折叠导航栏
       collapse:function(){
@@ -142,26 +143,26 @@
           }), 100);
         }
         */
-        this.collapsed = !this.collapsed;
-        this.isCollapse = !this.isCollapse;
+        this.collapsed = !this.collapsed
+        this.isCollapse = !this.isCollapse
       },
 
       showMenu(i,status){
-        this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
+        this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none'
       },
 
       startSystem: function(){
 
         setInterval(() => {
           getSystem().then((res) => {
-            this.system = res.data.system;
-            //console.log("in home");
-            //console.log(this.system);
-            //this.$store.commit('newRAMRate', this.system[0].RAMRate);
-            //this.$store.commit('newCPURate', this.system[0].CPURate);
-            //console.log(this.$store.state.RAMRate);
+            this.system = res.data.system
+          //console.log("in home");
+          //console.log(this.system);
+          //this.$store.commit('newRAMRate', this.system[0].RAMRate);
+          //this.$store.commit('newCPURate', this.system[0].CPURate);
+          //console.log(this.$store.state.RAMRate);
           })
-        },1000);
+        },1000)
       },
 
       generateTitle
@@ -170,15 +171,15 @@
     created() {
     },
     mounted() {
-      let user = sessionStorage.getItem('user');
+      let user = sessionStorage.getItem('user')
       if (user) {
-        user = JSON.parse(user);
-        this.sysUserName = user.name || '';
-        this.sysUserAvatar = user.avatar || '';
+        user = JSON.parse(user)
+        this.sysUserName = user.name || ''
+        this.sysUserAvatar = user.avatar || ''
       }
-      this.sysUserName = "翼辉";
-      this.sysUserAvatar = "static/logo.png";
-      // this.startSystem();
+      this.sysUserName = '翼辉Admin'
+      this.sysUserAvatar = 'static/avatar.jpg'
+    // this.startSystem();
     },
     computed: {
       lang: {
@@ -283,17 +284,17 @@
           height: 100%;
         }
         .collapsed{
-          width:65px;
+          width: 65px;
           .item{
             position: relative;
           }
           .submenu{
-            position:absolute;
-            top:0;
-            left:65px;
-            z-index:99999;
-            height:auto;
-            display:none;
+            position: absolute;
+            top: 0;
+            left: 65px;
+            z-index: 99999;
+            height: auto;
+            display: none;
           }
 
         }
@@ -307,13 +308,7 @@
         width: 200px;
       }
       .content-container {
-        // background: #f1f2f7;
         flex:1;
-        // position: absolute;
-        // right: 0px;
-        // top: 0px;
-        // bottom: 0px;
-        // left: 230px;
         overflow-y: scroll;
         padding: 20px;
         .breadcrumb-container {
@@ -337,4 +332,7 @@
       }
     }
   }
+    .el-radio-button__inner {
+      background: blue;
+    }
 </style>

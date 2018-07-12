@@ -65,10 +65,10 @@
 
 <script>
   export default {
-    name: "remoteManage",
+    name: 'remoteManage',
     methods:{
       headerStyle() {
-        return this.header();
+        return this.header()
       },
     }
   }

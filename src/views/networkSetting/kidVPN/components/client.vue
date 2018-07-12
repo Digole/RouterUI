@@ -1,0 +1,268 @@
+<template>
+  <section>
+    <div class="line_02"><span>{{$t('kidVPN.client.title')}}</span></div>
+
+    <el-col :span="24" style="padding: 0">
+      <el-form inline>
+        <el-form-item>
+          <el-button type="primary" @click="addClient">{{$t('kidVPN.client.button1')}}</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="danger" @click="batchDeletion">{{$t('kidVPN.client.button2')}}</el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+
+    <el-table :data="addedClientList" style="width: 100%" :header-cell-style="headerStyle">
+      <el-table-column type="selection" min-width="30"></el-table-column>
+      <el-table-column prop="serip" :label="$t('kidVPN.client.serip')" min-width="120"></el-table-column>
+      <el-table-column prop="locip" :label="$t('kidVPN.client.locip')" min-width="120"></el-table-column>
+      <el-table-column prop="netmask" :label="$t('kidVPN.client.netmask')" min-width="120"></el-table-column>
+      <el-table-column prop="gateway" :label="$t('kidVPN.client.gateway')" min-width="120"></el-table-column>
+      <el-table-column prop="mtu" :label="$t('kidVPN.client.mtu')" min-width="60"></el-table-column>
+      <el-table-column prop="vndid" :label="$t('kidVPN.client.vndid')" min-width="120"></el-table-column>
+      <el-table-column prop="status" :label="$t('kidVPN.client.status')" min-width="120"></el-table-column>
+      <el-table-column :label="$t('operation.operation')" min-width="60">
+        <template slot-scope="scope">
+          <el-button size="small" @click="deleteClient(scope.$index, scope.row)">{{$t('operation.delete')}}</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <el-pagination
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-size="5"
+      layout="total, prev, pager, next, jumper"
+      :total="total">
+    </el-pagination>
+
+    <el-dialog :title="$t('kidVPN.client.title1')" :visible.sync="isAddingClient">
+      <el-form :model="VNDForm" :rules="rules" :label-width="labelWidth" label-position="left">
+        <el-form-item prop="ipaddr" :label="$t('kidVPN.client.ipaddr')">
+          <el-input v-model="VNDForm.ipaddr"></el-input>
+        </el-form-item>
+        <el-form-item prop="netmask" :label="$t('kidVPN.client.netmask')">
+          <el-input v-model="VNDForm.netmask"></el-input>
+        </el-form-item>
+        <el-form-item prop="gateway" :label="$t('kidVPN.client.gateway')">
+          <el-input v-model="VNDForm.gateway"></el-input>
+        </el-form-item>
+        <el-form-item prop="mac" :label="$t('kidVPN.client.mac')">
+          <el-input v-model="VNDForm.mac"></el-input>
+        </el-form-item>
+        <el-form-item prop="mtu" :label="$t('kidVPN.client.mtu')">
+          <el-input v-model="VNDForm.mtu"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="danger" @click="triggerAddKidVPNClient">{{$t('operation.cancel')}}</el-button>
+        <el-button type="primary" @click="kidVPNNextStep">$t('kidVPN.client.button3')</el-button>
+      </div>
+    </el-dialog> 
+
+    <el-dialog :title="$t('kidVPN.client.title2')" :visible.sync="isLinkingClient" class="key">
+      <el-form :model="kidVPNForm" :label-width="labelWidth">
+        <el-form-item prop="ipaddr" :label="$t('kidVPN.client.ipaddr1')">
+          <el-input v-model="kidVPNForm.ipaddr"></el-input>
+        </el-form-item>
+        <el-form-item prop="aeskey" :label="$t('kidVPN.client.aeskey')">
+          <textarea v-model="kidVPNForm.aeskey"></textarea>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="danger" @click="triggerLinkKidVPNClient">{{$t('operation.cancel')}}</el-button>
+        <el-button type="primary" @click="linkKidVPN">{{$t('operation.determine')}}</el-button>
+      </div>
+    </el-dialog> 
+
+  </section>
+</template>
+
+<script>
+import { addVND, addKidVPN, delKidVPN, getKidVPNInfo } from '../../../../api/api.js'
+import validate from '../../../../utils/rules.js'
+export default {
+  name: 'client',
+  data () {
+    return {
+      isAddingClient: false,
+      isLinkingClient: false,
+      currentPage: 1,
+      total: '',
+      // addedClientList: {   
+      //   serip: '',
+      //   locip: '',
+      //   netmask: '',
+      //   gateway: '',
+      //   mtu: Number,
+      //   vndid: Number,
+      //   status: '',
+      //   type: ''
+      // },
+      addedClientList: [],
+      VNDForm: {
+        ipaddr: '',
+        netmask: '',
+        gateway: '',
+        mtu: '',
+        mac: ''
+      },
+      kidVPNForm: {
+        vndid: Number,      // 虚拟网卡IP
+        ipaddr: '',         // IP地址
+        aeskey: '',         // AES KEY
+        mtu: '',            // MTU
+        handle: ''
+      },
+      vndid: '',
+      chosenItems: [] ,
+      labelWidth: '120px',
+
+      rules: {
+        ipaddr: [
+          { validator: validate('ip', '请输入正确IP', 'IP不能为空！'), trigger: 'blur' },
+        ],
+        netmask: [
+          { validator: validate('ip', '请输入正确子网掩码', '子网掩码不能为空！'), trigger: 'blur' },
+        ],
+        gateway: [
+          { validator: validate('ip', '请输入正确网关地址', '网关地址不能为空！'), trigger: 'blur' },
+        ],
+        mac: [
+          { validator: validate('mac', '请输入正确MAC地址', 'MAC地址不能为空！'), trigger: 'blur' },
+        ],
+        mtu: [
+          { validator: validate('number', '请输入数字', '不能为空！'), trigger: 'blur' },
+        ]
+      }
+
+    }
+  },
+  methods: {
+    headerStyle () {
+      return this.header()
+    },
+    handleCurrentChange (val) {
+      this.currentPage = val
+      this.getInfo()
+    },
+    triggerAddKidVPNClient () {
+      this.isAddingClient = !this.isAddingClient
+    },
+    triggerLinkKidVPNClient() {
+      this.isLinkingClient = !this.isLinkingClient
+    },
+    addClient () {
+      this.triggerAddKidVPNClient()
+    },
+    kidVPNNextStep () {
+      let para = Object.assign( {}, this.VNDForm )
+
+      addVND(para).then( (res) => {
+        if(res.data.code === 200) {
+          this.vndid = res.data.vndid
+        }
+        this.triggerAddKidVPNClient()
+        this.triggerLinkKidVPNClient()
+      }) 
+    },
+
+    linkKidVPN () {
+      let para = Object.assign( {}, this.kidVPNForm )
+      para.vndid = this.vndid
+      para.mtu = this.VNDForm.mtu
+      para.handle = 'addClient'
+
+      addKidVPN(para).then( (res) => {
+        if(res.data.code === 200) {
+          this.getInfo()
+        }
+        else if(res.data.code === 100) {
+          this.$message ({
+            message: '参数错误',
+            type: 'error'
+          })
+        }
+        else if(res.data.code === 500) {
+          this.$message ({
+            message: '操作失败',
+            type: 'error'
+          })
+        }
+        this.triggerLinkKidVPNClient()
+      })
+    },
+    deleteClient (index, val) {
+      let para = {}
+      para.vndid = val.vndid
+
+      delKidVPN(para).then( (res) => {
+        if(res.data.code === 200) {
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+          })
+        }
+      })
+      this.getInfo()
+    },
+    selChange (sels) {
+      this.chosenItems = sels
+    },
+    async batchDeletion () {
+      let i
+      for(i = 0; i < this.chosenItems.length; i++) {
+        await this.deleteClient(i, this.chosenItems[i])
+      }
+      this.getInfo()
+    },
+    getInfo () {
+      // let result
+      let para = {}
+      para.page = this.currentPage
+      getKidVPNInfo(para).then( (res) => {
+        if(res.data.code === 200) {
+          if(this.currentPage === res.data.page) {
+            if(res.data.data.length !== 0) {
+              console.log('infor '+res.data.data.length)
+              for(let i = 0; i < res.data.data.length; i++) {
+                console.log(res.data.data[i].type)
+                if(res.data.data[i].type === 'servervpn') {
+                  console.log('in clinet getInfo'+res.data.data[i])
+                  // result = res.data.data.splice(i,1)
+                }
+              }
+              console.log(res.data.data)
+              this.addedClientList = res.data.data
+              console.log(this.addedClientList)
+              this.total = res.data.total
+            } 
+            else if (res.data.page > 1) {
+              this.currentPage -= 1
+              this.getInfo()
+            } else {
+              this.addedClientList = res.data.data
+            }
+          }
+        }
+      })
+    }
+  },
+  mounted () {
+    this.getInfo()
+  }
+}
+</script>
+
+<style scoped>
+.el-input {
+  width: 80%;
+}
+.el-select {
+  width: 80%;
+}
+textarea {
+  resize: none;
+}
+</style>

@@ -57,7 +57,7 @@
 
 <script>
   export default {
-    name: "update",
+    name: 'update',
     data() {
       return{
         versionVisual: false,
@@ -67,14 +67,11 @@
 
     methods: {
       submitUpload() {
-        this.$refs.upload.submit();
+        this.$refs.upload.submit()
       },
       checkVersion() {
-        this.versionVisual = true;
+        this.versionVisual = true
       },
-      submitUpload() {
-        this.uploadVisual = true;
-      }
     }
   }
 </script>

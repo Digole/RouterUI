@@ -1,15 +1,22 @@
-import Mock from 'mockjs';
+import Mock from 'mockjs'
 
-const ports = [];
+const ports = []
 
-let portsNumber = parseInt(Math.random()*3+4, 10);
+let portsNumber = parseInt(Math.random()*3+4, 10)
 
 for (let i = 0; i < portsNumber; i++) {
   ports.push(Mock.mock({
-    id: i,
-    category: Mock.Random.pick(['WAN','LAN','空闲']),
-    imgUrl: 'static/port3.png',
-  }));
+    enname: i,
+    devname: 'el',
+    webname: 'eTHX',  // 用户自定义的名称
+    function: Mock.Random.pick(['wan','lan','normal']),
+    linkstatus: 'off',
+    ip: Mock.Random.ip(),
+    netmask: Mock.Random.ip(),
+    mac: '00:00:00:00:00:00:00:00',
+    speed: '0',
+    // webindex: 
+  }))
 }
 
 const dialUp = {
@@ -19,4 +26,4 @@ const dialUp = {
   status:''
 }
 
-export { dialUp, ports };
+export { dialUp, ports }
