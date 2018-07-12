@@ -120,8 +120,8 @@
       <p v-if="this.lanLimit <= this.lanCount && !WANLANLoading" style="color: red;">LAN口数量到达上限</p>
       <p v-if="this.wanLimit <= this.wanCount && !WANLANLoading" style="color: red;">WAN口数量到达上限</p>
       <div slot="footer" class="dialog-footer">
-        <el-button :disabled="unbindEnable" type="danger" @click="unbind">解 绑</el-button>
-        <el-button :disabled="WANForm.use === ''" type="primary" @click="WANLANSubmit">提 交</el-button>
+        <el-button :disabled="unbindEnable" type="danger" @click="unbind">{{$t('operation.unbind')}}</el-button>
+        <el-button :disabled="WANForm.use === ''" type="primary" @click="WANLANSubmit">{{$t('operation.submit')}}</el-button>
       </div>
     </el-dialog>
   </section>

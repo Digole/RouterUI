@@ -37,11 +37,13 @@ export default {
     submit: 'Submit',
     cancel: 'Cancel',
     next: 'Next',
+    previous: 'Return',
     complete: 'Complete',
     add: 'Add',
     delete: 'Delete',
     batchdelete: 'Batch Delete',
     connect: 'Connect',
+    disconnect: 'Disconnect',
     edit: 'Edit',
     setting: 'Setting',
     determine: 'Apply'
