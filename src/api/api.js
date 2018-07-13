@@ -24,6 +24,7 @@ export const dialUp = params => { return axios.post('action/udialHandleAction',p
 // export const dialUp = params  => {return axios.create({url:'${base}/api/dialUp', method:'post', headers:'Content-Type:text/javascript', params:params}).then(res => res.data)}
 
 export const DHCP = params => { return axios.post('action/dhcpClientAction',params ) }
+export const staticIP = params => { return axios.post('action/interfaceInfoSetAction',params ) }
 
 
 /*******************************************************************/

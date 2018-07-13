@@ -237,7 +237,7 @@
 </template>
 
 <script>
-import { getPorts, dialUp, DHCP, staticIP } from '../../../../api/api'
+import { getPorts, dialUp, DHCP } from '../../../../api/api'
 
 let stopSignal1, stopSignal2
 
@@ -516,16 +516,6 @@ export default {
       if (this.wanForm.accessMethod === '1') {
         this.isASDLVisible = false
         this.isDHCP = false
-
-        let para = Object.assign( {}, this.wanForm )
-        para.enname = this.formDialUp.enname
-
-        staticIP(para).then((res) => {
-          if(res.data.code === 200) {
-            this.isSettingNetcardVisible = false
-          }
-        })
-
       }
     },
     sortingHandle: function() {
@@ -533,23 +523,43 @@ export default {
     },
     translate: function(val) {
       if (val === 'run') {
-        this.formDialUp.status = '拨号成功'
+        if(this.$store.state.app.language === 'zh') {
+          this.formDialUp.status = '拨号成功'
+        }else {
+          this.formDialUp.status = 'Success'
+        }
         // buttonChange
         this.isLoading = false
         this.isAfterConnection = true
         clearInterval(stopSignal1)
       }
       else if (val === 'init') {
-        this.formDialUp.status = '拨号初始化'
+        if(this.$store.state.app.language === 'zh') {
+          this.formDialUp.status = '拨号初始化'
+        }else {
+          this.formDialUp.status = 'Dial initialization'
+        }
       }
       else if (val === 'auth') {
-        this.formDialUp.status = '用户验证'
+        if(this.$store.state.app.language === 'zh') {
+          this.formDialUp.status = '用户验证'
+        }else {
+          this.formDialUp.status = 'User Authentication'
+        }
       }
       else if (val === 'disconnect') {
-        this.formDialUp.status = '连接断开'
+        if(this.$store.state.app.language === 'zh') {
+          this.formDialUp.status = '连接断开'
+        }else {
+          this.formDialUp.status = 'Disconnected'
+        }
       }
       else if (val === 'dead') {
-        this.formDialUp.status = '连接失败'
+        if(this.$store.state.app.language === 'zh') {
+          this.formDialUp.status = '连接失败'
+        }else {
+          this.formDialUp.status = 'Connection failed'
+        }
         this.isLoading = false
         this.isConnectionShow = true
         clearInterval(stopSignal1)
@@ -570,7 +580,11 @@ export default {
         if (res.data.code === 200) {
           this.translate(res.data.status)
         } else {
-          this.formDialUp.status = '拨号失败!'
+          if(this.$store.state.app.language === 'zh') {
+            this.formDialUp.status = '拨号失败'
+          }else {
+            this.formDialUp.status = 'Dial failed'
+          }         
         }
       })
 
@@ -582,7 +596,11 @@ export default {
             this.translate(res.data.status)
           }
           if (res.data.code === 300) {
-            this.formDialUp.status = '拨号次数已达上限'
+            if(this.$store.state.app.language === 'zh') {
+              this.formDialUp.status = '拨号次数已达上限'
+            }else {
+              this.formDialUp.status = 'The number of dialups has reached the limit'
+            }    
             this.isLoading = false
             clearInterval(stopSignal1)
           }
@@ -617,7 +635,7 @@ export default {
         })
       }, 1000)
       this.isConnectionShow = true
-      // 清空form是清空接如方式 这一栏
+      // 清空form是清空接入方式 这一栏
       this.$refs['formDialUp'].resetFields() 
     },
     DHCPLink() {

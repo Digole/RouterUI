@@ -147,6 +147,14 @@ export default {
       placeholder2: '请选择内外网',
       LAN: 'LAN（内网）',
       WAN: 'WAN（外网）',
+    },
+    dialUpStatus: {
+      success: '拨号成功',
+      init: '拨号初始化',
+      auth: '用户验证',
+      disconnect: '断开连接',
+      connectFail: '连接失败',
+      dialFail: '拨号失败'
     }
   },
   kidVPN: {

@@ -146,6 +146,14 @@ export default {
       placeholder2: 'Please select the network',
       LAN: 'LAN（Intranet）',
       WAN: 'WAN（Extranet）',
+    },
+    dialUpStatus: {
+      success: 'success',
+      init: 'Dial initialization',
+      auth: 'User Authentication',
+      disconnect: 'Disconnected',
+      connectFail: 'Connection failed',
+      dialFail: 'Dial failed'
     }
   },
   kidVPN: {

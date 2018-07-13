@@ -95,41 +95,41 @@
 
 
 <script>
-  import { getSystem } from '../api/api'
+import { getSystem } from '../api/api'
 import { generateTitle } from '@/utils/i18n'
 
 export default {
-    name: 'home',
-    data() {
-      return {
-        sysName:'OpenRT v0.1',
-        collapsed:false,
-        isCollapse: false,
-        sysUserName: '',
-        sysUserAvatar: '',
-        system:[{'CPURate':'0','RAMRate':'0'}],
-      }
+  name: 'home',
+  data() {
+    return {
+      sysName:'OpenRT v0.1',
+      collapsed:false,
+      isCollapse: false,
+      sysUserName: '',
+      sysUserAvatar: '',
+      system:[{'CPURate':'0','RAMRate':'0'}],
+    }
+  },
+
+  methods: {
+    onSubmit() {
+      console.log('submit!')
     },
 
-    methods: {
-      onSubmit() {
-        console.log('submit!')
-      },
-
-      //退出登录
-      logout: function () {
-        let _this = this
-        this.$confirm('确认退出吗?', '提示', {
-          //type: 'warning'
-        }).then(() => {
-          sessionStorage.removeItem('user')
-          _this.$router.push('/login')
-        }).catch(() => {
-        })
-      },
-      //折叠导航栏
-      collapse:function(){
-        /*
+    //退出登录
+    logout: function () {
+      let _this = this
+      this.$confirm('确认退出吗?', '提示', {
+        //type: 'warning'
+      }).then(() => {
+        sessionStorage.removeItem('user')
+        _this.$router.push('/login')
+      }).catch(() => {
+      })
+    },
+    //折叠导航栏
+    collapse:function(){
+      /*
         if(this.collapsed === false) {
           setTimeout((() => {
             this.collapsed = !this.collapsed;
@@ -143,58 +143,58 @@ export default {
           }), 100);
         }
         */
-        this.collapsed = !this.collapsed
-        this.isCollapse = !this.isCollapse
-      },
+      this.collapsed = !this.collapsed
+      this.isCollapse = !this.isCollapse
+    },
 
-      showMenu(i,status){
-        this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none'
-      },
+    showMenu(i,status){
+      this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none'
+    },
 
-      startSystem: function(){
+    startSystem: function(){
 
-        setInterval(() => {
-          getSystem().then((res) => {
-            this.system = res.data.system
+      setInterval(() => {
+        getSystem().then((res) => {
+          this.system = res.data.system
           //console.log("in home");
           //console.log(this.system);
           //this.$store.commit('newRAMRate', this.system[0].RAMRate);
           //this.$store.commit('newCPURate', this.system[0].CPURate);
           //console.log(this.$store.state.RAMRate);
-          })
-        },1000)
-      },
-
-      generateTitle
+        })
+      },1000)
     },
 
-    created() {
-    },
-    mounted() {
-      let user = sessionStorage.getItem('user')
-      if (user) {
-        user = JSON.parse(user)
-        this.sysUserName = user.name || ''
-        this.sysUserAvatar = user.avatar || ''
-      }
-      this.sysUserName = '翼辉Admin'
-      this.sysUserAvatar = 'static/avatar.jpg'
+    generateTitle
+  },
+
+  created() {
+  },
+  mounted() {
+    let user = sessionStorage.getItem('user')
+    if (user) {
+      user = JSON.parse(user)
+      this.sysUserName = user.name || ''
+      this.sysUserAvatar = user.avatar || ''
+    }
+    this.sysUserName = '翼辉Admin'
+    this.sysUserAvatar = 'static/avatar.jpg'
     // this.startSystem();
-    },
-    computed: {
-      lang: {
-        get() {
-          console.log('get')
-          return this.$store.state.app.language
-        },
-        set(lang) {
-          console.log('set')
-          this.$i18n.locale = lang
-          this.$store.dispatch('setLanguage', lang)
-        }
+  },
+  computed: {
+    lang: {
+      get() {
+        console.log('get')
+        return this.$store.state.app.language
+      },
+      set(lang) {
+        console.log('set')
+        this.$i18n.locale = lang
+        this.$store.dispatch('setLanguage', lang)
       }
     }
   }
+}
 </script>
 
 <style scoped lang="scss">
