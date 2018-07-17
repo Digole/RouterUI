@@ -89,4 +89,15 @@ export const handleVLAN = data => { return axios.post('action/vlanConfigAction',
 export const getFC = data => { return axios.post('action/flowctlShowAction', data)}
 export const handleFC = data => { return axios.post('action/flowctlConfigAction', data)}
 
+// ARP绑定
+export const handleARP = data => { return axios.post('action/arpConfigAction', data)}
+export const getARP = data => { return axios.post('action/arpShowAction', data)}
+export const getDynamicARP = data => { return axios.post('action/arpDynamicShowAction', data)}
 
+
+// 线路监控
+export const getMonitorInfo = data => { return axios.post('action/monitorInfoGetAction', data)}
+export const handleMonitorInfo = data => { return axios.post('action/monitorItemDisableAction', data)}
+
+// 系统日志
+export const getLog = data => { return axios.post('action/udialLogGetAction', data)}

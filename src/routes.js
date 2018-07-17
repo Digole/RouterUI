@@ -16,7 +16,7 @@ import echarts from './views/charts/echarts.vue'
 /*
 *status_monitor
  */
-import lineMonitor from './views/statusMonitor/lineMonitor.vue'
+import lineMonitor from './views/statusMonitor/lineMonitor/lineMonitor.vue'
 import flowMonitor from './views/statusMonitor/flowMonitor.vue'
 import terminalMonitor from './views/statusMonitor/terminalMonitor.vue'
 import performanceMonitor from './views/statusMonitor/performanceMonitor.vue'
@@ -60,6 +60,8 @@ import remoteManagement from './views/securitySetting/remoteManagement.vue'
 import systemStatus from './views/systemStatus/systemStatus.vue'
 
 // import routerSetting from './views/routerSetting/routerSetting.vue'
+
+import log from './views/log/log.vue'
 
 let routes = [
   {
@@ -225,6 +227,19 @@ let routes = [
     },
     children: [
       { path: '/systemStatus', component: systemStatus, name: '系统概况', meta: { title: 'systemStatus'} },
+    ]
+  },
+  {
+    path:'/',
+    component: Home,
+    name: '系统日志',
+    iconCls: 'fa fa-bar-chart',
+    leaf: true,
+    meta: {
+      title: 'log',
+    },
+    children: [
+      { path: '/log', component: log, name: '日志', meta: { title: 'log' }}
     ]
   },
   // {

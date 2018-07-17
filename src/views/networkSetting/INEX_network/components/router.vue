@@ -45,7 +45,7 @@
             <div class="text-area">
               <span v-show="item.function !== 'normal'"><svg class="icon"><use :xlink:href="selectIcon(item.function)"></use></svg></span>
               {{ports[index].webname}}
-              <span><svg class="icon"><use :xlink:href="selectIcon2(item.type)"></use></svg></span>
+              <span v-show="item.function !== 'normal'"><svg class="icon"><use :xlink:href="selectIcon2(item.type)"></use></svg></span>
             </div>
           </div>
         </div>
@@ -70,7 +70,7 @@
             <el-input v-model="lanForm.ip" prop="ip" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('INEXNetwork.cardConfig.mask')" :label-width="formLabelWidth">
-            <el-input v-model="lanForm.mask" prop="mask" auto-complete="off" placeholder="255.255.255.0"></el-input>
+            <el-input v-model="lanForm.netmask" prop="mask" auto-complete="off" placeholder="255.255.255.0"></el-input>
           </el-form-item>
           <el-form-item :label="$t('INEXNetwork.cardConfig.gateway')" :label-width="formLabelWidth">
             <el-input v-model="lanForm.gateway" prop="gateway" auto-complete="off" placeholder=""></el-input>
@@ -79,7 +79,7 @@
           <!--components of collapse-->
           <el-collapse class="advancedSetting">
             <el-collapse-item :title="$t('INEXNetwork.cardConfig.collapseTitle')" name="1">
-              <el-form :model="advancedLANForm" label-position="left" size="small" ref="advanceLANForm">
+              <el-form :model="advancedLANForm" label-position="left" size="small" ref="advancedLANForm">
 
                 <el-form-item :label="$t('INEXNetwork.cardConfig.workingMode')" prop="mode" :label-width="formLabelWidth">
                   <el-select v-model="advancedLANForm.mode" placeholder="请选择" value="" style="width: 100%;">
@@ -124,8 +124,8 @@
         :visible.sync="isWANInnerVisible"
         append-to-body>
         <el-form :model="wanForm" label-position="left" size="small" ref="wanForm">
-          <el-form-item :label="$t('INEXNetwork.cardConfig.linkType')" prop="accessMethod" :label-width="formLabelWidth">
-            <el-select v-model="wanForm.accessMethod" placeholder="请选择" style="width: 100%;" @change="onSelect">
+          <el-form-item :label="$t('INEXNetwork.cardConfig.linkType')" prop="accessMode" :label-width="formLabelWidth">
+            <el-select v-model="wanForm.accessMode" placeholder="请选择" style="width: 100%;" @change="onSelect">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -170,7 +170,7 @@
             <el-input v-model="wanForm.ip" :disabled="isASDLVisible||isDHCP" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('INEXNetwork.cardConfig.mask')" prop="mask" :label-width="formLabelWidth">
-            <el-input v-model="wanForm.mask" :disabled="isASDLVisible||isDHCP" auto-complete="off"></el-input>
+            <el-input v-model="wanForm.netmask" :disabled="isASDLVisible||isDHCP" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('INEXNetwork.cardConfig.gateway')" prop="gateway" :label-width="formLabelWidth">
             <el-input v-model="wanForm.gateway" :disabled="isASDLVisible||isDHCP" auto-complete="off"></el-input>
@@ -239,7 +239,7 @@
 <script>
 import { getPorts, dialUp, DHCP, staticIP } from '../../../../api/api'
 
-let stopSignal1, stopSignal2
+let stopSignal1, stopSignal2, stopSignal
 
 export default {
   name: 'IN-EX_network',
@@ -269,7 +269,7 @@ export default {
       //   mode: "", //工作模式
       //   rate: "", //网卡速率 lan
       //   control: "", //lan互访控制
-      //   accessMethod: "", //接入方式
+      //   accessMode: "", //接入方式
       //   primaryDNS: "", //首选DNS
       //   secondaryDNS: "", //备选DNS
       //   status: "" //连接状态，ASDL使用该属性
@@ -336,7 +336,7 @@ export default {
       lanForm: {
         ip: '',
         gateway: '',
-        mask: ''
+        netmask: ''
       },
       advancedLANForm: {
         mode: '',
@@ -346,7 +346,7 @@ export default {
       wanForm: {
         accessMode: '',
         ip: '',
-        mask: '',
+        netmask: '',
         gateway: '',
         primaryDNS: '',
         secondaryDNS: ''
@@ -383,6 +383,7 @@ export default {
           this.isInCancel = false
           this.isButtonVisible = true
           this.$refs['optionForm'].resetFields()
+          this.$refs['wanForm'].resetFields()
         }
       }
     },
@@ -390,6 +391,7 @@ export default {
       handler: function() {
         if(this.isWANInnerVisible === false) {
           this.isAfterConnection = false
+          this.isDHCP = false
           this.$refs['wanForm'].resetFields()
           this.$refs['advanceWANForm'].resetFields()
         }
@@ -469,9 +471,10 @@ export default {
       // 获得对应端口的enname，DHCP要用
       this.formDialUp.enname = obj.enname
 
-      // 获取连接状态
+      // 获取DHCP连接状态
       if(obj.type === 'dhcp') {
         this.DHCPStatus = '已连接' 
+        this.isDHCPConnected = true
       }
 
       this.triggerSettingNetcardVisible()
@@ -480,13 +483,14 @@ export default {
     nextStep: function() {
       if (this.optionForm.id === 'lan') {
         this.triggerLANInnerVisible()
+        this.lanForm = Object.assign( {}, this.ports[this.formDialUp.webindex] )
       } else if (this.optionForm.id === 'wan') {
         this.triggerWANInnerVisible()
       }
     },
     // 处理连接方式选择的函数,触发ASDL相关的操作
     onSelect: function() {
-      if (this.wanForm.accessMethod === '3') {
+      if (this.wanForm.accessMode === '3') {
         this.triggerASDLVisible()
 
         let para = Object.assign({}, this.formDialUp)
@@ -509,23 +513,17 @@ export default {
           }
         })
       }
-      if (this.wanForm.accessMethod === '2') {
+      if (this.wanForm.accessMode === '2') {
         this.isASDLVisible = false
         this.showDHCPItems()
+
+        this.wanForm = Object.assign( this.wanForm, this.ports[this.formDialUp.webindex] )
       }
-      if (this.wanForm.accessMethod === '1') {
+      if (this.wanForm.accessMode === '1') {
         this.isASDLVisible = false
         this.isDHCP = false
 
-        let para = Object.assign( {}, this.wanForm )
-        para.enname = this.formDialUp.enname
-
-        staticIP(para).then((res) => {
-          if(res.data.code === 200) {
-            this.isSettingNetcardVisible = false
-          }
-        })
-
+        this.wanForm = Object.assign( this.wanForm, this.ports[this.formDialUp.webindex] )
       }
     },
     sortingHandle: function() {
@@ -592,6 +590,7 @@ export default {
       this.isWANInnerVisible = true
       this.isSettingNetcardVisible = true
       this.$refs['formDialUp'].resetFields()
+      this.getPortsInfo()
     },
     dialCancel() {
       this.isLoading = false
@@ -635,6 +634,7 @@ export default {
         }
       })
       this.isDHCPConnected = true
+      this.getPortsInfo()
     },
     DHCPDisconnect() {
       let para = {}
@@ -674,8 +674,22 @@ export default {
     LANFormSubmit: function() {
       this.triggerSettingNetcardVisible()
       this.triggerLANInnerVisible()
+
+      let para = {}
+      para.enname = this.formDialUp.enname
+      para.ipaddr = this.lanForm.ip
+      para.netmask = this.lanForm.netmask
+      para.gateway = this.lanForm.gateway
+
+      staticIP(para).then((res) => {
+        if(res.data.code === 200) {
+          this.isSettingNetcardVisible = false
+        }
+      })
+
       this.$refs['advancedLANForm'].resetFields()
       this.$refs['lanForm'].resetFields()
+      this.getPortsInfo()
     },
     // LAN dialog取消
     LANFormCancel: function() {
@@ -692,6 +706,21 @@ export default {
     WANFormSubmit: function() {
       this.triggerSettingNetcardVisible()
       this.triggerWANInnerVisible()
+
+      if(this.wanForm.accessMode === '1') {
+        let para = {}
+        para.enname = this.formDialUp.enname
+        para.ipaddr = this.wanForm.ip
+        para.netmask = this.wanForm.netmask
+        para.gateway = this.wanForm.gateway
+
+        staticIP(para).then((res) => {
+          if(res.data.code === 200) {
+            this.isSettingNetcardVisible = false
+          }
+        })
+        this.getPortsInfo()
+      }
        
       this.$refs['advancedWANForm'].resetFields()
       this.$refs['wanForm'].resetFields()
@@ -731,6 +760,7 @@ export default {
         this.$refs['formDialUp'].resetFields()
       })
       this.isConnectionShow = false
+      this.getPortsInfo()
     },
     getPortsInfo: function() {
       getPorts().then((res) => {
@@ -742,7 +772,8 @@ export default {
         res.data.interfaces.sort(sortNumber)
 
         this.checked = res.data.code
-        this.ports = JSON.parse(JSON.stringify(res.data.interfaces))
+        // this.ports = JSON.parse(JSON.stringify(res.data.interfaces))
+        this.ports = res.data.interfaces
       })
     },
     pushDNS: function() {
@@ -752,6 +783,10 @@ export default {
   },
   mounted() {
     this.getPortsInfo()
+    stopSignal = setInterval(this.getPortsInfo, 5000)
+  },
+  beforeDestroy() {
+    clearInterval(stopSignal)
   }
 }
 </script>

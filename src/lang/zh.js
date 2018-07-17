@@ -28,7 +28,8 @@ export default {
     remoteLoginManagement: '远程登陆管理',
     firewall: '规则防火墙',
     systemStatus: '系统概况',
-    dynamicRoutingConfiguration: '动态路由配置'
+    dynamicRoutingConfiguration: '动态路由配置',
+    log: '系统日志'
   },
 
   operation: {
@@ -262,6 +263,16 @@ export default {
   ARP: {
     IP: 'IP',
     MAC: 'MAC',
-    name: '名称',
+    status: '状态',
+    title: 'ARP绑定',
+    title2: '新增ARP绑定',
+    title3: '编辑ARP绑定',
+    dynamicARP: '动态ARP'
   },
+  log: {
+    index: '编号',
+    time: '时间',
+    line: '线路',
+    detail: '日志详情'
+  }
 }

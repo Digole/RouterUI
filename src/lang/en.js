@@ -28,7 +28,8 @@ export default {
     remoteLoginManagement: 'RemoteLogin',
     firewall: 'Firewall',
     systemStatus: 'SystemStatus',
-    dynamicRoutingConfiguration: 'DynamicRouteConfig'
+    dynamicRoutingConfiguration: 'DynamicRouteConfig',
+    log: 'Log'
   },
 
   operation: {
@@ -256,7 +257,16 @@ export default {
   ARP: {
     IP: 'IP',
     MAC: 'MAC',
-    name: 'Name',
+    status: 'status',
+    title: 'ARP Binding',
+    title2: 'Add ARP Binding',
+    title3: 'Edit ARP Binding',
+    dynamicARP: 'Dynamic ARP'
   },
-
+  log: {
+    index: 'Index',
+    time: 'Time',
+    line: 'Line',
+    detail: 'Log Details'
+  }
 }

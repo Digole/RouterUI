@@ -32,8 +32,6 @@
       </el-collapse-item>
     </el-collapse>
 
-    
-
   </section>
 </template>
 
