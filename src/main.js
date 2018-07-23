@@ -10,8 +10,8 @@ import routes from './routes'
 import store from './store'
 import Vuex from 'vuex'
 
-// import NProgress from 'nprogress'
-// import 'nprogress/nprogress.css'
+// import axios from 'axios'
+
 import 'font-awesome/css/font-awesome.min.css'
 // import Mock from './mock'
 // Mock.bootstrap();
@@ -22,6 +22,8 @@ import 'font-awesome/css/font-awesome.min.css'
 import './assets/iconfont/iconfont.js'
 
 // import validateForm from '@/utils/validate'
+
+// axios.defaults.baseURL = 'https://10.9.0.17:80/'
 
 Vue.use(ElementUI, {
   i18n: (key, value) => i18n.t(key, value)

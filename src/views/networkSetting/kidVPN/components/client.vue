@@ -57,7 +57,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="danger" @click="triggerAddKidVPNClient">{{$t('operation.cancel')}}</el-button>
-        <el-button type="primary" @click="kidVPNNextStep">$t('kidVPN.client.button3')</el-button>
+        <el-button type="primary" @click="kidVPNNextStep">{{$t('kidVPN.client.button3')}}</el-button>
       </div>
     </el-dialog> 
 

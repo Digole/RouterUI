@@ -82,7 +82,6 @@
     </el-dialog>
 
     <!-- 动态ARP表 -->
-    <div class="line_02"><span>{{$t('ARP.dynamicARP')}}</span></div>
 
     <el-collapse>
       <el-collapse-item :title="$t('ARP.dynamicARP')" name="1">

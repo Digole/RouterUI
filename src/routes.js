@@ -14,10 +14,16 @@ import Page6 from './views/nav3/Page6.vue'
 import echarts from './views/charts/echarts.vue'
 */
 /*
+*systemStatus
+ */
+import systemStatus from './views/systemStatus/systemStatus.vue'
+
+/*
 *status_monitor
  */
 import lineMonitor from './views/statusMonitor/lineMonitor/lineMonitor.vue'
 import flowMonitor from './views/statusMonitor/flowMonitor.vue'
+import rateMonitor from './views/statusMonitor/rateMonitor.vue'
 import terminalMonitor from './views/statusMonitor/terminalMonitor.vue'
 import performanceMonitor from './views/statusMonitor/performanceMonitor.vue'
 /*
@@ -54,10 +60,7 @@ import BMDisplay from './views/behaviourManagement/BMDisplay.vue'
 import ARP from './views/securitySetting/ARP.vue'
 import firewall from './views/securitySetting/firewall.vue'
 import remoteManagement from './views/securitySetting/remoteManagement.vue'
-/*
-*systemStatus
- */
-import systemStatus from './views/systemStatus/systemStatus.vue'
+
 
 // import routerSetting from './views/routerSetting/routerSetting.vue'
 
@@ -127,6 +130,19 @@ let routes = [
   },
   */
   {
+    path:'/',
+    component: Home,
+    name: '系统概况简介',
+    iconCls: 'fa fa-bar-chart',
+    leaf: true,//只有一个节点
+    meta: {
+      title: 'systemSetting'
+    },
+    children: [
+      { path: '/systemStatus', component: systemStatus, name: '系统概况', meta: { title: 'systemStatus'} },
+    ]
+  },
+  {
     path: '/',
     component: Home,
     name: '状态监控',
@@ -138,6 +154,7 @@ let routes = [
       { path: '/lineMonitor', component: lineMonitor, name: '线路监控', meta: { title: 'lineMonitor'} },
       { path: '/terminalMonitor', component: terminalMonitor, name: '终端监控', meta: { title: 'terminalMonitor'} },
       { path: '/flowMonitor', component: flowMonitor, name: '流量监控', meta: { title: 'flowMonitor'} },
+      { path: '/rateMonitor', component: rateMonitor, name: '速率监控', meta: { title: 'rateMonitor'} },
       { path: '/performanceMonitor', component: performanceMonitor, name: '性能监控', meta: { title: 'performanceMonitor'} }
     ]
   },
@@ -219,27 +236,13 @@ let routes = [
   {
     path:'/',
     component: Home,
-    name: '系统概况简介',
+    name: '日志系统',
     iconCls: 'fa fa-bar-chart',
-    leaf: true,//只有一个节点
-    meta: {
-      title: 'systemSetting'
-    },
-    children: [
-      { path: '/systemStatus', component: systemStatus, name: '系统概况', meta: { title: 'systemStatus'} },
-    ]
-  },
-  {
-    path:'/',
-    component: Home,
-    name: '系统日志',
-    iconCls: 'fa fa-bar-chart',
-    leaf: true,
     meta: {
       title: 'log',
     },
     children: [
-      { path: '/log', component: log, name: '日志', meta: { title: 'log' }}
+      { path: '/log', component: log, name: '日志', meta: { title: 'diallog' }}
     ]
   },
   // {

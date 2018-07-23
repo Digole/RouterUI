@@ -3,7 +3,11 @@
 
     <div class="line_02"><span>监控</span></div>
 
-    <el-table :data="lineForm" title="线路监控" :header-cell-style="headerStyle">
+    <el-table :data="final" title="线路监控" :header-cell-style="headerStyle">
+      <el-table-column prop="lineName" label="线路名称" min-width="120">
+      </el-table-column>
+      <el-table-column prop="function" label="功能" min-width="120">
+      </el-table-column>
       <el-table-column prop="ip" label="IP" min-width="120">
       </el-table-column>
       <el-table-column prop="mac" label="Mac" min-width="120">
@@ -16,51 +20,31 @@
       </el-table-column>
       <el-table-column prop="send_total_length" label="下行总流量" min-width="120">
       </el-table-column>
-      <el-table-column prop="recv_total_packets" label="上行丢包数/天" min-width="120">
+      <el-table-column prop="recv_total_packets" label="上行包总数" min-width="120">
       </el-table-column>
-      <el-table-column prop="send_total_packets" label="下行丢包数/天" min-width="120">
-      </el-table-column>
-    </el-table>
-
-    <el-table :data="terminalForm" title="终端监控" :header-cell-style="headerStyle">
-      <el-table-column prop="ip" label="IP" min-width="120">
-      </el-table-column>
-      <el-table-column prop="mac" label="Mac" min-width="120">
-      </el-table-column>
-      <el-table-column prop="recv_rate" label="上行速率" min-width="120">
-      </el-table-column>
-      <el-table-column prop="send_rate" label="下行速率" min-width="120">
-      </el-table-column>
-      <el-table-column prop="recv_total_length" label="累计上行" min-width="120">
-      </el-table-column>
-      <el-table-column prop="send_total_length" label="累计下行" min-width="120">
-      </el-table-column>
-      <el-table-column prop="duration" label="在线时长" min-width="120">
-      </el-table-column>
-      <el-table-column>
-        <template slot-scope="scope" :label="$t('operation.operation')" min-width="120">
-          <el-button @click="forbidLink(scope.row)" type="text" size="small">禁止联网</el-button>
-          <el-button @click="limitLink(scope.row)" type="text" size="small">限速</el-button>
-        </template>
+      <el-table-column prop="send_total_packets" label="下行包总数" min-width="120">
       </el-table-column>
     </el-table>
 
-    <charts class="echarts"></charts>
+    <el-pagination
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-size="10"
+      layout="total, prev, pager, next, jumper"
+      :total="this.total">
+    </el-pagination>
   </section>
 </template>
 
 <script>
-import { getMonitorInfo } from '../../../api/api.js'
-import { charts } from './components'
+import { getMonitorInfo, getPorts } from '../../../api/api.js'
+import { conversion } from '../../../utils/rateUnitExchange.js'
 export default {
   name: 'line_monitor',
-  components: {
-    charts
-  },
   data() {
     return{
       form: {
-        type: '',
+        type: Number,
         enable: '',
         protocol: '',
         port: '',
@@ -74,38 +58,93 @@ export default {
         send_total_length: Number,
         recv_total_length: Number,
         send_total_packets: Number,
-        recv_total_packets: Number
+        recv_total_packets: Number,
       },
-      terminalForm: [],
+      final: [],
+      ports: [],
       lineForm: [],
+      currentPage: 1,
+      total: 0
     }
   },
   methods:{
     headerStyle() {
       return this.header()
     },
-    forbidLInk() {
-    },
-    limitLink() {
-    },
-    getLineInfo() {
+    handleCurrentChange(val) {
       let para = Object.assign( {}, this.form)
-      para.type = '3'
+      para.type = 3
+      para.page = this.currentPage
       getMonitorInfo(para).then( (res) => {
         if(res.data.code === 200) {
-          this.terminalForm = res.data.data
+          this.lineform = res.data.data
+          this.total = res.data.total
         }
+        this.currentPage = val
       })
     },
-    getTerminalInfo() {
+    async getLineInfo () {
       let para = Object.assign( {}, this.form)
-      para.type = '1'
-      getMonitorInfo(para).then( (res) => {
+      para.type = 3
+      para.page = this.currentPage
+      await getMonitorInfo(para).then( (res) => {
         if(res.data.code === 200) {
-          this.lineForm = res.data.data
-        }
+          if(res.data.data.length !==0 ) {
+            this.lineForm = res.data.data
+            this.total = res.data.total
+          } else {
+            if(res.data.total === 0) {
+              this.lineForm = res.data.data
+              this.lineForm.send_rate = conversion(this.lineForm.send_rate)
+              this.lineForm.recv_rate = conversion(this.lineForm.recv_rate)
+              this.total = res.data.total
+            } else {
+              this.currentPage -= 1
+              this.getLineInfo()
+            }
+          }
+        } 
       })
+    },
+    async getPortsInfo () {
+      await getPorts().then((res) => {
+        if(res.data.code === 200) {
+          this.ports = res.data.interfaces
+          console.log(this.ports)
+        } 
+      })
+    },
+    async generateData () {
+      await this.getLineInfo()
+      await this.getPortsInfo()
+      this.final = getNameAndFunc(this.lineForm, this.ports)
+      console.log('lineForm' + this.lineForm)
+      console.log('final' + this.final)
+
+      function getNameAndFunc (line, ports) {
+        console.log('in nameandfunc'+ line + ports)
+        for(let i = 0; i < line.length; i++) {
+          for(let j = 0; j < ports.length; j++) {
+            if (line[i].ifname === ports[j].enname) {
+              line[i].lineName = ports[j].webname
+              line[i].function = ports[j].function
+              if(line[i].function.length === 3) {
+                line[i].function + '   '
+              }
+              if(ports[j].type !== '') {
+                line[i].function += '/'
+                line[i].function += ports[j].type
+              }
+            }
+          }
+        }
+        return line
+      }
+
     }
+  },
+  mounted() {
+    this.generateData()
   }
 }
 </script>

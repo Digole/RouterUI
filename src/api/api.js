@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-let base = ''
+let base = 'https://10.9.0.17:80/'
+// let base = ''
 
 export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data) }
 //export const requestLogin = params => { return axios.post(`action/webLoginAction`, params).then(res => res.data); };
@@ -100,4 +101,4 @@ export const getMonitorInfo = data => { return axios.post('action/monitorInfoGet
 export const handleMonitorInfo = data => { return axios.post('action/monitorItemDisableAction', data)}
 
 // 系统日志
-export const getLog = data => { return axios.post('action/udialLogGetAction', data)}
+export const getLog = data => { return axios.post(base+'action/udialLogGetAction', data)}

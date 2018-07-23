@@ -63,11 +63,11 @@
                   <p>Kbps{{$t('systemStatus.middle.bandWidth')}}</p>
                 </div>
                 <div class="middleLeftTopTextChild">
-                  <p style="font-size: 36px">0</p>
+                  <p style="font-size: 36px">{{wanNumber}}</p>
                   <p>{{$t('systemStatus.middle.WAN')}}</p>
                 </div>
                 <div class="middleLeftTopTextChild">
-                  <p style="font-size: 36px">0</p>
+                  <p style="font-size: 36px">{{lanNumber}}</p>
                   <p>{{$t('systemStatus.middle.LAN')}}</p>
                 </div>
                 <div class="middleLeftTopTextChild">
@@ -138,7 +138,7 @@
     <div id="bottom">
       <el-row :gutter="10">
         <el-col :md="8" :lg="8" :xl="8">
-          <div class="bottomLeft">
+          <!-- <div class="bottomLeft">
             <div style="width:100%; margin: 0; display: inline-block;">
               <div style="float:left;">
                 <p style="margin-left: 20px;">{{$t('systemStatus.bottom.chartsTitle')}}</p>
@@ -155,7 +155,8 @@
               </div>
             </div>
             <div id="chartPie" style="width:100%; height:300px; margin: 0"></div>
-          </div>
+          </div> -->
+          <pie-chart class="bottomLeft"></pie-chart>
         </el-col>
         <el-col :md="16" :lg="16" :xl="16">
           <div class="bottomRight">
@@ -171,6 +172,8 @@
 <script>
 import systemStatus from 'echarts'
 import { getPorts } from '../../api/api'
+import { pieChart, lineChart } from './components'
+import { conversion } from '../../utils/rateUnitExchange.js'
 require('echarts/theme/walden')
 
 let option = {}
@@ -199,6 +202,32 @@ export default {
       value: '',
       tooltipLabelWidth: '80px'
     }
+  },
+  components: {
+    pieChart,
+    lineChart
+  },
+  computed: {
+    lanNumber: function () {
+      let i = 0, j = 0
+      for(i; i < this.ports.length; i++) {
+        if(this.ports[i].function === 'lan') {
+          j++
+        }
+      }
+      return j
+      // return conversion(j)
+    },
+    wanNumber: function () {
+      let i = 0, j = 0
+      for(i; i < this.ports.length; i++) {
+        if(this.ports[i].function === 'wan') {
+          j++
+        }
+      }
+      return j
+      // return conversion(j)
+    },
   },
   watch: {
     '$store.state.app.language': function() {
@@ -240,7 +269,7 @@ export default {
       // });
 
       getPorts().then((res) => {
-        this.ports = JSON.parse(JSON.stringify(res.data.interfaces))
+        this.ports = res.data.interfaces
       })
 
     },
@@ -367,7 +396,7 @@ export default {
 
       option2 = {
         title: {
-          subtext: '上行速率',
+          subtext: '下行速率',
         },
         tooltip: {
           trigger: 'axis',
@@ -485,7 +514,7 @@ export default {
     drawCharts() {
       this.drawLineChart1()
       this.drawLineChart2()
-      this.drawPieChart()
+      // this.drawPieChart()
     },
 
     translate() {

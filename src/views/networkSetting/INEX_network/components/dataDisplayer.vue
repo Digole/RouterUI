@@ -8,7 +8,7 @@
             <svg class="icon-big"><use xlink:href="#icon-wan"></use></svg>
           </div>
           <div class="tip1">
-            <h2>0</h2>
+            <h2>{{wanNumber}}</h2>
             <p class="bottomLine">{{$t('INEXNetwork.terminal.WANLinked')}}</p>
           </div>
           <div class="tip1">

@@ -4,6 +4,7 @@ export default {
     lineMonitor: '线路监控',
     terminalMonitor: '终端监控',
     flowMonitor: '流量监控',
+    rateMonitor: '速率监控',
     performanceMonitor: '性能监控',
     netSetting: '网络设置',
     INEXNetworkSetting: '内外网设置',
@@ -29,7 +30,8 @@ export default {
     firewall: '规则防火墙',
     systemStatus: '系统概况',
     dynamicRoutingConfiguration: '动态路由配置',
-    log: '系统日志'
+    log: '日志系统',
+    diallog: '拨号日志'
   },
 
   operation: {
@@ -267,7 +269,7 @@ export default {
     title: 'ARP绑定',
     title2: '新增ARP绑定',
     title3: '编辑ARP绑定',
-    dynamicARP: '动态ARP'
+    dynamicARP: 'ARP表'
   },
   log: {
     index: '编号',

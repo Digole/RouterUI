@@ -5,7 +5,7 @@
       <el-col :span="5" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
         {{collapsed?'':sysName}}
       </el-col>
-      <el-col :span="6">
+      <el-col :span="1">
         <!-- <div class="tools" @click.prevent="collapse" v-model="isCollapse"> -->
         <div class="tools" @click.prevent="collapse">
           <i class="fa fa-align-justify"></i>
@@ -13,13 +13,12 @@
       </el-col>
 
 
-      <el-col :span="9">
-      <div>
-        <el-radio-group v-model="lang" size="mini">
-          <el-radio label="zh">简体中文</el-radio>
-          <el-radio label="en">English</el-radio>
-        </el-radio-group>
-      </div>
+      <el-col :span="14">
+        <div>
+          <span @click="chooseLang('zh')" class="lang" :class="{selected: this.lang === 'zh'}">中文</span>
+          <span>/</span>
+          <span @click="chooseLang('en')" class="lang" :class="{selected: this.lang === 'en'}">EN</span>
+        </div>
       </el-col>
 
 
@@ -66,11 +65,11 @@
             </el-breadcrumb >
 
             <el-breadcrumb class="breadcrumb-inner-right" v-model="system">
-              <svg class="icon"><use xlink:href="#icon-xiazai1"></use></svg>{{$t('home.down')}}:{{system[0].CPURate}}
+              <svg class="icon"><use xlink:href="#icon-xiazai1"></use></svg>{{$t('home.down')}}:{{this.data.down}}
             </el-breadcrumb>
 
             <el-breadcrumb class="breadcrumb-inner-right" v-model="system">
-              <svg class="icon"><use xlink:href="#icon-shangchuan1"></use></svg>{{$t('home.up')}}:{{system[0].RAMRate}}
+              <svg class="icon"><use xlink:href="#icon-shangchuan1"></use></svg>{{$t('home.up')}}:{{this.data.up}}
             </el-breadcrumb>
 
             <el-breadcrumb class="breadcrumb-inner-right" v-model="system">
@@ -95,22 +94,39 @@
 
 
 <script>
-import { getSystem } from '../api/api'
 import { generateTitle } from '@/utils/i18n'
+import { getMonitorInfo } from '../api/api.js'
+import { conversion } from '../utils/rateUnitExchange.js'
 
 export default {
   name: 'home',
   data() {
     return {
-      sysName:'OpenRT v0.1',
+      sysName: 'OpenRT v0.1',
       collapsed:false,
       isCollapse: false,
       sysUserName: '',
       sysUserAvatar: '',
       system:[{'CPURate':'0','RAMRate':'0'}],
+      data: {
+        up: '',
+        down: ''
+      }
     }
   },
-
+  computed: {
+    lang: {
+      get() {
+        console.log('get')
+        return this.$store.state.app.language
+      },
+      set(lang) {
+        console.log('set')
+        this.$i18n.locale = lang
+        this.$store.dispatch('setLanguage', lang)
+      }
+    }
+  },
   methods: {
     onSubmit() {
       console.log('submit!')
@@ -151,21 +167,29 @@ export default {
       this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none'
     },
 
-    startSystem: function(){
-
-      setInterval(() => {
-        getSystem().then((res) => {
-          this.system = res.data.system
-          //console.log("in home");
-          //console.log(this.system);
-          //this.$store.commit('newRAMRate', this.system[0].RAMRate);
-          //this.$store.commit('newCPURate', this.system[0].CPURate);
-          //console.log(this.$store.state.RAMRate);
-        })
-      },1000)
+    chooseLang (val) {
+      this.lang = val
     },
 
-    generateTitle
+    generateTitle,
+
+    getInfo() {
+      setInterval(this.update, 2000)
+    },
+
+    update() {
+      let para = {}
+      para.page = 1
+      para.type = 5
+      getMonitorInfo(para).then((res) => {
+        if(res.data.code === 200) {
+          this.data.up = conversion(res.data.data[0].recv_rate)
+          this.data.down = conversion(res.data.data[0].send_rate)
+          console.log(this.data.up)
+          // this.$store.dispatch('pushSystemData', data)
+        }
+      })
+    }
   },
 
   created() {
@@ -178,21 +202,10 @@ export default {
       this.sysUserAvatar = user.avatar || ''
     }
     this.sysUserName = '翼辉Admin'
-    this.sysUserAvatar = 'static/avatar.jpg'
-    // this.startSystem();
-  },
-  computed: {
-    lang: {
-      get() {
-        console.log('get')
-        return this.$store.state.app.language
-      },
-      set(lang) {
-        console.log('set')
-        this.$i18n.locale = lang
-        this.$store.dispatch('setLanguage', lang)
-      }
-    }
+    // this.sysUserAvatar = 'static/avatar.jpg'
+    this.sysUserAvatar = 'static/acoinfo.png'
+
+    this.getInfo()
   }
 }
 </script>
@@ -265,6 +278,13 @@ export default {
         height: 60px;
         line-height: 60px;
         cursor: pointer;
+      }
+      .lang {
+        cursor: pointer; 
+        color: white;
+      }
+      .selected {
+        color: goldenrod;
       }
     }
     .main {

@@ -524,7 +524,7 @@
       getPortsInfo: function() {
         getPorts().then((res) => {
           if(res.data.code === 200) {
-            this.ports = JSON.parse(JSON.stringify(res.data.interfaces))
+            this.ports = res.data.interfaces
             console.log(this.ports)
           } 
         })

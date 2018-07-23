@@ -4,7 +4,7 @@
 
     <!--工具条-->
     <el-col :span="24">
-        <el-form :model="request" :inline="true">
+        <el-form :model="request" :inline="true" ref="request">
             <el-form-item prop="time">
               <el-date-picker
                 v-model="request.time"
@@ -12,7 +12,7 @@
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
-                @change="type">
+                @change="getTime">
               </el-date-picker>
             </el-form-item>
             <el-form-item prop="keyword">
@@ -25,17 +25,20 @@
             <el-form-item class="clear">
                 <el-button @click="empty">全部清空</el-button>
             </el-form-item>
+            <el-form-item>
+              <span class="tip" v-if="request.time === ''">默认提供最近24小时数据</span>
+            </el-form-item>
         </el-form>
     </el-col>
 
     <el-table :data="form" :header-cell-style="headerStyle">
-      <el-table-column prop="index" :label="$t('log.index')">
+      <el-table-column type="index" width="60">
       </el-table-column>
       <el-table-column prop="time" :label="$t('log.time')">
       </el-table-column>
-      <el-table-column prop="line" :label="$t('log.line')">
+      <el-table-column prop="enname" :label="$t('log.line')">
       </el-table-column>
-      <el-table-column prop="index" :label="$t('log.detail')">
+      <el-table-column prop="event" :label="$t('log.detail')">
       </el-table-column>
     </el-table>
 
@@ -63,6 +66,11 @@ export default {
         keyword: ''
       },
       form: [],
+      example: {
+        time: '',
+        enname: '',
+        event: ''
+      },
       dialForm: {
         starttime: '',
         endtime: '',
@@ -75,13 +83,17 @@ export default {
     headerStyle() {
       return this.header()
     },
-    type() {
-      console.log(this.request.time)
-    },
+    getTime() {
+      this.dialForm.starttime = this.transform(this.request.time[0])
+      this.dialForm.endtime = this.transform(this.request.time[1])
+      this.currentPage = 1 
+      this.getLogInfo()
+    },  
     empty() {
       this.$refs['request'].resetFields()
     },
     handleCurrentChange (val) {
+      this.currentPage = val
       let para = Object.assign( {}, this.dialForm )
       para.page = this.currentPage
       para.pagecount = 10
@@ -90,16 +102,21 @@ export default {
           this.form = res.data.data
           this.total = res.data.total
         }
-        this.currentPage = val
       })
     },
 
     getLogInfo() {
       let para = Object.assign( {}, this.dialForm )
-      para.starttime = this.request.time[0]
-      para.endtime = this.request.tiem[1]
+      if(this.request.time === '') {
+        let now = new Date()
+        this.dialForm.starttime = this.transform( new Date(now - 24*60*60*1000) )
+        para.starttime = this.dialForm.starttime
+        this.dialForm.endtime = this.transform( now )
+        para.endtime = this.dialForm.endtime
+      }
       para.page = this.currentPage
       para.pagecount = 10
+      console.log(para)
       getLog(para).then( (res) => {
         if(res.data.code === 200) {
           if(res.data.data.length !== 0) {
@@ -107,22 +124,28 @@ export default {
             this.total = res.data.total
           } else {
             if(res.data.total === 0) {
-              this.form = res.data.data
+              this.form = []
               this.total = res.data.total
             } else {
               this.currentPage -= 1
               this.getLogInfo()
             }
           }
+        } else {
+          this.form = []
+          this.total = 0
         }
       })
-
-      this.$refs['request'].resetFields()
-      
+      // this.$refs['request'].resetFields()
     },
-    mounted() {
-      this.getLogInfo()
+    transform(val) {
+      let time
+      time = val.toDateString() + ' ' + val.getHours() + ':' + val.getMinutes() + ':' +val.getSeconds()
+      return time
     }
+  },
+  mounted() {
+    this.getLogInfo()
   }
 }
 </script>
@@ -130,5 +153,8 @@ export default {
 <style lang="scss" scoped>
   .clear {
     float: right;
+  }
+  .tip {
+    color: #909399;
   }
 </style>

@@ -7,7 +7,11 @@ const app = {
       withoutAnimation: false
     },
     device: 'desktop',
-    language: Cookies.get('language') || 'zh'
+    language: Cookies.get('language') || 'zh',
+    systemData: {
+      up: '',
+      down: ''
+    }
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
@@ -30,11 +34,18 @@ const app = {
     SET_LANGUAGE: (state, language) => {
       state.language = language
       Cookies.set('language', language)
+    },
+    SET_SYSDATA: (state, systemData) => {
+      state.systemData.up = systemData.up
+      state.systemData.down = systemData.down
     }
   },
   actions: {
     setLanguage({ commit }, language) {
       commit('SET_LANGUAGE', language)
+    },
+    pushSystemData({ commit }, systemData) {
+      commit('SET_SYSDATA', systemData)
     }
   }
 }

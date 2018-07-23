@@ -4,6 +4,7 @@ export default {
     lineMonitor: 'Line',
     terminalMonitor: 'Terminal',
     flowMonitor: 'Data',
+    rateMonitor: 'Rate',
     performanceMonitor: 'Performance',
     netSetting: 'NetSetting',
     INEXNetworkSetting: 'Intranet&Extranet',
@@ -29,7 +30,8 @@ export default {
     firewall: 'Firewall',
     systemStatus: 'SystemStatus',
     dynamicRoutingConfiguration: 'DynamicRouteConfig',
-    log: 'Log'
+    log: 'Log',
+    diallog: 'DialLog'
   },
 
   operation: {
