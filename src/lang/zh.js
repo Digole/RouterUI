@@ -60,11 +60,11 @@ export default {
   },
 
   lineMonitor: {
-    portName: '网口名',
+    portName: '网口名'
   },
 
   NAT: {
-    dividingLine:{
+    dividingLine: {
       title1: 'WAN,LAN口设置',
       title2: '随机端口使用',
       title3: '网络别名',
@@ -80,7 +80,7 @@ export default {
       IP: '内网起始IP',
       IPCnt: '内网个数',
       proto: '协议',
-      placeholder: '请选择功能',
+      placeholder: '请选择功能'
     },
     alias: {
       aliasAddress: '别名地址',
@@ -92,14 +92,14 @@ export default {
       chooseFunc: '选择功能',
       placeholder: '请选择内外网',
       LAN: 'LAN（内网）',
-      WAN: 'WAN（外网）',
+      WAN: 'WAN（外网）'
     },
     adaptive: {
       title: '端口自适应',
       text: '调试',
       portsNameTip: '请输入名称',
       tipText: '(名称示例: eth0)',
-      maskTip: '请先进行网口定位操作',
+      maskTip: '请先进行网口定位操作'
     },
     selectFunction: {
       TCP: 'TCP分片包接收使能',
@@ -149,7 +149,7 @@ export default {
       chooseFunc: '选择功能',
       placeholder2: '请选择内外网',
       LAN: 'LAN（内网）',
-      WAN: 'WAN（外网）',
+      WAN: 'WAN（外网）'
     },
     dialUpStatus: {
       success: '拨号成功',
@@ -162,7 +162,7 @@ export default {
   },
   kidVPN: {
     index: {
-      title: 'KidVPN服务器',
+      title: 'KidVPN服务器'
     },
     client: {
       title: 'KidVPN客户端',
@@ -181,7 +181,7 @@ export default {
       button3: '创建虚拟网络',
       title2: '连接KidVPN服务器',
       ipaddr1: '服务器地址',
-      aeskey: 'AES Key',
+      aeskey: 'AES Key'
     },
     server: {
       title: 'VPN服务器信息',
@@ -201,7 +201,7 @@ export default {
       bit: 'AES Key bit位数',
       button4: '生成AESKey',
       button5: '创建服务器',
-      title3: 'KidVPN服务器信息',      
+      title3: 'KidVPN服务器信息',
       button6: '关闭'
     },
     status: {
@@ -226,7 +226,7 @@ export default {
     title4: '系统路由表',
     subtitle4: '系统路由表显示(IPV4)',
     prefix: 'Prefix',
-    subtitle5: '系统路由表显示(IPV6)',
+    subtitle5: '系统路由表显示(IPV6)'
   },
   systemStatus: {
     top: {
@@ -239,7 +239,7 @@ export default {
       upstream: '上行',
       downstream: '下行',
       status: '连接状态',
-      terminal: '终端在线',
+      terminal: '终端在线'
     },
     middle: {
       status: '接口状态',
@@ -247,7 +247,7 @@ export default {
       WAN: 'WAN已启用',
       LAN: 'LAN已启用',
       DHCP: 'DHCP池剩余',
-      average: '带宽平均使用率',
+      average: '带宽平均使用率'
     },
     bottom: {
       chartsTitle: '协议分布流量',

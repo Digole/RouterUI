@@ -42,27 +42,27 @@ export default {
   name: 'systemRouter',
   props: ['update'],
   data () {
-    return{
+    return {
       routerIpv4: [],
       routerIpn6: [],
       form: [],
       total: Number,
       currentPage: 1,
       addRouterForm: {
-        destination: '',                  // 目的地址
-        gateway: '',                      // 网关
-        genmask: '',                      // 掩码
-        flags: '',                        // 路由flags
-        prefix:'',                        // ipv6 前缀    
-        metric: '',                       // 路由度量值
-        ref: '',                          // 引用值
-        iface: '',                        // 接口名称 出口
-        ip_family: '',                    // ip地址族
-        oper_type: '',                    // 增删改查
-        route_type: '',                   // 路由类型
-        page: '',                         // 当前页数
-        total: '',                        // 总页数
-        data: ''                          // 内网端口
+        destination: '', // 目的地址
+        gateway: '', // 网关
+        genmask: '', // 掩码
+        flags: '', // 路由flags
+        prefix: '', // ipv6 前缀
+        metric: '', // 路由度量值
+        ref: '', // 引用值
+        iface: '', // 接口名称 出口
+        ip_family: '', // ip地址族
+        oper_type: '', // 增删改查
+        route_type: '', // 路由类型
+        page: '', // 当前页数
+        total: '', // 总页数
+        data: '' // 内网端口
       }
     }
   },
@@ -78,29 +78,29 @@ export default {
       return this.header()
     },
     handleCurrentChange (val) {
-      let para = Object.assign( {}, this.addRouterForm )
+      let para = Object.assign({}, this.addRouterForm)
       para.oper_type = 'query'
       para.ip_family = 'IPv4'
       para.page = val
       console.log('val is:' + val)
-      getRouterInfo(para).then( (res) => {
-        if(res.data.code === 200) {
+      getRouterInfo(para).then((res) => {
+        if (res.data.code === 200) {
           this.form = res.data.data
         }
       })
       this.currentPage = val
     },
     getInfo () {
-      let para = Object.assign( {}, this.addRouterForm )
+      let para = Object.assign({}, this.addRouterForm)
       para.oper_type = 'query'
       para.ip_family = 'IPv4'
       para.page = 1
-      getRouterInfo(para).then( (res) => {
-        if(res.data.code === 200) {
+      getRouterInfo(para).then((res) => {
+        if (res.data.code === 200) {
           this.total = res.data.total
           this.form = res.data.data
           console.log(JSON.stringify(this.form))
-        } 
+        }
       })
     }
   },

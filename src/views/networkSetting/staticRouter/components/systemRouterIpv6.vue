@@ -6,7 +6,7 @@
           <el-table :data="form" style="width: 100%;" :header-cell-style="headerStyle" v-model="form">
             <el-table-column type="selection" min-width="30">
             </el-table-column>
-            <el-table-column prop="destination" :label="$t('staticRouter.destination')" min-width="120" >
+            <el-table-column prop="destination" :label="$t('staticRouter.destination')" min-width="120">
             </el-table-column>
             <el-table-column prop="prefix" :label="$t('staticRouter.prefix')" min-width="120">
             </el-table-column>
@@ -20,17 +20,10 @@
             </el-table-column>
           </el-table>
         </div>
-        <el-pagination
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-size="5"
-          layout="total, prev, pager, next, jumper"
-          :total="this.total">
+        <el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-size="5" layout="total, prev, pager, next, jumper" :total="this.total">
         </el-pagination>
       </el-collapse-item>
     </el-collapse>
-
-    
 
   </section>
 </template>
@@ -41,69 +34,68 @@ import { getRouterInfo } from '../../../../api/api'
 export default {
   name: 'systemRouterIpv6',
   props: ['update'],
-  data () {
-    return{
+  data() {
+    return {
       routerIpv4: [],
       routerIpn6: [],
       total: Number,
       currentPage: 1,
       addRouterForm: {
-        destination: '',                  // 目的地址
-        gateway: '',                      // 网关
-        genmask: '',                      // 掩码
-        flags: '',                        // 路由flags
-        prefix:'',                        // ipv6 前缀    
-        metric: '',                       // 路由度量值
-        ref: '',                          // 引用值
-        iface: '',                        // 接口名称 出口
-        ip_family: '',                    // ip地址族
-        oper_type: '',                    // 增删改查
-        route_type: '',                   // 路由类型
-        page: '',                         // 当前页数
-        total: '',                        // 总页数
-        data: ''                          // 内网端口
+        destination: '', // 目的地址
+        gateway: '', // 网关
+        genmask: '', // 掩码
+        flags: '', // 路由flags
+        prefix: '', // ipv6 前缀
+        metric: '', // 路由度量值
+        ref: '', // 引用值
+        iface: '', // 接口名称 出口
+        ip_family: '', // ip地址族
+        oper_type: '', // 增删改查
+        route_type: '', // 路由类型
+        page: '', // 当前页数
+        total: '', // 总页数
+        data: '' // 内网端口
       },
       form: []
     }
   },
   watch: {
-    update: function () {
-      setTimeout(() => {
-      }, 500)
+    update: function() {
+      setTimeout(() => {}, 500)
       this.getInfo()
     }
   },
   methods: {
-    headerStyle () {
+    headerStyle() {
       return this.header()
     },
-    handleCurrentChange (val) {
-      let para = Object.assign( {}, this.addRouterForm )
+    handleCurrentChange(val) {
+      let para = Object.assign({}, this.addRouterForm)
       para.oper_type = 'query'
       para.ip_family = 'IPv6'
       para.page = val
       console.log('val is:' + val)
-      getRouterInfo(para).then( (res) => {
-        if(res.data.code === 200) {
+      getRouterInfo(para).then(res => {
+        if (res.data.code === 200) {
           this.form = res.data.data
         }
       })
       this.currentPage = val
     },
-    getInfo () {
-      let para = Object.assign( {}, this.addRouterForm )
+    getInfo() {
+      let para = Object.assign({}, this.addRouterForm)
       para.oper_type = 'query'
       para.ip_family = 'IPv6'
       para.page = 1
-      getRouterInfo(para).then( (res) => {
-        if(res.data.code === 200) {
+      getRouterInfo(para).then(res => {
+        if (res.data.code === 200) {
           this.total = res.data.total
           this.form = res.data.data
         }
       })
     }
   },
-  mounted () {
+  mounted() {
     this.getInfo()
   }
 }

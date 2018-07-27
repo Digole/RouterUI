@@ -15,11 +15,11 @@ export default {
       return {
         TCP: false,
         UDP: false,
-        ICMP: false,
+        ICMP: false
       }
     },
     methods: {
-      //分片包功能信息获取
+      // 分片包功能信息获取
       getFragmentPackageInfo: function () {
         getFragmentInfo().then((res) => {
           this.TCP = !!res.data.tcp
@@ -28,13 +28,12 @@ export default {
         // console.log("the value of fragment are "+this.TCP+" "+this.UDP+" "+this.ICMP);
         })
       },
-      //处理分片包选择
+      // 处理分片包选择
       handleTCPChange: function (val) {
         let para = {}
         if (val) {
           para.handle = 1
-        }
-        else {
+        } else {
           para.handle = 0
         }
         para.fragtype = 'tcp'
@@ -45,14 +44,12 @@ export default {
           })
         })
         this.getFragmentPackageInfo()
-
       },
       handleUDPChange: function (val) {
         let para = {}
         if (val) {
           para.handle = 1
-        }
-        else {
+        } else {
           para.handle = 0
         }
         para.fragtype = 'udp'
@@ -68,8 +65,7 @@ export default {
         let para = {}
         if (val) {
           para.handle = 1
-        }
-        else {
+        } else {
           para.handle = 0
         }
         para.fragtype = 'icmp'
@@ -80,7 +76,7 @@ export default {
           })
         })
         this.getFragmentPackageInfo()
-      },
+      }
     },
     mounted() {
       this.getFragmentPackageInfo()

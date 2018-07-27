@@ -1,6 +1,8 @@
 <template>
   <section>
-    <div class="line_02"><span></span></div>
+    <div class="line_02">
+      <span></span>
+    </div>
     <div id="top">
       <el-row :gutter="10">
         <el-col :md="10" :lg="10" :xl="10">
@@ -14,10 +16,14 @@
             <div class="topLeftText">
               <p>{{$t('systemStatus.top.rate')}}</p>
               <div class="rate">
-                <p>{{$t('systemStatus.top.upstream')}}:</p><p style="font-size: 18px;"></p><p>B/s</p>
+                <p>{{$t('systemStatus.top.upstream')}}:</p>
+                <p style="font-size: 18px;"></p>
+                <p>B/s</p>
               </div>
               <div class="rate">
-                <p>{{$t('systemStatus.top.downstream')}}:</p><p style="font-size: 18px;"></p><p>B/s</p>
+                <p>{{$t('systemStatus.top.downstream')}}:</p>
+                <p style="font-size: 18px;"></p>
+                <p>B/s</p>
               </div>
             </div>
           </div>
@@ -78,7 +84,7 @@
             </div>
             <div class="middleBottom">
               <div class="router">
-                <div v-for="(item, index) in ports" class="port"  @click="pushToINEX" :key="index">
+                <div v-for="(item, index) in ports" class="port" @click="pushToINEX" :key="index">
                   <div>
                     <el-tooltip class="item" effect="light">
                       <img style="width: 50px; height: 50px; border-radius: 5px;" :src=selectUrl(item.linkstatus) />
@@ -110,7 +116,11 @@
                     </el-tooltip>
                     <div class="textArea">
                       <p class="text">
-                        <span v-show="item.category !== '空闲'"><svg class="icon"><use :xlink:href=selectIcon(item.category)></use></svg></span>
+                        <span v-show="item.category !== '空闲'">
+                          <svg class="icon">
+                            <use :xlink:href=selectIcon(item.category)></use>
+                          </svg>
+                        </span>
                         en{{index}}</p>
                     </div>
                   </div>
@@ -126,7 +136,8 @@
               <p style="float: left;">{{$t('systemStatus.middle.average')}}</p>
             </div>
             <div>
-              <span style="font-size: 36px; margin-left: 20px;">0</span><span>%</span>
+              <span style="font-size: 36px; margin-left: 20px;">0</span>
+              <span>%</span>
             </div>
 
           </div>
@@ -173,31 +184,39 @@
 import systemStatus from 'echarts'
 import { getPorts } from '../../api/api'
 import { pieChart, lineChart } from './components'
-import { conversion } from '../../utils/rateUnitExchange.js'
+// import { conversion } from '../../utils/rateUnitExchange.js'
 require('echarts/theme/walden')
 
 let option = {}
 let myPieChart
-let myChart1, option1 = {}
-let myChart2, option2 = {}
+let myChart1
+let option1 = {}
+let myChart2
+let option2 = {}
 export default {
   name: 'systemStatus',
   data() {
     return {
-      ports: [{
-        'id':'0', 'category':'', imgUrl:'static/port3.png'
-      }],
-      options: [{
-        value:'选项1',
-        label:'近30分钟'
-      },{
-        value:'选项2',
-        label:'近1小时'
-      },
-      {
-        value:'选项3',
-        label:'近1天'
-      }
+      ports: [
+        {
+          id: '0',
+          category: '',
+          imgUrl: 'static/port3.png'
+        }
+      ],
+      options: [
+        {
+          value: '选项1',
+          label: '近30分钟'
+        },
+        {
+          value: '选项2',
+          label: '近1小时'
+        },
+        {
+          value: '选项3',
+          label: '近1天'
+        }
       ],
       value: '',
       tooltipLabelWidth: '80px'
@@ -208,26 +227,28 @@ export default {
     lineChart
   },
   computed: {
-    lanNumber: function () {
-      let i = 0, j = 0
-      for(i; i < this.ports.length; i++) {
-        if(this.ports[i].function === 'lan') {
+    lanNumber: function() {
+      let i = 0
+      let j = 0
+      for (i; i < this.ports.length; i++) {
+        if (this.ports[i].function === 'lan') {
           j++
         }
       }
       return j
       // return conversion(j)
     },
-    wanNumber: function () {
-      let i = 0, j = 0
-      for(i; i < this.ports.length; i++) {
-        if(this.ports[i].function === 'wan') {
+    wanNumber: function() {
+      let i = 0
+      let j = 0
+      for (i; i < this.ports.length; i++) {
+        if (this.ports[i].function === 'wan') {
           j++
         }
       }
       return j
       // return conversion(j)
-    },
+    }
   },
   watch: {
     '$store.state.app.language': function() {
@@ -237,14 +258,12 @@ export default {
   },
 
   methods: {
-    //选择LAN,WAN口对应图标
+    // 选择LAN,WAN口对应图标
     selectUrl(para) {
       // if(para === "空闲")
-      if(para === 'off')
-      {
+      if (para === 'off') {
         return 'static/port2.png'
-      }
-      else{
+      } else {
         return 'static/port3.png'
       }
     },
@@ -252,11 +271,9 @@ export default {
     selectIcon(para) {
       if (para === 'WAN') {
         return '#icon-wan'
-      }
-      else if(para === 'LAN') {
+      } else if (para === 'LAN') {
         return '#icon-pc'
-      }
-      else {
+      } else {
         return '#'
       }
     },
@@ -268,27 +285,29 @@ export default {
       //   console.log(this.ports);
       // });
 
-      getPorts().then((res) => {
+      getPorts().then(res => {
         this.ports = res.data.interfaces
       })
-
     },
 
     pushToINEX: function() {
       this.$router.push({ path: '../INEX_network' })
     },
 
-    drawLineChart1: function(){
-      myChart1 = systemStatus.init(document.getElementById('chartLine1'),'walden')
+    drawLineChart1: function() {
+      myChart1 = systemStatus.init(
+        document.getElementById('chartLine1'),
+        'walden'
+      )
 
       function randomData() {
         now = new Date(+now + 1000)
         // console.log("now "+now+"and "+now.toTimeString());
-        value = Math.random()*100/10+50
+        value = Math.random() * 100 / 10 + 50
         return {
           name: now.toString(),
           value: [
-            //[now.getHours(), now.getMinutes(), now.getSeconds()].join(':'),
+            // [now.getHours(), now.getMinutes(), now.getSeconds()].join(':'),
             now,
             Math.round(value)
           ]
@@ -308,15 +327,21 @@ export default {
           subtext: '上行速率',
           textStyle: {
             fontWeight: 'normal',
-            fontSize: 14,
-          },
+            fontSize: 14
+          }
         },
         tooltip: {
           trigger: 'axis',
-          formatter: function (params) {
+          formatter: function(params) {
             params = params[0]
             let date = new Date(params.name)
-            return date.getHours() + ':' + date.getMinutes() + ' : ' + params.value[1]
+            return (
+              date.getHours() +
+              ':' +
+              date.getMinutes() +
+              ' : ' +
+              params.value[1]
+            )
           },
           axisPointer: {
             animation: false
@@ -335,9 +360,9 @@ export default {
           },
           axisLine: {
             lineStyle: {
-              color: '#CD0000',
+              color: '#CD0000'
             }
-          },
+          }
         },
         yAxis: {
           type: 'value',
@@ -346,45 +371,47 @@ export default {
             show: false
           }
         },
-        series: [{
-          name: '模拟数据',
-          type: 'line',
-          lineStyle: {
-            width: 0.5,
-            type: 'dotted',
-          },
-          showSymbol: false,
-          hoverAnimation: false,
-          data: data
-        }],
+        series: [
+          {
+            name: '模拟数据',
+            type: 'line',
+            lineStyle: {
+              width: 0.5,
+              type: 'dotted'
+            },
+            showSymbol: false,
+            hoverAnimation: false,
+            data: data
+          }
+        ]
       }
 
       data.shift()
       data.push(randomData())
       myChart1.setOption(option1)
 
-      setInterval(function () {
+      setInterval(function() {
         data.shift()
         data.push(randomData())
         myChart1.setOption(option1)
       }, 2000)
-      window.addEventListener('resize',function() {
+      window.addEventListener('resize', function() {
         myChart1.resize()
       })
     },
 
-    drawLineChart2: function(){
-      myChart2 = systemStatus.init(document.getElementById('chartLine2'),'walden')
+    drawLineChart2: function() {
+      myChart2 = systemStatus.init(
+        document.getElementById('chartLine2'),
+        'walden'
+      )
 
       function randomData() {
         now = new Date(+now + 1000)
-        value = Math.random()*100/10+50
+        value = Math.random() * 100 / 10 + 50
         return {
           name: now.toString(),
-          value: [
-            now,
-            Math.round(value)
-          ]
+          value: [now, Math.round(value)]
         }
       }
       let data = []
@@ -396,14 +423,20 @@ export default {
 
       option2 = {
         title: {
-          subtext: '下行速率',
+          subtext: '下行速率'
         },
         tooltip: {
           trigger: 'axis',
-          formatter: function (params) {
+          formatter: function(params) {
             params = params[0]
             let date = new Date(params.name)
-            return date.getHours() + ':' + date.getMinutes() + ' : ' + params.value[1]
+            return (
+              date.getHours() +
+              ':' +
+              date.getMinutes() +
+              ' : ' +
+              params.value[1]
+            )
           },
           axisPointer: {
             animation: false
@@ -422,9 +455,9 @@ export default {
           },
           axisLine: {
             lineStyle: {
-              color: '#7CCD7C',
+              color: '#7CCD7C'
             }
-          },
+          }
         },
         yAxis: {
           type: 'value',
@@ -433,32 +466,37 @@ export default {
             show: false
           }
         },
-        series: [{
-          name: '模拟数据',
-          type: 'line',
-          showSymbol: false,
-          hoverAnimation: false,
-          data: data
-        }]
+        series: [
+          {
+            name: '模拟数据',
+            type: 'line',
+            showSymbol: false,
+            hoverAnimation: false,
+            data: data
+          }
+        ]
       }
 
       data.shift()
       data.push(randomData())
       myChart2.setOption(option2)
 
-      setInterval(function () {
+      setInterval(function() {
         data.shift()
         data.push(randomData())
         myChart2.setOption(option2)
       }, 2000)
-      window.addEventListener('resize',function() {
+      window.addEventListener('resize', function() {
         myChart2.resize()
       })
     },
 
-    drawPieChart: function(){
-      myPieChart = systemStatus.init(document.getElementById('chartPie'),'walden')
-      
+    drawPieChart: function() {
+      myPieChart = systemStatus.init(
+        document.getElementById('chartPie'),
+        'walden'
+      )
+
       option = {
         tooltip: {
           trigger: 'item',
@@ -467,12 +505,12 @@ export default {
         legend: {
           orient: 'vertical',
           x: 'left',
-          data:['HTTP协议','网络视频','网络游戏','网络下载','文件传输']
+          data: ['HTTP协议', '网络视频', '网络游戏', '网络下载', '文件传输']
         },
         series: [
           {
-            name:'协议流量分布',
-            type:'pie',
+            name: '协议流量分布',
+            type: 'pie',
             radius: ['70%', '80%'],
             avoidLabelOverlap: false,
             label: {
@@ -493,12 +531,12 @@ export default {
                 show: false
               }
             },
-            data:[
-              {value:335, name:'HTTP协议'},
-              {value:310, name:'网络视频'},
-              {value:234, name:'网络游戏'},
-              {value:135, name:'网络下载'},
-              {value:1548, name:'文件传输'}
+            data: [
+              { value: 335, name: 'HTTP协议' },
+              { value: 310, name: '网络视频' },
+              { value: 234, name: '网络游戏' },
+              { value: 135, name: '网络下载' },
+              { value: 1548, name: '文件传输' }
             ]
           }
         ]
@@ -506,7 +544,7 @@ export default {
 
       myPieChart.setOption(option)
 
-      window.addEventListener('resize',function() {
+      window.addEventListener('resize', function() {
         myPieChart.resize()
       })
     },
@@ -518,20 +556,21 @@ export default {
     },
 
     translate() {
-      if(this.$store.state.app.language === 'en') {
-        option.legend =
-         {
-           orient: 'vertical',
-           x: 'left',
-           data: ['HTTP','Vedio','Game','Download','Transmission']
-         },
+      if (this.$store.state.app.language === 'en') {
+        option.legend.data = [
+          'HTTP',
+          'Vedio',
+          'Game',
+          'Download',
+          'Transmission'
+        ]
         option.series[0].name = 'Protocol traffic distribution'
         option.series[0].data = [
-          {value:335, name:'HTTP'},
-          {value:310, name:'Vedio'},
-          {value:234, name:'Game'},
-          {value:135, name:'Download'},
-          {value:1548, name:'Transmission'}
+          { value: 335, name: 'HTTP' },
+          { value: 310, name: 'Vedio' },
+          { value: 234, name: 'Game' },
+          { value: 135, name: 'Download' },
+          { value: 1548, name: 'Transmission' }
         ]
 
         option1.title.text = 'Up/Downlink Rate'
@@ -539,20 +578,21 @@ export default {
 
         option2.title.subtext = 'Downlink Rate'
       }
-      if(this.$store.state.app.language === 'zh') {
-        option.legend =
-        {
-          orient: 'vertical',
-          x: 'left',
-          data:['HTTP协议','网络视频','网络游戏','网络下载','文件传输']
-        },
+      if (this.$store.state.app.language === 'zh') {
+        option.legend.data = [
+          'HTTP协议',
+          '网络视频',
+          '网络游戏',
+          '网络下载',
+          '文件传输'
+        ]
         option.series[0].name = '流量协议分布'
         option.series[0].data = [
-          {value:335, name:'HTTP协议'},
-          {value:310, name:'网络视频'},
-          {value:234, name:'网络游戏'},
-          {value:135, name:'网络下载'},
-          {value:1548, name:'文件传输'}
+          { value: 335, name: 'HTTP协议' },
+          { value: 310, name: '网络视频' },
+          { value: 234, name: '网络游戏' },
+          { value: 135, name: '网络下载' },
+          { value: 1548, name: '文件传输' }
         ]
 
         option1.title.text = '上下行速率'
@@ -566,134 +606,134 @@ export default {
     }
   },
 
-  mounted: function () {
+  mounted: function() {
     this.drawCharts()
     this.getPortsInfo()
-  },
+  }
 }
 </script>
 
 <style scoped lang="scss">
-  p{
+p {
+  color: grey;
+}
+.topLeft {
+  height: 150px;
+  display: flex;
+  border: 1px solid lightgrey;
+  .topLeftLeft {
+    width: 60%;
+    background-color: lightgrey;
+    p {
+      margin: auto 20px;
+      color: white;
+    }
+  }
+  .topLeftText {
+    padding-left: 20px;
+    width: 40%;
+    .rate {
+      p {
+        margin: 10px auto;
+        display: inline-block;
+      }
+    }
+  }
+}
+
+.topRight {
+  height: 150px;
+  border: 1px solid lightgrey;
+  padding-left: 20px;
+  font-family: Roboto-Thin;
+  .topRightBottom {
+    display: flex;
+    .topRightBottomText {
+      width: 25%;
+      p {
+        margin: 10px auto;
+      }
+    }
+  }
+}
+
+.middleLeft {
+  margin-top: 20px;
+  height: 240px;
+  border: 1px solid lightgrey;
+  font-family: Roboto-Thin;
+  .middleLeftTop {
+    height: 100px;
+    padding-left: 20px;
+    .middleLeftTopText {
+      display: flex;
+      .middleLeftTopTextChild {
+        width: 25%;
+        p {
+          margin: 0 auto;
+        }
+      }
+    }
+  }
+}
+.middleRight {
+  margin-top: 20px;
+  height: 240px;
+  border: 1px solid lightgrey;
+  font-family: Roboto-Thin;
+  p {
+    margin-left: 20px;
+  }
+  span {
+    margin-left: 0;
     color: grey;
   }
-  .topLeft {
-    height: 150px;
-    display: flex;
-    border: 1px solid lightgrey;
-    .topLeftLeft {
-      width: 60%;
-      background-color: lightgrey;
-      p {
-        margin: auto 20px;
-        color: white;
-      }
-    }
-    .topLeftText{
-      padding-left: 20px;
-      width: 40%;
-      .rate{
-        p{
-          margin: 10px auto;
-          display: inline-block;
-        }
-      }
-    }
-  }
+}
 
-  .topRight {
-    height: 150px;
+#bottom {
+  margin-top: 20px;
+  .bottomLeft {
+    height: 350px;
+    width: 100%;
     border: 1px solid lightgrey;
-    padding-left: 20px;
-    font-family:Roboto-Thin;
-    .topRightBottom {
-      display: flex;
-      .topRightBottomText {
-        width: 25%;
-        p{
-          margin: 10px auto;
-        }
-      }
-    }
   }
+  .bottomRight {
+    border: 1px solid lightgrey;
+    height: 350px;
+  }
+}
 
-  .middleLeft {
-    margin-top: 20px;
-    height: 240px;
-    border: 1px solid lightgrey;
-    font-family:Roboto-Thin;
-    .middleLeftTop {
-      height: 100px;
-      padding-left: 20px;
-      .middleLeftTopText {
-        display: flex;
-        .middleLeftTopTextChild {
-          width: 25%;
-          p {
-            margin: 0 auto;
-          }
-        }
-      }
-    }
-  }
-  .middleRight {
-    margin-top: 20px;
-    height: 240px;
-    border: 1px solid lightgrey;
-    font-family:Roboto-Thin;
-    p {
-      margin-left: 20px;
-    }
-    span {
-      margin-left: 0;
-      color: grey;
-    }
-  }
-
-  #bottom {
-    margin-top: 20px;
-    .bottomLeft{
-      height: 350px;
-      width: 100%;
-      border: 1px solid lightgrey;
-    }
-    .bottomRight {
-      border: 1px solid lightgrey;
-      height: 350px;
-    }
-  }
-
-  .router{
-    border: 1px solid lightgrey;
-    border-radius: 10px;
-    margin: 10px 20px;
-    background-color: lightgoldenrodyellow;
+.router {
+  border: 1px solid lightgrey;
+  border-radius: 10px;
+  margin: 10px 20px;
+  background-color: lightgoldenrodyellow;
+  text-align: center;
+  .port {
+    width: 50px;
+    height: 50px;
+    border-radius: 3px;
+    background-color: grey;
+    display: inline-flex;
     text-align: center;
-    .port{
-      width: 50px;
-      height:50px;
-      border-radius: 3px;
-      background-color: grey;
-      display: inline-flex;
-      text-align: center;
-      margin: 10px 10px;
-      img:hover {
-        cursor: pointer;
-      }
+    margin: 10px 10px;
+    img:hover {
+      cursor: pointer;
     }
   }
+}
 
-  .icon {
-    width: 1em; height: 1em;
-    vertical-align: -0.15em;
-    fill: currentColor;
-    overflow: hidden;
-  }
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
 
-  @font-face{
-    font-family:Roboto-Thin;
-    src: url("../../assets/font/Roboto-Thin.ttf");
-  }
-
+@font-face {
+  font-family: Roboto-Thin;
+  src: url("../../assets/font/Roboto-Thin.ttf");
+}
 </style>
 

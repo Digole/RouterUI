@@ -1,12 +1,16 @@
 <template>
   <section>
-    <div class="line_02"><span>终端监控</span></div>
+    <div class="line_02">
+      <span>终端监控</span>
+    </div>
 
     <el-row :gutter="0" class="setting">
       <el-col :md="9" :lg="9" :xl="9">
         <div class="left">
           <div class="icon-div">
-            <svg class="icon-big"><use xlink:href="#icon-wan"></use></svg>
+            <svg class="icon-big">
+              <use xlink:href="#icon-wan"></use>
+            </svg>
           </div>
           <div class="tip1">
             <h2>0</h2>
@@ -22,7 +26,9 @@
       <el-col :md="15" :lg="15" :xl="15">
         <div class="right">
           <div class="icon-div">
-            <svg class="icon-big"><use xlink:href="#icon-pc"></use></svg>
+            <svg class="icon-big">
+              <use xlink:href="#icon-pc"></use>
+            </svg>
           </div>
           <div class="tip">
             <h2>1</h2>
@@ -42,7 +48,9 @@
     </el-row>
 
     <div class="接口状态">
-      <div class="line_02"><span>状态接口</span></div>
+      <div class="line_02">
+        <span>状态接口</span>
+      </div>
 
       <div class="wholeRouter">
         <!--power button-->
@@ -88,7 +96,11 @@
               </el-tooltip>
               <div class="textArea">
                 <p class="text">
-                  <span v-show="item.function !== 'NORMAL'"><svg class="icon"><use :xlink:href=selectIcon(item.function)></use></svg></span>
+                  <span v-show="item.function !== 'NORMAL'">
+                    <svg class="icon">
+                      <use :xlink:href=selectIcon(item.function)></use>
+                    </svg>
+                  </span>
                   {{ports[index].enname}}</p>
               </div>
             </div>
@@ -99,12 +111,7 @@
 
     <el-dialog title="配置网卡" :visible.sync="dialogFormVisible" width="30%">
       <!--inner dialog LAN-->
-      <el-dialog
-        width="30%"
-        height="100%"
-        title="LAN配置"
-        :visible.sync="LANInnerVisible"
-        append-to-body>
+      <el-dialog width="30%" height="100%" title="LAN配置" :visible.sync="LANInnerVisible" append-to-body>
         <el-form :model="form" label-position="left" size="small">
           <el-form-item label="IP地址" :label-width="formLabelWidth">
             <el-input v-model="form.IP" auto-complete="off"></el-input>
@@ -115,7 +122,6 @@
           <el-form-item label="网关" :label-width="formLabelWidth">
             <el-input v-model="form.gateway" auto-complete="off" placeholder=""></el-input>
           </el-form-item>
-
 
           <!--router pic in LAN setting-->
           <!--
@@ -135,22 +141,14 @@
 
                 <el-form-item label="工作模式" :label-width="formLabelWidth">
                   <el-select v-model="form.mode" placeholder="请选择" value="" style="width: 100%;">
-                    <el-option
-                      v-for="item in modeOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                    <el-option v-for="item in modeOptions" :key="item.value" :label="item.label" :value="item.value">
                     </el-option>
                   </el-select>
                 </el-form-item>
 
                 <el-form-item label="网卡速率" :label-width="formLabelWidth">
                   <el-select v-model="form.rate" placeholder="请选择" value="" style="width: 100%;">
-                    <el-option
-                      v-for="item in rateOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                    <el-option v-for="item in rateOptions" :key="item.value" :label="item.label" :value="item.value">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -162,33 +160,24 @@
           </el-collapse>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="danger" @click="formCancel">退  出</el-button>
+          <el-button type="danger" @click="formCancel">退 出</el-button>
           <el-button type="danger" @click="formPrevious">上一步</el-button>
-          <el-button type="primary" @click="formSubmit">确  定</el-button>
+          <el-button type="primary" @click="formSubmit">确 定</el-button>
         </div>
       </el-dialog>
 
       <!--inner dialog WAN-->
-      <el-dialog
-        width="30%"
-        height="100%"
-        title="WAN配置"
-        :visible.sync="WANInnerVisible"
-        append-to-body>
+      <el-dialog width="30%" height="100%" title="WAN配置" :visible.sync="WANInnerVisible" append-to-body>
         <el-form :model="form" label-position="left" size="small" ref="form">
           <el-form-item label="接入方式" :label-width="formLabelWidth" prop="accessMethod">
             <el-select v-model="form.accessMethod" placeholder="请选择" value="" style="width: 100%;" @change="onSelect">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form  :model="formDialUp" ref="formDialUp" v-show="ifASDLVisible">
+          <el-form :model="formDialUp" ref="formDialUp" v-show="ifASDLVisible">
             <el-form-item label="账号" :label-width="formLabelWidth" prop="account">
-              <el-input  v-model="formDialUp.account" auto-complete="off" :disabled="!isGottonStatus"></el-input>
+              <el-input v-model="formDialUp.account" auto-complete="off" :disabled="!isGottonStatus"></el-input>
             </el-form-item>
             <el-form-item label="密码" :label-width="formLabelWidth" prop="pass">
               <el-input v-model="formDialUp.passwd" auto-complete="off" :disabled="!isGottonStatus"></el-input>
@@ -224,21 +213,13 @@
             <el-form :model="form" label-position="left" size="small">
               <el-form-item label="工作模式" :label-width="formLabelWidth">
                 <el-select v-model="form.mode" placeholder="请选择" style="width: 100%;" value="">
-                  <el-option
-                    v-for="item in modeOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
+                  <el-option v-for="item in modeOptions" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="网卡速率" :label-width="formLabelWidth">
                 <el-select v-model="form.rate" placeholder="请选择" style="width: 100%;" value="">
-                  <el-option
-                    v-for="item in rateOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
+                  <el-option v-for="item in rateOptions" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -276,34 +257,34 @@ export default {
   name: 'IN-EX_network',
   data() {
     return {
-      dialogFormVisible: false, //控制点击port之后的父级dialog
-      LANInnerVisible: false, //LAN的子级dialog
-      WANInnerVisible: false, //WAN的子级dialog
-      ifASDLVisible: false, //控制ASDL选项是否显示
-      ifButtonVisible: true, //控制上一步按钮是否显示
-      loading: false, //控制ASDL连接时的加载动画
+      dialogFormVisible: false, // 控制点击port之后的父级dialog
+      LANInnerVisible: false, // LAN的子级dialog
+      WANInnerVisible: false, // WAN的子级dialog
+      ifASDLVisible: false, // 控制ASDL选项是否显示
+      ifButtonVisible: true, // 控制上一步按钮是否显示
+      loading: false, // 控制ASDL连接时的加载动画
       stopSignal: Number,
       stopSignal2: Number,
       form: {
-        number: '', //端口编号，唯一，通过index确认端口
-        use: '', //选择功能LAN/WAN
+        number: '', // 端口编号，唯一，通过index确认端口
+        use: '', // 选择功能LAN/WAN
         IP: '',
-        mask: '', //子网掩码
-        gateway: '', //网关
-        mode: '1', //工作模式
-        rate: '1', //网卡速率 lan
-        control: '', //lan互访控制
-        accessMethod: '1', //接入方式
-        primaryDNS: '', //首选DNS
-        secondaryDNS: '', //备选DNS
-        status: '未连接' //连接状态，ASDL使用该属性
+        mask: '', // 子网掩码
+        gateway: '', // 网关
+        mode: '1', // 工作模式
+        rate: '1', // 网卡速率 lan
+        control: '', // lan互访控制
+        accessMethod: '1', // 接入方式
+        primaryDNS: '', // 首选DNS
+        secondaryDNS: '', // 备选DNS
+        status: '未连接' // 连接状态，ASDL使用该属性
       },
       formDialUp: {
         webindex: '',
         account: '',
         passwd: '',
         status: '未连接',
-        handle: 0 //后台用,勿删
+        handle: 0 // 后台用,勿删
       },
       tooltip: {
         number: ''
@@ -393,7 +374,7 @@ export default {
     }
   },
   methods: {
-    //选择LAN,WAN口对应图标
+    // 选择LAN,WAN口对应图标
     selectUrl(para) {
       // if(para === "空闲")
       if (para === 'off') {
@@ -402,7 +383,7 @@ export default {
         return 'static/port3.png'
       }
     },
-    //选择router页面里的图标
+    // 选择router页面里的图标
     selectIcon(para) {
       if (para === 'WAN') {
         return '#icon-wan'
@@ -429,7 +410,7 @@ export default {
     },
 
     formPrevious: function() {
-      //dialogChange();
+      // dialogChange();
       this.WANInnerVisible = false
       this.LANInnerVisible = false
     },
@@ -442,7 +423,7 @@ export default {
         para.handle = 2
         this.isGottonStatus = false
 
-        dialUp(para).then((res) => {
+        dialUp(para).then(res => {
           if (res.data.code === 200) {
             this.isGottonStatus = true
             // this.formDialUp.status = res.data.status;
@@ -484,10 +465,10 @@ export default {
     },
 
     dialLink: function() {
-      //buttonChange
+      // buttonChange
       this.ifButtonVisible = false
       this.loading = true
-      //formModified
+      // formModified
       // handle = 1的意义是拨号连接
       this.formDialUp.handle = 1
 
@@ -543,17 +524,17 @@ export default {
     },
 
     formSubmit: function() {
-      //dialogDisappear();
+      // dialogDisappear();
       this.dialogFormVisible = false
       this.LANInnerVisible = false
       this.WANInnerVisible = false
-      //dataBind();
+      // dataBind();
       this.formDialUp.handle = 1
       // let index = this.form.number
-      //change icon status, need to finish
+      // change icon status, need to finish
       this.getPortsInfo()
       clearInterval(this.stopSignal)
-      //buttonChange();
+      // buttonChange();
       this.loading = false
       this.$refs['form'].resetFields()
     },
@@ -561,11 +542,11 @@ export default {
     formCancel: function() {
       this.ifASDLVisible = false
       clearInterval(this.stopSignal)
-      //dialogDisappear
+      // dialogDisappear
       this.dialogFormVisible = false
       this.LANInnerVisible = false
       this.WANInnerVisible = false
-      //buttonChange
+      // buttonChange
       this.ifButtonVisible = true
       this.loading = false
       this.$refs['formDialUp'].resetFields()
@@ -575,16 +556,16 @@ export default {
 
     unbind: function() {
       clearInterval(this.stopSignal)
-      //dialogDisappear
+      // dialogDisappear
       this.dialogFormVisible = false
       this.LANInnerVisible = false
       this.WANInnerVisible = false
-      //buttonChange
+      // buttonChange
       this.ifButtonVisible = true
       this.loading = false
-      //dataBind
+      // dataBind
       let index = this.formDialUp.webindex
-      this.ports[index].function = 'NORMAL' //change icon status
+      this.ports[index].function = 'NORMAL' // change icon status
 
       let para = Object.assign({}, this.formDialUp)
       para.handle = 0

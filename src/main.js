@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
-import ElementUI from 'element-ui'                            //引用Element-ui
-import 'element-ui/lib/theme-chalk/index.css'                 //引用Element-ui 主题
+import ElementUI from 'element-ui' // 引用Element-ui
+import 'element-ui/lib/theme-chalk/index.css' // 引用Element-ui 主题
 
 import App from './App'
 import VueRouter from 'vue-router'
@@ -18,7 +18,6 @@ import 'font-awesome/css/font-awesome.min.css'
 
 import i18n from './lang' // Internationalization
 
-import 'font-awesome/css/font-awesome.min.css'
 import './assets/iconfont/iconfont.js'
 
 // import validateForm from '@/utils/validate'
@@ -33,21 +32,19 @@ Vue.use(Vuex)
 
 // Vue.use(validateForm)
 
-//NProgress.configure({ showSpinner: false });
-
-
+// NProgress.configure({ showSpinner: false });
 
 const router = new VueRouter({
   routes
 })
 
 router.beforeEach((to, from, next) => {
-  //NProgress.start();
-  if (to.path == '/login') {
+  // NProgress.start();
+  if (to.path === '/login') {
     sessionStorage.removeItem('user')
   }
   let user = JSON.parse(sessionStorage.getItem('user'))
-  
+
   // if (!user && to.path != '/login') {
   //   if(!user && to.path === '/createPasswd')
   //   {
@@ -60,31 +57,28 @@ router.beforeEach((to, from, next) => {
   //   next()
   // }
 
-  if (!user && to.path != '/login') {
+  if (!user && to.path !== '/login') {
     // 搞完记得恢复
     next({path: '/login'})
-  }
-  else{
+  } else {
     next()
   }
   next()
 })
 
-//设置一些全局函数
-Vue.prototype.header = function (){
+// 设置一些全局函数
+Vue.prototype.header = function () {
   return {
     'background-color': '#626c91',
     'color': 'white',
     'font-weight': 'normal',
-    'padding':'3px',
+    'padding': '3px'
   }
 }
 
-Vue.prototype.validate 
-
-//router.afterEach(transition => {
-//NProgress.done();
-//});
+// router.afterEach(transition => {
+// NProgress.done();
+// });
 
 new Vue({
   el: '#app',
@@ -92,7 +86,6 @@ new Vue({
   router,
   store,
   i18n,
-  //components: { App }
+  // components: { App }
   render: h => h(App)
 }).$mount('#app')
-

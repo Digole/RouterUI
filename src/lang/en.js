@@ -60,11 +60,11 @@ export default {
   },
 
   lineMonitor: {
-    portName: 'Port Name',
+    portName: 'Port Name'
   },
 
   NAT: {
-    dividingLine:{
+    dividingLine: {
       title1: 'WAN&LAN Setting',
       title2: 'Random port status',
       title3: 'Alias',
@@ -72,7 +72,7 @@ export default {
     },
     router: {
       linkStatus: 'Link Status',
-      IP: 'LAN IP',
+      IP: 'LAN IP'
     },
     mapping: {
       assPort: 'Extranet port',
@@ -80,7 +80,7 @@ export default {
       IP: 'Intranet starting IP',
       IPCnt: 'Intranet Count',
       proto: 'Protocol',
-      placeholder: 'Please choose function',
+      placeholder: 'Please choose function'
     },
     alias: {
       aliasAddress: 'Alias Address',
@@ -92,20 +92,20 @@ export default {
       chooseFunc: 'Choose function',
       placeholder: 'Please choose function',
       LAN: 'LAN(Intranet)',
-      WAN: 'WAN(Extranet)',
+      WAN: 'WAN(Extranet)'
     },
     adaptive: {
       title: 'Adapt port',
       text: 'debugging',
       portsNameTip: 'Enter name',
       tipText: '(example: eth0)',
-      maskTip: 'Please sort the ports',
+      maskTip: 'Please sort the ports'
     },
     selectFunction: {
       TCP: 'TCP fragment packet reception enable',
       UDP: 'UDP fragment packet reception enable',
       ICMP: 'ICMP fragment packet reception enable'
-    },
+    }
   },
   INEXNetwork: {
     dividingLine: {
@@ -148,7 +148,7 @@ export default {
       chooseFunc: 'Choose function',
       placeholder2: 'Please select the network',
       LAN: 'LAN（Intranet）',
-      WAN: 'WAN（Extranet）',
+      WAN: 'WAN（Extranet）'
     },
     dialUpStatus: {
       success: 'success',
@@ -161,7 +161,7 @@ export default {
   },
   kidVPN: {
     index: {
-      title: 'KidVPN Server',
+      title: 'KidVPN Server'
     },
     client: {
       title: 'KidVPN Clinet',
@@ -180,7 +180,7 @@ export default {
       button3: 'Create Virtual Network',
       title2: 'Connect KidVPN Server',
       ipaddr1: 'Server IP',
-      aeskey: 'AES Key',
+      aeskey: 'AES Key'
     },
     server: {
       title: 'VPN Server Information',
@@ -238,7 +238,7 @@ export default {
       upstream: 'Upstream',
       downstream: 'Downstream',
       status: 'Link status',
-      terminal: 'Terminal online',
+      terminal: 'Terminal online'
     },
     middle: {
       status: 'Interface State',
@@ -246,14 +246,14 @@ export default {
       WAN: 'WAN enable',
       LAN: 'LAN enable',
       DHCP: 'The DHCP pool',
-      average: 'Bandwidth average usage',
+      average: 'Bandwidth average usage'
     },
     bottom: {
       chartsTitle: 'Flow distribution',
       placeholder: 'Please select',
       title: 'Rate',
       subtitle: 'Upstream rate',
-      subtitle1: 'Downstream rate',
+      subtitle1: 'Downstream rate'
     }
   },
   ARP: {

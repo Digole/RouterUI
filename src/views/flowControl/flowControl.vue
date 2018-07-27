@@ -1,7 +1,9 @@
 <template>
   <section>
 
-    <div class="line_02"><span>流控策略管理</span></div>
+    <div class="line_02">
+      <span>流控策略管理</span>
+    </div>
 
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true">
@@ -17,9 +19,9 @@
     <el-table :data="form" @selection-change="selsChange" class="table" :header-cell-style="headerStyle">
       <el-table-column type="selection" min-width="30">
       </el-table-column>
-      <el-table-column prop="fc_start" label="起始IP地址" min-width="120" >
+      <el-table-column prop="fc_start" label="起始IP地址" min-width="120">
       </el-table-column>
-      <el-table-column prop="fc_end" label="结束IP地址" min-width="120" >
+      <el-table-column prop="fc_end" label="结束IP地址" min-width="120">
       </el-table-column>
       <el-table-column prop="fc_proto" label="协议" min-width="120">
       </el-table-column>
@@ -42,12 +44,7 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-size="5"
-      layout="total, prev, pager, next, jumper"
-      :total="total">
+    <el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-size="5" layout="total, prev, pager, next, jumper" :total="total">
     </el-pagination>
 
     <el-table :data="netForm" @selection-change="selsChange" class="table1" :header-cell-style="headerStyle">
@@ -68,12 +65,7 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination
-      @current-change="handleNetCurrentChange"
-      :current-page="netCurrentPage"
-      :page-size="5"
-      layout="total, prev, pager, next, jumper"
-      :total="netTotal">
+    <el-pagination @current-change="handleNetCurrentChange" :current-page="netCurrentPage" :page-size="5" layout="total, prev, pager, next, jumper" :total="netTotal">
     </el-pagination>
 
     <!-- 添加流控策略 -->
@@ -81,7 +73,7 @@
       <el-form :model="addForm">
         <el-form-item prop="fc_type" label="流控策略">
           <el-select v-model="addForm.fc_type" placeholder="请选择">
-            <el-option v-for="(item, index) in FCType" :key="index" :label="item.name" :value="item.value"></el-option> 
+            <el-option v-for="(item, index) in FCType" :key="index" :label="item.name" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -96,7 +88,7 @@
       <el-form :model="addForm" ref="addForm" label-width="120px">
         <el-form-item prop="fc_type" label="协议类型" required>
           <el-select v-model="addForm.fc_proto" placeholder="请选择" @change="editForm">
-            <el-option v-for="(item, index) in proto" :key="index" :label="item.name" :value="item.value"></el-option> 
+            <el-option v-for="(item, index) in proto" :key="index" :label="item.name" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="fc_start" label="起始IP地址" required>
@@ -160,248 +152,248 @@
 </template>
 
 <script>
-  import { getFC, handleFC, getPorts } from '../../api/api.js'
+import { getFC, handleFC, getPorts } from '../../api/api.js'
 
-  export default {
-    name: 'flowControl',
-    data() {
-      return {
-        isChooseFCTypeVisible: false,
-        isProtoVisible: false,
-        isNetVisible: false,
-        isProto: false,
-        currentPage: 1,
-        netCurrentPage: 1,
-        total: 1,
-        netTotal: 1,
+export default {
+  name: 'flowControl',
+  data() {
+    return {
+      isChooseFCTypeVisible: false,
+      isProtoVisible: false,
+      isNetVisible: false,
+      isProto: false,
+      currentPage: 1,
+      netCurrentPage: 1,
+      total: 1,
+      netTotal: 1,
 
-        form: [],
-        netForm: [],
-        addForm: {
-          fc_type: '',              // 1:ip flowtl   2: net interface flowtl
-          fc_enable: '',            // 是否启用流控
-          fc_proto: '',             // 流控协议
-          fc_start: '',             // 流控起始地址
-          fc_end: '',               // 流控结束地址
-          fc_sport: '',             // 流控起始端口
-          fc_eport: '',             // 流控结束端口
-          fc_ifname: '',            // LAN interface name
-          fc_uprate: '',            // LAN up stream bits rate
-          fc_downrate: '',          // LAN down stream bits rate
-          fc_bufsize: '',           // buffer size (16K~ 128M Bytes)
-          ip_family: '',            // 地址类型  IPv4/IPv6 
-          oper_type: ''
+      form: [],
+      netForm: [],
+      addForm: {
+        fc_type: '', // 1:ip flowtl   2: net interface flowtl
+        fc_enable: '', // 是否启用流控
+        fc_proto: '', // 流控协议
+        fc_start: '', // 流控起始地址
+        fc_end: '', // 流控结束地址
+        fc_sport: '', // 流控起始端口
+        fc_eport: '', // 流控结束端口
+        fc_ifname: '', // LAN interface name
+        fc_uprate: '', // LAN up stream bits rate
+        fc_downrate: '', // LAN down stream bits rate
+        fc_bufsize: '', // buffer size (16K~ 128M Bytes)
+        ip_family: '', // 地址类型  IPv4/IPv6
+        oper_type: ''
+      },
+      FCType: [
+        {
+          name: '针对网口进行流量控制',
+          value: 2 // 'net interface flowctl'
         },
-        FCType: [
-          {
-            name: '针对网口进行流量控制',
-            value: 2                                   // 'net interface flowctl'
-          },
-          {
-            name: '针对具体协议进行流量控制',
-            value: 1                                   // 'ip flowctl'
-          }
-        ],
-        proto: [
-          {
-            name: 'TCP',
-            value: 'tcp'
-          },
-          {
-            name: 'UDP',
-            value: 'udp'
-          },
-          // {
-          //   name: 'ICMP',
-          //   value: 1
-          // },
-          {
-            name: '所有协议',
-            value: 'all'
-          }
-        ],
+        {
+          name: '针对具体协议进行流量控制',
+          value: 1 // 'ip flowctl'
+        }
+      ],
+      proto: [
+        {
+          name: 'TCP',
+          value: 'tcp'
+        },
+        {
+          name: 'UDP',
+          value: 'udp'
+        },
+        // {
+        //   name: 'ICMP',
+        //   value: 1
+        // },
+        {
+          name: '所有协议',
+          value: 'all'
+        }
+      ],
 
-        sels: [],
-        ports: [],
-        options: []
+      sels: [],
+      ports: [],
+      options: []
+    }
+  },
+  methods: {
+    headerStyle() {
+      return this.header()
+    },
+    triggerChooseFCTypeVisible() {
+      this.isChooseFCTypeVisible = !this.isChooseFCTypeVisible
+    },
+    triggerProtoVisible() {
+      this.isProtoVisible = !this.isProtoVisible
+    },
+    triggerNetVisible() {
+      this.isNetVisible = !this.isNetVisible
+    },
+    showChooseFCType() {
+      this.triggerChooseFCTypeVisible()
+    },
+    showProto() {
+      this.triggerProtoVisible()
+    },
+    showNet() {
+      this.triggerNetVisible()
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.getFCInfo()
+    },
+    handleNetCurrentChange(val) {
+      this.netCurrentPage = val
+      this.getFCNetInfo()
+    },
+    selsChange: function(sels) {
+      this.sels = sels
+    },
+    editForm: function() {
+      if (this.addForm.fc_proto === 'all') {
+        this.isProto = false
+      } else {
+        this.isProto = true
+      }
+      console.log(this.isProto)
+    },
+    FCTypeNextStop() {
+      if (this.addForm.fc_type === 2) {
+        this.showNet()
+      }
+      if (this.addForm.fc_type === 1) {
+        this.showProto()
       }
     },
-    methods:{
-      headerStyle () {
-        return this.header()
-      },
-      triggerChooseFCTypeVisible () {
-        this.isChooseFCTypeVisible = !this.isChooseFCTypeVisible
-      },
-      triggerProtoVisible () {
-        this.isProtoVisible = !this.isProtoVisible
-      },
-      triggerNetVisible () {
-        this.isNetVisible = !this.isNetVisible
-      },
-      showChooseFCType () {
-        this.triggerChooseFCTypeVisible()
-      },
-      showProto () {
-        this.triggerProtoVisible()
-      },
-      showNet () {
-        this.triggerNetVisible()
-      },
-      handleCurrentChange (val) {
-        this.currentPage = val
-        this.getFCInfo()
-      },
-      handleNetCurrentChange (val) {
-        this.netCurrentPage = val
-        this.getFCNetInfo()
-      },
-      selsChange: function (sels) {
-        this.sels = sels
-      },
-      editForm: function () {
-        if(this.addForm.fc_proto === 'all') {
-          this.isProto = false
-        } else {
-          this.isProto = true
-        }
-        console.log(this.isProto) 
-      },
-      FCTypeNextStop () {
-        if (this.addForm.fc_type === 2) {
-          this.showNet()
-        }
-        if (this.addForm.fc_type === 1) {
-          this.showProto()
-        }
-      },
-      cancelFCTypeForm () {
-        this.triggerChooseFCTypeVisible()
-      },
-      addProto () {
-        let para = Object.assign( {}, this.addForm )
-        para.oper_type = 'add'
-        para.page = this.currentPage
-        para.fc_sport = Number(para.fc_sport)
-        para.fc_eport = Number(para.fc_eport)
-        para.fc_uprate = Number(para.fc_uprate)
-        para.fc_downrate = Number(para.fc_downrate)
-        para.fc_bufsize = Number(para.fc_bufsize)
-        handleFC(para).then( (res) => {
-          if(res.data.code === 200) {
-            this.getFCInfo()
-            this.triggerProtoVisible()
-            this.triggerChooseFCTypeVisible()
-            this.$refs['addForm'].resetFields()
-          }
-        })
-      },
-      addNet () {
-        let para = Object.assign( {}, this.addForm )
-        para.oper_type = 'add'
-        para.page = this.currentPage
-        para.fc_uprate = Number(para.fc_uprate)
-        para.fc_downrate = Number(para.fc_downrate)
-        para.fc_bufsize = Number(para.fc_bufsize)
-        handleFC(para).then( (res) => {
-          if(res.data.code === 200) {
-            this.getFCNetInfo()
-            this.triggerNetVisible()
-            this.triggerChooseFCTypeVisible()
-            this.$refs['addForm'].resetFields()
-          }
-        })
-      },
-      cancelProtoForm () {
-        this.triggerProtoVisible()
-        this.triggerChooseFCTypeVisible()
-        this.$refs['addForm'].resetFields()
-      },
-      cancelNetForm () {
-        this.triggerNetVisible()
-        this.triggerChooseFCTypeVisible()
-        this.$refs['addForm'].resetFields()
-      },
-      getFCInfo () {
-        let para = Object.assign( {}, this.addForm )
-        para.oper_type = 'flowctl'
-        para.fc_type = 1
-        para.page = this.currentPage
-        getFC(para).then( (res) => {
-          if(res.data.code === 200) {
-            if(res.data.data.length !== 0) {
-              this.total = res.data.total
-              this.form = res.data.data
-            } else if (this.currentPage > 1){
-              this.currentPage -= 1
-              this.getFCInfo()
-            } else {
-              this.form = res.data.data
-            }
-          }
-        }) 
-      },
-      getFCNetInfo () {
-        let para = Object.assign( {}, this.addForm )
-        para.oper_type = 'flowctl'
-        para.fc_type = 2
-        para.page = this.netCurrentPage
-        getFC(para).then( (res) => {
-          if(res.data.code === 200) {
-            if(res.data.data.length !== 0) {
-              this.netTotal = res.data.total
-              this.netForm = res.data.data
-            } else if (this.currentPage > 1){
-              this.this.netCurrentPage -= 1
-              this.getFCNetInfo()
-            } else {
-              this.netForm = res.data.data
-            }
-          }
-        })
-      },
-      deleteInfo (index, row) {
-        let para = Object.assign( {}, row )
-        para.oper_type = 'del'
-        handleFC(para).then( (res) => {
-          if(res.data.code === 200) {
-            this.getFCInfo()
-            this.getFCNetInfo()
-          }
-        })
-      },
-      async batchDelete () {
-        for(let i = 0; i < this.sels.length; i++) {
-          del(i, this.sels[i])
-        }
-        this.getFCInfo()
-        this.getFCNetInfo()
-
-        function del(index, row) {
-          let para = Object.assign( {}, row )
-          para.oper_type = 'del'
-          handleFC(para).then( (res) => {
-            if(res.data.code !== 200) {
-              this.handleFC(para)
-            }
-          })
-        }
-      },
-      getPortsInfo: function() {
-        getPorts().then((res) => {
-          if(res.data.code === 200) {
-            this.ports = res.data.interfaces
-            console.log(this.ports)
-          } 
-        })
-      },
+    cancelFCTypeForm() {
+      this.triggerChooseFCTypeVisible()
     },
-    mounted() {
-      this.getPortsInfo()
-      this.getFCNetInfo()
+    addProto() {
+      let para = Object.assign({}, this.addForm)
+      para.oper_type = 'add'
+      para.page = this.currentPage
+      para.fc_sport = Number(para.fc_sport)
+      para.fc_eport = Number(para.fc_eport)
+      para.fc_uprate = Number(para.fc_uprate)
+      para.fc_downrate = Number(para.fc_downrate)
+      para.fc_bufsize = Number(para.fc_bufsize)
+      handleFC(para).then(res => {
+        if (res.data.code === 200) {
+          this.getFCInfo()
+          this.triggerProtoVisible()
+          this.triggerChooseFCTypeVisible()
+          this.$refs['addForm'].resetFields()
+        }
+      })
+    },
+    addNet() {
+      let para = Object.assign({}, this.addForm)
+      para.oper_type = 'add'
+      para.page = this.currentPage
+      para.fc_uprate = Number(para.fc_uprate)
+      para.fc_downrate = Number(para.fc_downrate)
+      para.fc_bufsize = Number(para.fc_bufsize)
+      handleFC(para).then(res => {
+        if (res.data.code === 200) {
+          this.getFCNetInfo()
+          this.triggerNetVisible()
+          this.triggerChooseFCTypeVisible()
+          this.$refs['addForm'].resetFields()
+        }
+      })
+    },
+    cancelProtoForm() {
+      this.triggerProtoVisible()
+      this.triggerChooseFCTypeVisible()
+      this.$refs['addForm'].resetFields()
+    },
+    cancelNetForm() {
+      this.triggerNetVisible()
+      this.triggerChooseFCTypeVisible()
+      this.$refs['addForm'].resetFields()
+    },
+    getFCInfo() {
+      let para = Object.assign({}, this.addForm)
+      para.oper_type = 'flowctl'
+      para.fc_type = 1
+      para.page = this.currentPage
+      getFC(para).then(res => {
+        if (res.data.code === 200) {
+          if (res.data.data.length !== 0) {
+            this.total = res.data.total
+            this.form = res.data.data
+          } else if (this.currentPage > 1) {
+            this.currentPage -= 1
+            this.getFCInfo()
+          } else {
+            this.form = res.data.data
+          }
+        }
+      })
+    },
+    getFCNetInfo() {
+      let para = Object.assign({}, this.addForm)
+      para.oper_type = 'flowctl'
+      para.fc_type = 2
+      para.page = this.netCurrentPage
+      getFC(para).then(res => {
+        if (res.data.code === 200) {
+          if (res.data.data.length !== 0) {
+            this.netTotal = res.data.total
+            this.netForm = res.data.data
+          } else if (this.currentPage > 1) {
+            this.this.netCurrentPage -= 1
+            this.getFCNetInfo()
+          } else {
+            this.netForm = res.data.data
+          }
+        }
+      })
+    },
+    deleteInfo(index, row) {
+      let para = Object.assign({}, row)
+      para.oper_type = 'del'
+      handleFC(para).then(res => {
+        if (res.data.code === 200) {
+          this.getFCInfo()
+          this.getFCNetInfo()
+        }
+      })
+    },
+    async batchDelete() {
+      for (let i = 0; i < this.sels.length; i++) {
+        del(i, this.sels[i])
+      }
       this.getFCInfo()
+      this.getFCNetInfo()
+
+      function del(index, row) {
+        let para = Object.assign({}, row)
+        para.oper_type = 'del'
+        handleFC(para).then(res => {
+          if (res.data.code !== 200) {
+            this.handleFC(para)
+          }
+        })
+      }
+    },
+    getPortsInfo: function() {
+      getPorts().then(res => {
+        if (res.data.code === 200) {
+          this.ports = res.data.interfaces
+          console.log(this.ports)
+        }
+      })
     }
+  },
+  mounted() {
+    this.getPortsInfo()
+    this.getFCNetInfo()
+    this.getFCInfo()
   }
+}
 </script>
 
 <style scoped>

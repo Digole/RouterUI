@@ -11,12 +11,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-size="5"
-      layout="total, prev, pager, next, jumper"
-      :total="total">
+    <el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-size="5" layout="total, prev, pager, next, jumper" :total="total">
     </el-pagination>
   </section>
 </template>
@@ -24,17 +19,17 @@
 <script>
 export default {
   name: 'status',
-  data () {
+  data() {
     return {
       currentPage: 1,
       VPNList: []
     }
   },
   methods: {
-    headerStyle () {
+    headerStyle() {
       return this.header()
     },
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       this.currentPage = val
       // this.getInfo()
     }

@@ -17,7 +17,7 @@
     <el-table :data="terminalForm" title="终端监控" :header-cell-style="headerStyle">
       <el-table-column prop="ip" label="IP" min-width="120">
       </el-table-column>
-      <el-table-column prop="mac" label="Mac" min-width="120">
+      <el-table-column prop="mac" label="Mac" min-width="140">
       </el-table-column>
       <el-table-column prop="recv_rate" label="上行速率" min-width="120">
       </el-table-column>
@@ -44,21 +44,40 @@
       layout="total, prev, pager, next, jumper"
       :total="this.total">
     </el-pagination>
+
+    <el-dialog title="限速" :visible.sync="isLimitVisible">
+      <el-form :model="addForm" ref="addForm">
+        <el-form-item prop="fc_uprate" label="上行速率" required>
+          <el-input v-model="addForm.fc_uprate" type="number"></el-input>
+        </el-form-item>
+        <el-form-item prop="fc_downrate" label="下行速率" required>
+          <el-input v-model="addForm.fc_downrate" type="number"></el-input>
+        </el-form-item>
+        <el-form-item prop="fc_bufsize" label="缓冲区大小(KB)">
+          <el-input v-model="addForm.fc_bufsize" type="number"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="limitSubmit">{{$t('operation.operation')}}</el-button>
+      </div>
+    </el-dialog>
   </section>
 </template>
 
 <script>
-import { getMonitorInfo } from '../../api/api.js'
+import { getMonitorInfo, handleFC } from '../../api/api.js'
 import validate from '../../utils/rules.js'
+import { conversion, conversionUnit, time } from '../../utils/rateUnitExchange.js'
 export default {
   name: 'terminalMonitor',
   data() {
     return {
       addFormVisible: false,
+      isLimitVisible: false,
 
       request: {
         data: ''
-      },               // 存储用户请求信息
+      }, // 存储用户请求信息
       form: {
         type: Number,
         enable: '',
@@ -76,19 +95,34 @@ export default {
         send_total_packets: Number,
         recv_total_packets: Number
       },
+      addForm: {
+        fc_type: '', // 1:ip flowtl   2: net interface flowtl
+        fc_enable: '', // 是否启用流控
+        fc_proto: 'all', // 流控协议
+        fc_start: '', // 流控起始地址
+        fc_end: '', // 流控结束地址
+        fc_sport: '', // 流控起始端口
+        fc_eport: '', // 流控结束端口
+        fc_ifname: '', // LAN interface name
+        fc_uprate: '', // LAN up stream bits rate
+        fc_downrate: '', // LAN down stream bits rate
+        fc_bufsize: '', // buffer size (16K~ 128M Bytes)
+        ip_family: '', // 地址类型  IPv4/IPv6
+        oper_type: ''
+      },
 
-      terminalForm:[],
+      terminalForm: [],
       currentPage: 1,
       total: 0,
 
       rules: {
         data: [
-          { validator: validate( 'ip', '请输入正确IP或MAC' ), trigger: 'blur' }
+          { validator: validate('ip', '请输入正确IP或MAC'), trigger: 'blur' }
         ]
       },
       rules2: {
         data: [
-          { validator: validate( 'mac', '请输入正确IP或MAC' ), trigger: 'blur' }
+          { validator: validate('mac', '请输入正确IP或MAC'), trigger: 'blur' }
         ]
       },
       rule: 'ip'
@@ -100,14 +134,34 @@ export default {
     },
     forbidLInk() {
     },
-    limitLink() {
+    limitLink(val) {
+      this.isLimitVisible = true
+      this.addForm.fc_ifname = val.ifname
+      this.addForm.fc_start = val.ip
+      this.addForm.fc_end = val.ip
+      this.addForm.fc_type = 1
+    },
+    limitSubmit() {
+      let para = Object.assign({}, this.addForm)
+      para.oper_type = 'add'
+      para.page = 1
+      para.fc_uprate = Number(para.fc_uprate)
+      para.fc_downrate = Number(para.fc_downrate)
+      para.fc_bufsize = Number(para.fc_bufsize)
+      console.log(para)
+      handleFC(para).then((res) => {
+        if (res.data.code === 200) {
+          this.isLimitVisible = false
+        }
+        this.$refs['addForm'].resetFields()
+      })
     },
     judge() {
       console.log(this.request.data)
-      if(this.request.data.indexOf(':') > 0) {
+      if (this.request.data.indexOf(':') > 0) {
         this.rule = 'mac'
         return this.rules2
-      } else if(this.request.data.indexOf('.') > 0) {
+      } else if (this.request.data.indexOf('.') > 0) {
         this.rule = 'ip'
         return this.rules
       } else {
@@ -115,18 +169,19 @@ export default {
       }
     },
     inquery() {
-      let para = Object.assign( {}, this.form )
+      let para = Object.assign({}, this.form)
       para.type = 1
       para.page = this.currentPage
-      para[this.rule] = this.rule
-      this.$refs['form'].validate( (valid) => {
-        if(valid) {
-          getMonitorInfo(para).then( (res) => {
-            if(res.data.data.length !== 0) {
+      para[this.rule] = this.request.data
+
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          getMonitorInfo(para).then((res) => {
+            if (res.data.data.length !== 0) {
               this.terminalForm = res.data.data
               this.total = res.data.total
             } else {
-              if(res.data.total === 0) {
+              if (res.data.total === 0) {
                 this.terminalForm = res.data.data
                 this.total = res.data.total
               } else {
@@ -139,11 +194,11 @@ export default {
       })
     },
     handleCurrentChange(val) {
-      let para = Object.assign( {}, this.form)
+      let para = Object.assign({}, this.form)
       para.type = 1
       para.page = this.currentPage
-      getMonitorInfo(para).then( (res) => {
-        if(res.data.code === 200) {
+      getMonitorInfo(para).then((res) => {
+        if (res.data.code === 200) {
           this.terminalForm = res.data.data
           this.total = res.data.total
         }
@@ -151,16 +206,23 @@ export default {
       })
     },
     getTerminalInfo() {
-      let para = Object.assign( {}, this.form)
+      let para = Object.assign({}, this.form)
       para.type = 1
       para.page = this.currentPage
-      getMonitorInfo(para).then( (res) => {
-        if(res.data.code === 200) {
-          if(res.data.data.length !== 0) {
+      getMonitorInfo(para).then((res) => {
+        if (res.data.code === 200) {
+          if (res.data.data.length !== 0) {
             this.terminalForm = res.data.data
             this.total = res.data.total
+            for (let i = 0; i < res.data.data.length; i++) {
+              this.terminalForm[i].send_rate = conversion(this.terminalForm[i].send_rate)
+              this.terminalForm[i].recv_rate = conversion(this.terminalForm[i].recv_rate)
+              this.terminalForm[i].send_total_length = conversionUnit(this.terminalForm[i].send_total_length)
+              this.terminalForm[i].recv_total_length = conversionUnit(this.terminalForm[i].recv_total_length)
+              this.terminalForm[i].duration = time(this.terminalForm[i].duration)
+            }
           } else {
-            if(res.data.total === 0) {
+            if (res.data.total === 0) {
               this.terminalForm = res.data.data
               this.total = res.data.total
             } else {

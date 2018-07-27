@@ -14,9 +14,9 @@ export default {
       legend: {
         orient: 'vertical',
         x: 'right',
-        data:['HTTP协议','邮件服务','网络聊天','文件传输','其他']
+        data: ['HTTP协议', '邮件服务', '网络聊天', '文件传输', '其他']
       },
-      data:[
+      data: [
         {value: 0, name: 'HTTP协议'},
         {value: 0, name: '邮件服务'},
         {value: 0, name: '网络聊天'},
@@ -39,14 +39,14 @@ export default {
         send_total_length: Number,
         recv_total_length: Number,
         send_total_packets: Number,
-        recv_total_packets: Number,
+        recv_total_packets: Number
       },
       original: []
     }
   },
   methods: {
     drawCharts() {
-      let myChart = flowMonitor.init(document.getElementById('echarts'),'walden')
+      let myChart = flowMonitor.init(document.getElementById('echarts'), 'walden')
 
       let option = {
         title: {
@@ -59,8 +59,8 @@ export default {
         legend: this.legend,
         series: [
           {
-            name:'协议流量分布',
-            type:'pie',
+            name: '协议流量分布',
+            type: 'pie',
             radius: ['50%', '60%'],
             avoidLabelOverlap: false,
             label: {
@@ -88,22 +88,22 @@ export default {
 
       myChart.setOption(option)
 
-      window.addEventListener('resize',function() {
+      window.addEventListener('resize', function() {
         myChart.resize()
       })
     },
-    
+
     getFlowInfo() {
-      let para = Object.assign( {}, this.form)
+      let para = Object.assign({}, this.form)
       para.type = 4
       para.page = 1
-      getMonitorInfo(para).then( (res) => {
-        if(res.data.code === 200) {
+      getMonitorInfo(para).then((res) => {
+        if (res.data.code === 200) {
           this.original = res.data.data
         }
         puthToData(this.original, this.data)
       })
-        .then( () => {
+        .then(() => {
           this.drawCharts()
         })
 
@@ -116,14 +116,14 @@ export default {
        * app_type_others = 5,
        */
       function puthToData(val, data) {
-        for(let i = 0; i < val.length; i++) {
+        for (let i = 0; i < val.length; i++) {
           // if(val[i].protocol !== 6) {
           let index = val[i].protocol - 1
           data[index].value = val[i].recv_total_length
           // }
         }
       }
-    },
+    }
   },
   mounted() {
     this.getFlowInfo()

@@ -1,24 +1,20 @@
 <template>
-  <wxChat
-    :data="wxChatData"
-    :showShade="false"
-    :getUpperData="getUpperData"
-    :getUnderData="getUnderData"
-  >
+  <wxChat :data="wxChatData" :showShade="false" :getUpperData="getUpperData" :getUnderData="getUnderData">
   </wxChat>
 </template>
 
 <script>
-  import wxChat from '../../components/console.vue'
-  export default {
-    name: 'app',
-    data () {
-      return {
-        upperTimes: 0,
-        underTimes: 0,
-        upperId: 0,
-        underId: 6,
-        wxChatData: [{
+import wxChat from '../../components/console.vue'
+export default {
+  name: 'app',
+  data() {
+    return {
+      upperTimes: 0,
+      underTimes: 0,
+      upperId: 0,
+      underId: 6,
+      wxChatData: [
+        {
           direction: 2,
           id: 1,
           type: 1,
@@ -52,99 +48,100 @@
           type: 1,
           content: '你开心就好。[微笑]',
           ctime: new Date().toLocaleString()
-        },
-        ]
-      }
-    },
-    components:{wxChat},
-    methods:{
-      //向上滚动加载数据
-      getUpperData(){
-        var me = this
+        }
+      ]
+    }
+  },
+  components: { wxChat },
+  methods: {
+    // 向上滚动加载数据
+    getUpperData() {
+      var me = this
 
-        // 这里为模拟异步加载数据
-        // 实际上你可能要这么写:
-        // return axios.get('xxx').then(function(result){
-        //     return result;  //result的格式需要类似下面resolve里面的数组
-        // })
-        return new Promise(function(resolve){
-          setTimeout(function(){
-            //模拟加载完毕
-            if(me.upperTimes>3){
-              return resolve([])
-            }
+      // 这里为模拟异步加载数据
+      // 实际上你可能要这么写:
+      // return axios.get('xxx').then(function(result){
+      //     return result;  //result的格式需要类似下面resolve里面的数组
+      // })
+      return new Promise(function(resolve) {
+        setTimeout(function() {
+          // 模拟加载完毕
+          if (me.upperTimes > 3) {
+            return resolve([])
+          }
 
-            //加载数据
-            resolve([{
+          // 加载数据
+          resolve([
+            {
               direction: 2,
-              id: me.upperId-1,
+              id: me.upperId - 1,
               type: 1,
-              content: '向上滚动加载第 ' + me.upperTimes +' 条！',
+              content: '向上滚动加载第 ' + me.upperTimes + ' 条！',
               ctime: new Date().toLocaleString()
             },
             {
               direction: 1,
-              id: me.upperId-2,
+              id: me.upperId - 2,
               type: 1,
-              content: '向上滚动加载第 ' + me.upperTimes +' 条！',
+              content: '向上滚动加载第 ' + me.upperTimes + ' 条！',
               ctime: new Date().toLocaleString()
-            }]
-
-            )
-          }, 1000)
-          me.upperId= me.upperId+2
-          me.upperTimes++
-        })
-      },
-      getUnderData(){
-        var me = this
-        //意义同getUpperData()
-        return new Promise(function(resolve){
-          setTimeout(function(){
-            //模拟加载完毕
-            if(me.underTimes>3){
-              return resolve([])
             }
+          ])
+        }, 1000)
+        me.upperId = me.upperId + 2
+        me.upperTimes++
+      })
+    },
+    getUnderData() {
+      var me = this
+      // 意义同getUpperData()
+      return new Promise(function(resolve) {
+        setTimeout(function() {
+          // 模拟加载完毕
+          if (me.underTimes > 3) {
+            return resolve([])
+          }
 
-            //加载数据
-            resolve(
-              [{
-                direction: 1,
-                id: me.underId+1,
-                type: 1,
-                content: '向下滚动加载第 ' + me.underTimes +' 条！',
-                ctime: new Date().toLocaleString()
-              },
-              {
-                direction: 2,
-                id: me.underId+2,
-                type: 1,
-                content: '向下滚动加载第 ' + me.underTimes +' 条！',
-                ctime: new Date().toLocaleString()
-              }]
-            )
-          }, 1000)
-          me.underId = me.underId+2
-          me.underTimes++
-        })
-      }
+          // 加载数据
+          resolve([
+            {
+              direction: 1,
+              id: me.underId + 1,
+              type: 1,
+              content: '向下滚动加载第 ' + me.underTimes + ' 条！',
+              ctime: new Date().toLocaleString()
+            },
+            {
+              direction: 2,
+              id: me.underId + 2,
+              type: 1,
+              content: '向下滚动加载第 ' + me.underTimes + ' 条！',
+              ctime: new Date().toLocaleString()
+            }
+          ])
+        }, 1000)
+        me.underId = me.underId + 2
+        me.underTimes++
+      })
     }
   }
+}
 </script>
 
 <style>
-  *{
-    margin: 0;
-    padding: 0;
-  }
-  h1, h2 {
-    font-weight: normal;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-  }
+* {
+  margin: 0;
+  padding: 0;
+}
+h1,
+h2 {
+  font-weight: normal;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+}
 </style>

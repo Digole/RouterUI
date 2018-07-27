@@ -1,6 +1,8 @@
 <template>
   <section>
-    <div class="line_02"><span>{{$t('kidVPN.client.title')}}</span></div>
+    <div class="line_02">
+      <span>{{$t('kidVPN.client.title')}}</span>
+    </div>
 
     <el-col :span="24" style="padding: 0">
       <el-form inline>
@@ -29,12 +31,7 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-size="5"
-      layout="total, prev, pager, next, jumper"
-      :total="total">
+    <el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-size="5" layout="total, prev, pager, next, jumper" :total="total">
     </el-pagination>
 
     <el-dialog :title="$t('kidVPN.client.title1')" :visible.sync="isAddingClient">
@@ -59,7 +56,7 @@
         <el-button type="danger" @click="triggerAddKidVPNClient">{{$t('operation.cancel')}}</el-button>
         <el-button type="primary" @click="kidVPNNextStep">{{$t('kidVPN.client.button3')}}</el-button>
       </div>
-    </el-dialog> 
+    </el-dialog>
 
     <el-dialog :title="$t('kidVPN.client.title2')" :visible.sync="isLinkingClient" class="key">
       <el-form :model="kidVPNForm" :label-width="labelWidth">
@@ -74,23 +71,28 @@
         <el-button type="danger" @click="triggerLinkKidVPNClient">{{$t('operation.cancel')}}</el-button>
         <el-button type="primary" @click="linkKidVPN">{{$t('operation.determine')}}</el-button>
       </div>
-    </el-dialog> 
+    </el-dialog>
 
   </section>
 </template>
 
 <script>
-import { addVND, addKidVPN, delKidVPN, getKidVPNInfo } from '../../../../api/api.js'
+import {
+  addVND,
+  addKidVPN,
+  delKidVPN,
+  getKidVPNInfo
+} from '../../../../api/api.js'
 import validate from '../../../../utils/rules.js'
 export default {
   name: 'client',
-  data () {
+  data() {
     return {
       isAddingClient: false,
       isLinkingClient: false,
       currentPage: 1,
       total: '',
-      // addedClientList: {   
+      // addedClientList: {
       //   serip: '',
       //   locip: '',
       //   netmask: '',
@@ -109,83 +111,107 @@ export default {
         mac: ''
       },
       kidVPNForm: {
-        vndid: Number,      // 虚拟网卡IP
-        ipaddr: '',         // IP地址
-        aeskey: '',         // AES KEY
-        mtu: '',            // MTU
+        vndid: Number, // 虚拟网卡IP
+        ipaddr: '', // IP地址
+        aeskey: '', // AES KEY
+        mtu: '', // MTU
         handle: ''
       },
       vndid: '',
-      chosenItems: [] ,
+      chosenItems: [],
       labelWidth: '120px',
 
       rules: {
         ipaddr: [
-          { validator: validate('ip', '请输入正确IP', 'IP不能为空！'), trigger: 'blur' },
+          {
+            validator: validate('ip', '请输入正确IP', 'IP不能为空！'),
+            trigger: 'blur'
+          }
         ],
         netmask: [
-          { validator: validate('ip', '请输入正确子网掩码', '子网掩码不能为空！'), trigger: 'blur' },
+          {
+            validator: validate(
+              'ip',
+              '请输入正确子网掩码',
+              '子网掩码不能为空！'
+            ),
+            trigger: 'blur'
+          }
         ],
         gateway: [
-          { validator: validate('ip', '请输入正确网关地址', '网关地址不能为空！'), trigger: 'blur' },
+          {
+            validator: validate(
+              'ip',
+              '请输入正确网关地址',
+              '网关地址不能为空！'
+            ),
+            trigger: 'blur'
+          }
         ],
         mac: [
-          { validator: validate('mac', '请输入正确MAC地址', 'MAC地址不能为空！'), trigger: 'blur' },
+          {
+            validator: validate(
+              'mac',
+              '请输入正确MAC地址',
+              'MAC地址不能为空！'
+            ),
+            trigger: 'blur'
+          }
         ],
         mtu: [
-          { validator: validate('number', '请输入数字', '不能为空！'), trigger: 'blur' },
+          {
+            validator: validate('number', '请输入数字', '不能为空！'),
+            trigger: 'blur'
+          }
         ]
       }
-
     }
   },
   methods: {
-    headerStyle () {
+    headerStyle() {
       return this.header()
     },
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       this.currentPage = val
       this.getInfo()
     },
-    triggerAddKidVPNClient () {
+    triggerAddKidVPNClient() {
       this.isAddingClient = !this.isAddingClient
     },
     triggerLinkKidVPNClient() {
       this.isLinkingClient = !this.isLinkingClient
     },
-    addClient () {
+    addClient() {
       this.triggerAddKidVPNClient()
     },
-    kidVPNNextStep () {
-      let para = Object.assign( {}, this.VNDForm )
+    kidVPNNextStep() {
+      let para = Object.assign({}, this.VNDForm)
 
-      addVND(para).then( (res) => {
-        if(res.data.code === 200) {
+      addVND(para).then(res => {
+        if (res.data.code === 200) {
           this.vndid = res.data.vndid
         }
         this.triggerAddKidVPNClient()
         this.triggerLinkKidVPNClient()
-      }) 
+      })
     },
 
-    linkKidVPN () {
-      let para = Object.assign( {}, this.kidVPNForm )
+    linkKidVPN() {
+      let para = Object.assign({}, this.kidVPNForm)
       para.vndid = this.vndid
       para.mtu = this.VNDForm.mtu
       para.handle = 'addClient'
 
-      addKidVPN(para).then( (res) => {
-        if(res.data.code === 200) {
+      addKidVPN(para).then(res => {
+        if (res.data.code === 200) {
           this.getInfo()
-        }
-        else if(res.data.code === 100) {
-          this.$message ({
+        } else if (res.data.code === 100) {
+          this.$message({
             message: '参数错误',
             type: 'error'
           })
-        }
-        else if(res.data.code === 500) {
-          this.$message ({
+        } else if (res.data.code === 500) {
+          this.$message({
             message: '操作失败',
             type: 'error'
           })
@@ -193,12 +219,12 @@ export default {
         this.triggerLinkKidVPNClient()
       })
     },
-    deleteClient (index, val) {
+    deleteClient(index, val) {
       let para = {}
       para.vndid = val.vndid
 
-      delKidVPN(para).then( (res) => {
-        if(res.data.code === 200) {
+      delKidVPN(para).then(res => {
+        if (res.data.code === 200) {
           this.$message({
             message: '删除成功',
             type: 'success'
@@ -207,29 +233,29 @@ export default {
       })
       this.getInfo()
     },
-    selChange (sels) {
+    selChange(sels) {
       this.chosenItems = sels
     },
-    async batchDeletion () {
+    async batchDeletion() {
       let i
-      for(i = 0; i < this.chosenItems.length; i++) {
+      for (i = 0; i < this.chosenItems.length; i++) {
         await this.deleteClient(i, this.chosenItems[i])
       }
       this.getInfo()
     },
-    getInfo () {
+    getInfo() {
       // let result
       let para = {}
       para.page = this.currentPage
-      getKidVPNInfo(para).then( (res) => {
-        if(res.data.code === 200) {
-          if(this.currentPage === res.data.page) {
-            if(res.data.data.length !== 0) {
-              console.log('infor '+res.data.data.length)
-              for(let i = 0; i < res.data.data.length; i++) {
+      getKidVPNInfo(para).then(res => {
+        if (res.data.code === 200) {
+          if (this.currentPage === res.data.page) {
+            if (res.data.data.length !== 0) {
+              console.log('infor ' + res.data.data.length)
+              for (let i = 0; i < res.data.data.length; i++) {
                 console.log(res.data.data[i].type)
-                if(res.data.data[i].type === 'servervpn') {
-                  console.log('in clinet getInfo'+res.data.data[i])
+                if (res.data.data[i].type === 'servervpn') {
+                  console.log('in clinet getInfo' + res.data.data[i])
                   // result = res.data.data.splice(i,1)
                 }
               }
@@ -237,8 +263,7 @@ export default {
               this.addedClientList = res.data.data
               console.log(this.addedClientList)
               this.total = res.data.total
-            } 
-            else if (res.data.page > 1) {
+            } else if (res.data.page > 1) {
               this.currentPage -= 1
               this.getInfo()
             } else {
@@ -249,7 +274,7 @@ export default {
       })
     }
   },
-  mounted () {
+  mounted() {
     this.getInfo()
   }
 }

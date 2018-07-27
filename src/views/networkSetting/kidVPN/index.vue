@@ -2,7 +2,9 @@
   <section>
     <client class="client"></client>
 
-    <div class="line_02"><span>KidVPN服务器</span></div>
+    <div class="line_02">
+      <span>KidVPN服务器</span>
+    </div>
 
     <server class="server"></server>
 
@@ -21,7 +23,7 @@ export default {
     connection,
     visualization
   },
-  data () {
+  data() {
     return {}
   }
 }

@@ -3,9 +3,9 @@
     <el-row>
       <el-col :span="24" class="title">
         <span>{{$t('kidVPN.server.title')}}</span>
-         <el-form inline style="float: right">
-           <el-button type="primary" @click="addServer" v-if="isEmpty" size="mini">创建VPN服务器</el-button>
-           <el-button type="danger" size="mini" @click="delServer">{{$t('kidVPN.server.button1')}}</el-button>
+        <el-form inline style="float: right">
+          <el-button type="primary" @click="addServer" v-if="isEmpty" size="mini">创建VPN服务器</el-button>
+          <el-button type="danger" size="mini" @click="delServer">{{$t('kidVPN.server.button1')}}</el-button>
         </el-form>
       </el-col>
     </el-row>
@@ -56,7 +56,7 @@
           <el-input v-model="form.mtu"></el-input>
         </el-form-item>
       </el-form>
-     <div slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer">
         <el-button type="danger" @click="triggerAddingServer">{{$t('operation.cancel')}}</el-button>
         <el-button type="primary" @click="KidVPNServerNextStop">{{$t('kidVPN.server.button3')}}</el-button>
       </div>
@@ -82,7 +82,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :title="$t('kidVPN.server.title3')" :visible.sync="isGettingKey" class="key"> 
+    <el-dialog :title="$t('kidVPN.server.title3')" :visible.sync="isGettingKey" class="key">
       <el-form :model="getAESKeyForm" label-width="150px">
         <el-form-item prop="aeskey" label="$t('kidVPN.server.aeskey')">
           <textarea v-model="getAESKeyForm.aeskey"></textarea>
@@ -96,12 +96,19 @@
 </template>
 
 <script>
-import { addVND, addKidVPN, generateAESKey, getAESKey, getKidVPNInfo, delKidVPN } from '../../../../api/api.js'
+import {
+  addVND,
+  addKidVPN,
+  generateAESKey,
+  getAESKey,
+  getKidVPNInfo,
+  delKidVPN
+} from '../../../../api/api.js'
 import validate from '../../../../utils/rules.js'
 
 export default {
   name: 'server',
-  data () {
+  data() {
     return {
       isAddingServer: false,
       isInitingKey: false,
@@ -128,57 +135,80 @@ export default {
         ipaddr: '',
         aeskey: ''
       },
-      bitList: [
-        '128',
-        '192',
-        '256'
-      ],
+      bitList: ['128', '192', '256'],
       AESKey: '',
       vndid: '',
 
       rules: {
         ipaddr: [
-          { validator: validate('ip', '请输入正确IP', 'IP不能为空！'), trigger: 'blur' },
+          {
+            validator: validate('ip', '请输入正确IP', 'IP不能为空！'),
+            trigger: 'blur'
+          }
         ],
         netmask: [
-          { validator: validate('ip', '请输入正确子网掩码', '子网掩码不能为空！'), trigger: 'blur' },
+          {
+            validator: validate(
+              'ip',
+              '请输入正确子网掩码',
+              '子网掩码不能为空！'
+            ),
+            trigger: 'blur'
+          }
         ],
         gateway: [
-          { validator: validate('ip', '请输入正确网关地址', '网关地址不能为空！'), trigger: 'blur' },
+          {
+            validator: validate(
+              'ip',
+              '请输入正确网关地址',
+              '网关地址不能为空！'
+            ),
+            trigger: 'blur'
+          }
         ],
         mac: [
-          { validator: validate('mac', '请输入正确MAC地址', 'MAC地址不能为空！'), trigger: 'blur' },
+          {
+            validator: validate(
+              'mac',
+              '请输入正确MAC地址',
+              'MAC地址不能为空！'
+            ),
+            trigger: 'blur'
+          }
         ],
         mtu: [
-          { validator: validate('number', '请输入数字', '不能为空！'), trigger: 'blur' },
+          {
+            validator: validate('number', '请输入数字', '不能为空！'),
+            trigger: 'blur'
+          }
         ]
       }
     }
   },
   methods: {
-    headerStyle () {
+    headerStyle() {
       return this.header()
     },
-    addServer () {
+    addServer() {
       this.triggerAddingServer()
     },
-    triggerAddingServer () {
+    triggerAddingServer() {
       this.isAddingServer = !this.isAddingServer
     },
-    triggerInitingKey () {
+    triggerInitingKey() {
       this.isInitingKey = !this.isInitingKey
     },
-    triggerGettingKey () {
+    triggerGettingKey() {
       this.isGettingKey = !this.isGettingKey
     },
-    closeGettingKey () {
+    closeGettingKey() {
       this.triggerGettingKey()
     },
-    KidVPNServerNextStop () {
-      let para = Object.assign( {}, this.form )
+    KidVPNServerNextStop() {
+      let para = Object.assign({}, this.form)
       // para.handle = 'addServer'
-      addVND(para).then( (res) => {
-        if(res.data.code === 200) {
+      addVND(para).then(res => {
+        if (res.data.code === 200) {
           this.vndid = res.data.vndid
         }
       })
@@ -187,67 +217,65 @@ export default {
       this.getInfo()
       // this.$refs["forms"].resetFields()
     },
-    initAESKey () {
+    initAESKey() {
       let para = {}
       para.bit = this.initAESKeyForm.bit
-      generateAESKey(para).then( (res) => {
-        if(res.data.code === 200) {
+      generateAESKey(para).then(res => {
+        if (res.data.code === 200) {
           this.initAESKeyForm.aeskey = res.data.aeskey
         }
       })
     },
-    saveKey () {
-      let para = Object.assign( {}, this.initAESKeyForm )
+    saveKey() {
+      let para = Object.assign({}, this.initAESKeyForm)
       para.handle = 'addServer'
       para.vndid = this.vndid
       para.mtu = this.form.mtu
-      addKidVPN(para).then( (res) => {
-        if(res.data.code === 200) {
+      addKidVPN(para).then(res => {
+        if (res.data.code === 200) {
           this.$message({
             message: '发送成功',
             type: 'success'
           })
-        } 
+        }
       })
       this.triggerInitingKey()
       // this.addedClientList = Object.assign( {}, this.form )
       this.getServerInfo()
     },
-    delServer () {
+    delServer() {
       let para = {}
       para.vndid = this.addedClientList.vndid
-      delKidVPN(para).then( (res) => {
-        if(res.data.code === 200) {
-          this.$refs['addedClientList']
+      delKidVPN(para).then(res => {
+        if (res.data.code === 200) {
           this.getServerInfo()
+          this.$refs['addedClientList'].resetFields()
         }
       })
-
     },
-    iconToGetAESKeyInfo () {
+    iconToGetAESKeyInfo() {
       let para = {}
       para.vndid = this.addedClientList.vndid
-      getAESKey(para).then( (res) => {
+      getAESKey(para).then(res => {
         this.getAESKeyForm.aeskey = res.data.aeskey
       })
       this.triggerGettingKey()
     },
-    getInfo () {
+    getInfo() {
       let para = {}
       para.page = this.currentPage
-      getKidVPNInfo(para).then( (res) => {
-        if(res.data.code === 200) {
-          if(this.currentPage === res.data.page) {
-            if(res.data.total !== 0) {
-              for(let i = 0; i < res.data.data.length; i++) {
-                if(res.data.data[i].type === 'servervpn') {
+      getKidVPNInfo(para).then(res => {
+        if (res.data.code === 200) {
+          if (this.currentPage === res.data.page) {
+            if (res.data.total !== 0) {
+              for (let i = 0; i < res.data.data.length; i++) {
+                if (res.data.data[i].type === 'servervpn') {
                   // console.log("in setver getInfo " + res.data.data[i])
                   this.addedClientList = res.data.data[i]
                 }
               }
               this.total = res.data.total
-            } 
-            else if (res.data.page > 1) {
+            } else if (res.data.page > 1) {
               this.currentPage -= 1
               this.getInfo()
             }
@@ -258,19 +286,19 @@ export default {
     getServerInfo: function() {
       let para = {}
       para.page = this.currentPage
-      getKidVPNInfo(para).then( (res) => {
-        if(res.data.code === 200) {
-          if(this.currentPage === res.data.page) {
-            if(res.data.total !== 0) {
-              for(let i = 0; i < res.data.data.length; i++) {
-                if(res.data.data[i].type === 'servervpn') {
+      getKidVPNInfo(para).then(res => {
+        if (res.data.code === 200) {
+          if (this.currentPage === res.data.page) {
+            if (res.data.total !== 0) {
+              for (let i = 0; i < res.data.data.length; i++) {
+                if (res.data.data[i].type === 'servervpn') {
                   // console.log("in setver getServerInfo " + res.data.data[i])
                   this.addedClientList = res.data.data[i]
                 }
               }
-            } else if(res.data.total === 0) {
+            } else if (res.data.total === 0) {
               this.addedClientList = []
-            } 
+            }
           }
         }
       })
@@ -291,7 +319,7 @@ export default {
 .form {
   overflow: hidden;
   margin-top: 15px;
-  background: #BBBBBB;
+  background: #bbbbbb;
 }
 .form > .el-form {
   margin: 15px;
@@ -304,9 +332,11 @@ textarea {
   height: 90px;
   line-height: 30px;
   resize: none;
-  background-color: #BBBBBB;
+  background-color: #bbbbbb;
 }
-.key .el-input, .el-select, textarea {
+.key .el-input,
+.el-select,
+textarea {
   width: 80%;
 }
 </style>

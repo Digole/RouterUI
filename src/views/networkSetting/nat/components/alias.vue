@@ -56,11 +56,11 @@
       </el-table-column>
       <el-table-column type="index" width="60">
       </el-table-column>
-      <el-table-column prop="aliasip"  :label="$t('NAT.alias.aliasAddress')" min-width="120">
+      <el-table-column prop="aliasip" :label="$t('NAT.alias.aliasAddress')" min-width="120">
       </el-table-column>
-      <el-table-column prop="lanstart"  :label="$t('NAT.alias.initialAddress')" min-width="120">
+      <el-table-column prop="lanstart" :label="$t('NAT.alias.initialAddress')" min-width="120">
       </el-table-column>
-      <el-table-column prop="lanend"  :label="$t('NAT.alias.endAddress')" min-width="120">
+      <el-table-column prop="lanend" :label="$t('NAT.alias.endAddress')" min-width="120">
       </el-table-column>
       <el-table-column :label="$t('operation.operation')" min-width="120">
         <template slot-scope="scope">
@@ -73,162 +73,169 @@
 </template>
 
 <script>
-  import { getAlias, addAlias, delAlias, editAlias } from '../../../../api/api'
+import { getAlias, addAlias, delAlias, editAlias } from '../../../../api/api'
 import validate from '@/utils/rules'
 
-  export default {
-    name: 'alias',
-    directives: {
-      focus: {
-        inserted: function (el) {
-          el.focus()
+export default {
+  name: 'alias',
+  directives: {
+    focus: {
+      inserted: function(el) {
+        el.focus()
+      }
+    }
+  },
+  watch: {
+    aliasFormVisible: {
+      handler: function() {
+        if (this.aliasFormVisible === false) {
+          this.$refs['aliasForm'].resetFields()
         }
       }
-    },
-    watch: {
-      aliasFormVisible: {
-        handler: function() {
-          if(this.aliasFormVisible === false) {
-            this.$refs['aliasForm'].resetFields()
-          }
-        }
-      }
-    },
-    data() {
-      return {
-        aliasFormVisible: false,              //网络别名添加表格显示控制
-        aliasEditFormVisible: false,          //网络别名编辑表格显示控制
+    }
+  },
+  data() {
+    return {
+      aliasFormVisible: false, // 网络别名添加表格显示控制
+      aliasEditFormVisible: false, // 网络别名编辑表格显示控制
 
-        aliasPage: 1,
-        aliasTotal: 0,
+      aliasPage: 1,
+      aliasTotal: 0,
 
-        aliasForm:{
-          aliasip: '',                //别名地址
-          lanstart: '',              //起始地址
-          lanend: '',                  //结束地址
-        },
-
-        alias: [],
-        aliasSelections: [],                    //网络别名批量删除列表选中列
-
-        tooltipLabelWidth: '100px',
-        formLabelWidth: '130px',
-
-        rules: {
-          aliasip: [
-            { validator: validate('ip', '请输入正确IP', 'IP不能为空！'), trigger: 'blur' },
-          ],
-          lanstart: [
-            { validator: validate('ip', '请输入正确IP', 'IP不能为空！'), trigger: 'blur' },
-          ],
-          lanend: [
-            { validator: validate('ip', '请输入正确IP', 'IP不能为空！'), trigger: 'blur' },
-          ],
-        }
-      }
-    },
-    methods: {
-      headerStyle() {
-        return this.header()
+      aliasForm: {
+        aliasip: '', // 别名地址
+        lanstart: '', // 起始地址
+        lanend: '' // 结束地址
       },
 
-      //获得alias信息
-      getAliasInfo: function() {
-        let para = {
-          page: this.aliasPage,
-        }
-        getAlias(para).then((res) => {
-          if(this.aliasPage === res.data.page ) {
-            if(res.data.total !== 0) {
-              if (res.data.data.length !== 0) {
-                this.aliasTotal = res.data.total
-                this.alias = res.data.data
-              }
-              else if(res.data.total > 5) {
-                this.aliasPage -= 1
-                this.getAliasInfo()
-              }
+      alias: [],
+      aliasSelections: [], // 网络别名批量删除列表选中列
+
+      tooltipLabelWidth: '100px',
+      formLabelWidth: '130px',
+
+      rules: {
+        aliasip: [
+          {
+            validator: validate('ip', '请输入正确IP', 'IP不能为空！'),
+            trigger: 'blur'
+          }
+        ],
+        lanstart: [
+          {
+            validator: validate('ip', '请输入正确IP', 'IP不能为空！'),
+            trigger: 'blur'
+          }
+        ],
+        lanend: [
+          {
+            validator: validate('ip', '请输入正确IP', 'IP不能为空！'),
+            trigger: 'blur'
+          }
+        ]
+      }
+    }
+  },
+  methods: {
+    headerStyle() {
+      return this.header()
+    },
+
+    // 获得alias信息
+    getAliasInfo: function() {
+      let para = {
+        page: this.aliasPage
+      }
+      getAlias(para).then(res => {
+        if (this.aliasPage === res.data.page) {
+          if (res.data.total !== 0) {
+            if (res.data.data.length !== 0) {
+              this.aliasTotal = res.data.total
+              this.alias = res.data.data
+            } else if (res.data.total > 5) {
+              this.aliasPage -= 1
+              this.getAliasInfo()
             }
-            else {
-              this.alias = []
-            }   
+          } else {
+            this.alias = []
           }
-          else{
-            this.getAliasInfo()
-          }
-          //let alias1 = JSON.stringify(res.data.alias);
-          //console.log("alias is "+alias1);
-        })
-      },
-      //别名表格编辑
-      handleAliasEdit: function(index, row) {
-        this.aliasEditFormVisible = true
-        this.aliasForm = Object.assign({}, row)
-      },
-      //别名表格编辑提交
-      editAliasSubmit: function() {
-        let para = Object.assign({}, this.aliasForm)
-        // console.log("aliasForm is"+this.aliasForm);
-        editAlias(para).then(() => {
-          this.$message({
-            message: '提交成功',
-            type: 'success'
-          })
-          this.$refs['aliasForm'].resetFields()
-          this.aliasEditFormVisible = false
+        } else {
           this.getAliasInfo()
+        }
+        // let alias1 = JSON.stringify(res.data.alias);
+        // console.log("alias is "+alias1);
+      })
+    },
+    // 别名表格编辑
+    handleAliasEdit: function(index, row) {
+      this.aliasEditFormVisible = true
+      this.aliasForm = Object.assign({}, row)
+    },
+    // 别名表格编辑提交
+    editAliasSubmit: function() {
+      let para = Object.assign({}, this.aliasForm)
+      // console.log("aliasForm is"+this.aliasForm);
+      editAlias(para).then(() => {
+        this.$message({
+          message: '提交成功',
+          type: 'success'
         })
-      },
-      //别名表 编辑取消
-      aliasCancel() {
-        this.aliasFormVisible = false
+        this.$refs['aliasForm'].resetFields()
         this.aliasEditFormVisible = false
-      },
-      //别名表格添加处理
-      addAliasHandle: function() {
-        this.aliasFormVisible = true
-      },
-      //别名表格添加提交
-      addAliasSubmit: function() {
-        let para = Object.assign({}, this.aliasForm)
-        para.handle = 0
+        this.getAliasInfo()
+      })
+    },
+    // 别名表 编辑取消
+    aliasCancel() {
+      this.aliasFormVisible = false
+      this.aliasEditFormVisible = false
+    },
+    // 别名表格添加处理
+    addAliasHandle: function() {
+      this.aliasFormVisible = true
+    },
+    // 别名表格添加提交
+    addAliasSubmit: function() {
+      let para = Object.assign({}, this.aliasForm)
+      para.handle = 0
 
-        console.log(para)
-        addAlias(para).then(() => {
+      console.log(para)
+      addAlias(para)
+        .then(() => {
           this.$message({
             message: '提交成功',
             type: 'success'
           })
           this.$refs['aliasForm'].resetFields()
           this.getAliasInfo()
-        }).then(() => {
+        })
+        .then(() => {
           this.aliasFormVisible = false
         })
-      },
-      //别名表格批量删除
-      delAliasHandle () {
+    },
+    // 别名表格批量删除
+    delAliasHandle() {
+      for (let i = 0; i < this.aliasSelections.length; i++) {
+        del(this.aliasSelections[i])
+        console.log(this.aliasSelections)
+      }
+      function del(item) {
+        let para = Object.assign({}, item)
+        para.handle = 1
+        para.assport = para.assport + ''
+        delAlias(para).then(() => {})
+      }
+      this.getAliasInfo()
+    },
+    // 单独删除一个网络别名
+    signalDelAliasHandle: function(index, row) {
+      row.handle = 1
+      let para = Object.assign({}, row)
 
-        for(let i = 0; i < this.aliasSelections.length; i++) {
-          del(this.aliasSelections[i])
-          console.log(this.aliasSelections)
-        }
-        function del(item) {
-          let para = Object.assign({}, item)
-          para.handle = 1
-          para.assport = para.assport+''
-          delAlias(para).then(() => {
-          })
-        }
-        this.getAliasInfo()
-      },
-      //单独删除一个网络别名
-      signalDelAliasHandle: function(index, row) {
-        row.handle = 1
-        let para = Object.assign({}, row)
-
-        this.$confirm('确认删除选中记录吗？', '提示', {
-          type: 'warning'
-        }).then(() => {
+      this.$confirm('确认删除选中记录吗？', '提示', {
+        type: 'warning'
+      })
+        .then(() => {
           delAlias(para).then(() => {
             this.$message({
               message: '删除成功',
@@ -236,28 +243,28 @@ import validate from '@/utils/rules'
             })
             this.getAliasInfo()
           })
-        }).catch(() => {
         })
-      },
-      //别名表格 分页选择 跳到选中页面
-      aliasHandleCurrentChange(val) {
-        this.aliasPage = val
-        this.getAliasInfo()
-      },
-      //别名表格 多选 确定选中选项
-      aliasSelChange: function(sels) {
-        this.aliasSelections = sels
-        console.log(this.aliasSelections)
-      },
+        .catch(() => {})
     },
-    mounted() {
+    // 别名表格 分页选择 跳到选中页面
+    aliasHandleCurrentChange(val) {
+      this.aliasPage = val
       this.getAliasInfo()
+    },
+    // 别名表格 多选 确定选中选项
+    aliasSelChange: function(sels) {
+      this.aliasSelections = sels
+      console.log(this.aliasSelections)
     }
+  },
+  mounted() {
+    this.getAliasInfo()
   }
+}
 </script>
 
 <style scoped>
-  .table {
-    width: 100%;
-  }
+.table {
+  width: 100%;
+}
 </style>

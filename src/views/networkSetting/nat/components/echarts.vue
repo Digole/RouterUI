@@ -14,7 +14,7 @@ let option = {}
 
 export default {
   name: 'echarts',
-  data () {
+  data() {
     return {}
   },
   watch: {
@@ -23,48 +23,49 @@ export default {
       this.translate()
     }
   },
-  methods :{
-    drawLineChart1: function(){
-      myChart = echarts.init(document.getElementById('chartLine1'),'walden')
+  methods: {
+    drawLineChart1: function() {
+      myChart = echarts.init(document.getElementById('chartLine1'), 'walden')
 
       async function getPercentData() {
         now = new Date(+now + 5000)
         let percent
-        await getUsage().then((res) => {
-          return res.data.percent
-        }).then((val) => {
-          percent = val
-        })
+        await getUsage()
+          .then(res => {
+            return res.data.percent
+          })
+          .then(val => {
+            percent = val
+          })
         // console.log("reponse percent! the value is "+ percent);
         return {
           name: now.toString(),
-          value: [
-            now,
-            percent
-          ]
+          value: [now, percent]
         }
       }
 
       async function getUseNode() {
         let usage
-        await getUsage().then((res) => {
-          return [res.data.usenode, res.data.totalnode]
-        }).then((val) => {
-          usage = val
-        })
-        console.log('reponse usenode! the value is '+ usage)
+        await getUsage()
+          .then(res => {
+            return [res.data.usenode, res.data.totalnode]
+          })
+          .then(val => {
+            usage = val
+          })
+        console.log('reponse usenode! the value is ' + usage)
         return usage
       }
 
       function randomData() {
         now = new Date(+now + 5000)
-        //console.log("now "+now+"and "+now.toTimeString());
+        // console.log("now "+now+"and "+now.toTimeString());
         // value = Math.random()*100;
         value = 0
         return {
           name: now.toString(),
           value: [
-            //[now.getHours(), now.getMinutes(), now.getSeconds()].join(':'),
+            // [now.getHours(), now.getMinutes(), now.getSeconds()].join(':'),
             now,
             Math.round(value)
           ]
@@ -74,7 +75,7 @@ export default {
       let data = []
       let now = new Date()
       let value = 0
-      for (let i = 0; i <36; i++) {
+      for (let i = 0; i < 36; i++) {
         data.push(randomData())
       }
 
@@ -84,22 +85,28 @@ export default {
           subtext: '百分比',
           textStyle: {
             fontWeight: 'normal',
-            fontSize: 14,
-          },
+            fontSize: 14
+          }
         },
         tooltip: {
           trigger: 'none',
-          formatter: function (params) {
+          formatter: function(params) {
             params = params[0]
             let date = new Date(params.name)
-            return date.getHours() + ':' + date.getMinutes() + ' : ' + params.value[1]
+            return (
+              date.getHours() +
+              ':' +
+              date.getMinutes() +
+              ' : ' +
+              params.value[1]
+            )
           },
           axisPointer: {
             animation: false
           }
         },
         legend: {
-          data: ['占用百分比','使用数量']
+          data: ['占用百分比', '使用数量']
         },
         grid: {
           left: '5%',
@@ -115,13 +122,13 @@ export default {
             },
             axisLine: {
               lineStyle: {
-                color: '#CD0000',
+                color: '#CD0000'
               }
-            },
+            }
           },
           {
             type: 'category',
-            data: (function (){
+            data: (function() {
               let res = []
               let len = 36
               while (len--) {
@@ -139,7 +146,7 @@ export default {
             min: 0,
             splitLine: {
               show: false
-            },
+            }
           },
           {
             type: 'value',
@@ -156,18 +163,18 @@ export default {
             type: 'line',
             lineStyle: {
               width: 0.5,
-              type: 'dotted',
+              type: 'dotted'
             },
             showSymbol: false,
             hoverAnimation: false,
             data: data
           },
           {
-            name:'预购队列',
-            type:'bar',
+            name: '预购队列',
+            type: 'bar',
             xAxisIndex: 1,
             yAxisIndex: 1,
-            data:(function (){
+            data: (function() {
               let res = []
               let len = 36
               while (len--) {
@@ -177,12 +184,12 @@ export default {
               return res
             })()
           }
-        ],
+        ]
       }
 
       myChart.setOption(option)
 
-      async function update(){
+      async function update() {
         let resultData = await getPercentData()
         let result = await getUseNode()
         let resultUsage = result[0]
@@ -196,25 +203,25 @@ export default {
       }
       stopSignal2 = setInterval(update, 5000)
 
-      window.addEventListener('resize',function() {
+      window.addEventListener('resize', function() {
         myChart.resize()
       })
     },
 
     translate() {
-      if(this.$store.state.app.language === 'en') {
+      if (this.$store.state.app.language === 'en') {
         option.title.text = 'Random port usage'
         option.title.subtext = 'Percent'
         option.legend = {
-          data: ['Percent of Inuse','Number of Inuse']
+          data: ['Percent of Inuse', 'Number of Inuse']
         }
         option.yAxis[1].name = 'Number of Inuse'
       }
-      if(this.$store.state.app.language === 'zh') {
+      if (this.$store.state.app.language === 'zh') {
         option.title.text = '随机端口使用情况'
         option.title.subtext = '百分比'
         option.legend = {
-          data: ['占用百分比','使用数量']
+          data: ['占用百分比', '使用数量']
         }
         option.yAxis[1].name = '使用数量'
       }
@@ -231,5 +238,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

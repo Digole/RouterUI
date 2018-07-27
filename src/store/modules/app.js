@@ -1,4 +1,4 @@
-import Cookies from  'js-cookie'
+import Cookies from 'js-cookie'
 
 const app = {
   state: {
@@ -10,12 +10,15 @@ const app = {
     language: Cookies.get('language') || 'zh',
     systemData: {
       up: '',
-      down: ''
+      down: '',
+      cpu: '',
+      memory: '',
+      userNum: ''
     }
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
-      if(state.sidebar.opened) {
+      if (state.sidebar.opened) {
         Cookies.set('sidebarStatus', 1)
       } else {
         Cookies.set('sidebarStatus', 0)
@@ -38,6 +41,10 @@ const app = {
     SET_SYSDATA: (state, systemData) => {
       state.systemData.up = systemData.up
       state.systemData.down = systemData.down
+      state.systemData.cpu = systemData.cpu
+      state.systemData.memory = systemData.memory
+      state.systemData.userNum = systemData.userNum
+      console.log(state.systemData)
     }
   },
   actions: {

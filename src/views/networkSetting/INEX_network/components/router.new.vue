@@ -13,9 +13,9 @@
 
       <div class="router">
         <div v-for="(item, index) in ports" class="port" :key="index">
-          <div> 
+          <div>
             <el-tooltip class="item" effect="light">
-              <img style="width: 60px; height: 50px; border-radius: 5px;" :src=selectUrl(item.linkstatus) @click="dialog(index, item)"/>
+              <img style="width: 60px; height: 50px; border-radius: 5px;" :src=selectUrl(item.linkstatus) @click="dialog(index, item)" />
               <div slot="content" class="tooltip-content">
                 <h3>{{ports[index].webname}}</h3>
                 <el-form label-position="left" size="mini">
@@ -43,28 +43,31 @@
               </div>
             </el-tooltip>
             <div class="text-area">
-              <span v-show="item.function !== 'normal'"><svg class="icon"><use :xlink:href="selectIcon(item.function)"></use></svg></span>
+              <span v-show="item.function !== 'normal'">
+                <svg class="icon">
+                  <use :xlink:href="selectIcon(item.function)"></use>
+                </svg>
+              </span>
               {{ports[index].webname}}
-              <span><svg class="icon"><use :xlink:href="selectIcon2(item.type)"></use></svg></span>
+              <span>
+                <svg class="icon">
+                  <use :xlink:href="selectIcon2(item.type)"></use>
+                </svg>
+              </span>
             </div>
           </div>
         </div>
         <!-- <div v-if="checked !== 200" class="mask"> -->
-          <div v-if='false' class="mask">
+        <div v-if='false' class="mask">
           <el-button class="button" type="primary" @click="sortingHandle">{{$t('NAT.adaptive.maskTip')}}</el-button>
         </div>
       </div>
     </div>
 
     <el-dialog title="配置网卡" :visible.sync="isSettingNetcardVisible" width="30%">
-      
+
       <!--inner dialog LAN-->
-      <el-dialog
-        width="30%"
-        height="100%"
-        :title="$t('INEXNetwork.cardConfig.innerLANTitle')"
-        :visible.sync="isLANInnerVisible"
-        append-to-body>
+      <el-dialog width="30%" height="100%" :title="$t('INEXNetwork.cardConfig.innerLANTitle')" :visible.sync="isLANInnerVisible" append-to-body>
         <el-form :model="lanForm" label-position="left" size="small" ref="lanForm">
           <el-form-item :label="$t('INEXNetwork.cardConfig.IPAddress')" :label-width="formLabelWidth">
             <el-input v-model="lanForm.ip" prop="ip" auto-complete="off"></el-input>
@@ -83,22 +86,14 @@
 
                 <el-form-item :label="$t('INEXNetwork.cardConfig.workingMode')" prop="mode" :label-width="formLabelWidth">
                   <el-select v-model="advancedLANForm.mode" placeholder="请选择" value="" style="width: 100%;">
-                    <el-option
-                      v-for="item in modeOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                    <el-option v-for="item in modeOptions" :key="item.value" :label="item.label" :value="item.value">
                     </el-option>
                   </el-select>
                 </el-form-item>
 
                 <el-form-item :label="$t('INEXNetwork.cardConfig.rate')" prop="rate" :label-width="formLabelWidth">
                   <el-select v-model="advancedLANForm.rate" placeholder="请选择" value="" style="width: 100%;">
-                    <el-option
-                      v-for="item in rateOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                    <el-option v-for="item in rateOptions" :key="item.value" :label="item.label" :value="item.value">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -117,20 +112,11 @@
       </el-dialog>
 
       <!--inner dialog WAN-->
-      <el-dialog
-        width="30%"
-        height="100%"
-        :title="$t('INEXNetwork.cardConfig.innerWANTitle')"
-        :visible.sync="isWANInnerVisible"
-        append-to-body>
+      <el-dialog width="30%" height="100%" :title="$t('INEXNetwork.cardConfig.innerWANTitle')" :visible.sync="isWANInnerVisible" append-to-body>
         <el-form :model="wanForm" label-position="left" size="small" ref="wanForm">
           <el-form-item :label="$t('INEXNetwork.cardConfig.linkType')" prop="accessMethod" :label-width="formLabelWidth">
             <el-select v-model="wanForm.accessMethod" placeholder="请选择" style="width: 100%;" @change="onSelect">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
@@ -138,24 +124,22 @@
           <!-- ASDL连接所用的form,嵌入在inner dialog WAN中 -->
           <el-form :model="formDialUp" ref="formDialUp" v-show="isASDLVisible">
             <el-form-item :label="$t('INEXNetwork.cardConfig.account')" prop="account" :label-width="formLabelWidth">
-              <el-input  v-model="formDialUp.account" auto-complete="off" :disabled="isGottonStatus"></el-input>
+              <el-input v-model="formDialUp.account" auto-complete="off" :disabled="isGottonStatus"></el-input>
             </el-form-item>
             <el-form-item :label="$t('INEXNetwork.cardConfig.passwd')" prop="passwd" :label-width="formLabelWidth">
               <el-input v-model="formDialUp.passwd" auto-complete="off" :disabled="isGottonStatus"></el-input>
             </el-form-item>
             <el-form-item :label="$t('INEXNetwork.cardConfig.status')" prop="status" v-model="formDialUp.status" :label-width="formLabelWidth" v-loading="isGottonStatus">
               {{formDialUp.status}}
-              <el-button type="primary" @click="dialLink" style="margin-left: 20px" 
-              v-loading="isLoading" :disabled="isInCancel" v-if="isConnectionShow">{{$t('operation.connect')}}</el-button>
-              <el-button type="danger" @click="dialCancel" style="margin-left: 20px" 
-              v-loading="isInCancel" v-if="!isConnectionShow && !isFinishConnection">{{$t('operation.cancel')}}</el-button>
+              <el-button type="primary" @click="dialLink" style="margin-left: 20px" v-loading="isLoading" :disabled="isInCancel" v-if="isConnectionShow">{{$t('operation.connect')}}</el-button>
+              <el-button type="danger" @click="dialCancel" style="margin-left: 20px" v-loading="isInCancel" v-if="!isConnectionShow && !isFinishConnection">{{$t('operation.cancel')}}</el-button>
               <el-button type="danger" @click="unbind" style="margin-left: 20px" v-if="isFinishConnection">{{$t('operation.disconnect')}}</el-button>
             </el-form-item>
           </el-form>
 
           <!-- DHCP所用的form,嵌入在inner dialog WAN中 -->
           <el-form v-if="isDHCP">
-            <el-form-item :label="$t('INEXNetwork.cardConfig.status')" :label-width="formLabelWidth"> 
+            <el-form-item :label="$t('INEXNetwork.cardConfig.status')" :label-width="formLabelWidth">
               {{DHCPStatus}}
               <el-button type="primary" @click="DHCPLink" style="margin-left: 20px" v-if="!isDHCPConnected">
                 {{$t('operation.connect')}}
@@ -191,21 +175,13 @@
             <el-form :model="advancedWANForm" label-position="left" size="small" ref="advanceWANForm">
               <el-form-item :label="$t('INEXNetwork.cardConfig.workingMode')" prop="mode" :label-width="formLabelWidth">
                 <el-select v-model="advancedWANForm.mode" placeholder="请选择" style="width: 100%;" value="">
-                  <el-option
-                    v-for="item in modeOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
+                  <el-option v-for="item in modeOptions" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item :label="$t('INEXNetwork.cardConfig.rate')" prop="rate" :label-width="formLabelWidth">
                 <el-select v-model="advancedWANForm.rate" placeholder="请选择" style="width: 100%;" value="">
-                  <el-option
-                    v-for="item in rateOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
+                  <el-option v-for="item in rateOptions" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -243,19 +219,19 @@ let stopSignal1, stopSignal2
 
 export default {
   name: 'IN-EX_network',
-  data () {
+  data() {
     return {
-      isSettingNetcardVisible: false,   // 控制点击port之后的父级dialog
-      isLANInnerVisible: false,         // LAN的子级dialog
-      isWANInnerVisible: false,         // WAN的子级dialog
-      isASDLVisible: false,             // 控制ASDL选项是否显示
-      isDHCP: false,                    // 控制选择DHCP后，表单部分项目disable
-      isButtonVisible: true,            // 控制上一步按钮是否显示
-      isLoading: false,                 // 控制ASDL连接时的加载动画
-      isInCancel: false,                // 是否取消dial请求中
-      isGottonStatus: false,            // 是否正在获取dial状态
-      isConnectionShow: true,           // dial连接件是否显示
-      isFinishConnection: false,        // 连接是否完成,是否显示断开按钮
+      isSettingNetcardVisible: false, // 控制点击port之后的父级dialog
+      isLANInnerVisible: false, // LAN的子级dialog
+      isWANInnerVisible: false, // WAN的子级dialog
+      isASDLVisible: false, // 控制ASDL选项是否显示
+      isDHCP: false, // 控制选择DHCP后，表单部分项目disable
+      isButtonVisible: true, // 控制上一步按钮是否显示
+      isLoading: false, // 控制ASDL连接时的加载动画
+      isInCancel: false, // 是否取消dial请求中
+      isGottonStatus: false, // 是否正在获取dial状态
+      isConnectionShow: true, // dial连接件是否显示
+      isFinishConnection: false, // 连接是否完成,是否显示断开按钮
       checked: '',
       DHCPStatus: '未连接',
       isDHCPConnected: false,
@@ -360,7 +336,7 @@ export default {
         account: '',
         passwd: '',
         status: '',
-        handle: 0 //后台用,勿删
+        handle: 0 // 后台用,勿删
       },
       optionForm: {
         id: ''
@@ -368,7 +344,7 @@ export default {
 
       formLabelWidth: '100px',
       tooltipLabelWidth: '80px',
-      powerButton: 'static/port3.png',
+      powerButton: 'static/port3.png'
     }
   },
   watch: {
@@ -388,7 +364,7 @@ export default {
     },
     isWANInnerVisible: {
       handler: function() {
-        if(this.isWANInnerVisible === false) {
+        if (this.isWANInnerVisible === false) {
           this.isAfterConnection = false
           this.$refs['wanForm'].resetFields()
           this.$refs['advanceWANForm'].resetFields()
@@ -397,41 +373,41 @@ export default {
     }
   },
   methods: {
-    triggerSettingNetcardVisible () {
+    triggerSettingNetcardVisible() {
       this.isSettingNetcardVisible = !this.isSettingNetcardVisible
     },
-    triggerLANInnerVisible () {
+    triggerLANInnerVisible() {
       this.isLANInnerVisible = !this.isLANInnerVisible
     },
-    triggerWANInnerVisible () {
+    triggerWANInnerVisible() {
       this.isWANInnerVisible = !this.isWANInnerVisible
     },
-    triggerisASDLVisible () { 
+    triggerisASDLVisible() {
       this.isASDLVisible = !this.isASDLVisible
     },
-    triggerButtonVisible () {
+    triggerButtonVisible() {
       this.isButtonVisible = !this.isButtonVisible
     },
-    triggerLoading () {
+    triggerLoading() {
       this.isLoading = !this.isLoading
     },
-    triggerInCanel () {
+    triggerInCanel() {
       this.isInCancel = !this.isInCancel
     },
-    triggerGottonStatus () {
+    triggerGottonStatus() {
       this.isGottonStatus = !this.isGottonStatus
     },
-    triggerConnectionVisible () {
+    triggerConnectionVisible() {
       this.isConnectionShow = !this.isConnectionShow
     },
-    triggerASDLVisible () {
+    triggerASDLVisible() {
       this.isASDLVisible = !this.isASDLVisible
     },
-    showDHCPItems () {
+    showDHCPItems() {
       this.isDHCP = true
     },
 
-    //选择LAN,WAN口对应图标
+    // 选择LAN,WAN口对应图标
     selectUrl(para) {
       // if(para === "空闲")
       if (para === 'off') {
@@ -440,7 +416,7 @@ export default {
         return 'static/port3.png'
       }
     },
-    //选择router页面里的图标
+    // 选择router页面里的图标
     selectIcon(para) {
       if (para === 'wan') {
         return '#icon-wan'
@@ -451,7 +427,7 @@ export default {
       }
     },
     selectIcon2(para) {
-      if(para === 'adsl') {
+      if (para === 'adsl') {
         return '#icon-phone'
       } else if (para === 'dhcp') {
         return '#icon-dynamic'
@@ -470,8 +446,8 @@ export default {
       this.formDialUp.enname = obj.enname
 
       // 获取连接状态
-      if(obj.type === 'dhcp') {
-        this.DHCPStatus = '已连接' 
+      if (obj.type === 'dhcp') {
+        this.DHCPStatus = '已连接'
       }
 
       this.triggerSettingNetcardVisible()
@@ -492,11 +468,11 @@ export default {
         let para = Object.assign({}, this.formDialUp)
         // handle等于2时 代表获取状态
         para.handle = 2
-        // 
+        //
         // this.isGottonStatus = true;
         this.triggerGottonStatus()
 
-        dialUp(para).then((res) => {
+        dialUp(para).then(res => {
           if (res.data.code === 200) {
             this.translate(res.data.status)
             this.formDialUp.account = res.data.account
@@ -523,41 +499,37 @@ export default {
     },
     translate: function(val) {
       if (val === 'run') {
-        if(this.$store.state.app.language === 'zh') {
+        if (this.$store.state.app.language === 'zh') {
           this.formDialUp.status = '拨号成功'
-        }else {
+        } else {
           this.formDialUp.status = 'Success'
         }
         // buttonChange
         this.isLoading = false
         this.isAfterConnection = true
         clearInterval(stopSignal1)
-      }
-      else if (val === 'init') {
-        if(this.$store.state.app.language === 'zh') {
+      } else if (val === 'init') {
+        if (this.$store.state.app.language === 'zh') {
           this.formDialUp.status = '拨号初始化'
-        }else {
+        } else {
           this.formDialUp.status = 'Dial initialization'
         }
-      }
-      else if (val === 'auth') {
-        if(this.$store.state.app.language === 'zh') {
+      } else if (val === 'auth') {
+        if (this.$store.state.app.language === 'zh') {
           this.formDialUp.status = '用户验证'
-        }else {
+        } else {
           this.formDialUp.status = 'User Authentication'
         }
-      }
-      else if (val === 'disconnect') {
-        if(this.$store.state.app.language === 'zh') {
+      } else if (val === 'disconnect') {
+        if (this.$store.state.app.language === 'zh') {
           this.formDialUp.status = '连接断开'
-        }else {
+        } else {
           this.formDialUp.status = 'Disconnected'
         }
-      }
-      else if (val === 'dead') {
-        if(this.$store.state.app.language === 'zh') {
+      } else if (val === 'dead') {
+        if (this.$store.state.app.language === 'zh') {
           this.formDialUp.status = '连接失败'
-        }else {
+        } else {
           this.formDialUp.status = 'Connection failed'
         }
         this.isLoading = false
@@ -566,7 +538,7 @@ export default {
       }
     },
     dialLink: function() {
-      //buttonChange "上一步"按钮不显示
+      // buttonChange "上一步"按钮不显示
       this.isButtonVisible = false
       this.isLoading = true
 
@@ -576,31 +548,32 @@ export default {
 
       let para = Object.assign({}, this.formDialUp)
 
-      dialUp(para).then( (res) => {
+      dialUp(para).then(res => {
         if (res.data.code === 200) {
           this.translate(res.data.status)
         } else {
-          if(this.$store.state.app.language === 'zh') {
+          if (this.$store.state.app.language === 'zh') {
             this.formDialUp.status = '拨号失败'
-          }else {
+          } else {
             this.formDialUp.status = 'Dial failed'
-          }         
+          }
         }
       })
 
       stopSignal1 = setInterval(() => {
         // handle = 2的意义是获取状态
         para.handle = 2
-        dialUp(para).then( (res) => {
+        dialUp(para).then(res => {
           if (res.data.code === 200) {
             this.translate(res.data.status)
           }
           if (res.data.code === 300) {
-            if(this.$store.state.app.language === 'zh') {
+            if (this.$store.state.app.language === 'zh') {
               this.formDialUp.status = '拨号次数已达上限'
-            }else {
-              this.formDialUp.status = 'The number of dialups has reached the limit'
-            }    
+            } else {
+              this.formDialUp.status =
+                'The number of dialups has reached the limit'
+            }
             this.isLoading = false
             clearInterval(stopSignal1)
           }
@@ -620,7 +593,7 @@ export default {
       console.log(this.formDialUp)
       para.handle = 0
       stopSignal2 = setInterval(() => {
-        dialUp(para).then( (res) => {
+        dialUp(para).then(res => {
           if (res.data.code === 200) {
             this.isInCancel = false
             this.stopAsking()
@@ -636,7 +609,7 @@ export default {
       }, 1000)
       this.isConnectionShow = true
       // 清空form是清空接入方式 这一栏
-      this.$refs['formDialUp'].resetFields() 
+      this.$refs['formDialUp'].resetFields()
     },
     DHCPLink() {
       let para = {}
@@ -644,7 +617,7 @@ export default {
       para.handle = 'enable'
 
       this.DHCPStatus = '连接中'
-      DHCP(para).then((res) => {
+      DHCP(para).then(res => {
         if (res.data.code === 200) {
           this.DHCPStatus = '已连接'
         }
@@ -659,7 +632,7 @@ export default {
       para.netifname = this.formDialUp.enname
       para.handle = 'disable'
 
-      DHCP(para).then((res) => {
+      DHCP(para).then(res => {
         if (res.data.code === 200) {
           this.DHCPStatus = '未连接'
         }
@@ -669,7 +642,7 @@ export default {
       })
       this.isDHCPConnected = false
     },
-    stopAsking () {
+    stopAsking() {
       clearInterval(stopSignal2)
     },
     // 内部WAN/LAN dialog 信息
@@ -702,7 +675,6 @@ export default {
 
       this.$refs['advancedLANForm'].resetFields()
       this.$refs['lanForm'].resetFields()
-
     },
     LANFormPrevious: function() {
       this.triggerLANInnerVisible()
@@ -710,7 +682,7 @@ export default {
     WANFormSubmit: function() {
       this.triggerSettingNetcardVisible()
       this.triggerWANInnerVisible()
-       
+
       this.$refs['advancedWANForm'].resetFields()
       this.$refs['wanForm'].resetFields()
     },
@@ -721,7 +693,6 @@ export default {
 
       this.$refs['advancedWANForm'].resetFields()
       this.$refs['wanForm'].resetFields()
-
     },
     WANFormPrevious: function() {
       this.triggerWANInnerVisible()
@@ -732,7 +703,7 @@ export default {
       this.isSettingNetcardVisible = false
       this.isLANInnerVisible = false
       this.isWANInnerVisible = false
-      //buttonChange
+      // buttonChange
       this.isButtonVisible = true
       this.isLoading = false
 
@@ -743,16 +714,15 @@ export default {
           message: '解绑成功',
           type: 'success'
         })
-        //dataBind
+        // dataBind
         let index = this.formDialUp.webindex
-        this.ports[index].function = 'normal' //change icon status
+        this.ports[index].function = 'normal' // change icon status
         this.$refs['formDialUp'].resetFields()
       })
       this.isConnectionShow = false
     },
     getPortsInfo: function() {
-      getPorts().then((res) => {
-
+      getPorts().then(res => {
         // 根据webindex排序，确保端口顺序正确
         function sortNumber(a, b) {
           return a.webindex - b.webindex
@@ -788,9 +758,9 @@ export default {
   background-color: dodgerblue;
 }
 .powerButton {
-    width: 60px;
-    height: 50px;
-    margin: 25px 20px;
+  width: 60px;
+  height: 50px;
+  margin: 25px 20px;
 }
 .router {
   width: 75%;
@@ -821,7 +791,7 @@ export default {
 }
 .tip {
   display: flex;
-  width: 30%; 
+  width: 30%;
 }
 .tip1 {
   display: flex;

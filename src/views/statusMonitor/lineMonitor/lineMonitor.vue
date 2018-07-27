@@ -38,11 +38,11 @@
 
 <script>
 import { getMonitorInfo, getPorts } from '../../../api/api.js'
-import { conversion } from '../../../utils/rateUnitExchange.js'
+import { conversion, conversionUnit } from '../../../utils/rateUnitExchange.js'
 export default {
   name: 'line_monitor',
   data() {
-    return{
+    return {
       form: {
         type: Number,
         enable: '',
@@ -58,7 +58,7 @@ export default {
         send_total_length: Number,
         recv_total_length: Number,
         send_total_packets: Number,
-        recv_total_packets: Number,
+        recv_total_packets: Number
       },
       final: [],
       ports: [],
@@ -67,16 +67,16 @@ export default {
       total: 0
     }
   },
-  methods:{
+  methods: {
     headerStyle() {
       return this.header()
     },
     handleCurrentChange(val) {
-      let para = Object.assign( {}, this.form)
+      let para = Object.assign({}, this.form)
       para.type = 3
       para.page = this.currentPage
-      getMonitorInfo(para).then( (res) => {
-        if(res.data.code === 200) {
+      getMonitorInfo(para).then((res) => {
+        if (res.data.code === 200) {
           this.lineform = res.data.data
           this.total = res.data.total
         }
@@ -84,34 +84,38 @@ export default {
       })
     },
     async getLineInfo () {
-      let para = Object.assign( {}, this.form)
+      let para = Object.assign({}, this.form)
       para.type = 3
       para.page = this.currentPage
-      await getMonitorInfo(para).then( (res) => {
-        if(res.data.code === 200) {
-          if(res.data.data.length !==0 ) {
+      await getMonitorInfo(para).then((res) => {
+        if (res.data.code === 200) {
+          if (res.data.data.length !== 0) {
             this.lineForm = res.data.data
             this.total = res.data.total
+            for (let i = 0; i < res.data.data.length; i++) {
+              this.lineForm[i].send_rate = conversion(this.lineForm[i].send_rate)
+              this.lineForm[i].recv_rate = conversion(this.lineForm[i].recv_rate)
+              this.lineForm[i].send_total_length = conversionUnit(this.lineForm[i].send_total_length)
+              this.lineForm[i].recv_total_length = conversionUnit(this.lineForm[i].recv_total_length)
+            }
           } else {
-            if(res.data.total === 0) {
+            if (res.data.total === 0) {
               this.lineForm = res.data.data
-              this.lineForm.send_rate = conversion(this.lineForm.send_rate)
-              this.lineForm.recv_rate = conversion(this.lineForm.recv_rate)
               this.total = res.data.total
             } else {
               this.currentPage -= 1
               this.getLineInfo()
             }
           }
-        } 
+        }
       })
     },
     async getPortsInfo () {
       await getPorts().then((res) => {
-        if(res.data.code === 200) {
+        if (res.data.code === 200) {
           this.ports = res.data.interfaces
           console.log(this.ports)
-        } 
+        }
       })
     },
     async generateData () {
@@ -122,16 +126,16 @@ export default {
       console.log('final' + this.final)
 
       function getNameAndFunc (line, ports) {
-        console.log('in nameandfunc'+ line + ports)
-        for(let i = 0; i < line.length; i++) {
-          for(let j = 0; j < ports.length; j++) {
+        console.log('in nameandfunc' + line + ports)
+        for (let i = 0; i < line.length; i++) {
+          for (let j = 0; j < ports.length; j++) {
             if (line[i].ifname === ports[j].enname) {
               line[i].lineName = ports[j].webname
               line[i].function = ports[j].function
-              if(line[i].function.length === 3) {
-                line[i].function + '   '
-              }
-              if(ports[j].type !== '') {
+              // if (line[i].function.length === 3) {
+              //   line[i].function + '   '
+              // }
+              if (ports[j].type !== '') {
                 line[i].function += '/'
                 line[i].function += ports[j].type
               }
@@ -140,7 +144,6 @@ export default {
         }
         return line
       }
-
     }
   },
   mounted() {

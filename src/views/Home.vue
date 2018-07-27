@@ -3,7 +3,7 @@
 
     <el-col :span="24" class="header">
       <el-col :span="5" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
-        {{collapsed?'':sysName}}
+        {{ collapsed?'':sysName }}
       </el-col>
       <el-col :span="1">
         <!-- <div class="tools" @click.prevent="collapse" v-model="isCollapse"> -->
@@ -12,7 +12,6 @@
         </div>
       </el-col>
 
-
       <el-col :span="14">
         <div>
           <span @click="chooseLang('zh')" class="lang" :class="{selected: this.lang === 'zh'}">中文</span>
@@ -20,7 +19,6 @@
           <span @click="chooseLang('en')" class="lang" :class="{selected: this.lang === 'en'}">EN</span>
         </div>
       </el-col>
-
 
       <el-col :span="4" class="userinfo">
         <el-dropdown trigger="hover">
@@ -31,7 +29,6 @@
         </el-dropdown>
       </el-col>
     </el-col>
-
 
     <el-col :span="24" class="main">
       <aside :class="collapsed?'menu-collapsed':'menu-expanded'">
@@ -54,32 +51,40 @@
         </el-menu>
       </aside>
 
-
       <section class="content-container">
         <div class="grid-content bg-purple-light">
-          <el-col :span="24" class="breadcrumb-container">
+          <el-col :span="6" class="breadcrumb-container">
             <el-breadcrumb separator="/" class="breadcrumb-inner">
               <el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
                 {{ item.name }}
               </el-breadcrumb-item>
-            </el-breadcrumb >
-
-            <el-breadcrumb class="breadcrumb-inner-right" v-model="system">
-              <svg class="icon"><use xlink:href="#icon-xiazai1"></use></svg>{{$t('home.down')}}:{{this.data.down}}
-            </el-breadcrumb>
-
-            <el-breadcrumb class="breadcrumb-inner-right" v-model="system">
-              <svg class="icon"><use xlink:href="#icon-shangchuan1"></use></svg>{{$t('home.up')}}:{{this.data.up}}
-            </el-breadcrumb>
-
-            <el-breadcrumb class="breadcrumb-inner-right" v-model="system">
-              <svg class="icon"><use xlink:href="#icon-CPU"></use></svg>CPU:{{system[0].CPURate}}%
-            </el-breadcrumb>
-
-            <el-breadcrumb class="breadcrumb-inner-right" v-model="system">
-              <svg class="icon"><use xlink:href="#icon-shuju"></use></svg>{{$t('home.ram')}}:{{system[0].RAMRate}}%
             </el-breadcrumb>
           </el-col>
+
+          <div class="monitor">
+            <div class="inner-right">
+              <svg class="icon">
+                <use xlink:href="#icon-CPU"></use>
+              </svg>CPU:{{this.data.cpu}}%
+            </div>
+
+            <div class="inner-right">
+              <svg class="icon">
+                <use xlink:href="#icon-shuju"></use>
+              </svg>{{$t('home.ram')}}:{{this.data.memory}}%
+            </div>
+            <div class="inner-right long">
+              <svg class="icon">
+                <use xlink:href="#icon-shangchuan1"></use>
+              </svg>{{$t('home.up')}}:{{this.data.up}}
+            </div>
+            <div class="inner-right long">
+              <svg class="icon">
+                <use xlink:href="#icon-xiazai1"></use>
+              </svg>{{$t('home.down')}}:{{this.data.down}}
+            </div>
+          </div>
+
           <el-col :span="24" class="content-wrapper">
             <transition name="fade" mode="out-in">
               <router-view></router-view>
@@ -103,14 +108,16 @@ export default {
   data() {
     return {
       sysName: 'OpenRT v0.1',
-      collapsed:false,
+      collapsed: false,
       isCollapse: false,
       sysUserName: '',
       sysUserAvatar: '',
-      system:[{'CPURate':'0','RAMRate':'0'}],
+      system: [{ CPURate: '0', RAMRate: '0' }],
       data: {
         up: '',
-        down: ''
+        down: '',
+        cpu: '',
+        memory: ''
       }
     }
   },
@@ -132,19 +139,20 @@ export default {
       console.log('submit!')
     },
 
-    //退出登录
-    logout: function () {
+    // 退出登录
+    logout: function() {
       let _this = this
       this.$confirm('确认退出吗?', '提示', {
-        //type: 'warning'
-      }).then(() => {
-        sessionStorage.removeItem('user')
-        _this.$router.push('/login')
-      }).catch(() => {
+        // type: 'warning'
       })
+        .then(() => {
+          sessionStorage.removeItem('user')
+          _this.$router.push('/login')
+        })
+        .catch(() => {})
     },
-    //折叠导航栏
-    collapse:function(){
+    // 折叠导航栏
+    collapse: function() {
       /*
         if(this.collapsed === false) {
           setTimeout((() => {
@@ -163,37 +171,49 @@ export default {
       this.isCollapse = !this.isCollapse
     },
 
-    showMenu(i,status){
-      this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none'
+    showMenu(i, status) {
+      this.$refs.menuCollapsed.getElementsByClassName(
+        'submenu-hook-' + i
+      )[0].style.display = status ? 'block' : 'none'
     },
 
-    chooseLang (val) {
+    chooseLang(val) {
       this.lang = val
     },
 
     generateTitle,
 
     getInfo() {
+      this.update()
       setInterval(this.update, 2000)
     },
 
-    update() {
+    async update() {
       let para = {}
       para.page = 1
       para.type = 5
-      getMonitorInfo(para).then((res) => {
-        if(res.data.code === 200) {
+      await getMonitorInfo(para).then(res => {
+        if (res.data.code === 200) {
           this.data.up = conversion(res.data.data[0].recv_rate)
           this.data.down = conversion(res.data.data[0].send_rate)
           console.log(this.data.up)
           // this.$store.dispatch('pushSystemData', data)
         }
       })
+      let para1 = {}
+      para1.type = 6
+      await getMonitorInfo(para1).then(res => {
+        if (res.data.code === 200) {
+          this.data.cpu = (res.data.cpu_usage).toFixed(2)
+          this.data.memory = (res.data.memory_usage).toFixed(2)
+          this.data.userNum = res.data.online_users
+        }
+      })
+      this.$store.dispatch('pushSystemData', this.data)
     }
   },
 
-  created() {
-  },
+  created() {},
   mounted() {
     let user = sessionStorage.getItem('user')
     if (user) {
@@ -211,148 +231,159 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
-  .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 400px;
-  }
-  .icon {
-    width: 1em; height: 1em;
-    vertical-align: -0.15em;
-    fill: currentColor;
-    overflow: hidden;
-  }
-  .container {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    .header {
-      height: 60px;
-      line-height: 60px;
-      background: #3c8dbc;
-      color:#fff;
-      .userinfo {
-        text-align: right;
-        padding-right: 35px;
-        float: right;
-        .userinfo-inner {
-          cursor: pointer;
-          color:#fff;
-          img {
-            width: 40px;
-            height: 40px;
-            border-radius: 20px;
-            margin: 10px 0 10px 10px;
-            float: right;
-          }
-        }
-      }
-      .logo {
-        //width:230px;
-        height:60px;
-        font-size: 22px;
-        padding-left:20px;
-        padding-right:20px;
-        border-color: rgba(238,241,146,0.3);
-        border-right-width: 1px;
-        border-right-style: solid;
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
+  min-height: 400px;
+}
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+.container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  .header {
+    height: 60px;
+    line-height: 60px;
+    background: #3c8dbc;
+    color: #fff;
+    .userinfo {
+      text-align: right;
+      padding-right: 35px;
+      float: right;
+      .userinfo-inner {
+        cursor: pointer;
+        color: #fff;
         img {
           width: 40px;
-          float: left;
-          margin: 10px 10px 10px 18px;
+          height: 40px;
+          border-radius: 20px;
+          margin: 10px 0 10px 10px;
+          float: right;
         }
-        .txt {
-          color:#fff;
-        }
-      }
-      .logo-width{
-        width:200px;
-      }
-      .logo-collapse-width{
-        width:65px
-      }
-      .tools{
-        padding: 0 23px;
-        width:14px;
-        height: 60px;
-        line-height: 60px;
-        cursor: pointer;
-      }
-      .lang {
-        cursor: pointer; 
-        color: white;
-      }
-      .selected {
-        color: goldenrod;
       }
     }
-    .main {
-      display: flex;
-      // background: #324057;
-      position: absolute;
-      top: 60px;
-      bottom: 0;
-      overflow: hidden;
-      aside {
-        flex:0 0 200px;
-        width: 200px;
-        // position: absolute;
-        // top: 0px;
-        // bottom: 0px;
-        .el-menu{
-          height: 100%;
+    .logo {
+      //width:230px;
+      height: 60px;
+      font-size: 22px;
+      padding-left: 20px;
+      padding-right: 20px;
+      border-color: rgba(238, 241, 146, 0.3);
+      border-right-width: 1px;
+      border-right-style: solid;
+      img {
+        width: 40px;
+        float: left;
+        margin: 10px 10px 10px 18px;
+      }
+      .txt {
+        color: #fff;
+      }
+    }
+    .logo-width {
+      width: 200px;
+    }
+    .logo-collapse-width {
+      width: 65px;
+    }
+    .tools {
+      padding: 0 23px;
+      width: 14px;
+      height: 60px;
+      line-height: 60px;
+      cursor: pointer;
+    }
+    .lang {
+      cursor: pointer;
+      color: white;
+    }
+    .selected {
+      color: goldenrod;
+    }
+  }
+  .main {
+    display: flex;
+    // background: #324057;
+    position: absolute;
+    top: 60px;
+    bottom: 0;
+    overflow: hidden;
+    aside {
+      flex: 0 0 200px;
+      width: 200px;
+      // position: absolute;
+      // top: 0px;
+      // bottom: 0px;
+      .el-menu {
+        height: 100%;
+      }
+      .collapsed {
+        width: 65px;
+        .item {
+          position: relative;
         }
-        .collapsed{
-          width: 65px;
-          .item{
-            position: relative;
-          }
-          .submenu{
-            position: absolute;
-            top: 0;
-            left: 65px;
-            z-index: 99999;
-            height: auto;
-            display: none;
-          }
-
+        .submenu {
+          position: absolute;
+          top: 0;
+          left: 65px;
+          z-index: 99999;
+          height: auto;
+          display: none;
         }
       }
-      .menu-collapsed{
-        flex:0 0 60px;
-        width: 60px;
-      }
-      .menu-expanded{
-        flex:0 0 200px;
-        width: 200px;
-      }
-      .content-container {
-        flex:1;
-        overflow-y: scroll;
-        padding: 20px;
-        .breadcrumb-container {
-          //margin-bottom: 15px;
-          .title {
-            width: 200px;
-            float: left;
-            color: #475669;
-          }
-          .breadcrumb-inner {
-            float: left;
-          }
-          .breadcrumb-inner-right {
-            float: right;  margin-right: 30px;
-          }
+    }
+    .menu-collapsed {
+      flex: 0 0 60px;
+      width: 60px;
+    }
+    .menu-expanded {
+      flex: 0 0 200px;
+      width: 200px;
+    }
+    .content-container {
+      flex: 1;
+      overflow-y: scroll;
+      padding: 20px;
+      .breadcrumb-container {
+        //margin-bottom: 15px;
+        .title {
+          width: 200px;
+          float: left;
+          color: #475669;
         }
-        .content-wrapper {
-          background-color: #fff;
-          box-sizing: border-box;
+        .breadcrumb-inner {
+          float: left;
         }
+        .breadcrumb-inner-right {
+          float: right;
+          margin-right: 30px;
+        }
+      }
+      .monitor {
+        float: right;
+        .inner-right {
+          display: inline-block;
+          width: 6rem;
+        }
+        .long {
+          display: inline-block;
+          width: 11rem;
+        }
+      }
+      .content-wrapper {
+        background-color: #fff;
+        box-sizing: border-box;
       }
     }
   }
-    .el-radio-button__inner {
-      background: blue;
-    }
+}
+.el-radio-button__inner {
+  background: blue;
+}
 </style>
