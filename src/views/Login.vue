@@ -113,11 +113,16 @@ export default {
       // this.$router.push('/ModeChoose')
       let para = {}
       para.username = this.ruleForm.account
-      para.passwd = md5(this.ruleForm.checkPass)
+      para.passwd = this.ruleForm.checkPass
+      para.passwdMd5 = md5(this.ruleForm.checkPass)
       console.log(para.passwd)
 
       requestLogin(para).then((res) => {
         if (res.data.code === 200) {
+          let user = {}
+          user.id = res.data.id
+          user.userName = res.data.userName
+          sessionStorage.setItem('user', JSON.stringify(user))
           this.$router.push('/ModeChoose')
         } else {
           this.$message({

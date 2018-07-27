@@ -20,7 +20,7 @@
     </el-col>
 
     <!--列表-->
-    <el-table :data="form" :header-cell-style="headerStyle">
+    <!-- <el-table :data="form" :header-cell-style="headerStyle">
       <el-table-column prop="start" label="起始地址" width="120">
       </el-table-column>
       <el-table-column prop="end" label="结束地址" width="120">
@@ -39,16 +39,16 @@
       </el-table-column>
       <el-table-column prop="status" label="状态" width="120">
       </el-table-column>
-      <!-- <el-table-column label="操作" min-width="180">
+      <el-table-column label="操作" min-width="180">
                 <template slot-scope="scope">
                     <el-button size="small">停止</el-button>
                     <el-button size="small" @click="rowDelete(scope.row)">删除</el-button>
                 </template>
-            </el-table-column> -->
-    </el-table>
+            </el-table-column>
+    </el-table> -->
 
     <!--新增界面-->
-    <el-dialog title="新增" :visible.sync="isAddFormVisible">
+    <!-- <el-dialog title="新增" :visible.sync="isAddFormVisible"> -->
       <el-form :model="addForm" label-width="100px" ref="addForm">
         <el-form-item prop="start" label="起始地址">
           <el-input v-model="addForm.start" auto-complete="off"></el-input>
@@ -76,7 +76,7 @@
         <el-button @click.native="addCancel">取消</el-button>
         <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
       </div>
-    </el-dialog>
+    <!-- </el-dialog> -->
 
   </section>
 </template>

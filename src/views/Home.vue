@@ -100,7 +100,7 @@
 
 <script>
 import { generateTitle } from '@/utils/i18n'
-import { getMonitorInfo } from '../api/api.js'
+import { getMonitorInfo, logout } from '../api/api.js'
 import { conversion } from '../utils/rateUnitExchange.js'
 
 export default {
@@ -146,8 +146,13 @@ export default {
         // type: 'warning'
       })
         .then(() => {
-          sessionStorage.removeItem('user')
-          _this.$router.push('/login')
+          let para = sessionStorage.getItem('user')
+          logout(para).then((res) => {
+            if (res.data.code === 200) {
+              sessionStorage.removeItem('user')
+              _this.$router.push('/login')
+            }
+          })
         })
         .catch(() => {})
     },
