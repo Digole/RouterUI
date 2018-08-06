@@ -21,6 +21,8 @@
 		</el-col>
 
 		<el-table @selection-change="selsChange" style="width: 100%;" :header-cell-style="headerStyle">
+			<el-table-column type="selection" width="55">
+			</el-table-column>
 			<el-table-column prop="username" label="用户名" min-width="120">
 			</el-table-column>
 			<el-table-column prop="passwd" label="密码" min-width="180">
@@ -28,8 +30,9 @@
 			<el-table-column prop="status" label="状态" min-width="180">
 			</el-table-column>
 			<el-table-column prop="behaviour" label="操作" min-width="180">
-			</el-table-column>
-			<el-table-column type="selection" width="55">
+				<template slot-scope="scope">
+					<el-button 
+				</template>
 			</el-table-column>
 		</el-table>
 	</section>

@@ -28,10 +28,14 @@ export default {
     ARPBinding: 'ARP绑定',
     remoteLoginManagement: '远程登陆管理',
     firewall: '规则防火墙',
+    ARPDefence: 'ARP防御',
     systemStatus: '系统概况',
     dynamicRoutingConfiguration: '动态路由配置',
     log: '日志系统',
-    diallog: '拨号日志'
+    dialLog: '拨号日志',
+    tools: '系统工具',
+    ping: 'Ping测试',
+    operaLog: '操作日志'
   },
 
   operation: {
@@ -49,7 +53,8 @@ export default {
     disconnect: '断开',
     edit: '修改',
     setting: '设置',
-    determine: '确定'
+    determine: '确定',
+    search: '搜索'
   },
 
   home: {

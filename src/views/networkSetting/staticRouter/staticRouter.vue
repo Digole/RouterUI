@@ -311,14 +311,18 @@ export default {
       para.route_type = '-host'
       para.ip_family = 'IPv4'
 
-      handleRouter(para).then(res => {
-        if (res.data.code === 200) {
-          this.$message({
-            message: '发送成功',
-            type: 'success'
-          })
-        }
-      })
+      handleRouter(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.$message({
+              message: '发送成功',
+              type: 'success'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
 
       this.getRouterInfomation()
       this.update()
@@ -332,14 +336,18 @@ export default {
       para.oper_type = 'add'
       para.route_type = '-net'
 
-      handleRouter(para).then(res => {
-        if (res.data.code === 200) {
-          this.$message({
-            message: '发送成功',
-            type: 'success'
-          })
-        }
-      })
+      handleRouter(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.$message({
+              message: '发送成功',
+              type: 'success'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
 
       this.getRouterInfomation()
       this.update()
@@ -353,14 +361,18 @@ export default {
       para.oper_type = 'add'
       para.route_type = 'default'
 
-      handleRouter(para).then(res => {
-        if (res.data.code === 200) {
-          this.$message({
-            message: '发送成功',
-            type: 'success'
-          })
-        }
-      })
+      handleRouter(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.$message({
+              message: '发送成功',
+              type: 'success'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
 
       this.getRouterInfomation()
       this.update()
@@ -374,14 +386,18 @@ export default {
       para.oper_type = 'add'
       para.route_type = 'default'
 
-      handleRouter(para).then(res => {
-        if (res.data.code === 200) {
-          this.$message({
-            message: '发送成功',
-            type: 'success'
-          })
-        }
-      })
+      handleRouter(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.$message({
+              message: '发送成功',
+              type: 'success'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
 
       this.getRouterInfomation()
       this.update()
@@ -408,14 +424,18 @@ export default {
       para.ip_family = 'IPv4'
       console.log(row)
 
-      handleRouter(para).then(res => {
-        if (res.data.code === 200) {
-          this.$message({
-            message: '删除成功',
-            type: 'success'
-          })
-        }
-      })
+      handleRouter(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
       this.getRouterInfomation()
       this.update()
     },
@@ -452,22 +472,26 @@ export default {
       para.ip_family = 'IPv4'
       para.page = this.currentPage
 
-      getRouterInfo(para).then(res => {
-        if (res.data.code === 200) {
-          if (res.data.data.length !== 0) {
-            this.total = res.data.total
-            this.info = JSON.parse(JSON.stringify(res.data.data))
-            // console.log(JSON.stringify(this.info))
-          } else {
-            if (this.currentPage > 1) {
-              this.currentPage -= 1
-              this.getRouterInfomation()
-            } else {
+      getRouterInfo(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            if (res.data.data.length !== 0) {
+              this.total = res.data.total
               this.info = JSON.parse(JSON.stringify(res.data.data))
+            // console.log(JSON.stringify(this.info))
+            } else {
+              if (this.currentPage > 1) {
+                this.currentPage -= 1
+                this.getRouterInfomation()
+              } else {
+                this.info = JSON.parse(JSON.stringify(res.data.data))
+              }
             }
           }
-        }
-      })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     handleCurrentChange(val) {
       let para = Object.assign({}, this.addRouterForm)
@@ -476,18 +500,22 @@ export default {
       para.ip_family = 'IPv4'
       para.page = val
       console.log('val is: ' + val)
-      getRouterInfo(para).then(res => {
-        if (res.data.code === 200) {
-          if (res.data.data.length !== 0) {
-            this.total = res.data.total
-            this.info = JSON.parse(JSON.stringify(res.data.data))
+      getRouterInfo(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            if (res.data.data.length !== 0) {
+              this.total = res.data.total
+              this.info = JSON.parse(JSON.stringify(res.data.data))
             // console.log(JSON.stringify(this.info))
-          } else {
-            this.currentPage -= 1
-            this.getRouterInfomation()
+            } else {
+              this.currentPage -= 1
+              this.getRouterInfomation()
+            }
           }
-        }
-      })
+        })
+        .catch(error => {
+          console.log(error)
+        })
       this.currentPage = val
     },
     getInfo() {
@@ -497,24 +525,32 @@ export default {
       para.ip_family = 'IPv4'
       para.page = 1
 
-      getRouterInfo(para).then(res => {
-        if (res.data.code === 200) {
-          this.total = res.data.total
-          this.info = JSON.parse(JSON.stringify(res.data.data))
-          console.log(this.info)
-        }
-      })
+      getRouterInfo(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.total = res.data.total
+            this.info = JSON.parse(JSON.stringify(res.data.data))
+            console.log(this.info)
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     update() {
       this.updateSignal = !this.updateSignal
     },
     getPortsInfo: function() {
-      getPorts().then(res => {
-        if (res.data.code === 200) {
-          this.ports = res.data.interfaces
-          console.log(this.ports)
-        }
-      })
+      getPorts()
+        .then(res => {
+          if (res.data.code === 200) {
+            this.ports = res.data.interfaces
+            console.log(this.ports)
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   mounted() {

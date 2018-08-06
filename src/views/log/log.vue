@@ -86,12 +86,16 @@ export default {
       let para = Object.assign({}, this.dialForm)
       para.page = this.currentPage
       para.pagecount = 10
-      getLog(para).then(res => {
-        if (res.data.code === 200) {
-          this.form = res.data.data
-          this.total = res.data.total
-        }
-      })
+      getLog(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.form = res.data.data
+            this.total = res.data.total
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
 
     getLogInfo() {

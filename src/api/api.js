@@ -102,6 +102,8 @@ export const handleMonitorInfo = data => { return axios.post('action/monitorItem
 
 // 系统日志
 export const getLog = data => { return axios.post(base + 'action/udialLogGetAction', data) }
+// 操作日志
+export const getOperaLog = data => { return axios.post(base + 'action/operLogGetAction', data) }
 
 // DHCP
 export const dhcpServerConfigAction = data => { return axios.post(base + 'action/dhcpServerConfigAction', data) }
@@ -112,6 +114,30 @@ export const setTime = data => { return axios.post(base + 'action/timeConfigActi
 export const getTime = data => { return axios.post(base + 'action/timeConfigAction', data) }
 export const setName = data => { return axios.post(base + 'action/devNameConfigAction', data) }
 export const getName = data => { return axios.post(base + 'action/devNameGetAction', data) }
+// 密码修改
+export const changePasswd = data => { return axios.post(base + 'action/changepassedAction', data) }
 
+// firewall
+export const showInfo = data => { return axios.post(base + 'action/npfShowAction', data) }
+export const handle = data => { return axios.post(base + 'action/npfConfigAction', data) }
+export const enable = data => { return axios.post(base + 'action/npfEnableAction', data) }
+export const addMac = data => { return axios.post(base + 'action/npfAddMacFilter', data) }
+export const deleteMac = data => { return axios.post(base + 'action/npfDelMacFilter', data) }
+
+// 开关机
 export const powerOff = data => { return axios.post(base + 'action/powerOffAction', data) }
 export const restart = data => { return axios.post(base + 'action/powerRestartAction', data) }
+
+// ARP防御
+export const setARP = data => { return axios.post(base + 'action/asdefenseEnAction', data) }
+export const getARPInfo = data => { return axios.post(base + 'action/asdefenseInfoGetAction', data) }
+
+// ping
+export const ping = data => { return axios.post(base + 'action/pingTestAction', data) }
+
+// DNS
+export const getDNS = data => { return axios.post(base + 'action/dnsShowAction', data) }
+export const setDNS = data => { return axios.post(base + 'action/dnsConfigAction', data) }
+
+// web上下线
+export const getWebInfo = data => { return axios.post(base + 'action/logoutRecoedQuery', data) }

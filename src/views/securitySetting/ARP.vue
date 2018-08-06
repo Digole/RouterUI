@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div class="line_02"><span>{{$t('ARP.title')}}</span></div>
+    <div class="line_02">
+      <span>{{$t('ARP.title')}}</span>
+    </div>
 
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true">
@@ -15,8 +17,8 @@
 
     <el-table :data="form" :header-cell-style="headerStyle">
       <el-table-column type="selection" min-width="60">
-      </el-table-column> 
-      <el-table-column prop="ipaddr" :label="$t('ARP.IP')" min-width="120" >
+      </el-table-column>
+      <el-table-column prop="ipaddr" :label="$t('ARP.IP')" min-width="120">
       </el-table-column>
       <el-table-column prop="hwaddr" :label="$t('ARP.MAC')" min-width="120">
       </el-table-column>
@@ -27,28 +29,16 @@
       </el-table-column>
       <el-table-column :label="$t('operation.operation')" min-width="60">
         <template slot-scope="scope">
-          <el-button
-            v-if="scope.row.status==='configured'" 
-            type="text" 
-            @click="edit(scope.row)" 
-            size="small">
+          <el-button v-if="scope.row.status==='configured'" type="text" @click="edit(scope.row)" size="small">
             {{$t('operation.edit')}}
           </el-button>
-          <el-button
-            type="text" 
-            @click="deleteForm(scope.row)"
-            size="small">
+          <el-button type="text" @click="deleteForm(scope.row)" size="small">
             {{$t('operation.delete')}}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-size="5"
-      layout="total, prev, pager, next, jumper"
-      :total="this.total">
+    <el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-size="5" layout="total, prev, pager, next, jumper" :total="this.total">
     </el-pagination>
 
     <el-dialog :title="$t('ARP.title2')" :visible.sync="isFormVisible" @selection-change="change()">
@@ -87,20 +77,15 @@
       <el-collapse-item :title="$t('ARP.dynamicARP')" name="1">
         <div>
           <el-table :data="formDynamic" :header-cell-style="headerStyle">
-            <el-table-column prop="ipaddr" :label="$t('ARP.IP')" min-width="120" >
+            <el-table-column prop="ipaddr" :label="$t('ARP.IP')" min-width="120">
             </el-table-column>
             <el-table-column prop="hwaddr" :label="$t('ARP.MAC')" min-width="120">
             </el-table-column>
           </el-table>
         </div>
-        <el-pagination
-          @current-change="handleCurrentChangeDynamic"
-          :current-page="currentPageDynamic"
-          :page-size="5"
-          layout="total, prev, pager, next, jumper"
-          :total="this.totalDynamic">
+        <el-pagination @current-change="handleCurrentChangeDynamic" :current-page="currentPageDynamic" :page-size="5" layout="total, prev, pager, next, jumper" :total="this.totalDynamic">
         </el-pagination>
-    </el-collapse-item>
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
@@ -110,7 +95,7 @@ import { getARP, getDynamicARP, handleARP } from '../../api/api.js'
 export default {
   name: 'ARP',
   data() {
-    return{
+    return {
       isFormVisible: false,
       isEditFormVisible: false,
 
@@ -138,38 +123,46 @@ export default {
       labelWidth: '80px'
     }
   },
-  methods:  {
+  methods: {
     headerStyle() {
       return this.header()
     },
     change(sels) {
       this.sels = sels
     },
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       let para = {}
       para.ipaddr = ''
       para.hwaddr = ''
       para.oper_type = 'arp'
       para.page = val
-      getARP(para).then( (res) => {
-        if(res.data.code === 200) {
-          this.form = res.data.data
-        }
-        this.currentPage = val
-      })
+      getARP(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.form = res.data.data
+          }
+          this.currentPage = val
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
-    handleCurrentChangeDynamic (val) {
+    handleCurrentChangeDynamic(val) {
       let para = {}
       para.ipaddr = ''
       para.hwaddr = ''
       para.oper_type = 'arp'
       para.page = val
-      getDynamicARP(para).then( (res) => {
-        if(res.data.code === 200) {
-          this.formDynamic = res.data.data
-        }
-        this.currentPageDynamic = val
-      })
+      getDynamicARP(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.formDynamic = res.data.data
+          }
+          this.currentPageDynamic = val
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
 
     addHandle: function() {
@@ -185,59 +178,71 @@ export default {
       this.$refs['editForm'].resetFields()
     },
     // 添加
-    formCancel: function(){
+    formCancel: function() {
       this.formVisible = false
       this.$refs['ARPForm'].resetFields()
     },
-    formSubmit: function(type){
+    formSubmit: function(type) {
       this.isFormVisible = false
       this.isEditFormVisible = false
 
       let para
-      if(type === 'set') {
-        para = Object.assign( {}, this.ARPForm )       
+      if (type === 'set') {
+        para = Object.assign({}, this.ARPForm)
       } else if (type === 'update') {
-        para = Object.assign( {}, this.editForm )
+        para = Object.assign({}, this.editForm)
       }
       para.oper_type = type
-      handleARP(para).then( (res) => {
-        if(res.data.code === 200) {
-          this.getARPInfo()
-          this.getDynamicARPInfo()
-        }
-      })
+      handleARP(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.getARPInfo()
+            this.getDynamicARPInfo()
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
       this.$refs['ARPForm'].resetFields()
     },
     // 删除
     deleteForm(row) {
-      let para = Object.assign( {}, row )
+      let para = Object.assign({}, row)
       para.oper_type = 'clear'
 
-      handleARP(para).then( (res) => {
-        if(res.data.code === 200) {
-          this.getARPInfo()
-          this.getDynamicARPInfo()
-        }
-      })
+      handleARP(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.getARPInfo()
+            this.getDynamicARPInfo()
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     batchDelete() {
-      for(let i = 0; i < this.sels.length; i++) {
+      for (let i = 0; i < this.sels.length; i++) {
         del(this.sels[i])
       }
       this.getARPInfo()
       this.getDynamicARP()
 
       function del(row) {
-        let para = Object.assign( {}, row )
+        let para = Object.assign({}, row)
         para.oper_type = 'clear'
 
-        this.handleARP(para).then( (res) => {
-          if(res.data.code === 200) {
-            return true
-          } else if(res.data.code === 500)  {
-            return false
-          }
-        })
+        this.handleARP(para)
+          .then(res => {
+            if (res.data.code === 200) {
+              return true
+            } else if (res.data.code === 500) {
+              return false
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }
     },
 
@@ -247,42 +252,50 @@ export default {
       para.hwaddr = ''
       para.oper_type = 'arp'
       para.page = this.currentPage
-      getARP(para).then( (res) => {
-        if(res.data.code === 200) {
-          if(res.data.length !== 0) {
-            this.form = res.data.data
-          } else {
-            if(this.total === 0) {
-              this.total = res.data.total
+      getARP(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            if (res.data.length !== 0) {
               this.form = res.data.data
             } else {
-              this.currentPage -= 1
-              this.getARPInfo()
+              if (this.total === 0) {
+                this.total = res.data.total
+                this.form = res.data.data
+              } else {
+                this.currentPage -= 1
+                this.getARPInfo()
+              }
             }
           }
-        }
-      })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     getDynamicARPInfo() {
       let para = {}
       para.ipaddr = ''
       para.hwaddr = ''
       para.page = this.currentPageDynamic
-      getDynamicARP(para).then( (res) => {
-        if(res.data.code === 200) {
-          if(res.data.length !== 0) {
-            this.formDynamic = res.data.data
-          } else {
-            if(this.totalDynamic === 0) {
-              this.totalDynamic = res.data.total
+      getDynamicARP(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            if (res.data.length !== 0) {
               this.formDynamic = res.data.data
             } else {
-              this.currentPageDynamic -= 1
-              this.getDynamicARPInfo()
+              if (this.totalDynamic === 0) {
+                this.totalDynamic = res.data.total
+                this.formDynamic = res.data.data
+              } else {
+                this.currentPageDynamic -= 1
+                this.getDynamicARPInfo()
+              }
             }
           }
-        }
-      })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   mounted() {
@@ -293,7 +306,7 @@ export default {
 </script>
 
 <style scoped>
-  .warning {
-    color: red;
-  }
+.warning {
+  color: red;
+}
 </style>

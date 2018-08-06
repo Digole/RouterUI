@@ -28,10 +28,14 @@ export default {
     ARPBinding: 'ARPBinding',
     remoteLoginManagement: 'RemoteLogin',
     firewall: 'Firewall',
+    ARPdefence: 'APRDefence',
     systemStatus: 'SystemStatus',
     dynamicRoutingConfiguration: 'DynamicRouteConfig',
     log: 'Log',
-    diallog: 'DialLog'
+    dialLog: 'DialLog',
+    tools: 'SystemTools',
+    ping: 'PingTest',
+    operaLog: 'OperationLog'
   },
 
   operation: {
@@ -49,7 +53,8 @@ export default {
     disconnect: 'Disconnect',
     edit: 'Edit',
     setting: 'Setting',
-    determine: 'Apply'
+    determine: 'Apply',
+    search: 'Search'
   },
 
   home: {

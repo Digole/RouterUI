@@ -187,13 +187,17 @@ export default {
     kidVPNNextStep() {
       let para = Object.assign({}, this.VNDForm)
 
-      addVND(para).then(res => {
-        if (res.data.code === 200) {
-          this.vndid = res.data.vndid
-        }
-        this.triggerAddKidVPNClient()
-        this.triggerLinkKidVPNClient()
-      })
+      addVND(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.vndid = res.data.vndid
+          }
+          this.triggerAddKidVPNClient()
+          this.triggerLinkKidVPNClient()
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
 
     linkKidVPN() {
@@ -202,35 +206,43 @@ export default {
       para.mtu = this.VNDForm.mtu
       para.handle = 'addClient'
 
-      addKidVPN(para).then(res => {
-        if (res.data.code === 200) {
-          this.getInfo()
-        } else if (res.data.code === 100) {
-          this.$message({
-            message: '参数错误',
-            type: 'error'
-          })
-        } else if (res.data.code === 500) {
-          this.$message({
-            message: '操作失败',
-            type: 'error'
-          })
-        }
-        this.triggerLinkKidVPNClient()
-      })
+      addKidVPN(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.getInfo()
+          } else if (res.data.code === 100) {
+            this.$message({
+              message: '参数错误',
+              type: 'error'
+            })
+          } else if (res.data.code === 500) {
+            this.$message({
+              message: '操作失败',
+              type: 'error'
+            })
+          }
+          this.triggerLinkKidVPNClient()
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     deleteClient(index, val) {
       let para = {}
       para.vndid = val.vndid
 
-      delKidVPN(para).then(res => {
-        if (res.data.code === 200) {
-          this.$message({
-            message: '删除成功',
-            type: 'success'
-          })
-        }
-      })
+      delKidVPN(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
       this.getInfo()
     },
     selChange(sels) {
@@ -247,31 +259,35 @@ export default {
       // let result
       let para = {}
       para.page = this.currentPage
-      getKidVPNInfo(para).then(res => {
-        if (res.data.code === 200) {
-          if (this.currentPage === res.data.page) {
-            if (res.data.data.length !== 0) {
-              console.log('infor ' + res.data.data.length)
-              for (let i = 0; i < res.data.data.length; i++) {
-                console.log(res.data.data[i].type)
-                if (res.data.data[i].type === 'servervpn') {
-                  console.log('in clinet getInfo' + res.data.data[i])
+      getKidVPNInfo(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            if (this.currentPage === res.data.page) {
+              if (res.data.data.length !== 0) {
+                console.log('infor ' + res.data.data.length)
+                for (let i = 0; i < res.data.data.length; i++) {
+                  console.log(res.data.data[i].type)
+                  if (res.data.data[i].type === 'servervpn') {
+                    console.log('in clinet getInfo' + res.data.data[i])
                   // result = res.data.data.splice(i,1)
+                  }
                 }
+                console.log(res.data.data)
+                this.addedClientList = res.data.data
+                console.log(this.addedClientList)
+                this.total = res.data.total
+              } else if (res.data.page > 1) {
+                this.currentPage -= 1
+                this.getInfo()
+              } else {
+                this.addedClientList = res.data.data
               }
-              console.log(res.data.data)
-              this.addedClientList = res.data.data
-              console.log(this.addedClientList)
-              this.total = res.data.total
-            } else if (res.data.page > 1) {
-              this.currentPage -= 1
-              this.getInfo()
-            } else {
-              this.addedClientList = res.data.data
             }
           }
-        }
-      })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   mounted() {

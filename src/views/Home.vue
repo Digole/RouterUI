@@ -32,7 +32,7 @@
 
     <el-col :span="24" class="main">
       <aside :class="collapsed?'menu-collapsed':'menu-expanded'">
-        <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :collapse="isCollapse" :collapse-transition="false" background-color="#222d32" text-color="#aabba1">
+        <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :collapse="isCollapse" :collapse-transition="false" background-color="#222d32" text-color="#aabba1" unique-opened>
           <template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
             <el-submenu :index="index+''" v-if="!item.leaf" :key="index">
               <template slot="title">
@@ -154,7 +154,9 @@ export default {
             }
           })
         })
-        .catch(() => {})
+        .catch(error => {
+          console.log(error)
+        })
     },
     // 折叠导航栏
     collapse: function() {
@@ -190,30 +192,38 @@ export default {
 
     getInfo() {
       this.update()
-      setInterval(this.update, 2000)
+      setInterval(this.update, 5000)
     },
 
     async update() {
       let para = {}
       para.page = 1
       para.type = 5
-      await getMonitorInfo(para).then(res => {
-        if (res.data.code === 200) {
-          this.data.up = conversion(res.data.data[0].recv_rate)
-          this.data.down = conversion(res.data.data[0].send_rate)
-          console.log(this.data.up)
+      await getMonitorInfo(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.data.up = conversion(res.data.data[0].recv_rate)
+            this.data.down = conversion(res.data.data[0].send_rate)
+            // console.log(this.data.up)
           // this.$store.dispatch('pushSystemData', data)
-        }
-      })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
       let para1 = {}
       para1.type = 6
-      await getMonitorInfo(para1).then(res => {
-        if (res.data.code === 200) {
-          this.data.cpu = (res.data.cpu_usage).toFixed(2)
-          this.data.memory = (res.data.memory_usage).toFixed(2)
-          this.data.userNum = res.data.online_users
-        }
-      })
+      await getMonitorInfo(para1)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.data.cpu = (res.data.cpu_usage).toFixed(0)
+            this.data.memory = (res.data.memory_usage).toFixed(0)
+            this.data.userNum = res.data.online_users
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
       this.$store.dispatch('pushSystemData', this.data)
     }
   },

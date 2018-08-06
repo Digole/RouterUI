@@ -9,7 +9,7 @@ let _ports = ports
 let _alias = alias
 let _mapping = mapping
 let code = 200
-//let _dialUp = dialUp;
+// let _dialUp = dialUp;
 
 // console.log(Users);
 // console.log(system);
@@ -31,7 +31,7 @@ export default {
       msg: 'failure'
     })
 
-    //登录
+    // 登录
     mock.onPost('/login').reply(config => {
       let {username, password} = JSON.parse(config.data)
       return new Promise((resolve, reject) => {
@@ -54,7 +54,7 @@ export default {
       })
     })
 
-    //获取用户列表
+    // 获取用户列表
     mock.onGet('/user/list').reply(config => {
       let {name} = config.params
       let mockUsers = _Users.filter(user => {
@@ -69,7 +69,7 @@ export default {
       })
     })
 
-    //获取用户列表（分页）
+    // 获取用户列表（分页）
     mock.onGet('/user/listpage').reply(config => {
       let {page, name} = config.params
       let mockUsers = _Users.filter(user => {
@@ -87,7 +87,7 @@ export default {
       })
     })
 
-    //删除用户
+    // 删除用户
     mock.onGet('/user/remove').reply(config => {
       let {id} = config.params
       _Users = _Users.filter(u => u.id !== id)
@@ -101,7 +101,7 @@ export default {
       })
     })
 
-    //批量删除用户
+    // 批量删除用户
     mock.onGet('/user/batchremove').reply(config => {
       let {ids} = config.params
       ids = ids.split(',')
@@ -116,7 +116,7 @@ export default {
       })
     })
 
-    //编辑用户
+    // 编辑用户
     mock.onGet('/user/edit').reply(config => {
       let {id, name, addr, age, birth, sex} = config.params
       _Users.some(u => {
@@ -135,12 +135,12 @@ export default {
           resolve([200, {
             code: 200,
             msg: '编辑成功'
-          },])
+          } ])
         }, 500)
       })
     })
 
-    //新增用户
+    // 新增用户
     mock.onGet('/user/add').reply(config => {
       let {name, addr, age, birth, sex} = config.params
       _Users.push({
@@ -165,7 +165,7 @@ export default {
         Mock.mock(
           {
             'CPURate|20-80.1': 1,
-            'RAMRate|20-80.1': 1,
+            'RAMRate|20-80.1': 1
           }
         )
       ]
@@ -179,7 +179,7 @@ export default {
       })
     })
 
-    //ports info
+    // ports info
     mock.onPost('/action/interfaceMonitorAction').reply(config => {
       let ports = _ports
 
@@ -191,14 +191,14 @@ export default {
       }, 1500)
     })
 
-    //dialup
+    // dialup
     mock.onPost('/api/dialUp').reply(config => {
       let {index, account, passwd, status} = config.data
       console.log(index)
       console.log(config)
-      console.log(typeof(config))
+      console.log(typeof (config))
       console.log(config.data)
-      console.log(typeof(config.data))
+      console.log(typeof (config.data))
       console.log(config.data)
       return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -209,9 +209,9 @@ export default {
       })
     })
 
-    //alias info
+    // alias info
     mock.onPost('/api/alias').reply(config => {
-      console.log('config.data is '+config.data)
+      console.log('config.data is ' + config.data)
       config.data = JSON.parse(config.data)
 
       let {page} = config.data
@@ -223,20 +223,20 @@ export default {
         setTimeout(() => {
           resolve([200, {
             total: total,
-            alias: mockAlias,
+            alias: mockAlias
           }])
         }, 1000)
       })
     })
 
-    //edit alias info
+    // edit alias info
     mock.onPost('/api/editAlias').reply(config => {
-      console.log('config.data is '+config.data)
+      console.log('config.data is ' + config.data)
       config.data = JSON.parse(config.data)
 
       let { id, aliasAddress, initialAddress, endAddress } = config.data
       _alias.some(a => {
-        console.log('let see what a is:'+a)
+        console.log('let see what a is:' + a)
         if (a.id === id) {
           a.aliasAddress = aliasAddress
           a.initialAddress = initialAddress
@@ -252,18 +252,17 @@ export default {
           }])
         }, 500)
       })
-
     })
 
-    //add alias info
+    // add alias info
     mock.onPost('/api/addAlias').reply(config => {
-      console.log('in add  config.data is '+config.data)
+      console.log('in add  config.data is ' + config.data)
 
       config.data = JSON.parse(config.data)
       _alias.unshift({
         id: Mock.Random.guid(),
         aliasAddress: config.data.aliasAddress,
-        initialAddress:config.data.initialAddress,
+        initialAddress: config.data.initialAddress,
         endAddress: config.data.endAddress
       })
       return new Promise((resolve, reject) => {
@@ -276,12 +275,12 @@ export default {
       })
     })
 
-    //del alias info
+    // del alias info
     mock.onPost('/api/delAlias').reply(config => {
       config.data = JSON.parse(config.data)
-      console.log('in del config.data is '+config.data.ids)
+      console.log('in del config.data is ' + config.data.ids)
       let {ids} = config.data
-      //ids = ids.split(',');
+      // ids = ids.split(',');
       _alias = _alias.filter(u => !ids.includes(u.id))
       return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -293,7 +292,7 @@ export default {
       })
     })
 
-    //mapping info
+    // mapping info
     mock.onPost('/api/mapping').reply(config => {
       config.data = JSON.parse(config.data)
       let {page} = config.data
@@ -305,21 +304,21 @@ export default {
         setTimeout(() => {
           resolve([200, {
             total: total,
-            mapping: mockMapping,
+            mapping: mockMapping
           }])
         }, 1000)
       })
     })
 
-    //edit mapping info
+    // edit mapping info
     mock.onPost('/api/editMapping').reply(config => {
-      console.log('config.data is '+config.data)
+      console.log('config.data is ' + config.data)
       config.data = JSON.parse(config.data)
 
       let { id, outerPort, innerPort, innerInitialIP, numOfInner, protocol } = config.data
       _mapping.some(m => {
         if (m.id === id) {
-          console.log('find it! id is: '+id)
+          console.log('find it! id is: ' + id)
           m.outerPort = outerPort
           m.innerPort = innerPort
           m.innerInitialIP = innerInitialIP
@@ -336,21 +335,20 @@ export default {
           }])
         }, 500)
       })
-
     })
 
-    //add mapping info
+    // add mapping info
     mock.onPost('/api/addMapping').reply(config => {
-      console.log('in add  config.data is '+config.data)
+      console.log('in add  config.data is ' + config.data)
 
       config.data = JSON.parse(config.data)
       _mapping.unshift({
         id: Mock.Random.guid(),
         outerPort: config.data.outerPort,
-        innerPort:config.data.innerPort,
+        innerPort: config.data.innerPort,
         innerInitialIP: config.data.innerInitialIP,
         numOfInner: config.data.numOfInner,
-        protocol: config.data.protocol,
+        protocol: config.data.protocol
       })
       return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -362,12 +360,12 @@ export default {
       })
     })
 
-    //del mapping info
+    // del mapping info
     mock.onPost('/api/delMapping').reply(config => {
       config.data = JSON.parse(config.data)
-      console.log('in del config.data is '+config.data.ids)
+      console.log('in del config.data is ' + config.data.ids)
       let {ids} = config.data
-      //ids = ids.split(',');
+      // ids = ids.split(',');
       _mapping = _mapping.filter(u => !ids.includes(u.id))
       return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -384,19 +382,18 @@ export default {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           let data1 = JSON.parse(config.data)
-          console.log('the config.data.flag is '+data1.flag)
-          if(data1.flag === 'last'){
+          console.log('the config.data.flag is ' + data1.flag)
+          if (data1.flag === 'last') {
             code = 200
-          }
-          else{
+          } else {
             code = 500
           }
           resolve([200, {
-            code: 200,
+            code: 200
           }])
-          reject([500,{
-            code: 500,
-          }])
+          // reject([500, {
+          //   code: 500
+          // }])
         }, 300)
       })
     })
@@ -404,14 +401,13 @@ export default {
     mock.onPost('/action/natAssNodeUseAction').reply(() => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          resolve([200,{
-            percent: Math.random()*30+20,
-            usenode: Math.random()*1000,
-            totalnode: 12228+Math.random()*10000
+          resolve([200, {
+            percent: Math.random() * 30 + 20,
+            usenode: Math.random() * 1000,
+            totalnode: 12228 + Math.random() * 10000
           }])
         }, 100)
       })
     })
-
   }
 }

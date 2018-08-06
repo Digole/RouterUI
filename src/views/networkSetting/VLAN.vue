@@ -112,13 +112,17 @@ export default {
       let para = Object.assign({}, this.addForm)
       para.oper_type = 'set'
       para.page = this.currentPage
-      handleVLAN(para).then(res => {
-        if (res.data.code === 200) {
-          this.getVLANInfo()
-          this.triggerAdd()
-          this.$refs['addForm'].resetFields()
-        }
-      })
+      handleVLAN(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.getVLANInfo()
+            this.triggerAdd()
+            this.$refs['addForm'].resetFields()
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     cancelForm() {
       this.triggerAdd()
@@ -129,11 +133,15 @@ export default {
       para.oper_type = 'clear'
       para.vlan_id += ''
       console.log(para.vlan_id)
-      handleVLAN(para).then(res => {
-        if (res.data.code === 200) {
-          this.getVLANInfo()
-        }
-      })
+      handleVLAN(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.getVLANInfo()
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     async batchDelete() {
       for (let i = 0; i < this.sels.length; i++) {
@@ -144,40 +152,52 @@ export default {
       function del(index, row) {
         let para = Object.assign({}, row)
         para.oper_type = 'clear'
-        handleVLAN(para).then(res => {
-          if (res.sata.code !== 200) {
-            handleVLAN(para)
-          }
-        })
+        handleVLAN(para)
+          .then(res => {
+            if (res.sata.code !== 200) {
+              handleVLAN(para)
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }
     },
     getVLANInfo() {
       let para = Object.assign({}, this.addForm)
       para.oper_type = 'vlan'
       para.page = this.currentPage
-      getVLAN(para).then(res => {
-        if (res.data.code === 200) {
-          if (res.data.total !== 0) {
-            if (res.data.data.length !== 0) {
-              this.total = res.data.total
-              this.form = res.data.data
-            } else if (this.currentPage > 1) {
-              this.currentPage -= 1
-              this.getVLANInfo()
+      getVLAN(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            if (res.data.total !== 0) {
+              if (res.data.data.length !== 0) {
+                this.total = res.data.total
+                this.form = res.data.data
+              } else if (this.currentPage > 1) {
+                this.currentPage -= 1
+                this.getVLANInfo()
+              }
+            } else {
+              this.form = []
             }
-          } else {
-            this.form = []
           }
-        }
-      })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     getPortsInfo: function() {
-      getPorts().then(res => {
-        if (res.data.code === 200) {
-          this.ports = res.data.interfaces
-          console.log(this.ports)
-        }
-      })
+      getPorts()
+        .then(res => {
+          if (res.data.code === 200) {
+            this.ports = res.data.interfaces
+            console.log(this.ports)
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   mounted() {

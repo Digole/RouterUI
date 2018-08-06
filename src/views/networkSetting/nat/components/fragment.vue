@@ -21,12 +21,16 @@ export default {
     methods: {
       // 分片包功能信息获取
       getFragmentPackageInfo: function () {
-        getFragmentInfo().then((res) => {
-          this.TCP = !!res.data.tcp
-          this.UDP = !!res.data.udp
-          this.ICMP = !!res.data.icmp
-        // console.log("the value of fragment are "+this.TCP+" "+this.UDP+" "+this.ICMP);
-        })
+        getFragmentInfo()
+          .then((res) => {
+            this.TCP = !!res.data.tcp
+            this.UDP = !!res.data.udp
+            this.ICMP = !!res.data.icmp
+            // console.log("the value of fragment are "+this.TCP+" "+this.UDP+" "+this.ICMP);
+          })
+          .catch(error => {
+            console.log(error)
+          })
       },
       // 处理分片包选择
       handleTCPChange: function (val) {
@@ -37,12 +41,16 @@ export default {
           para.handle = 0
         }
         para.fragtype = 'tcp'
-        sendFragment(para).then(() => {
-          this.$message({
-            message: '提交成功',
-            type: 'success'
+        sendFragment(para)
+          .then(() => {
+            this.$message({
+              message: '提交成功',
+              type: 'success'
+            })
           })
-        })
+          .catch(error => {
+            console.log(error)
+          })
         this.getFragmentPackageInfo()
       },
       handleUDPChange: function (val) {
@@ -53,12 +61,16 @@ export default {
           para.handle = 0
         }
         para.fragtype = 'udp'
-        sendFragment(para).then(() => {
-          this.$message({
-            message: '提交成功',
-            type: 'success'
+        sendFragment(para)
+          .then(() => {
+            this.$message({
+              message: '提交成功',
+              type: 'success'
+            })
           })
-        })
+          .catch(error => {
+            console.log(error)
+          })
         this.getFragmentPackageInfo()
       },
       handleICMPChange: function (val) {
@@ -69,12 +81,16 @@ export default {
           para.handle = 0
         }
         para.fragtype = 'icmp'
-        sendFragment(para).then(() => {
-          this.$message({
-            message: '提交成功',
-            type: 'success'
+        sendFragment(para)
+          .then(() => {
+            this.$message({
+              message: '提交成功',
+              type: 'success'
+            })
           })
-        })
+          .catch(error => {
+            console.log(error)
+          })
         this.getFragmentPackageInfo()
       }
     },

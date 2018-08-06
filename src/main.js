@@ -10,17 +10,15 @@ import routes from './routes'
 import store from './store'
 import Vuex from 'vuex'
 
-// import axios from 'axios'
+import axios from 'axios'
 
 import 'font-awesome/css/font-awesome.min.css'
 // import Mock from './mock'
-// Mock.bootstrap();
+// Mock.bootstrap()
 
 import i18n from './lang' // Internationalization
 
 import './assets/iconfont/iconfont.js'
-
-// import validateForm from '@/utils/validate'
 
 // axios.defaults.baseURL = 'https://10.9.0.17:80/'
 
@@ -44,18 +42,6 @@ router.beforeEach((to, from, next) => {
     sessionStorage.removeItem('user')
   }
   let user = JSON.parse(sessionStorage.getItem('user'))
-
-  // if (!user && to.path != '/login') {
-  //   if(!user && to.path === '/createPasswd')
-  //   {
-  //     next()
-  //   }
-  //   else {
-  //       next({path: '/login'})
-  //   }
-  // } else {
-  //   next()
-  // }
 
   if (!user && to.path !== '/login') {
     // 搞完记得恢复
@@ -89,3 +75,30 @@ new Vue({
   // components: { App }
   render: h => h(App)
 }).$mount('#app')
+
+// 添加响应拦截器
+axios.interceptors.response.use(function (response) {
+  return response
+}, function (error) {
+  let status = error.response.status
+
+  // 统一处理
+  switch (status) {
+    case 300:
+      console.log('300错误')
+      break
+    case 400:
+      console.log('400错误')
+      break
+    case 401:
+      console.log('401错误')
+      router.push('/login')
+      break
+    case 500:
+      console.log('500错误')
+      break
+  }
+
+  // 返回后给每个请求catch抓住针对错误做处理
+  return Promise.reject(error)
+})

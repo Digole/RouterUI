@@ -146,25 +146,29 @@ export default {
       let para = {
         page: this.aliasPage
       }
-      getAlias(para).then(res => {
-        if (this.aliasPage === res.data.page) {
-          if (res.data.total !== 0) {
-            if (res.data.data.length !== 0) {
-              this.aliasTotal = res.data.total
-              this.alias = res.data.data
-            } else if (res.data.total > 5) {
-              this.aliasPage -= 1
-              this.getAliasInfo()
+      getAlias(para)
+        .then(res => {
+          if (this.aliasPage === res.data.page) {
+            if (res.data.total !== 0) {
+              if (res.data.data.length !== 0) {
+                this.aliasTotal = res.data.total
+                this.alias = res.data.data
+              } else if (res.data.total > 5) {
+                this.aliasPage -= 1
+                this.getAliasInfo()
+              }
+            } else {
+              this.alias = []
             }
           } else {
-            this.alias = []
+            this.getAliasInfo()
           }
-        } else {
-          this.getAliasInfo()
-        }
         // let alias1 = JSON.stringify(res.data.alias);
         // console.log("alias is "+alias1);
-      })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     // 别名表格编辑
     handleAliasEdit: function(index, row) {
@@ -175,15 +179,19 @@ export default {
     editAliasSubmit: function() {
       let para = Object.assign({}, this.aliasForm)
       // console.log("aliasForm is"+this.aliasForm);
-      editAlias(para).then(() => {
-        this.$message({
-          message: '提交成功',
-          type: 'success'
+      editAlias(para)
+        .then(() => {
+          this.$message({
+            message: '提交成功',
+            type: 'success'
+          })
+          this.$refs['aliasForm'].resetFields()
+          this.aliasEditFormVisible = false
+          this.getAliasInfo()
         })
-        this.$refs['aliasForm'].resetFields()
-        this.aliasEditFormVisible = false
-        this.getAliasInfo()
-      })
+        .catch(error => {
+          console.log(error)
+        })
     },
     // 别名表 编辑取消
     aliasCancel() {
@@ -212,6 +220,9 @@ export default {
         .then(() => {
           this.aliasFormVisible = false
         })
+        .catch(error => {
+          console.log(error)
+        })
     },
     // 别名表格批量删除
     delAliasHandle() {
@@ -223,7 +234,11 @@ export default {
         let para = Object.assign({}, item)
         para.handle = 1
         para.assport = para.assport + ''
-        delAlias(para).then(() => {})
+        delAlias(para)
+          .then(() => {})
+          .catch(error => {
+            console.log(error)
+          })
       }
       this.getAliasInfo()
     },
@@ -244,7 +259,9 @@ export default {
             this.getAliasInfo()
           })
         })
-        .catch(() => {})
+        .catch(error => {
+          console.log(error)
+        })
     },
     // 别名表格 分页选择 跳到选中页面
     aliasHandleCurrentChange(val) {

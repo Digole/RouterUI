@@ -188,7 +188,7 @@
           this.drawBarChart()
           this.drawLineChart()
           this.drawPieChart()
-        },
+        }
       },
 
       mounted: function () {

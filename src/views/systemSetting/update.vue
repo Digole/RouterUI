@@ -59,9 +59,9 @@
   export default {
     name: 'update',
     data() {
-      return{
+      return {
         versionVisual: false,
-        uploadVisual: false,
+        uploadVisual: false
       }
     },
 
@@ -71,7 +71,7 @@
       },
       checkVersion() {
         this.versionVisual = true
-      },
+      }
     }
   }
 </script>

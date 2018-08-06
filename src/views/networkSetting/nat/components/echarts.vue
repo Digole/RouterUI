@@ -37,6 +37,9 @@ export default {
           .then(val => {
             percent = val
           })
+          .catch(error => {
+            console.log(error)
+          })
         // console.log("reponse percent! the value is "+ percent);
         return {
           name: now.toString(),
@@ -52,6 +55,9 @@ export default {
           })
           .then(val => {
             usage = val
+          })
+          .catch(error => {
+            console.log(error)
           })
         console.log('reponse usenode! the value is ' + usage)
         return usage

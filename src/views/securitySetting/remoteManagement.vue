@@ -66,10 +66,10 @@
 <script>
   export default {
     name: 'remoteManage',
-    methods:{
+    methods: {
       headerStyle() {
         return this.header()
-      },
+      }
     }
   }
 </script>

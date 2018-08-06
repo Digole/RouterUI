@@ -476,18 +476,22 @@ export default {
         // this.isGottonStatus = true;
         this.triggerGottonStatus()
 
-        dialUp(para).then(res => {
-          if (res.data.code === 200) {
-            this.translate(res.data.status)
-            this.formDialUp.account = res.data.account
-            this.formDialUp.passwd = res.data.passwd
-            this.triggerGottonStatus()
-          } else {
-            this.formDialUp.status = '获取失败！'
-            this.triggerGottonStatus()
-            this.$refs['formDialUp'].resetFields()
-          }
-        })
+        dialUp(para)
+          .then(res => {
+            if (res.data.code === 200) {
+              this.translate(res.data.status)
+              this.formDialUp.account = res.data.account
+              this.formDialUp.passwd = res.data.passwd
+              this.triggerGottonStatus()
+            } else {
+              this.formDialUp.status = '获取失败！'
+              this.triggerGottonStatus()
+              this.$refs['formDialUp'].resetFields()
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }
       if (this.wanForm.accessMode === '2') {
         this.isASDLVisible = false
@@ -542,27 +546,35 @@ export default {
 
       let para = Object.assign({}, this.formDialUp)
 
-      dialUp(para).then(res => {
-        if (res.data.code === 200) {
-          this.translate(res.data.status)
-        } else {
-          this.formDialUp.status = '拨号失败!'
-        }
-      })
+      dialUp(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.translate(res.data.status)
+          } else {
+            this.formDialUp.status = '拨号失败!'
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
 
       stopSignal1 = setInterval(() => {
         // handle = 2的意义是获取状态
         para.handle = 2
-        dialUp(para).then(res => {
-          if (res.data.code === 200) {
-            this.translate(res.data.status)
-          }
-          if (res.data.code === 300) {
-            this.formDialUp.status = '拨号次数已达上限'
-            this.isLoading = false
-            clearInterval(stopSignal1)
-          }
-        })
+        dialUp(para)
+          .then(res => {
+            if (res.data.code === 200) {
+              this.translate(res.data.status)
+            }
+            if (res.data.code === 300) {
+              this.formDialUp.status = '拨号次数已达上限'
+              this.isLoading = false
+              clearInterval(stopSignal1)
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }, 1000)
       // keep dialog alive
       this.isWANInnerVisible = true
@@ -579,19 +591,23 @@ export default {
       console.log(this.formDialUp)
       para.handle = 0
       stopSignal2 = setInterval(() => {
-        dialUp(para).then(res => {
-          if (res.data.code === 200) {
-            this.isInCancel = false
-            this.stopAsking()
-          }
-          if (res.data.code === 500) {
-            this.$message({
-              message: '取消失败!',
-              type: 'error'
-            })
-            this.stopAsking()
-          }
-        })
+        dialUp(para)
+          .then(res => {
+            if (res.data.code === 200) {
+              this.isInCancel = false
+              this.stopAsking()
+            }
+            if (res.data.code === 500) {
+              this.$message({
+                message: '取消失败!',
+                type: 'error'
+              })
+              this.stopAsking()
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }, 1000)
       this.isConnectionShow = true
       // 清空form是清空接如方式 这一栏
@@ -603,14 +619,18 @@ export default {
       para.handle = 'enable'
 
       this.DHCPStatus = '连接中'
-      DHCP(para).then(res => {
-        if (res.data.code === 200) {
-          this.DHCPStatus = '已连接'
-        }
-        if (res.data.code === 500) {
-          this.DHCPStatus = '连接失败'
-        }
-      })
+      DHCP(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.DHCPStatus = '已连接'
+          }
+          if (res.data.code === 500) {
+            this.DHCPStatus = '连接失败'
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
       this.isDHCPConnected = true
       this.getPortsInfo()
     },
@@ -619,14 +639,18 @@ export default {
       para.netifname = this.formDialUp.enname
       para.handle = 'disable'
 
-      DHCP(para).then(res => {
-        if (res.data.code === 200) {
-          this.DHCPStatus = '未连接'
-        }
-        if (res.data.code === 500) {
-          this.DHCPStatus = '断开连接失败'
-        }
-      })
+      DHCP(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.DHCPStatus = '未连接'
+          }
+          if (res.data.code === 500) {
+            this.DHCPStatus = '断开连接失败'
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
       this.isDHCPConnected = false
     },
     stopAsking() {
@@ -659,11 +683,15 @@ export default {
       para.netmask = this.lanForm.netmask
       para.gateway = this.lanForm.gateway
 
-      staticIP(para).then(res => {
-        if (res.data.code === 200) {
-          this.isSettingNetcardVisible = false
-        }
-      })
+      staticIP(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.isSettingNetcardVisible = false
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
 
       this.$refs['advancedLANForm'].resetFields()
       this.$refs['lanForm'].resetFields()
@@ -691,11 +719,15 @@ export default {
         para.netmask = this.wanForm.netmask
         para.gateway = this.wanForm.gateway
 
-        staticIP(para).then(res => {
-          if (res.data.code === 200) {
-            this.isSettingNetcardVisible = false
-          }
-        })
+        staticIP(para)
+          .then(res => {
+            if (res.data.code === 200) {
+              this.isSettingNetcardVisible = false
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
         this.getPortsInfo()
       }
 
@@ -725,31 +757,39 @@ export default {
 
       let para = Object.assign({}, this.formDialUp)
       para.handle = 0
-      dialUp(para).then(() => {
-        this.$message({
-          message: '解绑成功',
-          type: 'success'
+      dialUp(para)
+        .then(() => {
+          this.$message({
+            message: '解绑成功',
+            type: 'success'
+          })
+          // dataBind
+          let index = this.formDialUp.webindex
+          this.ports[index].function = 'normal' // change icon status
+          this.$refs['formDialUp'].resetFields()
         })
-        // dataBind
-        let index = this.formDialUp.webindex
-        this.ports[index].function = 'normal' // change icon status
-        this.$refs['formDialUp'].resetFields()
-      })
+        .catch(error => {
+          console.log(error)
+        })
       this.isConnectionShow = false
       this.getPortsInfo()
     },
     getPortsInfo: function() {
-      getPorts().then(res => {
+      getPorts()
+        .then(res => {
         // 根据webindex排序，确保端口顺序正确
-        function sortNumber(a, b) {
-          return a.webindex - b.webindex
-        }
-        res.data.interfaces.sort(sortNumber)
+          function sortNumber(a, b) {
+            return a.webindex - b.webindex
+          }
+          res.data.interfaces.sort(sortNumber)
 
-        this.checked = res.data.code
-        // this.ports = JSON.parse(JSON.stringify(res.data.interfaces))
-        this.ports = res.data.interfaces
-      })
+          this.checked = res.data.code
+          // this.ports = JSON.parse(JSON.stringify(res.data.interfaces))
+          this.ports = res.data.interfaces
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     pushDNS: function() {
       this.$store.commit('changeRoutePush', true)

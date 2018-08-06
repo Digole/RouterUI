@@ -18,8 +18,8 @@
 export default {
   name: 'BMControl',
   data() {
-    return{
-      checked: '',
+    return {
+      checked: ''
     }
   }
 }

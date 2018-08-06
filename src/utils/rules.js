@@ -15,8 +15,8 @@ const pattern = {
  */
 const validate = (reg, msg1, msg2) => {
   return (rule, value, callback) => {
-    console.log(reg)
-    console.log(value)
+    // console.log(reg)
+    // console.log(value)
     if (!value) {
       if (!msg2) {
         callback()

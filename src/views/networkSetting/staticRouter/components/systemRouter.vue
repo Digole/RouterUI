@@ -83,11 +83,15 @@ export default {
       para.ip_family = 'IPv4'
       para.page = val
       console.log('val is:' + val)
-      getRouterInfo(para).then((res) => {
-        if (res.data.code === 200) {
-          this.form = res.data.data
-        }
-      })
+      getRouterInfo(para)
+        .then((res) => {
+          if (res.data.code === 200) {
+            this.form = res.data.data
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
       this.currentPage = val
     },
     getInfo () {
@@ -95,13 +99,17 @@ export default {
       para.oper_type = 'query'
       para.ip_family = 'IPv4'
       para.page = 1
-      getRouterInfo(para).then((res) => {
-        if (res.data.code === 200) {
-          this.total = res.data.total
-          this.form = res.data.data
-          console.log(JSON.stringify(this.form))
-        }
-      })
+      getRouterInfo(para)
+        .then((res) => {
+          if (res.data.code === 200) {
+            this.total = res.data.total
+            this.form = res.data.data
+            console.log(JSON.stringify(this.form))
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   mounted () {

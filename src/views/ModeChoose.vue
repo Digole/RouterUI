@@ -20,9 +20,9 @@
 <script>
   export default {
     name: 'ModeChoose',
-    data(){
-      return{
-        logining: false,
+    data() {
+      return {
+        logining: false
       }
     },
     methods: {

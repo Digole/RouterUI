@@ -75,13 +75,17 @@ export default {
       let para = Object.assign({}, this.form)
       para.type = 3
       para.page = this.currentPage
-      getMonitorInfo(para).then((res) => {
-        if (res.data.code === 200) {
-          this.lineform = res.data.data
-          this.total = res.data.total
-        }
-        this.currentPage = val
-      })
+      getMonitorInfo(para)
+        .then((res) => {
+          if (res.data.code === 200) {
+            this.lineform = res.data.data
+            this.total = res.data.total
+          }
+          this.currentPage = val
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     async getLineInfo () {
       let para = Object.assign({}, this.form)
@@ -111,12 +115,16 @@ export default {
       })
     },
     async getPortsInfo () {
-      await getPorts().then((res) => {
-        if (res.data.code === 200) {
-          this.ports = res.data.interfaces
-          console.log(this.ports)
-        }
-      })
+      await getPorts()
+        .then((res) => {
+          if (res.data.code === 200) {
+            this.ports = res.data.interfaces
+            console.log(this.ports)
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     async generateData () {
       await this.getLineInfo()

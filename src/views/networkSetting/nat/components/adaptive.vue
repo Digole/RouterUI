@@ -212,8 +212,48 @@ export default {
 
     // 获取ports信息
     getPortsInfo: function() {
-      getPorts().then(res => {
-        if (res.data.code === 200) {
+      getPorts()
+        .then(res => {
+          if (res.data.code === 200) {
+            this.wanLimit = res.data.wancount
+            this.lanLimit = res.data.lancount
+            let lanCount = 0
+            let wanCount = 0
+            for (let i = 0; i < res.data.interfaces.length; i++) {
+              if (res.data.interfaces[i].function.toLowerCase() === 'wan') {
+                wanCount++
+                console.log('wanCount is ' + wanCount)
+              }
+              if (res.data.interfaces[i].function.toLowerCase() === 'lan') {
+                lanCount++
+                console.log('lanCount is ' + lanCount)
+              }
+            }
+            this.lanCount = lanCount
+            this.wanCount = wanCount
+
+            res.data.interfaces.sort(sortNumber)
+
+            // console.log("get feedback, res.data.interfaces is: "+res.data.interfaces);
+            this.checked = JSON.parse(JSON.stringify(res.data.code))
+            // console.log("code is "+JSON.stringify(res.data.code));
+            this.ports = JSON.parse(JSON.stringify(res.data.interfaces))
+            console.log(
+              'after parse, the port[] is: ' + JSON.stringify(res.data.interfaces)
+            )
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      // 根据webindex排序，确保端口顺序正确
+      function sortNumber(a, b) {
+        return a.webindex - b.webindex
+      }
+    },
+    getPortsInfoBegin: function() {
+      getPorts()
+        .then(res => {
           this.wanLimit = res.data.wancount
           this.lanLimit = res.data.lancount
           let lanCount = 0
@@ -231,8 +271,6 @@ export default {
           this.lanCount = lanCount
           this.wanCount = wanCount
 
-          res.data.interfaces.sort(sortNumber)
-
           // console.log("get feedback, res.data.interfaces is: "+res.data.interfaces);
           this.checked = JSON.parse(JSON.stringify(res.data.code))
           // console.log("code is "+JSON.stringify(res.data.code));
@@ -240,40 +278,10 @@ export default {
           console.log(
             'after parse, the port[] is: ' + JSON.stringify(res.data.interfaces)
           )
-        }
-      })
-      // 根据webindex排序，确保端口顺序正确
-      function sortNumber(a, b) {
-        return a.webindex - b.webindex
-      }
-    },
-    getPortsInfoBegin: function() {
-      getPorts().then(res => {
-        this.wanLimit = res.data.wancount
-        this.lanLimit = res.data.lancount
-        let lanCount = 0
-        let wanCount = 0
-        for (let i = 0; i < res.data.interfaces.length; i++) {
-          if (res.data.interfaces[i].function.toLowerCase() === 'wan') {
-            wanCount++
-            console.log('wanCount is ' + wanCount)
-          }
-          if (res.data.interfaces[i].function.toLowerCase() === 'lan') {
-            lanCount++
-            console.log('lanCount is ' + lanCount)
-          }
-        }
-        this.lanCount = lanCount
-        this.wanCount = wanCount
-
-        // console.log("get feedback, res.data.interfaces is: "+res.data.interfaces);
-        this.checked = JSON.parse(JSON.stringify(res.data.code))
-        // console.log("code is "+JSON.stringify(res.data.code));
-        this.ports = JSON.parse(JSON.stringify(res.data.interfaces))
-        console.log(
-          'after parse, the port[] is: ' + JSON.stringify(res.data.interfaces)
-        )
-      })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     // 显示选择功能的dialog
     dialog: function(para) {
@@ -331,6 +339,9 @@ export default {
           this.dialogFormVisible = false
           this.WANLANLoading = false
         })
+        .catch(error => {
+          console.log(error)
+        })
     },
     // WAN,LAN口解绑功能
     unbind: function() {
@@ -352,6 +363,9 @@ export default {
         .then(() => {
           this.dialogFormVisible = false
           this.WANLANLoading = false
+        })
+        .catch(error => {
+          console.log(error)
         })
     },
 
@@ -390,41 +404,45 @@ export default {
       console.log('name is: ' + JSON.stringify(this.portsName))
 
       stopSignal3 = setInterval(() => {
-        sendSorting(para).then(res => {
-          if (this.portsName.index === res.data.index) {
-            if (res.data.code === 200) {
-              clearInterval(stopSignal3)
-              console.log('interval stop: ' + stopSignal3)
+        sendSorting(para)
+          .then(res => {
+            if (this.portsName.index === res.data.index) {
+              if (res.data.code === 200) {
+                clearInterval(stopSignal3)
+                console.log('interval stop: ' + stopSignal3)
 
-              this.localName[res.data.index] = this.portsName.name
+                this.localName[res.data.index] = this.portsName.name
 
-              this.sortLoading = false
-              this.portsName.index = res.data.index + 1
-              // this.portsName.index++;
-              this.portsName.flag = 'middle'
-              this.tip1 = this.tips[0]
-              this.tip2 = this.tips[1]
+                this.sortLoading = false
+                this.portsName.index = res.data.index + 1
+                // this.portsName.index++;
+                this.portsName.flag = 'middle'
+                this.tip1 = this.tips[0]
+                this.tip2 = this.tips[1]
 
-              console.log(
-                'in sorting interval: http status is ' +
+                console.log(
+                  'in sorting interval: http status is ' +
                   res.status +
                   ' and the index is ' +
                   this.portsName.index
-              )
-              console.log(res)
-            } else if (res.data.code === 500) {
-              this.tip1 = this.tips[2]
-              this.tip2 = this.tips[3]
-              console.log(
-                'in sorting interval: http status is ' +
+                )
+                console.log(res)
+              } else if (res.data.code === 500) {
+                this.tip1 = this.tips[2]
+                this.tip2 = this.tips[3]
+                console.log(
+                  'in sorting interval: http status is ' +
                   res.status +
                   ' and the index is ' +
                   this.portsName.index
-              )
-              console.log(res)
+                )
+                console.log(res)
+              }
             }
-          }
-        })
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }, 1000)
     },
     // 网口自适应功能 “完成”按钮调用函数
@@ -435,39 +453,43 @@ export default {
       let para = Object.assign({}, this.portsName)
 
       stopSignal4 = setInterval(() => {
-        sendSorting(para).then(res => {
-          if (res.data.index === this.portsName.index) {
-            if (res.data.code === 200) {
-              this.sortLoading = false
-              this.portsName.name = ''
-              this.portsName.flag = ''
-              this.portsName.index = 0
-              clearInterval(stopSignal4)
-              console.log('in cancel interval: ' + res.status)
-              console.log(res)
-              this.sortingVisible = false
+        sendSorting(para)
+          .then(res => {
+            if (res.data.index === this.portsName.index) {
+              if (res.data.code === 200) {
+                this.sortLoading = false
+                this.portsName.name = ''
+                this.portsName.flag = ''
+                this.portsName.index = 0
+                clearInterval(stopSignal4)
+                console.log('in cancel interval: ' + res.status)
+                console.log(res)
+                this.sortingVisible = false
 
-              this.tip1 = this.tips[0]
-              this.tip2 = this.tips[1]
+                this.tip1 = this.tips[0]
+                this.tip2 = this.tips[1]
 
-              this.getPortsInfo()
-
-              setTimeout(() => {
                 this.getPortsInfo()
-              }, 1000)
-            } else if (res.data.code === 500) {
-              this.tip1 = this.tips[2]
-              this.tip2 = this.tips[3]
-              console.log(
-                'in sorting interval: http status is ' +
+
+                setTimeout(() => {
+                  this.getPortsInfo()
+                }, 1000)
+              } else if (res.data.code === 500) {
+                this.tip1 = this.tips[2]
+                this.tip2 = this.tips[3]
+                console.log(
+                  'in sorting interval: http status is ' +
                   res.status +
                   ' and the index is ' +
                   this.portsName.index
-              )
-              console.log(res)
+                )
+                console.log(res)
+              }
             }
-          }
-        })
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }, 1000)
     },
     // 网口自适应功能 “取消”按钮调用函数

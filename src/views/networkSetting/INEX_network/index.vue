@@ -32,7 +32,7 @@
       router
     },
     data() {
-      return { 
+      return {
         list: [
           {
             name: 'asdl',
@@ -51,7 +51,7 @@
             tip: '静态IP接入',
             tipEn: 'Static IP',
             url: '#icon-ip'
-          },{
+          }, {
             name: 'wan',
             tip: 'WAN口',
             tipEn: 'WAN',

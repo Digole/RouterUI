@@ -37,7 +37,7 @@ export default {
       logining: false,
       ruleForm: {
         account: 'admin',
-        checkPass: '123456'
+        checkPass: 'admin'
       },
       rules2: {
         account: [
@@ -111,19 +111,21 @@ export default {
       // ]
       // sessionStorage.setItem('user', JSON.stringify(user))
       // this.$router.push('/ModeChoose')
+
       let para = {}
       para.username = this.ruleForm.account
-      para.passwd = this.ruleForm.checkPass
-      para.passwdMd5 = md5(this.ruleForm.checkPass)
-      console.log(para.passwd)
+      // para.passwd = this.ruleForm.checkPass
+      para.passwd = md5(this.ruleForm.checkPass)
 
-      requestLogin(para).then((res) => {
+      requestLogin(para).then(res => {
         if (res.data.code === 200) {
           let user = {}
           user.id = res.data.id
           user.userName = res.data.userName
           sessionStorage.setItem('user', JSON.stringify(user))
           this.$router.push('/ModeChoose')
+        } else if (res.data.code === 1000) {
+          this.$router.push('/CreatePasswd')
         } else {
           this.$message({
             message: '错误',

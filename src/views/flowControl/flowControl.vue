@@ -279,14 +279,18 @@ export default {
       para.fc_uprate = Number(para.fc_uprate)
       para.fc_downrate = Number(para.fc_downrate)
       para.fc_bufsize = Number(para.fc_bufsize)
-      handleFC(para).then(res => {
-        if (res.data.code === 200) {
-          this.getFCInfo()
-          this.triggerProtoVisible()
-          this.triggerChooseFCTypeVisible()
-          this.$refs['addForm'].resetFields()
-        }
-      })
+      handleFC(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.getFCInfo()
+            this.triggerProtoVisible()
+            this.triggerChooseFCTypeVisible()
+            this.$refs['addForm'].resetFields()
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     addNet() {
       let para = Object.assign({}, this.addForm)
@@ -295,14 +299,18 @@ export default {
       para.fc_uprate = Number(para.fc_uprate)
       para.fc_downrate = Number(para.fc_downrate)
       para.fc_bufsize = Number(para.fc_bufsize)
-      handleFC(para).then(res => {
-        if (res.data.code === 200) {
-          this.getFCNetInfo()
-          this.triggerNetVisible()
-          this.triggerChooseFCTypeVisible()
-          this.$refs['addForm'].resetFields()
-        }
-      })
+      handleFC(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.getFCNetInfo()
+            this.triggerNetVisible()
+            this.triggerChooseFCTypeVisible()
+            this.$refs['addForm'].resetFields()
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     cancelProtoForm() {
       this.triggerProtoVisible()
@@ -319,48 +327,60 @@ export default {
       para.oper_type = 'flowctl'
       para.fc_type = 1
       para.page = this.currentPage
-      getFC(para).then(res => {
-        if (res.data.code === 200) {
-          if (res.data.data.length !== 0) {
-            this.total = res.data.total
-            this.form = res.data.data
-          } else if (this.currentPage > 1) {
-            this.currentPage -= 1
-            this.getFCInfo()
-          } else {
-            this.form = res.data.data
+      getFC(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            if (res.data.data.length !== 0) {
+              this.total = res.data.total
+              this.form = res.data.data
+            } else if (this.currentPage > 1) {
+              this.currentPage -= 1
+              this.getFCInfo()
+            } else {
+              this.form = res.data.data
+            }
           }
-        }
-      })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     getFCNetInfo() {
       let para = Object.assign({}, this.addForm)
       para.oper_type = 'flowctl'
       para.fc_type = 2
       para.page = this.netCurrentPage
-      getFC(para).then(res => {
-        if (res.data.code === 200) {
-          if (res.data.data.length !== 0) {
-            this.netTotal = res.data.total
-            this.netForm = res.data.data
-          } else if (this.currentPage > 1) {
-            this.this.netCurrentPage -= 1
-            this.getFCNetInfo()
-          } else {
-            this.netForm = res.data.data
+      getFC(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            if (res.data.data.length !== 0) {
+              this.netTotal = res.data.total
+              this.netForm = res.data.data
+            } else if (this.currentPage > 1) {
+              this.this.netCurrentPage -= 1
+              this.getFCNetInfo()
+            } else {
+              this.netForm = res.data.data
+            }
           }
-        }
-      })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     deleteInfo(index, row) {
       let para = Object.assign({}, row)
       para.oper_type = 'del'
-      handleFC(para).then(res => {
-        if (res.data.code === 200) {
-          this.getFCInfo()
-          this.getFCNetInfo()
-        }
-      })
+      handleFC(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.getFCInfo()
+            this.getFCNetInfo()
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     async batchDelete() {
       for (let i = 0; i < this.sels.length; i++) {
@@ -372,20 +392,28 @@ export default {
       function del(index, row) {
         let para = Object.assign({}, row)
         para.oper_type = 'del'
-        handleFC(para).then(res => {
-          if (res.data.code !== 200) {
-            this.handleFC(para)
-          }
-        })
+        handleFC(para)
+          .then(res => {
+            if (res.data.code !== 200) {
+              this.handleFC(para)
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }
     },
     getPortsInfo: function() {
-      getPorts().then(res => {
-        if (res.data.code === 200) {
-          this.ports = res.data.interfaces
-          console.log(this.ports)
-        }
-      })
+      getPorts()
+        .then(res => {
+          if (res.data.code === 200) {
+            this.ports = res.data.interfaces
+            console.log(this.ports)
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   mounted() {

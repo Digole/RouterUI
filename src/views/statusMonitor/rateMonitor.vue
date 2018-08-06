@@ -44,19 +44,19 @@ export default {
         {
           name: 'HTTP协议',
           type: 'line',
-          smooth: true ,         
+          smooth: true,
           data: []
         },
         {
           name: '邮件服务',
           type: 'line',
-          smooth: true ,          
+          smooth: true,
           data: []
         },
         {
           name: '网络聊天',
           type: 'line',
-          smooth: true,          
+          smooth: true,
           data: []
         },
         {
@@ -76,19 +76,19 @@ export default {
         {
           name: 'HTTP协议',
           type: 'line',
-          smooth: true ,         
+          smooth: true,
           data: []
         },
         {
           name: '邮件服务',
           type: 'line',
-          smooth: true ,          
+          smooth: true,
           data: []
         },
         {
           name: '网络聊天',
           type: 'line',
-          smooth: true,          
+          smooth: true,
           data: []
         },
         {
@@ -105,7 +105,7 @@ export default {
         }
       ],
 
-      dataUp:[
+      dataUp: [
         {value: 0, name: 'HTTP协议'},
         {value: 0, name: '邮件服务'},
         {value: 0, name: '网络聊天'},
@@ -120,12 +120,12 @@ export default {
         {value: 0, name: '其他'}
       ],
 
-      Axis: (function (){
+      Axis: (function () {
         let now = new Date()
         let res = []
         let len = 12
         while (len--) {
-          res.unshift(now.toLocaleTimeString().replace(/^\D*/,''))
+          res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''))
           now = new Date(now - 2000)
         }
         return res
@@ -146,7 +146,7 @@ export default {
         send_total_length: Number,
         recv_total_length: Number,
         send_total_packets: Number,
-        recv_total_packets: Number,
+        recv_total_packets: Number
       },
       original: []
     }
@@ -154,14 +154,14 @@ export default {
 
   methods: {
     drawLineChart1: function() {
-      myChartUp = rateMonitor.init(document.getElementById('chartLine1'),'walden')
+      myChartUp = rateMonitor.init(document.getElementById('chartLine1'), 'walden')
       let option = {
         title: {
           text: '上行速率'
         },
         tooltip: this.tooltip,
         legend: {
-          data:['HTTP协议', '邮件服务', '网络聊天', '文件传输', '其他'],
+          data: ['HTTP协议', '邮件服务', '网络聊天', '文件传输', '其他'],
           selected: {
             'HTTP协议': true,
             '邮件服务': false,
@@ -172,11 +172,11 @@ export default {
         },
         grid: this.grid,
         toolbox: {
-          show: true,
+          show: true
           // feature: {
-          //dataView: {readOnly: false},
+          // dataView: {readOnly: false},
           // restore: {},
-          //saveAsImage: {}
+          // saveAsImage: {}
           // }
         },
         dataZoom: {
@@ -197,27 +197,27 @@ export default {
             // max: 1000,
             min: 0,
             boundaryGap: [0.2, 0.2]
-          },
+          }
         ],
         series: this.series
       }
 
       myChartUp.setOption(option)
 
-      window.addEventListener('resize',function() {
+      window.addEventListener('resize', function() {
         myChartUp.resize()
       })
     },
 
     drawLineChart2: function() {
-      myChartDown = rateMonitor.init(document.getElementById('chartLine2'),'walden')
+      myChartDown = rateMonitor.init(document.getElementById('chartLine2'), 'walden')
       let option = {
         title: {
           text: '上行速率'
         },
         tooltip: this.tooltip,
         legend: {
-          data:['HTTP协议', '邮件服务', '网络聊天', '文件传输', '其他'],
+          data: ['HTTP协议', '邮件服务', '网络聊天', '文件传输', '其他'],
           selected: {
             'HTTP协议': true,
             '邮件服务': false,
@@ -228,11 +228,11 @@ export default {
         },
         grid: this.grid,
         toolbox: {
-          show: true,
+          show: true
           // feature: {
-          //dataView: {readOnly: false},
+          // dataView: {readOnly: false},
           // restore: {},
-          //saveAsImage: {}
+          // saveAsImage: {}
           // }
         },
         dataZoom: {
@@ -253,31 +253,35 @@ export default {
             // max: 1000,
             min: 0,
             boundaryGap: [0.2, 0.2]
-          },
+          }
         ],
         series: this.series
       }
 
       myChartDown.setOption(option)
-      
-      window.addEventListener('resize',function() {
+
+      window.addEventListener('resize', function() {
         myChartDown.resize()
       })
     },
 
     async getRateInfo() {
-      let para = Object.assign( {}, this.form)
+      let para = Object.assign({}, this.form)
       para.type = 4
       para.page = 1
-      await getMonitorInfo(para).then( (res) => {
-        if(res.data.code === 200) {
-          this.original = res.data.data
-        }
-        pushToData(this.original, this.dataUp, this.dataDown)
-      })
+      await getMonitorInfo(para)
+        .then((res) => {
+          if (res.data.code === 200) {
+            this.original = res.data.data
+          }
+          pushToData(this.original, this.dataUp, this.dataDown)
+        })
+        .catch(error => {
+          console.log(error)
+        })
 
       function pushToData(val, up, down) {
-        for(let i = 0; i < val.length; i++) {
+        for (let i = 0; i < val.length; i++) {
           let index = val[i].protocol - 1
           up[index].value = val[i].recv_rate
           down[index].value = val[i].send_rate
@@ -305,11 +309,11 @@ export default {
         series: this.seriesDown
       }
       await this.getRateInfo()
-      let axisData = (new Date()).toLocaleTimeString().replace(/^\D*/,'')
+      let axisData = (new Date()).toLocaleTimeString().replace(/^\D*/, '')
       optionUp.xAxis.data.shift()
       optionUp.xAxis.data.push(axisData)
-      for(let i = 0; i < this.dataUp.length; i++) {
-        if(optionUp.series[i].data.length > 11) {
+      for (let i = 0; i < this.dataUp.length; i++) {
+        if (optionUp.series[i].data.length > 11) {
           optionUp.series[i].data.shift()
           optionDown.series[i].data.shift()
         }

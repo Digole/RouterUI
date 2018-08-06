@@ -44,7 +44,6 @@ const app = {
       state.systemData.cpu = systemData.cpu
       state.systemData.memory = systemData.memory
       state.systemData.userNum = systemData.userNum
-      console.log(state.systemData)
     }
   },
   actions: {

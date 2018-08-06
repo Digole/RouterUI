@@ -190,23 +190,27 @@ export default {
       let para = {
         page: this.mappingPage
       }
-      getMapping(para).then(res => {
-        if (this.mappingPage === res.data.page) {
-          if (res.data.total !== 0) {
-            if (res.data.data.length !== 0) {
-              this.mappingTotal = res.data.total
-              this.mapping = res.data.data
-            } else if (res.data.total > 5) {
-              this.mappingPage -= 1
-              this.getMappingInfo()
+      getMapping(para)
+        .then(res => {
+          if (this.mappingPage === res.data.page) {
+            if (res.data.total !== 0) {
+              if (res.data.data.length !== 0) {
+                this.mappingTotal = res.data.total
+                this.mapping = res.data.data
+              } else if (res.data.total > 5) {
+                this.mappingPage -= 1
+                this.getMappingInfo()
+              }
+            } else if (res.data.total === 0) {
+              this.mapping = []
             }
-          } else if (res.data.total === 0) {
-            this.mapping = []
+          } else {
+            this.getMappingInfo()
           }
-        } else {
-          this.getMappingInfo()
-        }
-      })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     // 映射表格编辑
     handleMappingEdit: function(index, row) {
@@ -218,15 +222,19 @@ export default {
       this.mappingForm.handle = 0
       let para = Object.assign({}, this.mappingForm)
       // console.log("mappingForm is"+this.mappingForm);
-      editMapping(para).then(() => {
-        this.$message({
-          message: '提交成功',
-          type: 'success'
+      editMapping(para)
+        .then(() => {
+          this.$message({
+            message: '提交成功',
+            type: 'success'
+          })
+          this.$refs['mappingForm'].resetFields()
+          this.mappingEditFormVisible = false
+          this.getMappingInfo()
         })
-        this.$refs['mappingForm'].resetFields()
-        this.mappingEditFormVisible = false
-        this.getMappingInfo()
-      })
+        .catch(error => {
+          console.log(error)
+        })
     },
     // 映射表格编辑取消
     mappingCancel() {
@@ -255,6 +263,9 @@ export default {
           this.mappingFormVisible = false
           this.mappingForm = {}
         })
+        .catch(error => {
+          console.log(error)
+        })
     },
     // 映射表格删除
     delMappingHandle: function() {
@@ -267,7 +278,11 @@ export default {
         para.handle = 1
         para.assport = para.assport + ''
         console.log(para.assport)
-        delMapping(para).then(() => {})
+        delMapping(para)
+          .then(() => {})
+          .catch(error => {
+            console.log(error)
+          })
       }
       this.getMappingInfo()
     },
@@ -291,6 +306,9 @@ export default {
           this.getMappingInfo()
         })
       })
+        .catch(error => {
+          console.log(error)
+        })
     },
     // 映射表格 分页选择 跳到选中页面
     mappingHandleCurrentChange(val) {

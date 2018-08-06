@@ -10,7 +10,7 @@ export default {
   name: 'lineMonitor',
   methods: {
     drawCharts() {
-      let myChart = lineMonitor.init(document.getElementById('echarts'),'walden')
+      let myChart = lineMonitor.init(document.getElementById('echarts'), 'walden')
 
       let option = {
         tooltip: {
@@ -20,12 +20,12 @@ export default {
         legend: {
           orient: 'vertical',
           x: 'left',
-          data:['HTTP协议','网络视频','网络游戏','网络下载','文件传输']
+          data: ['HTTP协议', '网络视频', '网络游戏', '网络下载', '文件传输']
         },
         series: [
           {
-            name:'协议流量分布',
-            type:'pie',
+            name: '协议流量分布',
+            type: 'pie',
             radius: ['60%', '80%'],
             avoidLabelOverlap: false,
             label: {
@@ -46,12 +46,12 @@ export default {
                 show: false
               }
             },
-            data:[
-              {value:335, name:'HTTP协议'},
-              {value:310, name:'网络视频'},
-              {value:234, name:'网络游戏'},
-              {value:135, name:'网络下载'},
-              {value:1548, name:'文件传输'}
+            data: [
+              {value: 335, name: 'HTTP协议'},
+              {value: 310, name: '网络视频'},
+              {value: 234, name: '网络游戏'},
+              {value: 135, name: '网络下载'},
+              {value: 1548, name: '文件传输'}
             ]
           }
         ]
@@ -59,7 +59,7 @@ export default {
 
       myChart.setOption(option)
 
-      window.addEventListener('resize',function() {
+      window.addEventListener('resize', function() {
         myChart.resize()
       })
     }

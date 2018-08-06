@@ -173,6 +173,9 @@ export default {
           this.drawChartsUp()
           this.drawChartsDown()
         })
+        .catch(error => {
+          console.log(error)
+        })
 
       /**
        * 当TMT_LINE_APP时，返回Protocol值取:

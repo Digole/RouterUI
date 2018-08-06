@@ -1,5 +1,6 @@
 
 import Login from './views/Login.vue'
+import CreatePasswd from './views/CreatePasswd.vue'
 import ModeChoose from './views/ModeChoose.vue'
 import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
@@ -58,10 +59,14 @@ import BMDisplay from './views/behaviourManagement/BMDisplay.vue'
 *securitySetting
  */
 import ARP from './views/securitySetting/ARP.vue'
+import ARPDefence from './views/securitySetting/ARPDefence.vue'
 import firewall from './views/securitySetting/firewall.vue'
 import remoteManagement from './views/securitySetting/remoteManagement.vue'
 
-// import routerSetting from './views/routerSetting/routerSetting.vue'
+/*
+*tools
+*/
+import ping from './views/tools/ping.vue'
 
 import log from './views/log/log.vue'
 
@@ -69,6 +74,12 @@ let routes = [
   {
     path: '/login',
     component: Login,
+    name: '',
+    hidden: true
+  },
+  {
+    path: '/CreatePasswd',
+    component: CreatePasswd,
     name: '',
     hidden: true
   },
@@ -228,8 +239,23 @@ let routes = [
     },
     children: [
       { path: '/ARP', component: ARP, name: 'ARP绑定', meta: { title: 'ARPBinding' } },
+      { path: '/ARPDefence', component: ARPDefence, name: 'ARP防御', meta: { title: 'ARPDefence' } },
       { path: '/remoteManagement', component: remoteManagement, name: '远程登陆管理', meta: { title: 'remoteLoginManagement' } },
       { path: '/firewall', component: firewall, name: '规则防火墙', meta: { title: 'firewall' } }
+    ]
+  },
+  {
+    path: '/',
+    component: Home,
+    name: '系统工具',
+    iconCls: 'fa fa-bar-chart',
+    meta: {
+      title: 'tools'
+    },
+    children: [
+      {
+        path: '/ping', component: ping, name: 'Ping测试', meta: { title: 'ping' }
+      }
     ]
   },
   {
@@ -241,7 +267,8 @@ let routes = [
       title: 'log'
     },
     children: [
-      { path: '/log', component: log, name: '日志', meta: { title: 'diallog' } }
+      { path: '/log', component: log, name: '日志', meta: { title: 'dialLog' } },
+      { path: '/operationLog', component: log, name: '操作日志', meta: { stitle: 'operaLog' } }
     ]
   },
   // {

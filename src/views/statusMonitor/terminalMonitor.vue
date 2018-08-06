@@ -149,12 +149,16 @@ export default {
       para.fc_downrate = Number(para.fc_downrate)
       para.fc_bufsize = Number(para.fc_bufsize)
       console.log(para)
-      handleFC(para).then((res) => {
-        if (res.data.code === 200) {
-          this.isLimitVisible = false
-        }
-        this.$refs['addForm'].resetFields()
-      })
+      handleFC(para)
+        .then((res) => {
+          if (res.data.code === 200) {
+            this.isLimitVisible = false
+          }
+          this.$refs['addForm'].resetFields()
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     judge() {
       console.log(this.request.data)
@@ -176,10 +180,60 @@ export default {
 
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          getMonitorInfo(para).then((res) => {
+          getMonitorInfo(para)
+            .then((res) => {
+              if (res.data.data.length !== 0) {
+                this.terminalForm = res.data.data
+                this.total = res.data.total
+              } else {
+                if (res.data.total === 0) {
+                  this.terminalForm = res.data.data
+                  this.total = res.data.total
+                } else {
+                  this.currentPage -= 1
+                  this.getTerminalInfo()
+                }
+              }
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        }
+      })
+    },
+    handleCurrentChange(val) {
+      let para = Object.assign({}, this.form)
+      para.type = 1
+      para.page = this.currentPage
+      getMonitorInfo(para)
+        .then((res) => {
+          if (res.data.code === 200) {
+            this.terminalForm = res.data.data
+            this.total = res.data.total
+          }
+          this.currentPage = val
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    getTerminalInfo() {
+      let para = Object.assign({}, this.form)
+      para.type = 1
+      para.page = this.currentPage
+      getMonitorInfo(para)
+        .then((res) => {
+          if (res.data.code === 200) {
             if (res.data.data.length !== 0) {
               this.terminalForm = res.data.data
               this.total = res.data.total
+              for (let i = 0; i < res.data.data.length; i++) {
+                this.terminalForm[i].send_rate = conversion(this.terminalForm[i].send_rate)
+                this.terminalForm[i].recv_rate = conversion(this.terminalForm[i].recv_rate)
+                this.terminalForm[i].send_total_length = conversionUnit(this.terminalForm[i].send_total_length)
+                this.terminalForm[i].recv_total_length = conversionUnit(this.terminalForm[i].recv_total_length)
+                this.terminalForm[i].duration = time(this.terminalForm[i].duration)
+              }
             } else {
               if (res.data.total === 0) {
                 this.terminalForm = res.data.data
@@ -189,49 +243,11 @@ export default {
                 this.getTerminalInfo()
               }
             }
-          })
-        }
-      })
-    },
-    handleCurrentChange(val) {
-      let para = Object.assign({}, this.form)
-      para.type = 1
-      para.page = this.currentPage
-      getMonitorInfo(para).then((res) => {
-        if (res.data.code === 200) {
-          this.terminalForm = res.data.data
-          this.total = res.data.total
-        }
-        this.currentPage = val
-      })
-    },
-    getTerminalInfo() {
-      let para = Object.assign({}, this.form)
-      para.type = 1
-      para.page = this.currentPage
-      getMonitorInfo(para).then((res) => {
-        if (res.data.code === 200) {
-          if (res.data.data.length !== 0) {
-            this.terminalForm = res.data.data
-            this.total = res.data.total
-            for (let i = 0; i < res.data.data.length; i++) {
-              this.terminalForm[i].send_rate = conversion(this.terminalForm[i].send_rate)
-              this.terminalForm[i].recv_rate = conversion(this.terminalForm[i].recv_rate)
-              this.terminalForm[i].send_total_length = conversionUnit(this.terminalForm[i].send_total_length)
-              this.terminalForm[i].recv_total_length = conversionUnit(this.terminalForm[i].recv_total_length)
-              this.terminalForm[i].duration = time(this.terminalForm[i].duration)
-            }
-          } else {
-            if (res.data.total === 0) {
-              this.terminalForm = res.data.data
-              this.total = res.data.total
-            } else {
-              this.currentPage -= 1
-              this.getTerminalInfo()
-            }
           }
-        }
-      })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   mounted() {
