@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { getHardware } from '../../api/api'
 export default {
   name: 'hardwareInfo',
 
@@ -21,24 +22,33 @@ export default {
       hardwareInfo: [
         {
           name: 'CPU',
-          hardware:
-            'Intel(R) Atom(TM) CPU D525   @ 1.80GHz'
+          hardware: ''
         },
         {
           name: '存储',
-          hardware: 'SSD 8GB'
+          hardware: ''
         },
         {
           name: '内存',
-          hardware: '1011 MBytes'
-        },
-        {
-          name: '网卡：',
-          hardware:
-            'e1000e * 6'
+          hardware: ''
         }
       ]
     }
+  },
+  methods: {
+    getInfo() {
+      getHardware()
+        .then(res => {
+          if (res.data.code === 200) {
+            this.hardwareInfo[0].hardware = res.data.cpu
+            this.hardwareInfo[1].hardware = res.data.sto
+            this.hardwareInfo[2].hardware = res.data.mem
+          }
+        })
+    }
+  },
+  mounted() {
+    this.getInfo()
   }
 }
 </script>

@@ -5,7 +5,7 @@
       <span>规则防火墙</span>
     </div>
 
-    <el-col :span="24" style="padding-bottom: 0px;">
+    <el-col :span="24">
       <el-form :inline="true">
         <el-form-item>
           <el-button type="primary" @click="handleAdd">添加</el-button>
@@ -127,7 +127,7 @@
 
     <!-- UDP策略 -->
     <el-dialog title="添加UDP策略" :visible.sync="isUdpRule">
-      <el-form :model="addForm" ref="addForm">
+      <el-form :model="addForm" ref="addForm" :rules="validateRules">
         <el-form-item prop="ips" label="IP开始地址">
           <el-input v-model="addForm.ips"></el-input>
         </el-form-item>
@@ -149,7 +149,7 @@
 
     <!-- IP策略 -->
     <el-dialog title="添加IP策略" :visible.sync="isIpRule">
-      <el-form :model="addForm" ref="addForm">
+      <el-form :model="addForm" ref="addForm" :rules="validateRules">
         <el-form-item prop="ips" label="IP开始地址">
           <el-input v-model="addForm.ips"></el-input>
         </el-form-item>
@@ -165,7 +165,7 @@
 
     <!-- mac策略 -->
     <el-dialog title="添加MAC策略" :visible.sync="isMacRule">
-      <el-form :model="addForm">
+      <el-form :model="addForm" ref="addFrom" :rules="validateRules">
         <el-form-item prop="mac" label="MAC地址">
           <el-input v-model="addForm.mac"></el-input>
         </el-form-item>
@@ -181,7 +181,7 @@
 
 <script>
 import { handle, showInfo, enable, getPorts } from '@/api/api.js'
-import validate from '@/utils/rules'
+import validate from '@/utils/rules.js'
 export default {
   name: 'firewall',
   data() {
@@ -231,7 +231,7 @@ export default {
       typeStorage: '',
       enableStorage: '',
 
-      total: '',
+      total: 0,
       currentPage: 1,
       pagesize: 10,
 
@@ -251,15 +251,33 @@ export default {
             trigger: 'blur'
           }
         ],
-        lanstart: [
+        udps: [
           {
             validator: validate('ip', '请输入正确IP', 'IP不能为空！'),
             trigger: 'blur'
           }
         ],
-        lanend: [
+        udpe: [
           {
             validator: validate('ip', '请输入正确IP', 'IP不能为空！'),
+            trigger: 'blur'
+          }
+        ],
+        tcps: [
+          {
+            validator: validate('ip', '请输入正确IP', 'IP不能为空！'),
+            trigger: 'blur'
+          }
+        ],
+        tcpe: [
+          {
+            validator: validate('ip', '请输入正确IP', 'IP不能为空！'),
+            trigger: 'blur'
+          }
+        ],
+        mac: [
+          {
+            validator: validate('mac', '请输入正确MAC', 'MAC不能为空！'),
             trigger: 'blur'
           }
         ]
@@ -282,7 +300,7 @@ export default {
     },
     addPortCancel() {
       this.isAdding = false
-      this.$refs.addForm.resetfields()
+      this.$refs['addForm'].resetFields()
       this.rulesChoosen = ''
       this.ifaceChoosen = ''
     },
@@ -309,40 +327,46 @@ export default {
       this.isUdpRule = false
       this.isIpRule = false
       this.isMacRule = false
-      this.$refs.addForm.resetfields()
+      this.$refs['addForm'].resetFields()
     },
     addSubmit() {
-      let para = {
-        data: []
-      }
-      let object = {}
-      object = Object.assign({}, this.addForm)
-      // 端口地址要求是int类型
-      for (let i in object) {
-        if (i === 'ports' || i === 'porte') {
-          object[i] = Number(object[i])
-        }
-      }
-      object.optype = 'add'
-      object.rules = setRules(this.rulesChoosen)
-      object.iface = this.ifaceChoosen
-      // console.log('submit rules is ' + object.rules)
-      para.data.push(object)
-      // console.log('编号是 ' + this.rulesChoosen)
-      handle(para)
-        .then(res => {
-          if (res.data.code === 200) {
-            this.getInfo()
-            this.addCancel()
-          } else {
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        })
+      this.$refs['addFrom'].validate((valid) => {
+        console.log('val is ' + valid)
 
-      this.rulesChoosen = ''
-      this.ifaceChoosen = ''
+        if (valid) {
+          let para = {
+            data: []
+          }
+          let object = {}
+          object = Object.assign({}, this.addForm)
+          // 端口地址要求是int类型
+          for (let i in object) {
+            if (i === 'ports' || i === 'porte') {
+              object[i] = Number(object[i])
+            }
+          }
+          object.optype = 'add'
+          object.rules = setRules(this.rulesChoosen)
+          object.iface = this.ifaceChoosen
+          // console.log('submit rules is ' + object.rules)
+          para.data.push(object)
+          // console.log('编号是 ' + this.rulesChoosen)
+          handle(para)
+            .then(res => {
+              if (res.data.code === 200) {
+                this.getInfo()
+                this.addCancel()
+              } else {
+              }
+            })
+            .catch(error => {
+              console.log(error)
+            })
+
+          this.rulesChoosen = ''
+          this.ifaceChoosen = ''
+        }
+      })
 
       function setRules(val) {
         let i
@@ -421,49 +445,123 @@ export default {
     },
 
     // 开始处理拿到的数组
+    // getRules() {
+    //   this.rules.forEach(this.getPortRules)
+    // },
+    // getPortRules(element, index, array) {
+    //   this.portStorage = element.iface
+    //   this.enableStorage = element.enable
+    //   if (element.enable === 1) {
+    //     this.disablePortList.push(element.iface)
+    //   } else if (element.enable === 0) {
+    //     this.enablePortList.push(element.iface)
+    //   }
+    //   element.rules.forEach(this.getTypeRules)
+    // },
+    // getTypeRules(item, index, array) {
+    //   for (let i in item) {
+    //     console.log('i ' + i)
+    //     if (item[i].length !== 0) {
+    //       if (i === 'macs') {
+    //         this.typeStorage = 'MAC'
+    //       } else if (i === 'ip') {
+    //         this.typeStorage = 'IP'
+    //       } else if (i === 'udp') {
+    //         this.typeStorage = 'UDP'
+    //       } else if (i === 'tcp') {
+    //         this.typeStorage = 'TCP'
+    //       }
+    //     }
+    //     // console.log('item[Object.keys(item)] ' + item[Object.keys(item)])
+    //     // console.log('Object.keys(item) ' + Object.keys(item))
+    //   }
+    //   // console.log('in 3rd step ' + item)
+    //   // 获取策略类型
+    //   item[Object.keys(item)].forEach(this.getValue)
+    // },
+    // getValue(val, index, array) {
+    //   let table = {}
+    //   // console.log('last step ' + JSON.stringify(val))
+    //   table.id = val.id
+    //   table.port = this.portStorage
+    //   table.type = this.typeStorage
+    //   table.status = result(table.status, this.enableStorage)
+
+    //   function result(status, val) {
+    //     if (val === 0) {
+    //       status = '未启用'
+    //     } else if (val === 1) {
+    //       status = '启用中'
+    //     }
+    //     return status
+    //   }
+    //   console.log('aaaaaaaaaaaaaaaaa' + table.status)
+    //   for (let i in val) {
+    //     if (i === 'ips') {
+    //       table.ipSE = val.ips + '-' + val.ipe
+    //     }
+    //     if (i === 'ports') {
+    //       table.portSE = val.ports + '-' + val.porte
+    //     }
+    //     if (i === 'mac') {
+    //       table[i] = val[i]
+    //     }
+    //   }
+    //   this.rulesList.push(table)
+    //   // console.log('last step ruleList ' + JSON.stringify(this.rulesList))
+    // },
+
     getRules() {
-      this.rules.forEach(this.getPortRules)
+      this.rules.forEach(this.getValues)
     },
-    getPortRules(element, index, array) {
-      this.portStorage = element.iface
-      this.enableStorage = element.enable
-      if (element.enable === 1) {
-        this.disablePortList.push(element.iface)
-      } else if (element.enable === 0) {
-        this.enablePortList.push(element.iface)
-      }
-      element.rules.forEach(this.getTypeRules)
-    },
-    getTypeRules(item, index, array) {
+    getValues(item, index, array) {
+      console.log('item : ' + item)
+      let para = {}
+      para.id = item.id
+      para.port = item.iface
+      para.type = getType()
+      para.status = getStatus(item.enable)
       for (let i in item) {
-        console.log('i ' + i)
-        if (item[i].length !== 0) {
-          if (i === 'macs') {
-            this.typeStorage = 'MAC'
-          } else if (i === 'ip') {
-            this.typeStorage = 'IP'
-          } else if (i === 'udp') {
-            this.typeStorage = 'UDP'
-          } else if (i === 'tcp') {
-            this.typeStorage = 'TCP'
+        if (i === 'ips') {
+          para.ipSE = item.ips + '-' + item.ipe
+        }
+        if (i === 'ports') {
+          para.portSE = item.ports + '-' + item.porte
+        }
+        if (i === 'mac') {
+          para[i] = item[i]
+        }
+
+        // 生成已启用/未启用端口的列表
+        if (i === 'enable') {
+          if (item[i] === 0) {
+            this.enablePortList.push(item.iface)
+          } else {
+            this.disablePortList.push(item.iface)
           }
         }
-        // console.log('item[Object.keys(item)] ' + item[Object.keys(item)])
-        // console.log('Object.keys(item) ' + Object.keys(item))
       }
-      // console.log('in 3rd step ' + item)
-      // 获取策略类型
-      item[Object.keys(item)].forEach(this.getValue)
-    },
-    getValue(val, index, array) {
-      let table = {}
-      // console.log('last step ' + JSON.stringify(val))
-      table.id = val.id
-      table.port = this.portStorage
-      table.type = this.typeStorage
-      table.status = result(table.status, this.enableStorage)
+      this.rulesList.push(para)
 
-      function result(status, val) {
+      function getType() {
+        let para = ''
+        if (item.ruletype === 0) {
+          para = 'MAC'
+        }
+        if (item.ruletype === 1) {
+          para = 'IP'
+        }
+        if (item.ruletype === 2) {
+          para = 'UDP'
+        }
+        if (item.ruletype === 3) {
+          para = 'TCP'
+        }
+        return para
+      }
+
+      function getStatus(val) {
+        let status = ''
         if (val === 0) {
           status = '未启用'
         } else if (val === 1) {
@@ -471,27 +569,17 @@ export default {
         }
         return status
       }
-      console.log('aaaaaaaaaaaaaaaaa' + table.status)
-      for (let i in val) {
-        if (i === 'ips') {
-          table.ipSE = val.ips + '-' + val.ipe
-        }
-        if (i === 'ports') {
-          table.portSE = val.ports + '-' + val.porte
-        }
-        if (i === 'mac') {
-          table[i] = val[i]
-        }
-      }
-      this.rulesList.push(table)
-      // console.log('last step ruleList ' + JSON.stringify(this.rulesList))
     },
 
     search() {
       let para = {}
       para.iface = []
-      para.iface.push(this.portChoosen)
-      para.ifacestr = '(' + "'" + this.portChoosen + "'" + ')'
+      if (this.portChoosen !== '') {
+        para.iface.push(this.portChoosen)
+        para.ifacestr = '(' + "'" + this.portChoosen + "'" + ')'
+      } else {
+        this.getInfo()
+      }
       // para.page = this.currentPage
       para.page = 1
       para.pagesize = this.pageSize
@@ -502,8 +590,8 @@ export default {
         .then(res => {
           if (res.data.code === 200) {
             if (res.data.total !== 0) {
-              if (res.data.data.length > 0) {
-                this.rules = res.data.data
+              if (res.data.data.rules.length > 0) {
+                this.rules = res.data.data.rules
               } else {
                 this.currentPage -= 1
                 this.getInfo()
@@ -512,6 +600,8 @@ export default {
             }
             this.total = res.data.total
             this.rulesList = []
+            this.enablePortList = []
+            this.disablePortList = []
             this.getRules()
           }
         })
@@ -537,18 +627,20 @@ export default {
         .then(res => {
           if (res.data.code === 200) {
             if (res.data.total !== 0) {
-              if (res.data.data.length > 0) {
-                this.rules = res.data.data
+              if (res.data.data.rules.length > 0) {
+                this.rules = res.data.data.rules
               } else {
                 this.currentPage -= 1
                 this.getInfo()
                 return
               }
             } else if (res.data.total === 0) {
-              this.rules = {}
+              this.rules = []
             }
             this.total = res.data.total
             this.rulesList = []
+            this.enablePortList = []
+            this.disablePortList = []
             this.getRules()
           }
         })
@@ -604,7 +696,7 @@ export default {
   },
   mounted() {
     this.getPorts()
-    this.getRules()
+    this.getInfo()
   }
 }
 </script>

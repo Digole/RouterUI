@@ -7,7 +7,7 @@
       </div>
       -->
     <div>
-      <el-col :span="24" class="toolbar">
+      <el-col :span="24">
         <el-form :inline="true">
           <el-form-item>
             <el-button type="primary" >添加</el-button>
@@ -37,7 +37,7 @@
       </div>
       -->
     <div>
-      <el-col :span="24" class="toolbar">
+      <el-col :span="24">
         <el-form :inline="true">
           <el-form-item>
             <el-button type="primary" >添加</el-button>

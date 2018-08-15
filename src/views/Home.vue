@@ -125,6 +125,7 @@ export default {
     lang: {
       get() {
         console.log('get')
+        console.log('in get ' + this.$store.state.app.language)
         return this.$store.state.app.language
       },
       set(lang) {

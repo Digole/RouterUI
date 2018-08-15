@@ -51,24 +51,31 @@ import update from './views/systemSetting/update.vue'
 */
 import flowControl from './views/flowControl/flowControl.vue'
 /*
-*behaviourManagement
- */
+**behaviourManagement
+*/
 import BMControl from './views/behaviourManagement/BMControl.vue'
 import BMDisplay from './views/behaviourManagement/BMDisplay.vue'
 /*
-*securitySetting
- */
+**securitySetting
+*/
 import ARP from './views/securitySetting/ARP.vue'
 import ARPDefence from './views/securitySetting/ARPDefence.vue'
 import firewall from './views/securitySetting/firewall.vue'
 import remoteManagement from './views/securitySetting/remoteManagement.vue'
-
 /*
-*tools
+**tools
 */
 import ping from './views/tools/ping.vue'
-
+/*
+**log
+*/
 import log from './views/log/log.vue'
+import operaLog from './views/log/operationLog.vue'
+
+/*
+**shell
+*/
+import shell from './views/shell/shell.vue'
 
 let routes = [
   {
@@ -268,7 +275,33 @@ let routes = [
     },
     children: [
       { path: '/log', component: log, name: '日志', meta: { title: 'dialLog' } },
-      { path: '/operationLog', component: log, name: '操作日志', meta: { stitle: 'operaLog' } }
+      { path: '/operationLog', component: operaLog, name: '操作日志', meta: { title: 'operaLog' } }
+    ]
+  },
+  {
+    path: '/',
+    component: Home,
+    name: '日志系统',
+    iconCls: 'fa fa-bar-chart',
+    meta: {
+      title: 'log'
+    },
+    children: [
+      { path: '/log', component: log, name: '日志', meta: { title: 'dialLog' } },
+      { path: '/operationLog', component: operaLog, name: '操作日志', meta: { title: 'operaLog' } }
+    ]
+  },
+  {
+    path: '/',
+    component: Home,
+    name: 'shellpath',
+    iconCls: 'fa fa-list',
+    leaf: true, // 只有一个节点
+    meta: {
+      title: 'shell'
+    },
+    children: [
+      { path: '/shell', component: shell, name: 'shell页面', meta: { title: 'shell' } }
     ]
   },
   // {

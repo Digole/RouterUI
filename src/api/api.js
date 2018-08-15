@@ -56,9 +56,6 @@ export const getFragmentInfo = data => { return axios.post('action/natIpFragGetA
 export const getUsage = data => { return axios.post('action/natAssNodeUseAction', data) }
 export const getDialStatus = data => { return axios.post('action/netIfInfoAction', data) }
 
-// export const sendRestart = data => { return axios.post(`${base}/api/sendRestart`, data);};
-export const sendRestart = data => { return axios.post('action/shutdownHandle', data) }
-
 export const sendWANLAN = data => { return axios.post('action/natWanLanAction', data) }
 
 /**********************************************************/
@@ -104,6 +101,8 @@ export const handleMonitorInfo = data => { return axios.post('action/monitorItem
 export const getLog = data => { return axios.post(base + 'action/udialLogGetAction', data) }
 // 操作日志
 export const getOperaLog = data => { return axios.post(base + 'action/operLogGetAction', data) }
+// web上下线
+export const getWebInfo = data => { return axios.post(base + 'action/loginRecordQuery', data) }
 
 // DHCP
 export const dhcpServerConfigAction = data => { return axios.post(base + 'action/dhcpServerConfigAction', data) }
@@ -111,11 +110,11 @@ export const dhcpServerShowAction = data => { return axios.post(base + 'action/d
 
 // 系统信息
 export const setTime = data => { return axios.post(base + 'action/timeConfigAction', data) }
-export const getTime = data => { return axios.post(base + 'action/timeConfigAction', data) }
+export const getTime = data => { return axios.post(base + 'action/timeShowAction', data) }
 export const setName = data => { return axios.post(base + 'action/devNameConfigAction', data) }
 export const getName = data => { return axios.post(base + 'action/devNameGetAction', data) }
 // 密码修改
-export const changePasswd = data => { return axios.post(base + 'action/changepassedAction', data) }
+export const changePasswd = data => { return axios.post(base + 'action/changePasswordAction', data) }
 
 // firewall
 export const showInfo = data => { return axios.post(base + 'action/npfShowAction', data) }
@@ -127,6 +126,8 @@ export const deleteMac = data => { return axios.post(base + 'action/npfDelMacFil
 // 开关机
 export const powerOff = data => { return axios.post(base + 'action/powerOffAction', data) }
 export const restart = data => { return axios.post(base + 'action/powerRestartAction', data) }
+export const getEvent = data => { return axios.post(base + 'action/powerEventShowAction', data) }
+export const setEvent = data => { return axios.post(base + 'action/powerEventConfigAction', data) }
 
 // ARP防御
 export const setARP = data => { return axios.post(base + 'action/asdefenseEnAction', data) }
@@ -139,5 +140,8 @@ export const ping = data => { return axios.post(base + 'action/pingTestAction', 
 export const getDNS = data => { return axios.post(base + 'action/dnsShowAction', data) }
 export const setDNS = data => { return axios.post(base + 'action/dnsConfigAction', data) }
 
-// web上下线
-export const getWebInfo = data => { return axios.post(base + 'action/logoutRecoedQuery', data) }
+// 获取版本信息
+export const getVersion = data => { return axios.post(base + 'action/versionShowAction', data) }
+
+// 硬件参数
+export const getHardware = data => { return axios.post(base + 'action/hwInfoGetAction', data) }

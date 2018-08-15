@@ -120,7 +120,7 @@
 
 <style lang="scss" scoped>
   .status-line {
-    height: 5rem;
+    // height: 5rem;
     line-height: 5rem;
     .button {
       margin-left: 5rem;

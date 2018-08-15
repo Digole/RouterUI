@@ -16,7 +16,7 @@
 				<!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
 			</el-form-item>
 		</el-form>
-		<div></div>
+		</div>
 </template>
 
 <script>

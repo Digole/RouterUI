@@ -119,9 +119,10 @@ export default {
 
       requestLogin(para).then(res => {
         if (res.data.code === 200) {
+          console.log(JSON.stringify(res.data))
           let user = {}
           user.id = res.data.id
-          user.userName = res.data.userName
+          user.userName = res.data.username
           sessionStorage.setItem('user', JSON.stringify(user))
           this.$router.push('/ModeChoose')
         } else if (res.data.code === 1000) {

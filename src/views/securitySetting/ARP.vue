@@ -4,7 +4,7 @@
       <span>{{$t('ARP.title')}}</span>
     </div>
 
-    <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
+    <el-col :span="24">
       <el-form :inline="true">
         <el-form-item>
           <el-button type="primary" @click="addHandle()">{{$t('operation.add')}}</el-button>
@@ -305,7 +305,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .warning {
   color: red;
 }
