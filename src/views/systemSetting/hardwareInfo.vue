@@ -1,7 +1,11 @@
 <template>
   <section>
     <div class="line_02">
+<<<<<<< HEAD
       <span>硬件信息</span>
+=======
+      <span>{{$t('systemSetting.hardwareInfo')}}</span>
+>>>>>>> wuyunke1
     </div>
     <el-table :data="hardwareInfo" style="width: 100%">
       <el-table-column prop="name" width="180">

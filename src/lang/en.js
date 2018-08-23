@@ -35,7 +35,12 @@ export default {
     dialLog: 'DialLog',
     tools: 'SystemTools',
     ping: 'PingTest',
+<<<<<<< HEAD
     operaLog: 'OperationLog'
+=======
+    operaLog: 'OperationLog',
+    Qos: 'Qos'
+>>>>>>> wuyunke1
   },
 
   operation: {
@@ -275,5 +280,61 @@ export default {
     time: 'Time',
     line: 'Line',
     detail: 'Log Details'
+<<<<<<< HEAD
+=======
+  },
+
+  Qos: {
+    QosSetting: 'QosSetting',
+    netif: 'netif',
+    rule: 'rule',
+    ipStart: 'ipStart',
+    ipEnd: 'ipEnd',
+    cmpMethod: 'cmpMethod',
+    dontDrop: 'dontDrop',
+    addNewQos: 'addNewQos',
+    portStart: 'portStart',
+    portEnd: 'portEnd',
+    portStart: 'portStart',
+    
+  },
+  systemSetting: {
+    AccountSetting: 'AccountSetting',
+    username: 'username',
+    passwd: 'passwd',
+    status: 'status',
+    behaviour: 'behaviour',
+    changePasswd: 'changePasswd',
+    old: 'old',
+    one: 'one',
+    two: 'two',
+    hardwareInfo: 'hardwareInfo',
+    restartShutdown: 'restartShutdown',
+    restartNow: 'restartNow',
+    powerOffNow: 'powerOffNow',
+    addTrigger: 'addTrigger',
+    event: 'event',
+    shutdown: 'shutdown',
+    restart: 'restart',
+    date: 'date',
+    oper_type: 'oper_type',
+    handleStart: 'handleStart',
+    handleStop: 'handleStop',
+    handleDel: 'handleDel',
+    update: 'update',
+    VersionDetection: 'VersionDetection:',
+    DetectNewVersion: 'DetectNewVersion',
+    RoutingSystemVersion: 'RoutingSystemVersion: ',
+    SylixOSVersion: 'SylixOSVersion: ',
+    localUpdate: 'localUpdate: ',
+    fileSelection: 'fileSelection',
+    submitUpload: 'submitUpload',
+    check: 'check',
+    latestVersion: 'latestVersion: ',
+    updateNow: 'updateNow',
+    updateFinished: 'updateFinished',
+    refreshAfter: 'refreshAfter',
+    sDoNotTurnOff: 'sDoNotTurnOff',
+>>>>>>> wuyunke1
   }
 }
