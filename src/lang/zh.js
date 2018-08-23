@@ -35,7 +35,12 @@ export default {
     dialLog: '拨号日志',
     tools: '系统工具',
     ping: 'Ping测试',
+<<<<<<< HEAD
     operaLog: '操作日志'
+=======
+    operaLog: '操作日志',
+    Qos: 'Qos'
+>>>>>>> wuyunke1
   },
 
   operation: {
@@ -281,5 +286,60 @@ export default {
     time: '时间',
     line: '线路',
     detail: '日志详情'
+<<<<<<< HEAD
+=======
+  },
+
+  Qos: {
+    QosSetting: 'Qos配置',
+    netif: '网卡接口',
+    rule: '规则',
+    ipStart: 'ip起始',
+    ipEnd: 'ip结束',
+    cmpMethod: '比较方法',
+    priority: '优先级',
+    dontDrop: '丢包选项',
+    addNewQos: '添加新Qos',
+    portStart: '开始端口',
+    portEnd: '结束端口',
+  },
+  systemSetting: {
+    AccountSetting: '账号设置',
+    username: '用户名',
+    passwd: '密码',
+    status: '状态',
+    behaviour: '操作',
+    changePasswd: '修改密码',
+    old: '请输入原密码',
+    one: '请输入新密码',
+    two: '请再次输入新密码',
+    hardwareInfo: '硬件信息',
+    restartShutdown: '重启关机',
+    restartNow: '立即重启',
+    powerOffNow: '立即关机',
+    addTrigger: '添加事件',
+    event: '事件',
+    shutdown: '关机',
+    restart: '重启',
+    date: '预设时间',
+    oper_type: '操作',
+    handleStart: '停用',
+    handleStop: '启用',
+    handleDel: '删除',
+    update: '版本升级',
+    VersionDetection: '版本检测：',
+    DetectNewVersion: '检测新版本',
+    RoutingSystemVersion: '路由系统版本：',
+    SylixOSVersion: 'SylixOS操作系统版本：',
+    localUpdate: '本地升级：',
+    fileSelection: '选取文件',
+    submitUpload: '上传到服务器',
+    check: '检测',
+    latestVersion: '最新版本为:',
+    updateNow: '立即升级',
+    updateFinished: '上传完成',
+    refreshAfter: '预计',
+    sDoNotTurnOff: '秒后刷新页面，请勿关闭电源',
+>>>>>>> wuyunke1
   }
 }
