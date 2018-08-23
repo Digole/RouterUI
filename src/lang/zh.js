@@ -35,12 +35,8 @@ export default {
     dialLog: '拨号日志',
     tools: '系统工具',
     ping: 'Ping测试',
-<<<<<<< HEAD
-    operaLog: '操作日志'
-=======
     operaLog: '操作日志',
     Qos: 'Qos'
->>>>>>> wuyunke1
   },
 
   operation: {
@@ -286,8 +282,6 @@ export default {
     time: '时间',
     line: '线路',
     detail: '日志详情'
-<<<<<<< HEAD
-=======
   },
 
   Qos: {
@@ -301,7 +295,7 @@ export default {
     dontDrop: '丢包选项',
     addNewQos: '添加新Qos',
     portStart: '开始端口',
-    portEnd: '结束端口',
+    portEnd: '结束端口'
   },
   systemSetting: {
     AccountSetting: '账号设置',
@@ -339,8 +333,6 @@ export default {
     updateNow: '立即升级',
     updateFinished: '上传完成',
     refreshAfter: '预计',
-    sDoNotTurnOff: '秒后刷新页面，请勿关闭电源',
->>>>>>> wuyunke1
-/*test*/
+    sDoNotTurnOff: '秒后刷新页面，请勿关闭电源'
   }
 }

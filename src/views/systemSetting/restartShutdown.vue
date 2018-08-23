@@ -1,18 +1,5 @@
 <template>
 	<section>
-<<<<<<< HEAD
-		<div class="line_02"><span>重启关机</span></div>
-		<el-col :span="24">
-			<el-form :inline="true">
-				<el-form-item>
-					<el-button type="danger" @click="restartNow" >立即重启</el-button>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="danger" @click="powerOffNow" right>立即关机</el-button>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="danger" @click="addTrigger" right>添加事件</el-button>
-=======
 		<div class="line_02"><span>{{$t('systemSetting.restartShutdown')}}</span></div>
 		<el-col :span="24">
 			<el-form :inline="true">
@@ -24,7 +11,6 @@
 				</el-form-item>
 				<el-form-item>
 					<el-button type="danger" @click="addTrigger" right>{{$t('systemSetting.addTrigger')}}</el-button>
->>>>>>> wuyunke1
 				</el-form-item>
 				<!-- <el-form-item>
 					<el-button type="danger" right>删除事件</el-button>
@@ -32,17 +18,6 @@
 			</el-form>
 		</el-col>
 		<el-table :data="form" style="width: 100%" :header-cell-style="headerStyle">
-<<<<<<< HEAD
-			<el-table-column prop="event" label="事件">
-			</el-table-column>
-			<el-table-column prop="date"  label="预设时间">
-			</el-table-column>
-			<el-table-column prop="oper_type" label="操作">
-				<template slot-scope="scope">
-						<el-button v-if="scope.row.status" size="small" @click="handleStart(scope.$index, scope.row)">停用</el-button>
-						<el-button v-else size="small" @click="handleStop(scope.$index, scope.row)">启用</el-button>
-						<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
-=======
 			<el-table-column prop="event" :label="$t('systemSetting.event')">
 			</el-table-column>
 			<el-table-column prop="date"  :label="$t('systemSetting.date')">
@@ -52,7 +27,6 @@
 						<el-button v-if="scope.row.status" size="small" @click="handleStart(scope.$index, scope.row)">{{$t('systemSetting.handleStart')}}</el-button>
 						<el-button v-else size="small" @click="handleStop(scope.$index, scope.row)">{{$t('systemSetting.handleStop')}}</el-button>
 						<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">{{$t('systemSetting.handleDel')}}</el-button>
->>>>>>> wuyunke1
 				</template>
 			</el-table-column>
 		</el-table>
@@ -65,18 +39,6 @@
       style="float: right">
     </el-pagination>
 
-<<<<<<< HEAD
-    <el-dialog title="添加事件" :visible.sync="isAdd">
-      <el-form ref="form" :model="powerEvent" label-width="3rem">
-        <el-form-item prop="event" label="事件">
-          <el-radio v-model="powerEvent.oper_type" label="shutdown"></el-radio>
-          <el-radio v-model="powerEvent.oper_type" label="restart"></el-radio>
-        </el-form-item>
-        <el-form-item prop="date" label="日期">
-          <el-input v-model="powerEvent.date" placeholder="示例: 20180808"></el-input>
-        </el-form-item>
-        <el-form-item prop="time" label="事件">
-=======
     <el-dialog :title="$t('systemSetting.addTrigger')" :visible.sync="isAdd">
       <el-form ref="form" :model="powerEvent" label-width="3rem">
         <el-form-item prop="event" :label="$t('systemSetting.event')">
@@ -87,7 +49,6 @@
           <el-input v-model="powerEvent.date" placeholder="示例: 20180808"></el-input>
         </el-form-item>
         <el-form-item prop="time" :label="$t('systemSetting.event')">
->>>>>>> wuyunke1
           <el-input v-model="powerEvent.time" placeholder="示例: 02:30"></el-input>
         </el-form-item>
       </el-form>

@@ -44,7 +44,7 @@ export default {
       return value
     },
 
-    handle: function() {
+    handle() {
       let para = Object.assign({}, this.form)
       if (this.buttonValue === '保存') {
         console.log(this.buttonValue)
@@ -52,6 +52,10 @@ export default {
         setDNS(para)
           .then(res => {
             if (res.data.code === 200) {
+              this.$message({
+                message: '保存成功',
+                type: 'success'
+              })
               this.getDNSInfo()
             }
           })

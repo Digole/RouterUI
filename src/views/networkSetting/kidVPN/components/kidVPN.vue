@@ -6,6 +6,7 @@
 <script>
 import kidVPN from 'echarts'
 import axios from 'axios'
+import jsonp from '@/utils/jsonp-promise.js'
 // import chinaJson from '../../static/china.json';
 
 export default {
@@ -30,12 +31,16 @@ export default {
        * IP解析是否由后台进行
        */
 
-      this.$jsonp('http://freeapi.ipip.net/118.28.8.8')
-        .then(json => {
-          console.log(json)
+      const url = 'http://freeapi.ipip.net/117.89.57.129'
+
+      // jsonp(url, {method: 'encode'}, {jsonp: 'callback', callback: 'render'})
+      jsonp(url)
+        .then(res => {
+          console.log('lalalalallalal')
+          console.log(res)
         })
         .catch(err => {
-          console.log(err)
+          console.log('aaaaaaaaaaaaaaa' + err)
         })
 
       purposeList = ['上海', '北京', '广州', '深圳']

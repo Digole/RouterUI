@@ -35,12 +35,8 @@ export default {
     dialLog: 'DialLog',
     tools: 'SystemTools',
     ping: 'PingTest',
-<<<<<<< HEAD
-    operaLog: 'OperationLog'
-=======
     operaLog: 'OperationLog',
     Qos: 'Qos'
->>>>>>> wuyunke1
   },
 
   operation: {
@@ -280,8 +276,6 @@ export default {
     time: 'Time',
     line: 'Line',
     detail: 'Log Details'
-<<<<<<< HEAD
-=======
   },
 
   Qos: {
@@ -294,9 +288,7 @@ export default {
     dontDrop: 'dontDrop',
     addNewQos: 'addNewQos',
     portStart: 'portStart',
-    portEnd: 'portEnd',
-    portStart: 'portStart',
-    
+    portEnd: 'portEnd'
   },
   systemSetting: {
     AccountSetting: 'AccountSetting',
@@ -334,7 +326,6 @@ export default {
     updateNow: 'updateNow',
     updateFinished: 'updateFinished',
     refreshAfter: 'refreshAfter',
-    sDoNotTurnOff: 'sDoNotTurnOff',
->>>>>>> wuyunke1
+    sDoNotTurnOff: 'sDoNotTurnOff'
   }
 }
