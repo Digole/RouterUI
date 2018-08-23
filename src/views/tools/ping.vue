@@ -54,9 +54,9 @@ export default {
                 let content = res.data.result.split('\n')
                 console.log(content)
                 if (content[1] !== '') {
-                  this.text = this.text + content[1] + '\n'
+                  this.text = content[1] + '\n' + this.text
                 } else {
-                  this.text = this.text + content[0] + '\n'
+                  this.text = content[0] + '\n' + this.text
                 }
                 setTimeout(test, 1000)
               }

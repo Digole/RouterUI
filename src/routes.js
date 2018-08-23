@@ -38,6 +38,7 @@ import kidVPN from './views/networkSetting/kidVPN'
 import NAT from './views/networkSetting/nat/'
 import VLAN from './views/networkSetting/VLAN.vue'
 import staticRouter from './views/networkSetting/staticRouter/staticRouter.vue'
+import Qos from './views/networkSetting/Qos/index.vue'
 /*
 *systemSetting
  */
@@ -191,7 +192,8 @@ let routes = [
       // { path: '/currentRouter', component: currentRouter, name: '当前路由表' },
       { path: '/VLAN', component: VLAN, name: 'VLAN设置', meta: { title: 'VLANSetting' } },
       { path: '/kidVPN', component: kidVPN, name: 'KidVPN设置', meta: { title: 'KidVPNSetting' } },
-      { path: '/NAT', component: NAT, name: 'NAT转发与端口映射', meta: { title: 'NAT' } }
+      { path: '/NAT', component: NAT, name: 'NAT转发与端口映射', meta: { title: 'NAT' } },
+      { path: '/Qos', component: Qos, name: 'Qos设置', meta: { title: 'Qos' } }
     ]
   },
   {
@@ -207,7 +209,7 @@ let routes = [
       { path: '/accountSetting', component: accountSetting, name: '账号设置', meta: { title: 'accountSetting' } },
       { path: '/update', component: update, name: '版本升级', meta: { title: 'versionUpdate' } },
       { path: '/hardwareInfo', component: hardwareInfo, name: '硬件信息', meta: { title: 'hardwareInfo' } },
-      { path: '/restartShutdown', component: (restartShutdown), name: '重启关机', meta: { title: 'shutdownRestart' } }
+      { path: '/restartShutdown', component: restartShutdown, name: '重启关机', meta: { title: 'shutdownRestart' } }
     ]
   },
   {
@@ -263,19 +265,6 @@ let routes = [
       {
         path: '/ping', component: ping, name: 'Ping测试', meta: { title: 'ping' }
       }
-    ]
-  },
-  {
-    path: '/',
-    component: Home,
-    name: '日志系统',
-    iconCls: 'fa fa-bar-chart',
-    meta: {
-      title: 'log'
-    },
-    children: [
-      { path: '/log', component: log, name: '日志', meta: { title: 'dialLog' } },
-      { path: '/operationLog', component: operaLog, name: '操作日志', meta: { title: 'operaLog' } }
     ]
   },
   {

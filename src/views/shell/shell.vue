@@ -1,8 +1,6 @@
 <template>
   <div class="shell_container">
     <pre>
-      fowerfhowehf
-      fewfwef
     </pre>
   </div>
 </template>

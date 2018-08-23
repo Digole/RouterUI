@@ -22,6 +22,7 @@ export default {
   data() {
     return {
       currentPage: 1,
+      total: 0,
       VPNList: []
     }
   },
@@ -40,7 +41,7 @@ export default {
 <style scoped>
 p {
   height: 28px;
-  margin: 0;
+  margin: 1rem 0 0 0;
 }
 
 .el-table {

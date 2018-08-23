@@ -39,8 +39,8 @@ const app = {
       Cookies.set('language', language)
     },
     SET_SYSDATA: (state, systemData) => {
-      state.systemData.up = systemData.up
-      state.systemData.down = systemData.down
+      state.systemData.up = systemData.upStorage
+      state.systemData.down = systemData.downStorage
       state.systemData.cpu = systemData.cpu
       state.systemData.memory = systemData.memory
       state.systemData.userNum = systemData.userNum

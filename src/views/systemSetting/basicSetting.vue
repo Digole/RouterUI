@@ -80,7 +80,8 @@ export default {
         name: '',
         date: '',
         time: ''
-      }
+      },
+      timer: ''
     }
   },
   watch: {
@@ -136,6 +137,13 @@ export default {
         .then(res => {
           if (res.data.code === 200) {
             this.deviceTime = res.data.date + ' ' + res.data.time
+            this.deviceTime = () => {
+              for (let i = 60; i > 0; i--) {
+                setTimeout(function() {
+                  this.deviceTime += 1
+                }, 1000)
+              }
+            }
           }
         }).catch(error => {
           console.log(error)

@@ -91,7 +91,7 @@ export default {
       isAddingClient: false,
       isLinkingClient: false,
       currentPage: 1,
-      total: '',
+      total: 0,
       // addedClientList: {
       //   serip: '',
       //   locip: '',
@@ -288,6 +288,11 @@ export default {
         .catch(error => {
           console.log(error)
         })
+    },
+
+    // 处理兄弟组件的bus事件
+    liseterUpdate() {
+      this.bus.$on('update', this.getInfo())
     }
   },
   mounted() {

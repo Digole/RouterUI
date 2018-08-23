@@ -9,6 +9,7 @@
     <server class="server"></server>
 
     <connection class="connection"></connection>
+    
     <visualization class="visualization"></visualization>
   </section>
 </template>
@@ -33,19 +34,6 @@ export default {
 .client {
   height: 40%;
   width: 100%;
-}
-.server {
-  display: inline-block;
-  /* height: 30%; */
-  width: 48%;
-  margin-right: 2%;
-  vertical-align: top;
-}
-.connection {
-  display: inline-block;
-  /* height: 30%; */
-  width: 48%;
-  vertical-align: top;
 }
 .visualization {
   height: 30%;

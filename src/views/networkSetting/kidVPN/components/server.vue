@@ -5,12 +5,12 @@
         <span>{{$t('kidVPN.server.title')}}</span>
         <el-form inline style="float: right">
           <el-button type="primary" @click="addServer" v-if="isEmpty" size="mini">创建VPN服务器</el-button>
-          <el-button type="danger" size="mini" @click="delServer">{{$t('kidVPN.server.button1')}}</el-button>
+          <!-- <el-button type="danger" size="mini" @click="delServer">{{$t('kidVPN.server.button1')}}</el-button> -->
         </el-form>
       </el-col>
     </el-row>
 
-    <div class="form">
+    <!-- <div class="form">
       <el-form v-model="addedClientList" ref="addedClientList" label-position="left" label-width="120px" size="mini">
         <el-form-item prop="serip" :label="$t('kidVPN.server.serip')">
           <el-input v-model="addedClientList.serip" disabled></el-input>
@@ -36,7 +36,29 @@
           </div>
         </el-form-item>
       </el-form>
-    </div>
+    </div> -->
+
+    <el-table :data="addedClientList" :header-cell-style="headerStyle">
+      <el-table-column prop="serip" :label="$t('kidVPN.server.serip')"></el-table-column>
+      <el-table-column prop="netmask" :label="$t('kidVPN.server.netmask')"></el-table-column>
+      <el-table-column prop="gateway" :label="$t('kidVPN.server.gateway')"></el-table-column>
+      <el-table-column prop="mac" :label="$t('kidVPN.server.mac')"></el-table-column>
+      <el-table-column prop="mtu" :label="$t('kidVPN.server.mtu')"></el-table-column>
+      <el-table-column prop="vndid" :label="$t('kidVPN.server.vndid')"></el-table-column>
+      <el-table-column>
+        <template slot-scope="scope">
+          <el-button size="small" @click="delServer(scope.index, scope.row)">{{ $t('operation.delete') }}</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <el-pagination
+      :total="total"
+      :current-page="currentPage"
+      :page-size="pageSize"
+      layout="total, prev, pager, next, jumper"
+      @current-change="handleChange">
+    </el-pagination>
 
     <el-dialog :title="$t('kidVPN.server.title2')" :visible.sync="isAddingServer">
       <el-form :model="form" :rules="rules" ref="form" label-width="120px">
@@ -71,6 +93,9 @@
           <el-select v-model="initAESKeyForm.bit">
             <el-option v-for="(item, index) in bitList" :key="index" :label="item" :value="item"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item prop="password" label="密码">
+          <el-input v-model="initAESKeyForm.password"></el-input>
         </el-form-item>
         <el-form-item prop="aeskey" :label="$t('kidVPN.server.aeskey')">
           <textarea v-model="initAESKeyForm.aeskey" disabled></textarea>
@@ -115,8 +140,7 @@ export default {
       isGettingKey: false,
       isEmpty: true,
       addedForm: [],
-      addedClientList: {},
-      currentPage: 1,
+      addedClientList: [],
       form: {
         serip: '',
         netmask: '',
@@ -129,7 +153,8 @@ export default {
         vndid: '',
         ipaddr: '',
         bit: '',
-        aeskey: ''
+        aeskey: '',
+        password: ''
       },
       getAESKeyForm: {
         ipaddr: '',
@@ -138,6 +163,10 @@ export default {
       bitList: ['128', '192', '256'],
       AESKey: '',
       vndid: '',
+
+      total: 0,
+      currentPage: 1,
+      pageSize: 5,
 
       rules: {
         ipaddr: [
@@ -204,6 +233,10 @@ export default {
     closeGettingKey() {
       this.triggerGettingKey()
     },
+    handleChange(val) {
+      this.currentPage = val
+      this.getInfo()
+    },
     KidVPNServerNextStop() {
       let para = Object.assign({}, this.form)
       // para.handle = 'addServer'
@@ -231,25 +264,30 @@ export default {
       para.handle = 'addServer'
       para.vndid = this.vndid
       para.mtu = this.form.mtu
-      addKidVPN(para).then(res => {
-        if (res.data.code === 200) {
-          this.$message({
-            message: '发送成功',
-            type: 'success'
-          })
-        }
-      })
+      addKidVPN(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.$message({
+              message: '发送成功',
+              type: 'success'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
       this.triggerInitingKey()
       // this.addedClientList = Object.assign( {}, this.form )
       this.getServerInfo()
     },
-    delServer() {
+    delServer(index, val) {
       let para = {}
-      para.vndid = this.addedClientList.vndid
+      para.vndid = val.vndid
       delKidVPN(para).then(res => {
         if (res.data.code === 200) {
           this.getServerInfo()
-          this.$refs['addedClientList'].resetFields()
+          // this.$refs['addedClientList'].resetFields()
+          this.bus.$emit('update')
         }
       })
     },
@@ -264,28 +302,34 @@ export default {
     getInfo() {
       let para = {}
       para.page = this.currentPage
-      getKidVPNInfo(para).then(res => {
-        if (res.data.code === 200) {
-          if (this.currentPage === res.data.page) {
-            if (res.data.total !== 0) {
-              for (let i = 0; i < res.data.data.length; i++) {
-                if (res.data.data[i].type === 'servervpn') {
-                  // console.log("in setver getInfo " + res.data.data[i])
-                  this.addedClientList = res.data.data[i]
+      this.addedClientList = []
+      getKidVPNInfo(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            if (this.currentPage === res.data.page) {
+              if (res.data.total !== 0) {
+                for (let i = 0; i < res.data.data.length; i++) {
+                  if (res.data.data[i].type === 'servervpn') {
+                    // this.addedClientList = res.data.data[i]
+                    this.addedClientList.push(res.data.data[i])
+                  }
                 }
+                this.total = res.data.total
+              } else if (res.data.page > 1) {
+                this.currentPage -= 1
+                this.getInfo()
               }
-              this.total = res.data.total
-            } else if (res.data.page > 1) {
-              this.currentPage -= 1
-              this.getInfo()
             }
           }
-        }
-      })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
-    getServerInfo: function() {
+    getServerInfo() {
       let para = {}
       para.page = this.currentPage
+      this.addedClientList = []
       getKidVPNInfo(para).then(res => {
         if (res.data.code === 200) {
           if (this.currentPage === res.data.page) {
@@ -293,7 +337,7 @@ export default {
               for (let i = 0; i < res.data.data.length; i++) {
                 if (res.data.data[i].type === 'servervpn') {
                   // console.log("in setver getServerInfo " + res.data.data[i])
-                  this.addedClientList = res.data.data[i]
+                  this.addedClientList.push(res.data.data[i])
                 }
               }
             } else if (res.data.total === 0) {
@@ -305,7 +349,7 @@ export default {
     }
   },
   mounted() {
-    this.getInfo()
+    // this.getInfo()
     this.getServerInfo()
   }
 }

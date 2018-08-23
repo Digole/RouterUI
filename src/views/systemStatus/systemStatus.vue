@@ -89,7 +89,7 @@
                     <el-tooltip class="item" effect="light">
                       <img style="width: 50px; height: 50px; border-radius: 5px;" :src=selectUrl(item.linkstatus) />
                       <div slot="content" class="tooltip-content">
-                        <p>en{{index}}</p>
+                        <p>{{item.webname}}</p>
                         <el-form label-position="left" size="mini">
                           <el-form-item label="连接状态:" :label-width="tooltipLabelWidth" style="margin: 0;">
                             {{ports[index].linkstatus}}
@@ -171,8 +171,9 @@
         </el-col>
         <el-col :md="16" :lg="16" :xl="16">
           <div class="bottomRight">
-            <div id="chartLine1" style="width:100%; height:160px; margin-top: 10px"></div>
-            <div id="chartLine2" style="width:100%; height:160px; margin-top: 10px"></div>
+            <!-- <div id="chartLine1" style="width:100%; height:160px; margin-top: 10px"></div> -->
+            <!-- <div id="chartLine2" style="width:100%; height:160px; margin-top: 10px"></div> -->
+            <line-chart></line-chart>
           </div>
         </el-col>
       </el-row>
@@ -193,6 +194,7 @@ let myChart1
 let option1 = {}
 let myChart2
 let option2 = {}
+
 export default {
   name: 'systemStatus',
   data() {
@@ -248,6 +250,13 @@ export default {
       }
       return j
       // return conversion(j)
+    },
+    'item.linkstatus': function(para) {
+      if (para === 'off') {
+        return 'static/port2.png'
+      } else {
+        return 'static/port3.png'
+      }
     }
   },
   watch: {
@@ -607,7 +616,7 @@ export default {
   },
 
   mounted: function() {
-    this.drawCharts()
+    // this.drawCharts()
     this.getPortsInfo()
   }
 }

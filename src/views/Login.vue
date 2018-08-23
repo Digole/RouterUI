@@ -12,7 +12,7 @@
         <el-input type="password" v-model="ruleForm.checkPass" auto-complete="off" placeholder="密码"></el-input>
       </el-form-item>
       <div style="display: inline;">
-        <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
+        <!-- <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox> -->
         <!--<router-link to="/CreatePasswd">忘记密码</router-link>-->
         <el-tooltip placement="bottom" effect="light">
           <div slot="content" style="text-align: right;">请在控制台<br/>更改密码</div>

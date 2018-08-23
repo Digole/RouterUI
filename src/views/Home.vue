@@ -116,8 +116,11 @@ export default {
       data: {
         up: '',
         down: '',
+        upStorage: '',
+        downStorage: '',
         cpu: '',
-        memory: ''
+        memory: '',
+        userNum: ''
       }
     }
   },
@@ -193,7 +196,10 @@ export default {
 
     getInfo() {
       this.update()
-      setInterval(this.update, 5000)
+      setInterval(() => {
+        this.update()
+        this.$store.dispatch('pushSystemData', this.data)
+      }, 5000)
     },
 
     async update() {
@@ -203,10 +209,12 @@ export default {
       await getMonitorInfo(para)
         .then(res => {
           if (res.data.code === 200) {
+            this.data.upStorage = res.data.data[0].recv_rate
+            this.data.downStorage = res.data.data[0].send_rate
             this.data.up = conversion(res.data.data[0].recv_rate)
             this.data.down = conversion(res.data.data[0].send_rate)
             // console.log(this.data.up)
-          // this.$store.dispatch('pushSystemData', data)
+            // this.$store.dispatch('pushSystemData', this.data)
           }
         })
         .catch(error => {
@@ -225,7 +233,7 @@ export default {
         .catch(error => {
           console.log(error)
         })
-      this.$store.dispatch('pushSystemData', this.data)
+      // this.$store.dispatch('pushSystemData', this.data)
     }
   },
 

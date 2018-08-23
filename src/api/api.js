@@ -58,6 +58,10 @@ export const getDialStatus = data => { return axios.post('action/netIfInfoAction
 
 export const sendWANLAN = data => { return axios.post('action/natWanLanAction', data) }
 
+export const getQos = data => { return axios.post('action/qosShowAction', data) }
+export const setQos = data => { return axios.post('action/qosConfigAction', data) }
+export const delQos = data => { return axios.post('action/qosDeleteAction', data) }
+
 /**********************************************************/
 // export const sendSorting = data => { return axios.post(`${base}/api/intAdaHandleAction`, data);};
 export const sendSorting = data => { return axios.post('action/intAdaHandleAction', data) }

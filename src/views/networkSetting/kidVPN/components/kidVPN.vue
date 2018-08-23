@@ -30,6 +30,14 @@ export default {
        * IP解析是否由后台进行
        */
 
+      this.$jsonp('http://freeapi.ipip.net/118.28.8.8')
+        .then(json => {
+          console.log(json)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+
       purposeList = ['上海', '北京', '广州', '深圳']
       // purposeList.push("上海","北京","广州");
 

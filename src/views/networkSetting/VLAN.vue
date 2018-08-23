@@ -34,7 +34,12 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-size="5" layout="total, prev, pager, next, jumper" :total="this.total">
+    <el-pagination 
+      @current-change="handleCurrentChange" 
+      :current-page="currentPage" 
+      :page-size="5" 
+      layout="total, prev, pager, next, jumper" 
+      :total="this.total">
     </el-pagination>
 
     <!--新增界面-->

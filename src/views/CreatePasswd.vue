@@ -12,7 +12,7 @@
 				<el-input v-model="form.new_passwd2" type="password" auto-complete="off" placeholder="请确认新密码"></el-input>
 			</el-form-item>
 			<el-form-item style="width:100%;">
-				<el-button @click="submit" type="primary" style="width:100%;" :loading="logining">重置密码</el-button>
+				<el-button @click="submit" type="primary" style="width:100%;" :loading="logining">修改密码</el-button>
 				<!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
 			</el-form-item>
 		</el-form>
