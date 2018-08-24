@@ -343,7 +343,7 @@ export default {
     inUse: '使用中',
     stopped: '已停用',
     stop: '停用',
-    start: '启用',
+    start: '启用', 
     showInfo: '显示全部信息',
     showConflict: '显示冲突信息',
     IP: 'IP地址',
