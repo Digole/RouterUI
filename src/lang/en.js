@@ -35,12 +35,10 @@ export default {
     dialLog: 'DialLog',
     tools: 'SystemTools',
     ping: 'PingTest',
-<<<<<<< HEAD
-    operaLog: 'OperationLog'
-=======
+    operaLog: 'OperationLog',
     operaLog: 'OperationLog',
     Qos: 'Qos'
->>>>>>> wuyunke1
+
   },
 
   operation: {
@@ -280,8 +278,7 @@ export default {
     time: 'Time',
     line: 'Line',
     detail: 'Log Details'
-<<<<<<< HEAD
-=======
+
   },
 
   Qos: {
@@ -335,6 +332,48 @@ export default {
     updateFinished: 'updateFinished',
     refreshAfter: 'refreshAfter',
     sDoNotTurnOff: 'sDoNotTurnOff',
->>>>>>> wuyunke1
+
+  },
+  securitySetting:{
+    ARPDefence: 'ARPDefence',
+    status: 'status：',
+    inUse: 'inUse',
+    stopped: 'stopped',
+    stop: 'stop',
+    start: 'start',
+    showInfo: 'showInfo',
+    showConflict: 'showConflict',
+    IP: 'IP',
+    MACInfo: 'MACInfo',
+    conflictMACAddr: 'conflictMACAddr',
+    firewall: 'firewall',
+    add: 'add',
+    port: 'port',
+    type: 'type',
+    ipSE: 'ipSE',
+    mac: 'mac',
+    portSE: 'portSE',
+    enable: 'enable',
+    disablePort: 'disablePort',
+    disableSubmit: 'disableSubmit',
+    Cancle: 'Cancle',
+    isInEnabling: 'isInEnabling',
+    enableSubmit: 'enableSubmit',
+    selectStrategy: 'selectStrategy',
+    isTcpRule: 'isTcpRule',
+    ips: 'ips',
+    ipe: 'ipe',
+    tcps: 'tcps',
+    tcpe: 'tcpe',
+    isUdpRule: 'isUdpRule',
+    udps: 'udps',
+    udpe: 'udpe',
+    isIpRule: 'isIpRule',
+    isMacRule: 'isMacRule',
+    whitelist: 'whitelist',
+    delete: 'delete',
+    edit: 'edit',
+    blacklist: 'blacklist',
+    time: 'time',
   }
 }

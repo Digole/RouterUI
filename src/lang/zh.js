@@ -35,12 +35,10 @@ export default {
     dialLog: '拨号日志',
     tools: '系统工具',
     ping: 'Ping测试',
-<<<<<<< HEAD
-    operaLog: '操作日志'
-=======
+    operaLog: '操作日志',
     operaLog: '操作日志',
     Qos: 'Qos'
->>>>>>> wuyunke1
+
   },
 
   operation: {
@@ -286,10 +284,8 @@ export default {
     time: '时间',
     line: '线路',
     detail: '日志详情'
-<<<<<<< HEAD
-=======
-  },
 
+  },
   Qos: {
     QosSetting: 'Qos配置',
     netif: '网卡接口',
@@ -303,7 +299,7 @@ export default {
     portStart: '开始端口',
     portEnd: '结束端口',
   },
-  systemSetting: {
+   systemSetting: {
     AccountSetting: '账号设置',
     username: '用户名',
     passwd: '密码',
@@ -340,7 +336,47 @@ export default {
     updateFinished: '上传完成',
     refreshAfter: '预计',
     sDoNotTurnOff: '秒后刷新页面，请勿关闭电源',
->>>>>>> wuyunke1
-/*test*/
+  },
+  securitySetting:{
+    ARPDefence: 'ARP防御',
+    status: '状态：',
+    inUse: '使用中',
+    stopped: '已停用',
+    stop: '停用',
+    start: '启用',
+    showInfo: '显示全部信息',
+    showConflict: '显示冲突信息',
+    IP: 'IP地址',
+    MACInfo: 'MAC信息',
+    conflictMACAddr: '冲突MAC地址',
+    firewall: '规则防火墙',
+    add: '添加',
+    port: '网口',
+    type: '策略类型',
+    ipSE: 'IP开始地址-结束地址',
+    mac: 'MAC地址',
+    portSE: '端口开始地址-结束地址',
+    enable: '操作',
+    disablePort: '禁用网卡',
+    disableSubmit: '禁用',
+    Cancle: '取消',
+    isInEnabling: '启用网卡',
+    enableSubmit: '启用',
+    selectStrategy: '请选择策略',
+    isTcpRule: '添加TCP策略',
+    ips: 'IP开始地址',
+    ipe: 'IP结束地址',
+    tcps: 'TCP开始端口',
+    tcpe: 'TCP结束端口',
+    isUdpRule: '添加UDP策略',
+    udps: 'UDP开始端口',
+    udpe: 'UDP结束端口',
+    isIpRule: '添加IP策略',
+    isMacRule: '添加MAC策略',
+    whitelist: '白名单',
+    delete: '删除',
+    edit: '编辑',
+    blacklist: '黑名单',
+    time: '时间',
   }
 }
