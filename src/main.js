@@ -12,8 +12,6 @@ import Vuex from 'vuex'
 
 import axios from 'axios'
 
-import jsonp from 'vue-jsonp'
-
 import 'font-awesome/css/font-awesome.min.css'
 import './assets/css/index.css'
 
@@ -31,8 +29,6 @@ Vue.use(ElementUI, {
 })
 Vue.use(VueRouter)
 Vue.use(Vuex)
-
-Vue.use(jsonp)
 
 // Vue.use(validateForm)
 

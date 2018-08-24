@@ -297,7 +297,7 @@ export default {
     dontDrop: '丢包选项',
     addNewQos: '添加新Qos',
     portStart: '开始端口',
-    portEnd: '结束端口',
+    portEnd: '结束端口'
   },
    systemSetting: {
     AccountSetting: '账号设置',
