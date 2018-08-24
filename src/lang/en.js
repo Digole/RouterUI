@@ -35,15 +35,8 @@ export default {
     dialLog: 'DialLog',
     tools: 'SystemTools',
     ping: 'PingTest',
-<<<<<<< HEAD
-    operaLog: 'OperationLog',
     operaLog: 'OperationLog',
     Qos: 'Qos'
-
-=======
-    operaLog: 'OperationLog',
-    Qos: 'Qos'
->>>>>>> 6967cd9197c28d683799933cfb0ebad876eedfdc
   },
 
   operation: {
@@ -283,10 +276,6 @@ export default {
     time: 'Time',
     line: 'Line',
     detail: 'Log Details'
-<<<<<<< HEAD
-
-=======
->>>>>>> 6967cd9197c28d683799933cfb0ebad876eedfdc
   },
 
   Qos: {
@@ -337,7 +326,6 @@ export default {
     updateNow: 'updateNow',
     updateFinished: 'updateFinished',
     refreshAfter: 'refreshAfter',
-<<<<<<< HEAD
     sDoNotTurnOff: 'sDoNotTurnOff',
 
   },
@@ -382,8 +370,5 @@ export default {
     edit: 'edit',
     blacklist: 'blacklist',
     time: 'time',
-=======
-    sDoNotTurnOff: 'sDoNotTurnOff'
->>>>>>> 6967cd9197c28d683799933cfb0ebad876eedfdc
   }
 }
