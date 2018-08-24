@@ -1,11 +1,7 @@
 <template>
   <section>
     <div class="line_02">
-<<<<<<< HEAD
-      <span>账号设置</span>
-=======
       <span>{{$t('systemSetting.AccountSetting')}}</span>
->>>>>>> wuyunke1
     </div>
     <!-- <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true">
@@ -27,17 +23,6 @@
     <el-table :data="list" @selection-change="selsChange" style="width: 100%;" :header-cell-style="headerStyle">
       <el-table-column type="selection" width="55">
       </el-table-column>
-<<<<<<< HEAD
-      <el-table-column prop="username" label="用户名" min-width="120">
-      </el-table-column>
-      <el-table-column prop="passwd" label="密码" min-width="180">
-      </el-table-column>
-      <el-table-column prop="status" label="状态" min-width="180">
-      </el-table-column>
-      <el-table-column prop="behaviour" label="操作" min-width="180">
-        <template slot-scope="scope">
-          <el-button size="small" @click="changePasswd">修改密码</el-button>
-=======
       <el-table-column prop="username" :label="$t('systemSetting.username')" min-width="120">
       </el-table-column>
       <el-table-column prop="passwd" :label="$t('systemSetting.passwd')" min-width="180">
@@ -47,22 +32,10 @@
       <el-table-column prop="behaviour" :label="$t('systemSetting.behaviour')" min-width="180">
         <template slot-scope="scope">
           <el-button size="small" @click="changePasswd">{{$t('systemSetting.changePasswd')}}</el-button>
->>>>>>> wuyunke1
         </template>
       </el-table-column>
     </el-table>
 
-<<<<<<< HEAD
-    <el-dialog title="修改密码" :visible.sync="isInChanging">
-      <el-form :model="checkForm" ref="addForm">
-        <el-form-item prop="old" label="请输入原密码">
-          <el-input type="password" v-model="checkForm.old"></el-input>
-        </el-form-item>
-        <el-form-item prop="one" label="请输入新密码">
-          <el-input type="password" v-model="checkForm.one"></el-input>
-        </el-form-item>
-        <el-form-item prop="two" label="请再次输入新密码">
-=======
     <el-dialog :title="$t('systemSetting.changePasswd')" :visible.sync="isInChanging">
       <el-form :model="checkForm" ref="addForm">
         <el-form-item prop="old" :label="$t('systemSetting.old')">
@@ -72,7 +45,6 @@
           <el-input type="password" v-model="checkForm.one"></el-input>
         </el-form-item>
         <el-form-item prop="two" :label="$t('systemSetting.two')">
->>>>>>> wuyunke1
           <el-input type="password" v-model="checkForm.two"></el-input>
         </el-form-item>
       </el-form>
