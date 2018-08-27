@@ -78,7 +78,7 @@
 
           <div class="router">
             <div v-for="(item, index) in ports" class="port" :key="index">
-              <img style="width: 60px; height: 50px; border-radius: 5px;" src="../../../../../static/port2.png" />
+              <img style="width: 60px; height: 50px; border-radius: 5px;" src="../../static/port2.png" />
               <div :class="{ 'triangular': index === portsName.index }"></div>
               <div class="text-area">
                 <p class="text" v-if="index < portsName.index">
@@ -105,7 +105,7 @@
         <div>{{$t('NAT.adaptive.tipText')}}</div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="danger" @click="sortingCancel">{{$t('operation.cancel')}}</el-button>
+        <!-- <el-button type="danger" @click="sortingCancel">{{$t('operation.cancel')}}</el-button> -->
         <el-button v-if="portsName.index < ports.length-1" type="primary" :disabled="sortLoading" @click="sortingNextStep">{{$t('operation.next')}}</el-button>
         <el-button v-else type="primary" :disabled="sortLoading" @click="sortingFinish">{{$t('operation.complete')}}</el-button>
       </div>
@@ -137,7 +137,7 @@ import {
   sendSorting,
   sendWANLAN,
   sortingCancel
-} from '../../../../api/api.js'
+} from '@/api/api.js'
 
 let stopSignal1, stopSignal3, stopSignal4
 export default {
@@ -243,7 +243,8 @@ export default {
 
             // console.log("get feedback, res.data.interfaces is: "+res.data.interfaces);
             this.checked = JSON.parse(JSON.stringify(res.data.code))
-            // console.log("code is "+JSON.stringify(res.data.code));
+            this.$store.dispatch('setAdaptive', this.checked)
+            console.log('commit adaptive ' + this.checked)
             this.ports = JSON.parse(JSON.stringify(res.data.interfaces))
             console.log(
               'after parse, the port[] is: ' + JSON.stringify(res.data.interfaces)

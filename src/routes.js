@@ -47,6 +47,7 @@ import basicSetting from './views/systemSetting/basicSetting.vue'
 import hardwareInfo from './views/systemSetting/hardwareInfo.vue'
 import restartShutdown from './views/systemSetting/restartShutdown.vue'
 import update from './views/systemSetting/update.vue'
+import ports from './views/systemSetting/ports.vue'
 /*
 *flowControl
 */
@@ -72,6 +73,7 @@ import ping from './views/tools/ping.vue'
 */
 import log from './views/log/log.vue'
 import operaLog from './views/log/operationLog.vue'
+import vpnLog from './views/log/vpnLog.vue'
 
 /*
 **shell
@@ -154,7 +156,7 @@ let routes = [
     iconCls: 'fa fa-bar-chart',
     leaf: true, // 只有一个节点
     meta: {
-      title: 'systemSetting'
+      title: 'systemStatus'
     },
     children: [
       { path: '/systemStatus', component: systemStatus, name: '系统概况', meta: { title: 'systemStatus' } }
@@ -209,7 +211,8 @@ let routes = [
       { path: '/accountSetting', component: accountSetting, name: '账号设置', meta: { title: 'accountSetting' } },
       { path: '/update', component: update, name: '版本升级', meta: { title: 'versionUpdate' } },
       { path: '/hardwareInfo', component: hardwareInfo, name: '硬件信息', meta: { title: 'hardwareInfo' } },
-      { path: '/restartShutdown', component: restartShutdown, name: '重启关机', meta: { title: 'shutdownRestart' } }
+      { path: '/restartShutdown', component: restartShutdown, name: '重启关机', meta: { title: 'shutdownRestart' } },
+      { path: '/ports', component: ports, name: '端口自适应', meta: { title: 'ports' } }
     ]
   },
   {
@@ -277,7 +280,8 @@ let routes = [
     },
     children: [
       { path: '/log', component: log, name: '日志', meta: { title: 'dialLog' } },
-      { path: '/operationLog', component: operaLog, name: '操作日志', meta: { title: 'operaLog' } }
+      { path: '/operationLog', component: operaLog, name: '操作日志', meta: { title: 'operaLog' } },
+      { path: '/vpnLog', component: vpnLog, name: 'VPN日志', meta: { title: 'VPNLog' } }
     ]
   },
   {

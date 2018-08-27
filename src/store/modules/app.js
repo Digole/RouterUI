@@ -14,7 +14,8 @@ const app = {
       cpu: '',
       memory: '',
       userNum: ''
-    }
+    },
+    adaptiveCode: 0
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
@@ -44,7 +45,11 @@ const app = {
       state.systemData.cpu = systemData.cpu
       state.systemData.memory = systemData.memory
       state.systemData.userNum = systemData.userNum
+    },
+    SET_ADAPTIVE: (state, adaptiveCode) => {
+      state.adaptiveCode = adaptiveCode
     }
+
   },
   actions: {
     setLanguage({ commit }, language) {
@@ -52,6 +57,10 @@ const app = {
     },
     pushSystemData({ commit }, systemData) {
       commit('SET_SYSDATA', systemData)
+    },
+    // 判断是否需要跳转去做自适应
+    setAdaptive({ commit }, adaptiveCode) {
+      commit('SET_ADAPTIVE', adaptiveCode)
     }
   }
 }

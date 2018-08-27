@@ -36,7 +36,7 @@ export default {
     tools: 'SystemTools',
     ping: 'PingTest',
     operaLog: 'OperationLog',
-    Qos: 'Qos'
+    Qos: 'QoS'
   },
 
   operation: {

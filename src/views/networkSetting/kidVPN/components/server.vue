@@ -1,14 +1,13 @@
 <template>
   <section>
-    <el-row>
-      <el-col :span="24" class="title">
-        <span>{{$t('kidVPN.server.title')}}</span>
-        <el-form inline style="float: right">
-          <el-button type="primary" @click="addServer" v-if="isEmpty" size="mini">创建VPN服务器</el-button>
-          <!-- <el-button type="danger" size="mini" @click="delServer">{{$t('kidVPN.server.button1')}}</el-button> -->
-        </el-form>
-      </el-col>
-    </el-row>
+    <el-col :span="24" class="title">
+      <el-form inline>
+        <el-form-item>
+        <el-button type="primary" @click="addServer" v-if="isEmpty">创建VPN服务器</el-button>
+        <!-- <el-button type="danger" size="mini" @click="delServer">{{$t('kidVPN.server.button1')}}</el-button> -->
+        </el-form-item>
+      </el-form>
+    </el-col>
 
     <!-- <div class="form">
       <el-form v-model="addedClientList" ref="addedClientList" label-position="left" label-width="120px" size="mini">
@@ -39,15 +38,17 @@
     </div> -->
 
     <el-table :data="addedClientList" :header-cell-style="headerStyle">
-      <el-table-column prop="serip" :label="$t('kidVPN.server.serip')"></el-table-column>
-      <el-table-column prop="netmask" :label="$t('kidVPN.server.netmask')"></el-table-column>
-      <el-table-column prop="gateway" :label="$t('kidVPN.server.gateway')"></el-table-column>
-      <el-table-column prop="mac" :label="$t('kidVPN.server.mac')"></el-table-column>
-      <el-table-column prop="mtu" :label="$t('kidVPN.server.mtu')"></el-table-column>
-      <el-table-column prop="vndid" :label="$t('kidVPN.server.vndid')"></el-table-column>
-      <el-table-column>
+      <el-table-column prop="serip" :label="$t('kidVPN.server.serip')" min-width="150"></el-table-column>
+      <el-table-column prop="locip" :label="$t('kidVPN.server.locip')" min-width="120"></el-table-column>
+      <el-table-column prop="netmask" :label="$t('kidVPN.server.netmask')" min-width="120"></el-table-column>
+      <el-table-column prop="gateway" :label="$t('kidVPN.server.gateway')" min-width="120"></el-table-column>
+      <el-table-column prop="mac" :label="$t('kidVPN.server.mac')" min-width="120"></el-table-column>
+      <el-table-column prop="mtu" :label="$t('kidVPN.server.mtu')" min-width="120"></el-table-column>
+      <el-table-column prop="vndid" :label="$t('kidVPN.server.vndid')" min-width="120"></el-table-column>
+      <el-table-column :label="$t('operation.operation')" min-width="120">
         <template slot-scope="scope">
           <el-button size="small" @click="delServer(scope.index, scope.row)">{{ $t('operation.delete') }}</el-button>
+          <el-button size="small" @click="triggerGettingKey">显示AES Key</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -117,6 +118,7 @@
         <el-button type="danger" @click="closeGettingKey">{{"$t('kidVPN.server.button6')"}}</el-button>
       </div>
     </el-dialog>
+
   </section>
 </template>
 
@@ -312,9 +314,9 @@ export default {
                   if (res.data.data[i].type === 'servervpn') {
                     // this.addedClientList = res.data.data[i]
                     this.addedClientList.push(res.data.data[i])
+                    this.total += 1
                   }
                 }
-                this.total = res.data.total
               } else if (res.data.page > 1) {
                 this.currentPage -= 1
                 this.getInfo()
@@ -338,6 +340,7 @@ export default {
                 if (res.data.data[i].type === 'servervpn') {
                   // console.log("in setver getServerInfo " + res.data.data[i])
                   this.addedClientList.push(res.data.data[i])
+                  this.total += 1
                 }
               }
             } else if (res.data.total === 0) {
@@ -362,7 +365,7 @@ export default {
 }
 .form {
   overflow: hidden;
-  margin-top: 15px;
+  margin-top: 1rem;
   background: #bbbbbb;
 }
 .form > .el-form {

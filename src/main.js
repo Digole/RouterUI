@@ -40,17 +40,26 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   // NProgress.start();
-  if (to.path === '/login') {
-    sessionStorage.removeItem('user')
-  }
-  let user = JSON.parse(sessionStorage.getItem('user'))
 
-  if (!user && to.path !== '/login') {
-    // 搞完记得恢复
-    // next({path: '/login'})
-  } else {
-    next()
-  }
+  // if (to.path === '/login') {
+  //   sessionStorage.removeItem('user')
+  //   next()
+  // }
+
+  // let user = JSON.parse(sessionStorage.getItem('user'))
+
+  // if (!user && to.path !== '/login') {
+  //   next({path: '/login'})
+  //   return false
+  //   // next()
+  // } else if (to.path !== '/ports' && store.state.app.adaptiveCode === 500) {
+  //   // 验证是否已完成自适应操作
+  //   console.log('def ' + store.state.app.adaptiveCode)
+  //   next({path: '/ports'})
+  // } else {
+  //   next()
+  // }
+
   next()
 })
 

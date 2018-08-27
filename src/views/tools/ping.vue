@@ -11,7 +11,7 @@
         <el-input v-model="form.amount">次数</el-input>
       </el-form-item> -->
       <el-form-item porp="address" label="检测结果" label-width="6rem">
-        <el-input v-model="text" type="textarea" :rows="12" placeholder="检测结果"></el-input>
+        <el-input v-model="text" type="textarea" :rows="12" placeholder="检测结果" id="container"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -32,11 +32,29 @@ export default {
     return {
       isInTest: false,
       form: {},
-      text: []
+      text: [],
+      height: 0
+    }
+  },
+  watch: {
+    height: function() {
+      let container = this.$el.querySelector('#container')
+      console.log(container)
+      container.scrollTop = container.scrollHeight
     }
   },
   methods: {
     start() {
+      console.log(this.form.address)
+
+      if (this.form.address === undefined || this.form.address === undefined === '') {
+        this.$message({
+          message: '请输入地址',
+          type: 'warning'
+        })
+        return false
+      }
+
       this.isInTest = true
       this.text = ''
       this.text = this.text + 'Pinging ' + this.form.address + '\n'
@@ -54,9 +72,11 @@ export default {
                 let content = res.data.result.split('\n')
                 console.log(content)
                 if (content[1] !== '') {
-                  this.text = content[1] + '\n' + this.text
+                  this.text = this.text + content[1] + '\n'
+                  this.height++
                 } else {
-                  this.text = content[0] + '\n' + this.text
+                  this.text = this.text + content[0] + '\n'
+                  this.height++
                 }
                 setTimeout(test, 1000)
               }
@@ -72,7 +92,8 @@ export default {
     }
   },
   beforeDestroy() {
-    this.$refs.form.reserFields()
+    this.stop()
+    this.$refs.form.resetFields()
   }
 }
 </script>

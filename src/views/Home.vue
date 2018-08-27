@@ -127,12 +127,11 @@ export default {
   computed: {
     lang: {
       get() {
-        console.log('get')
-        console.log('in get ' + this.$store.state.app.language)
+        // console.log('get')
         return this.$store.state.app.language
       },
       set(lang) {
-        console.log('set')
+        // console.log('set')
         this.$i18n.locale = lang
         this.$store.dispatch('setLanguage', lang)
       }

@@ -36,7 +36,7 @@ export default {
     tools: '系统工具',
     ping: 'Ping测试',
     operaLog: '操作日志',
-    Qos: 'Qos'
+    Qos: 'QoS'
   },
 
   operation: {

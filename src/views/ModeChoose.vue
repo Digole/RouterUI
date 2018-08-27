@@ -30,7 +30,7 @@
         console.log('modeSubmit1')
       },
       modeSubmit2() {
-        this.$router.push({ path: '/lineMonitor' })
+        this.$router.push({ path: '/systemStatus' })
       }
     }
   }

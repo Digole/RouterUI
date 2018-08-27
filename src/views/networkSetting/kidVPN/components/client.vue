@@ -63,6 +63,9 @@
         <el-form-item prop="ipaddr" :label="$t('kidVPN.client.ipaddr1')">
           <el-input v-model="kidVPNForm.ipaddr"></el-input>
         </el-form-item>
+        <el-form-item prop="passwd" label='密码'>
+          <el-input v-model="kidVPNForm.passwd"></el-input>
+        </el-form-item>
         <el-form-item prop="aeskey" :label="$t('kidVPN.client.aeskey')">
           <textarea v-model="kidVPNForm.aeskey"></textarea>
         </el-form-item>
@@ -115,6 +118,7 @@ export default {
         ipaddr: '', // IP地址
         aeskey: '', // AES KEY
         mtu: '', // MTU
+        passwd: '',
         handle: ''
       },
       vndid: '',
@@ -265,17 +269,20 @@ export default {
             if (this.currentPage === res.data.page) {
               if (res.data.data.length !== 0) {
                 console.log('infor ' + res.data.data.length)
-                for (let i = 0; i < res.data.data.length; i++) {
-                  console.log(res.data.data[i].type)
-                  if (res.data.data[i].type === 'servervpn') {
-                    console.log('in clinet getInfo' + res.data.data[i])
-                  // result = res.data.data.splice(i,1)
+
+                let param = res.data.data
+                this.total = res.data.total
+
+                for (let i = 0; i < param.length; i++) {
+                  if (param[i].type === 'servervpn') {
+                    console.log('in clinet getInfo' + JSON.stringify(param[i]))
+                    param.splice(i, 1)
+                    this.total -= 1
                   }
                 }
-                console.log(res.data.data)
-                this.addedClientList = res.data.data
+                console.log(param)
+                this.addedClientList = param
                 console.log(this.addedClientList)
-                this.total = res.data.total
               } else if (res.data.page > 1) {
                 this.currentPage -= 1
                 this.getInfo()
