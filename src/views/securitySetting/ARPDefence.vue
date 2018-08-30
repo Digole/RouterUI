@@ -1,27 +1,27 @@
 <template>
   <div>
     <div class="line_02">
-      <span>ARP防御</span>
+      <span>{{$t('securitySetting.ARPDefence')}}</span>
     </div>
 
     <div class="status-line">
-      <span>状态:</span>
+      <span>{{$t('securitySetting.status')}}</span>
 
-      <span v-if="this.isInuse">使用中</span>
-      <span v-else>已停用</span>
+      <span v-if="this.isInuse">{{$t('securitySetting.inUse')}}</span>
+      <span v-else>{{$t('securitySetting.stopped')}}</span>
 
-      <el-button v-if="this.isInuse" @click="disable" type="danger" class="button">停用</el-button>
-      <el-button v-else @click="enable" type="primary" class="button">启用</el-button>
+      <el-button v-if="this.isInuse" @click="disable" type="danger" class="button">{{$t('securitySetting.stop')}}</el-button>
+      <el-button v-else @click="enable" type="primary" class="button">{{$t('securitySetting.start')}}</el-button>
     </div>
 
-    <el-radio v-model="infoType" label='0'>显示全部信息</el-radio>
-    <el-radio v-model="infoType" label='1'>显示冲突信息</el-radio>
+    <el-radio v-model="infoType" label='0'>{{$t('securitySetting.showInfo')}}</el-radio>
+    <el-radio v-model="infoType" label='1'>{{$t('securitySetting.showConflict')}}</el-radio>
 
     <el-table :data="list" :header-cell-style="headerStyle">
-      <el-table-column prop="ip" label="IP地址"></el-table-column>
-      <el-table-column prop="oldmac" label="MAC信息"></el-table-column>
-      <el-table-column prop="newmac" label="冲突MAC地址"></el-table-column>
-      <el-table-column prop="flag" label="当前状态"></el-table-column>
+      <el-table-column prop="ip" :label="$t('securitySetting.IP')"></el-table-column>
+      <el-table-column prop="oldmac" :label="$t('securitySetting.MACInfo')"></el-table-column>
+      <el-table-column prop="newmac" :label="$t('securitySetting.conflictMACAddr')"></el-table-column>
+      <el-table-column prop="flag" :label="$t('securitySetting.status')"></el-table-column>
     </el-table>
 
     <el-pagination 
