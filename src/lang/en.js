@@ -332,10 +332,10 @@ export default {
     updateNow: 'updateNow',
     updateFinished: 'updateFinished',
     refreshAfter: 'refreshAfter',
-    sDoNotTurnOff: 'sDoNotTurnOff',
+    sDoNotTurnOff: 'sDoNotTurnOff'
 
   },
-  securitySetting:{
+  securitySetting: {
     ARPDefence: 'ARPDefence',
     status: 'status：',
     inUse: 'inUse',
@@ -375,6 +375,6 @@ export default {
     delete: 'delete',
     edit: 'edit',
     blacklist: 'blacklist',
-    time: 'time',
+    time: 'time'
   }
 }
