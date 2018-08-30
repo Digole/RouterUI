@@ -137,7 +137,7 @@ export default {
     deleteInfo(index, row) {
       let para = Object.assign({}, row)
       para.oper_type = 'clear'
-      para.vlan_id += ''
+      para.vlan_id = Number(para.vlan_id)
       console.log(para.vlan_id)
       handleVLAN(para)
         .then(res => {

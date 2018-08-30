@@ -6,7 +6,7 @@
     </div>
 
     <div class="top">
-      <p>当前网口状态: {{status}}</p>
+      <p>当前网口状态: 已完成定位</p>
 
       <adaptive class="whole-router"></adaptive>
     </div>
@@ -20,7 +20,7 @@ export default {
   name: 'ports',
   data() {
     return {
-      status: '',
+      status: '已完成定位',
       code: this.$store.status.app.adaptiveCode
     }
   },

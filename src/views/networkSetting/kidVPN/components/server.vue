@@ -48,7 +48,7 @@
       <el-table-column :label="$t('operation.operation')" min-width="120">
         <template slot-scope="scope">
           <el-button size="small" @click="delServer(scope.index, scope.row)">{{ $t('operation.delete') }}</el-button>
-          <el-button size="small" @click="triggerGettingKey">显示AES Key</el-button>
+          <el-button size="small" @click="getAESKeyInfo(scope.row)">显示AES Key</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -110,12 +110,12 @@
 
     <el-dialog :title="$t('kidVPN.server.title3')" :visible.sync="isGettingKey" class="key">
       <el-form :model="getAESKeyForm" label-width="150px">
-        <el-form-item prop="aeskey" label="$t('kidVPN.server.aeskey')">
+        <el-form-item prop="aeskey" :label="$t('kidVPN.server.aeskey')">
           <textarea v-model="getAESKeyForm.aeskey"></textarea>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="danger" @click="closeGettingKey">{{"$t('kidVPN.server.button6')"}}</el-button>
+        <el-button type="danger" @click="closeGettingKey">{{$t('kidVPN.server.button6')}}</el-button>
       </div>
     </el-dialog>
 
@@ -293,12 +293,27 @@ export default {
         }
       })
     },
+    getAESKeyInfo(val) {
+      console.log('val is ' + val)
+      let para = {
+        vndid: val.vndid
+      }
+      getAESKey(para)
+        .then(res => {
+          this.getAESKeyForm.aeskey = res.data.aeskey
+          this.triggerGettingKey()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     iconToGetAESKeyInfo() {
       let para = {}
       para.vndid = this.addedClientList.vndid
-      getAESKey(para).then(res => {
-        this.getAESKeyForm.aeskey = res.data.aeskey
-      })
+      getAESKey(para)
+        .then(res => {
+          this.getAESKeyForm.aeskey = res.data.aeskey
+        })
       this.triggerGettingKey()
     },
     getInfo() {
@@ -332,23 +347,24 @@ export default {
       let para = {}
       para.page = this.currentPage
       this.addedClientList = []
-      getKidVPNInfo(para).then(res => {
-        if (res.data.code === 200) {
-          if (this.currentPage === res.data.page) {
-            if (res.data.total !== 0) {
-              for (let i = 0; i < res.data.data.length; i++) {
-                if (res.data.data[i].type === 'servervpn') {
+      getKidVPNInfo(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            if (this.currentPage === res.data.page) {
+              if (res.data.total !== 0) {
+                for (let i = 0; i < res.data.data.length; i++) {
+                  if (res.data.data[i].type === 'servervpn') {
                   // console.log("in setver getServerInfo " + res.data.data[i])
-                  this.addedClientList.push(res.data.data[i])
-                  this.total += 1
+                    this.addedClientList.push(res.data.data[i])
+                    this.total += 1
+                  }
                 }
+              } else if (res.data.total === 0) {
+                this.addedClientList = []
               }
-            } else if (res.data.total === 0) {
-              this.addedClientList = []
             }
           }
-        }
-      })
+        })
     }
   },
   mounted() {

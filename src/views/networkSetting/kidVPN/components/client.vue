@@ -23,6 +23,7 @@
       <el-table-column prop="gateway" :label="$t('kidVPN.client.gateway')" min-width="120"></el-table-column>
       <el-table-column prop="mtu" :label="$t('kidVPN.client.mtu')" min-width="60"></el-table-column>
       <el-table-column prop="vndid" :label="$t('kidVPN.client.vndid')" min-width="120"></el-table-column>
+      <el-table-column prop="position" :label="$t('kidVPN.client.serverLoc')" min-width="120"></el-table-column>
       <el-table-column prop="status" :label="$t('kidVPN.client.status')" min-width="120"></el-table-column>
       <el-table-column :label="$t('operation.operation')" min-width="60">
         <template slot-scope="scope">

@@ -85,7 +85,7 @@ export const getKidVPNInfo = data => { return axios.post('action/kidvpnInfoGetAc
 export const saveAESKey = data => { return axios.post('action/kidvpnAesKeySaveAction', data) }
 export const getLinkStatus = data => { return axios.post('action/kidvpnLinkInfoGetAction', data) }
 //  请求目的/源地址
-export const getCityInfo = data => { return axios.post('action/kidvpnIpPosInfoGetAction', data) }
+export const getCityInfo = data => { return axios.post('action/kidvpnPosInfoGetAction', data) }
 
 // VLAN页面
 export const getVLAN = data => { return axios.post('action/vlanShowAction', data) }

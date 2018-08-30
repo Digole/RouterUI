@@ -117,23 +117,25 @@ export default {
       // para.passwd = this.ruleForm.checkPass
       para.passwd = md5(this.ruleForm.checkPass)
 
-      requestLogin(para).then(res => {
-        if (res.data.code === 200) {
-          console.log(JSON.stringify(res.data))
-          let user = {}
-          user.id = res.data.id
-          user.userName = res.data.username
-          sessionStorage.setItem('user', JSON.stringify(user))
-          this.$router.push('/ModeChoose')
-        } else if (res.data.code === 1000) {
-          this.$router.push('/CreatePasswd')
-        } else {
-          this.$message({
-            message: '错误',
-            type: 'error'
-          })
-        }
-      })
+      requestLogin(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            console.log(JSON.stringify(res.data))
+            let user = {}
+            user.id = res.data.id
+            user.userName = res.data.username
+            sessionStorage.setItem('user', JSON.stringify(user))
+            this.$router.push('/ModeChoose')
+          } else if (res.data.code === 1000) {
+            // alert('ready to jump to createword')
+            this.$router.push('/CreatePasswd')
+          } else {
+            this.$message({
+              message: '错误',
+              type: 'error'
+            })
+          }
+        })
     }
   }
 }

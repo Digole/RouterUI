@@ -35,8 +35,12 @@ export default {
     dialLog: '拨号日志',
     tools: '系统工具',
     ping: 'Ping测试',
+    speed: '网速测试',
     operaLog: '操作日志',
-    Qos: 'QoS'
+    VPNLog: 'VPN日志',
+    Qos: 'QoS',
+    ports: '网口定位',
+    shell: '动态路由'
   },
 
   operation: {
@@ -179,7 +183,8 @@ export default {
       netmask: '子网掩码',
       gateway: '网关地址',
       mtu: 'MTU',
-      vndid: '虚拟网卡ID',
+      vndid: 'VPN编号',
+      serverLoc: '客户端地理位置',
       status: '连接状态',
       title1: '创建KidVPN客户端网络',
       ipaddr: '本地IP地址',
@@ -198,7 +203,7 @@ export default {
       gateway: '网关地址',
       mac: 'MAC',
       mtu: 'MTU',
-      vndid: '虚拟网卡ID',
+      vndid: 'VPN编号',
       aeskey: 'AES Key',
       ipaddr: '本地IP地址',
       button3: '创建虚拟网络',
@@ -213,7 +218,8 @@ export default {
     status: {
       title: 'VPN连接状态',
       ip: '客户端IP地址',
-      mac: '客户端MAC地址'
+      mac: '客户端MAC地址',
+      clientLoc: '服务端地理位置'
     }
   },
   staticRouter: {
@@ -324,7 +330,7 @@ export default {
     VersionDetection: '版本检测：',
     DetectNewVersion: '检测新版本',
     RoutingSystemVersion: '路由系统版本：',
-    SylixOSVersion: 'SylixOS操作系统版本：',
+    versionStatus: '版本状态',
     localUpdate: '本地升级：',
     fileSelection: '选取文件',
     submitUpload: '上传到服务器',

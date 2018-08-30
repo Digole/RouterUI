@@ -68,6 +68,7 @@ import remoteManagement from './views/securitySetting/remoteManagement.vue'
 **tools
 */
 import ping from './views/tools/ping.vue'
+import speed from './views/tools/speed.vue'
 /*
 **log
 */
@@ -265,9 +266,8 @@ let routes = [
       title: 'tools'
     },
     children: [
-      {
-        path: '/ping', component: ping, name: 'Ping测试', meta: { title: 'ping' }
-      }
+      { path: '/ping', component: ping, name: 'Ping测试', meta: { title: 'ping' } },
+      { path: '/speed', component: speed, name: 'Speed测试', meta: { title: 'speed' } }
     ]
   },
   {

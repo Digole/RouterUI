@@ -26,6 +26,8 @@ export default {
       let purposeJsonList = []
       let localJson = {}
 
+      let reg = new RegExp('"', 'g')
+
       /**
        * 此处需要的数据为VPN地址的列表，
        * IP解析是否由后台进行
@@ -35,30 +37,40 @@ export default {
           if (res.data.code === 200) {
             if (res.data.data !== '') {
               res.data.data.forEach(item => {
-                purposeList.push(item.ser_pos)
+                console.log(item)
+                let para = item.cli_pos.split(',', 3)
+                para[2] = para[2].replace(reg, '')    // 去除双引号
+                console.log(para[2])
+
+                // 临时措施
+                if (para[2] === '') {
+                  para[2] = '北京'
+                }
+                purposeList.push(para[2])
                 console.log('purposeList ' + purposeList)
-                local = res.data.cli_pos
+                let server = item.ser_pos.split(',', 3)
+                local = server[2].replace(reg, '')
                 console.log(local)
               })
             }
+
+            // purposeList = ['北京']
+            // purposeList.push("上海","北京","广州");
+
+            // local = '南京'
+            localJson.name = local
+            for (let i = 0; i < purposeList.length; i++) {
+              let purposeJson = {}
+              purposeJson.name = purposeList[i]
+
+              purposeJsonList.push([localJson, purposeJson])
+              // console.log(i + "   " + JSON.stringify(purposeJsonList));
+            }
+            this.testData = purposeJsonList
           }
+
+          this.drawMap()
         })
-
-      // purposeList = ['北京']
-      // purposeList.push("上海","北京","广州");
-
-      // local = '南京'
-      localJson.name = local
-
-      for (let i = 0; i < purposeList.length; i++) {
-        let purposeJson = {}
-        purposeJson.name = purposeList[i]
-
-        purposeJsonList.push([localJson, purposeJson])
-        // console.log(i + "   " + JSON.stringify(purposeJsonList));
-      }
-
-      this.testData = purposeJsonList
     },
 
     drawMap: function() {
@@ -350,7 +362,7 @@ export default {
         let option = {
           backgroundColor: '#404a59',
           title: {
-            text: 'VPN客户端连接',
+            text: 'VPN连接',
             left: 'center',
             textStyle: {
               color: '#fff'
@@ -400,7 +412,7 @@ export default {
 
   mounted() {
     this.getTestData()
-    this.drawMap()
+    // this.drawMap()
   }
 }
 </script>

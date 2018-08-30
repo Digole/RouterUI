@@ -73,6 +73,7 @@ export default {
     return {
       isSetTimeVisible: false,
       isSetNameVisible: false,
+      isUsingTimer: true,   // 时候使用计时器
 
       deviceName: '未获取名称',
       deviceTime: '未获取时间',
@@ -136,16 +137,43 @@ export default {
       getTime()
         .then(res => {
           if (res.data.code === 200) {
-            this.deviceTime = res.data.date + ' ' + res.data.time
-            this.deviceTime = () => {
-              for (let i = 60; i > 0; i--) {
-                setTimeout(function() {
-                  this.deviceTime += 1
-                }, 1000)
+            // this.deviceTime = res.data.date + ' ' + res.data.time
+            let date = res.data.date.split('/')
+            date = date.map(value => {
+              return parseInt(value, 10)
+            })
+            let date0 = date[0]
+            let date1 = date[1]
+            let date2 = date[2]
+            console.log('date is ' + date)
+            let time = res.data.time.split(':')
+            time = time.map(value => {
+              return parseInt(value, 10)
+            })
+            let val0 = time[0]
+            let val1 = time[1]
+            let val2 = time[2]
+            console.log('time is ' + time)
+            let para = date + ',' + time
+            console.log('para is ' + para)
+            let timeNumber = new Date(date0, date1, date2, val0, val1, val2)
+            this.deviceTime = new Date(timeNumber).toLocaleString()
+            console.log(timeNumber)
+            for (let i = 0; i < 60; i++) {
+              if (this.isUsingTimer) {
+                setTimeout(() => {
+                  timeNumber = +timeNumber + 1000
+                  this.deviceTime = new Date(timeNumber).toLocaleString()
+                  console.log(timeNumber)
+                  if (i === 59) {
+                    this.getSystemInfo()
+                  }
+                }, i * 1000)
               }
             }
           }
-        }).catch(error => {
+        })
+        .catch(error => {
           console.log(error)
         })
       getName()
@@ -165,6 +193,9 @@ export default {
   },
   mounted() {
     this.getSystemInfo()
+  },
+  beforeDestroy () {
+    this.isUsingTimer = false
   }
 }
 </script>

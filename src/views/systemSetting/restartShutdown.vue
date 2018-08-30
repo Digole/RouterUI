@@ -40,7 +40,7 @@
     </el-pagination>
 
     <el-dialog :title="$t('systemSetting.addTrigger')" :visible.sync="isAdd">
-      <el-form ref="form" :model="powerEvent" label-width="3rem">
+      <el-form ref="form" :model="powerEvent" label-width="6rem">
         <el-form-item prop="event" :label="$t('systemSetting.event')">
           <el-radio v-model="powerEvent.oper_type" :label="$t('systemSetting.shutdown')"></el-radio>
           <el-radio v-model="powerEvent.oper_type" :label="$t('systemSetting.restart')"></el-radio>
