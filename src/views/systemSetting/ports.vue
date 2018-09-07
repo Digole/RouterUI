@@ -6,10 +6,11 @@
     </div>
 
     <div class="top">
-      <p>当前网口状态: 已完成定位</p>
-
-      <adaptive class="whole-router"></adaptive>
+      <span>当前网口状态: {{ status }}</span>
+      <el-button type="primary">重新定位</el-button>
     </div>
+
+      <adaptive :adaptiveStatus="adaStatus" @finishSorting="finishSorting" class="whole-router"></adaptive>
 
   </div>
 </template>
@@ -21,7 +22,8 @@ export default {
   data() {
     return {
       status: '已完成定位',
-      code: this.$store.status.app.adaptiveCode
+      code: this.$store.status.app.adaptiveCode,
+      adaStatus: 1
     }
   },
   components: {
@@ -34,6 +36,15 @@ export default {
       } else {
         this.status = '请完成网口定位'
       }
+    }
+  },
+  methods: {
+    readapt() {
+      this.adaStatus = 0
+    },
+    finishSorting(val) {
+      console.log(val)
+      this.adaStatus = 1
     }
   }
 }

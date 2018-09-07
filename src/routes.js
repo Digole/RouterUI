@@ -79,7 +79,12 @@ import vpnLog from './views/log/vpnLog.vue'
 /*
 **shell
 */
-import shell from './views/shell/shell.vue'
+import ripd from './views/shell/ripd.vue'
+import ripngd from './views/shell/ripngd.vue'
+import ospfd from './views/shell/ospfd.vue'
+import isisd from './views/shell/isisd.vue'
+import bgpd from './views/shell/bgpd.vue'
+import pimd from './views/shell/pimd.vue'
 
 let routes = [
   {
@@ -287,14 +292,18 @@ let routes = [
   {
     path: '/',
     component: Home,
-    name: 'shellpath',
+    name: 'shell',
     iconCls: 'fa fa-list',
-    leaf: true, // 只有一个节点
     meta: {
       title: 'shell'
     },
     children: [
-      { path: '/shell', component: shell, name: 'shell页面', meta: { title: 'shell' } }
+      { path: '/ripd', component: ripd, name: 'ripd页面', meta: { title: 'ripd' } },
+      { path: '/ripngd', component: ripngd, name: 'ripngd页面', meta: { title: 'ripngd' } },
+      { path: '/ospfd', component: ospfd, name: 'ospfd页面', meta: { title: 'ospfd' } },
+      { path: '/isisd', component: isisd, name: 'isisd页面', meta: { title: 'isisd' } },
+      { path: '/bgpd', component: bgpd, name: 'bgpd页面', meta: { title: 'bgpd' } },
+      { path: '/pimd', component: pimd, name: 'pimd页面', meta: { title: 'pimd' } }
     ]
   },
   // {

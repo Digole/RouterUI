@@ -154,3 +154,11 @@ export const getVersion = data => { return axios.post(base + 'action/versionShow
 
 // 硬件参数
 export const getHardware = data => { return axios.post(base + 'action/hwInfoGetAction', data) }
+
+// shell 页面
+export const startQuagga = data => { return axios.post(base + 'action/quaggaStartAction', data) }
+export const stopQuagga = data => { return axios.post(base + 'action/quaggaStopAction', data) }
+export const getQuaggaInfo = data => { return axios.post(base + 'action/quaggaStatGetAction', data) }
+export const startRoute = data => { return axios.post(base + 'action/quaggaConfStartAction', data) }
+export const stopRoute = data => { return axios.post(base + 'action/quaggaConfStopAction', data) }
+export const stopAllRoute = data => { return axios.post(base + 'action/quaggaConfAllStopAction', data) }

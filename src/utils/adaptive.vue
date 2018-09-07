@@ -142,6 +142,7 @@ import {
 let stopSignal1, stopSignal3, stopSignal4
 export default {
   name: 'adaptive',
+  props: ['adaptiveStatus'],    // 0表示不需要重新定位，1表示需要
   data() {
     return {
       dialogFormVisible: false, // LAN,WAN设置
@@ -209,6 +210,14 @@ export default {
     checked: function() {
       if (this.checked !== 200) {
         this.sortingHandle()
+      }
+    },
+    adaptiveStatus: function() {
+      if (this.adaptiveStatus) {
+        setTimeout({}, 200)
+        this.getPortsInfo()
+      } else {
+        return true
       }
     }
   },
@@ -499,6 +508,7 @@ export default {
             console.log(error)
           })
       }, 1000)
+      this.$emit('finishSorting', 'finish')
     },
     // 网口自适应功能 “取消”按钮调用函数
     sortingCancel: function() {
@@ -520,6 +530,8 @@ export default {
 
       this.tip1 = this.tips[0]
       this.tip2 = this.tips[1]
+
+      this.$emit('finishSorting', 'cancel')
     }
   },
   mounted() {
