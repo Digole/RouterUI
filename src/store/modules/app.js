@@ -15,7 +15,11 @@ const app = {
       memory: '',
       userNum: ''
     },
-    adaptiveCode: 0
+    adaptiveCode: 0,
+    webSocket: {
+      socket: '',
+      count: 0
+    }
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {

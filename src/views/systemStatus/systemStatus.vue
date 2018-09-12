@@ -298,7 +298,7 @@ export default {
         let checked = res.data.code
         if (checked !== 200) {
           this.$store.dispatch('setAdaptive', checked)
-          // this.$router.push('ports')
+          this.$router.push('ports')
         }
 
         this.ports = res.data.interfaces

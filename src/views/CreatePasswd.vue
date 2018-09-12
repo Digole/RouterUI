@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { changePasswd } from '../api/api.js'
+import { changePasswd } from '@/api/api.js'
 import md5 from 'js-md5'
 export default {
   name: 'CreatePasswd',

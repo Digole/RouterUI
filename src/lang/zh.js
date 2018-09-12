@@ -38,7 +38,7 @@ export default {
     speed: '网速测试',
     operaLog: '操作日志',
     VPNLog: 'VPN日志',
-    Qos: 'QoS',
+    Qos: 'QoS设置',
     ports: '网口定位',
     shell: '动态路由'
   },
