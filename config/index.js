@@ -10,7 +10,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    //assetsPublicPath: './',  //change by sean
+    // assetsPublicPath: './',  //change by sean
     proxyTable: {},
 
     // Various Dev Server settings
@@ -20,7 +20,6 @@ module.exports = {
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
-
 
     /**
      * Source Maps
@@ -51,7 +50,7 @@ module.exports = {
      */
 
     // productionSourceMap: true,
-    productionSourceMap: false, //change by sean
+    productionSourceMap: false, // change by sean
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 

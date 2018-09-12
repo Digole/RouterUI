@@ -92,8 +92,8 @@ export default {
   methods: {
     startTelnet() {
       this.$store.state.app.webSocket.socket = new WebSocket('ws://10.9.0.13:8000')
-      socket = this.$store.state.app.webSocket.socket
 
+      socket = this.$store.state.app.webSocket.socket
       // Connection opened
       socket.addEventListener('open', function(event) {
         console.log('opened!!!!!!!!!!!!!!!')
@@ -243,9 +243,8 @@ export default {
       stopAllQuagga()
         .then(res => {
           if (res.data.code === 200) {
-            // socket.close()
-            this.$store.state.app.webSocket.socket = ''
-            this.$store.state.app.webSocket.count = 0
+            this.$store.state.app.webSocket.count = 1
+            this.socketListener(0)
             console.log('after closing all ' + socket)
             this.shellStatus = true
             this.proStatus = true
@@ -338,6 +337,35 @@ export default {
   },
   mounted() {
     socket = this.$store.state.app.webSocket.socket
+    if (socket) {
+      // Connection opened
+      socket.addEventListener('open', function(event) {
+        console.log('opened!!!!!!!!!!!!!!!')
+      })
+
+      socket.onopen = function(evt) {
+        console.log('in sending')
+      }
+
+      socket.onmessage = evt => {
+        console.log('get response')
+        let result = evt.data.split('\r\n')
+        // console.log(result)
+        result.forEach((element, index) => {
+          if (index !== 0) {
+            // if (element.indexOf(this.code)) {
+            // element = element.subString(4)
+            this.interactList.push(element)
+            // }
+          }
+        })
+        setTimeout(() => {
+          this.height++
+        }, 100)
+
+        // console.log(this.interactList)
+      }
+    }
 
     let name = sessionStorage.getItem('user')
     name = JSON.parse(name)
