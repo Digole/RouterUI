@@ -17,6 +17,7 @@ export default {
     systemSetting: 'SystemSetting',
     basicSetting: 'Basic',
     accountSetting: 'Account',
+    powerSetting: 'Power',
     versionUpdate: 'Update',
     hardwareInfo: 'HardwareInfo',
     shutdownRestart: 'Shutdown&Restart',
@@ -57,8 +58,13 @@ export default {
     determine: 'Apply',
     search: 'Search'
   },
-
+  situationMode:{
+    situation: 'SituationMode',
+    change: 'ChangeMode',
+  },
   home: {
+    professional: 'ProfessionalMode',
+    change: 'ChangeMode',
     ram: 'RAM',
     up: 'Uplink Rate',
     down: 'Downlink Rate',
@@ -291,9 +297,23 @@ export default {
     portEnd: 'portEnd'
   },
   systemSetting: {
+    ifDelete: 'Are you sure to delete this account?',
+    On: 'On',
+    Off: 'Off',
+    selectStatus: 'Status',
+    changeStatus: 'changeStatus',
+    deleteUser: 'Delete',
+    role: 'role',
+    selectPower: 'selectPower',
+    admin: 'admin',
+    operator: 'operator',
+    visitor: 'visitor',
+    addAccount: 'addAccount',
     AccountSetting: 'AccountSetting',
     username: 'username',
     passwd: 'passwd',
+    passwd1: 'passwd',
+    passwd2: 'passwdAgain',
     status: 'status',
     behaviour: 'behaviour',
     changePasswd: 'changePasswd',
@@ -370,5 +390,15 @@ export default {
     edit: 'edit',
     blacklist: 'blacklist',
     time: 'time',
+  },
+  powerSetting:{
+    submitChange: 'Submit changes',
+    ifsubmit: 'Are you sure to submit changes?',
+    powerSetting: 'Power',
+    addChange: 'Submit',
+    all: 'General',
+    detail: 'Detail',
+    operator: "Operator",
+    visitor: "Visitor",
   }
 }

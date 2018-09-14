@@ -17,6 +17,7 @@ export default {
     systemSetting: '系统设置',
     basicSetting: '基础设置',
     accountSetting: '账号设置',
+    powerSetting: '权限管理',
     versionUpdate: '版本升级',
     hardwareInfo: '硬件信息',
     shutdownRestart: '重启关机',
@@ -36,9 +37,7 @@ export default {
     tools: '系统工具',
     ping: 'Ping测试',
     operaLog: '操作日志',
-    operaLog: '操作日志',
     Qos: 'Qos'
-
   },
 
   operation: {
@@ -59,8 +58,13 @@ export default {
     determine: '确定',
     search: '搜索'
   },
-
+  situationMode:{
+    situation: '情景模式',
+    change: '切换模式',
+  },
   home: {
+    professional: '专家模式',
+    change: '切换模式',
     ram: '内存',
     up: '上行速率',
     down: '下行速率',
@@ -300,9 +304,23 @@ export default {
     portEnd: '结束端口'
   },
    systemSetting: {
-    AccountSetting: '账号设置',
+    ifDelete: '是否要删除该账户',
+    On: '启用',
+    Off: '禁用',
+    selectStatus: '选择状态',
+    changeStatus: '修改状态',
+    deleteUser: '删除',
+    role: '角色',
+    selectPower: '权限',
+    admin: '主管',
+    operator: '管理员',
+    visitor: '游客',
+    addAccount: '添加用户',
+    AccountSetting: '用户管理',
     username: '用户名',
     passwd: '密码',
+    passwd1: '请输入密码',
+    passwd2: '请再次输入密码',
     status: '状态',
     behaviour: '操作',
     changePasswd: '修改密码',
@@ -343,7 +361,7 @@ export default {
     inUse: '使用中',
     stopped: '已停用',
     stop: '停用',
-    start: '启用', 
+    start: '启用',
     showInfo: '显示全部信息',
     showConflict: '显示冲突信息',
     IP: 'IP地址',
@@ -378,5 +396,15 @@ export default {
     edit: '编辑',
     blacklist: '黑名单',
     time: '时间',
+  },
+  powerSetting:{
+    submitChange: '提交更改',
+    ifsubmit: '是否提交更改？',
+    powerSetting: '权限管理',
+    addChange: '提交更改',
+    all: '总类',
+    detail: '具体权限',
+    operator: '操作员',
+    visitor: '普通用户',
   }
 }

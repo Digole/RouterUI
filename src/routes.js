@@ -1,9 +1,10 @@
-
+import situationMode from './views/situationMode.vue'
 import Login from './views/Login.vue'
 import CreatePasswd from './views/CreatePasswd.vue'
 import ModeChoose from './views/ModeChoose.vue'
 import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
+
 // import Main from './views/Main.vue'
 /*
 import Table from './views/nav1/Table.vue'
@@ -47,6 +48,7 @@ import basicSetting from './views/systemSetting/basicSetting.vue'
 import hardwareInfo from './views/systemSetting/hardwareInfo.vue'
 import restartShutdown from './views/systemSetting/restartShutdown.vue'
 import update from './views/systemSetting/update.vue'
+import powerSetting from './views/systemSetting/powerSetting'
 /*
 *flowControl
 */
@@ -100,6 +102,12 @@ let routes = [
   {
     path: '/404',
     component: NotFound,
+    name: '',
+    hidden: true
+  },
+  {
+    path: '/situationMode',
+    component: situationMode,
     name: '',
     hidden: true
   },
@@ -209,7 +217,8 @@ let routes = [
       { path: '/accountSetting', component: accountSetting, name: '账号设置', meta: { title: 'accountSetting' } },
       { path: '/update', component: update, name: '版本升级', meta: { title: 'versionUpdate' } },
       { path: '/hardwareInfo', component: hardwareInfo, name: '硬件信息', meta: { title: 'hardwareInfo' } },
-      { path: '/restartShutdown', component: restartShutdown, name: '重启关机', meta: { title: 'shutdownRestart' } }
+      { path: '/restartShutdown', component: restartShutdown, name: '重启关机', meta: { title: 'shutdownRestart' } },
+      { path: '/powerSetting', component: powerSetting, name: '权限管理', meta: { title: 'powerSetting' } }
     ]
   },
   {
@@ -311,7 +320,8 @@ let routes = [
     path: '*',
     hidden: true,
     redirect: { path: '/404' }
-  }
+  },
+  
 ]
 
 export default routes
