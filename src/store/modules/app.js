@@ -18,7 +18,8 @@ const app = {
     adaptiveCode: 0,
     webSocket: {
       socket: '',
-      count: 0
+      count: 0,
+      contentList: []
     }
   },
   mutations: {
