@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import shell from '@/utils/shell.vue'
+import shell from '@/utils/shell.1.vue'
 export default {
   name: 'rip',
   data() {
