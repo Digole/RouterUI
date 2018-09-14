@@ -24,7 +24,7 @@
 			</el-table-column>
 			<el-table-column prop="oper_type" :label="$t('systemSetting.oper_type')">
 				<template slot-scope="scope">
-						<el-button v-if="scope.row.status" size="small" @click="handleStart(scope.$index, scope.row)">{{$t('systemSetting.handleStart')}}</el-button>
+						<el-button v-if="!scope.row.status" size="small" @click="handleStart(scope.$index, scope.row)">{{$t('systemSetting.handleStart')}}</el-button>
 						<el-button v-else size="small" @click="handleStop(scope.$index, scope.row)">{{$t('systemSetting.handleStop')}}</el-button>
 						<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">{{$t('systemSetting.handleDel')}}</el-button>
 				</template>
@@ -40,10 +40,10 @@
     </el-pagination>
 
     <el-dialog :title="$t('systemSetting.addTrigger')" :visible.sync="isAdd">
-      <el-form ref="form" :model="powerEvent" label-width="3rem">
+      <el-form ref="form" :model="powerEvent" label-width="6rem">
         <el-form-item prop="event" :label="$t('systemSetting.event')">
-          <el-radio v-model="powerEvent.oper_type" :label="$t('systemSetting.shutdown')"></el-radio>
-          <el-radio v-model="powerEvent.oper_type" :label="$t('systemSetting.restart')"></el-radio>
+          <el-radio v-model="powerEvent.event" label="shutdown">{{ $t('systemSetting.shutdown') }}</el-radio>
+          <el-radio v-model="powerEvent.event" label="restart">{{ $t('systemSetting.restart') }}</el-radio>
         </el-form-item>
         <el-form-item prop="date" :label="$t('systemSetting.date')">
           <el-input v-model="powerEvent.date" placeholder="示例: 20180808"></el-input>
@@ -96,7 +96,8 @@
         isAdd: false,
 
         currentPage: 1,
-        total: 0
+        total: 0,
+        event_id: 0
   
       }
     },
@@ -118,6 +119,7 @@
         let para = Object.assign({}, this.powerEvent)
         para.oper_type = 'add'
         this.setInfo(para)
+        this.isAdd = !this.isAdd
       },
 
       handleDel(index, val) {
@@ -126,15 +128,17 @@
         this.setInfo(para)
       },
 
-      handStart(index, val) {
+      handleStart(index, val) {
         let para = Object.assign(val)
         para.oper_type = 'update'
+        para.status = 1               // 状态改为启用
         this.setInfo(para)
       },
 
       handleStop(index, val) {
         let para = Object.assign(val)
         para.oper_type = 'stop'
+        para.status = 0               // 状态改为禁用
         this.setInfo(para)
       },
 
@@ -182,6 +186,8 @@
           .then(res => {
             if (res.data.code === 200) {
               this.form = res.data.data
+              this.total = res.data.total
+              this.event_id = res.data.max_event_id
             }
           })
           .catch(error => {
@@ -193,6 +199,8 @@
         if (para === '' || para === null) {
           para = Object.assign({}, this.powerEvent)
         }
+        para.event_id = this.event_id + 1
+        para.status = 1
         setEvent(para)
           .then(res => {
             if (res.data.code === 200) {

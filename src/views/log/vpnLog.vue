@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="line_02">
-      <span>日志中心</span>
+      <span>VPN日志</span>
     </div>
 
     <!--工具条-->
@@ -18,9 +18,12 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item prop="keyword">
-          <el-input placeholder="搜索" v-model="request.keyword">
+          <el-input placeholder="搜索VND ID" v-model="request.vndid">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>>
           </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="sendTime">确认</el-button>
         </el-form-item>
         <el-form-item class="clear">
           <el-button @click="empty">全部清空</el-button>
@@ -36,7 +39,7 @@
       </el-table-column>
       <el-table-column prop="time" :label="$t('log.time')">
       </el-table-column>
-      <el-table-column prop="enname" :label="$t('log.line')">
+      <el-table-column prop="vndid" label='VNDid'>
       </el-table-column>
       <el-table-column prop="event" :label="$t('log.detail')">
       </el-table-column>
@@ -49,7 +52,7 @@
 </template>
 
 <script>
-import { getLog } from '../../api/api.js'
+import { getVPNLog, getCityInfo } from '../../api/api.js'
 export default {
   name: 'log',
   data() {
@@ -58,18 +61,19 @@ export default {
       total: 0,
       request: {
         time: '',
-        keyword: ''
+        vndid: ''
       },
       form: [],
       example: {
         time: '',
-        enname: '',
+        vndid: '',
         event: ''
       },
       dialForm: {
         starttime: '',
         endtime: '',
         page: '',
+        vndid: -1,
         pagecount: ''
       }
     }
@@ -81,8 +85,23 @@ export default {
     getTime() {
       this.dialForm.starttime = this.transform(this.request.time[0])
       this.dialForm.endtime = this.transform(this.request.time[1])
+      if (this.request.vndid === '') {
+        this.dialForm.vndid = -1
+      } else {
+        this.dialForm.vndid = this.request.vndid
+      }
       this.currentPage = 1
-      this.getLogInfo()
+      // this.getLogInfo()
+    },
+    sendTime() {
+      if (this.dialForm.starttime && this.dialForm.endtime) {
+        this.getLogInfo()
+      } else {
+        this.$message({
+          message: '输入查询时间',
+          type: 'warning'
+        })
+      }
     },
     empty() {
       this.$refs['request'].resetFields()
@@ -90,9 +109,12 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val
       let para = Object.assign({}, this.dialForm)
+      if (this.request.vndid !== '') {
+        para.vndid = this.request.vndid
+      }
       para.page = this.currentPage
       para.pagecount = 10
-      getLog(para)
+      getVPNLog(para)
         .then(res => {
           if (res.data.code === 200) {
             this.form = res.data.data
@@ -118,7 +140,7 @@ export default {
       para.page = this.currentPage
       para.pagecount = 10
       console.log(para)
-      getLog(para).then(res => {
+      getVPNLog(para).then(res => {
         if (res.data.code === 200) {
           if (res.data.data.length !== 0) {
             this.form = res.data.data

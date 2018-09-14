@@ -30,7 +30,7 @@
         this.$router.push({ path: '/situationMode' })
       },
       modeSubmit2() {
-        this.$router.push({ path: '/lineMonitor' })
+        this.$router.push({ path: '/systemStatus' })
       }
     }
   }

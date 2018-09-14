@@ -25,10 +25,10 @@
       </el-table-column>
       <el-table-column prop="fc_proto" label="协议" min-width="120">
       </el-table-column>
-      <el-table-column prop="fc_sport" label="起始端口" min-width="120">
+      <!-- <el-table-column prop="fc_sport" label="起始端口" min-width="120">
       </el-table-column>
       <el-table-column prop="fc_eport" label="结束端口" min-width="120">
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column prop="fc_ifname" label="网口" min-width="120">
       </el-table-column>
       <el-table-column prop="fc_uprate" label="上行网速" min-width="120">
@@ -97,12 +97,12 @@
         <el-form-item prop="fc_end" label="结束IP地址" required>
           <el-input v-model="addForm.fc_end"></el-input>
         </el-form-item>
-        <el-form-item prop="fc_sport" label="起始端口" :required="isProto">
+        <!-- <el-form-item prop="fc_sport" label="起始端口" :required="isProto">
           <el-input v-model="addForm.fc_sport" :disabled="!isProto"></el-input>
         </el-form-item>
         <el-form-item prop="fc_eport" label="结束端口" :required="isProto">
           <el-input v-model="addForm.fc_eport" :disabled="!isProto"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item prop="fc_uprate" label="上行速率(KB/s)" required>
           <el-input v-model="addForm.fc_uprate"></el-input>
         </el-form-item>
@@ -153,6 +153,7 @@
 
 <script>
 import { getFC, handleFC, getPorts } from '../../api/api.js'
+import { conversion, conversionUnit } from '@/utils/rateUnitExchange.js'
 
 export default {
   name: 'flowControl',
@@ -333,6 +334,18 @@ export default {
             if (res.data.data.length !== 0) {
               this.total = res.data.total
               this.form = res.data.data
+              if (this.form.length >= 1) {
+                this.form.forEach(val => {
+                  this.ports.forEach(item => {
+                    if (val.fc_ifname === item.enname) {
+                      val.fc_ifname = item.webname
+                    }
+                  })
+                  val.fc_uprate = conversion(val.fc_uprate)
+                  val.fc_downrate = conversion(val.fc_downrate)
+                  val.fc_bufsize = conversionUnit(val.fc_bufsize)
+                })
+              }
             } else if (this.currentPage > 1) {
               this.currentPage -= 1
               this.getFCInfo()
@@ -356,6 +369,18 @@ export default {
             if (res.data.data.length !== 0) {
               this.netTotal = res.data.total
               this.netForm = res.data.data
+              if (this.netForm.length >= 1) {
+                this.netForm.forEach(val => {
+                  this.ports.forEach(item => {
+                    if (val.fc_ifname === item.enname) {
+                      val.fc_ifname = item.webname
+                    }
+                  })
+                  val.fc_uprate = conversion(val.fc_uprate)
+                  val.fc_downrate = conversion(val.fc_downrate)
+                  val.fc_bufsize = conversionUnit(val.fc_bufsize)
+                })
+              }
             } else if (this.currentPage > 1) {
               this.this.netCurrentPage -= 1
               this.getFCNetInfo()

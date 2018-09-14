@@ -1,14 +1,13 @@
 <template>
   <section>
-    <el-row>
-      <el-col :span="24" class="title">
-        <span>{{$t('kidVPN.server.title')}}</span>
-        <el-form inline style="float: right">
-          <el-button type="primary" @click="addServer" v-if="isEmpty" size="mini">创建VPN服务器</el-button>
-          <!-- <el-button type="danger" size="mini" @click="delServer">{{$t('kidVPN.server.button1')}}</el-button> -->
-        </el-form>
-      </el-col>
-    </el-row>
+    <el-col :span="24" class="title">
+      <el-form inline>
+        <el-form-item>
+        <el-button type="primary" @click="addServer" v-if="isEmpty">创建VPN服务器</el-button>
+        <!-- <el-button type="danger" size="mini" @click="delServer">{{$t('kidVPN.server.button1')}}</el-button> -->
+        </el-form-item>
+      </el-form>
+    </el-col>
 
     <!-- <div class="form">
       <el-form v-model="addedClientList" ref="addedClientList" label-position="left" label-width="120px" size="mini">
@@ -39,15 +38,17 @@
     </div> -->
 
     <el-table :data="addedClientList" :header-cell-style="headerStyle">
-      <el-table-column prop="serip" :label="$t('kidVPN.server.serip')"></el-table-column>
-      <el-table-column prop="netmask" :label="$t('kidVPN.server.netmask')"></el-table-column>
-      <el-table-column prop="gateway" :label="$t('kidVPN.server.gateway')"></el-table-column>
-      <el-table-column prop="mac" :label="$t('kidVPN.server.mac')"></el-table-column>
-      <el-table-column prop="mtu" :label="$t('kidVPN.server.mtu')"></el-table-column>
-      <el-table-column prop="vndid" :label="$t('kidVPN.server.vndid')"></el-table-column>
-      <el-table-column>
+      <el-table-column prop="serip" :label="$t('kidVPN.server.serip')" min-width="150"></el-table-column>
+      <el-table-column prop="locip" :label="$t('kidVPN.server.locip')" min-width="120"></el-table-column>
+      <el-table-column prop="netmask" :label="$t('kidVPN.server.netmask')" min-width="120"></el-table-column>
+      <el-table-column prop="gateway" :label="$t('kidVPN.server.gateway')" min-width="120"></el-table-column>
+      <el-table-column prop="mac" :label="$t('kidVPN.server.mac')" min-width="120"></el-table-column>
+      <el-table-column prop="mtu" :label="$t('kidVPN.server.mtu')" min-width="120"></el-table-column>
+      <el-table-column prop="vndid" :label="$t('kidVPN.server.vndid')" min-width="120"></el-table-column>
+      <el-table-column :label="$t('operation.operation')" min-width="120">
         <template slot-scope="scope">
           <el-button size="small" @click="delServer(scope.index, scope.row)">{{ $t('operation.delete') }}</el-button>
+          <el-button size="small" @click="getAESKeyInfo(scope.row)">显示AES Key</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -109,14 +110,15 @@
 
     <el-dialog :title="$t('kidVPN.server.title3')" :visible.sync="isGettingKey" class="key">
       <el-form :model="getAESKeyForm" label-width="150px">
-        <el-form-item prop="aeskey" label="$t('kidVPN.server.aeskey')">
+        <el-form-item prop="aeskey" :label="$t('kidVPN.server.aeskey')">
           <textarea v-model="getAESKeyForm.aeskey"></textarea>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="danger" @click="closeGettingKey">{{"$t('kidVPN.server.button6')"}}</el-button>
+        <el-button type="danger" @click="closeGettingKey">{{$t('kidVPN.server.button6')}}</el-button>
       </div>
     </el-dialog>
+
   </section>
 </template>
 
@@ -291,12 +293,27 @@ export default {
         }
       })
     },
+    getAESKeyInfo(val) {
+      console.log('val is ' + val)
+      let para = {
+        vndid: val.vndid
+      }
+      getAESKey(para)
+        .then(res => {
+          this.getAESKeyForm.aeskey = res.data.aeskey
+          this.triggerGettingKey()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     iconToGetAESKeyInfo() {
       let para = {}
       para.vndid = this.addedClientList.vndid
-      getAESKey(para).then(res => {
-        this.getAESKeyForm.aeskey = res.data.aeskey
-      })
+      getAESKey(para)
+        .then(res => {
+          this.getAESKeyForm.aeskey = res.data.aeskey
+        })
       this.triggerGettingKey()
     },
     getInfo() {
@@ -312,9 +329,9 @@ export default {
                   if (res.data.data[i].type === 'servervpn') {
                     // this.addedClientList = res.data.data[i]
                     this.addedClientList.push(res.data.data[i])
+                    this.total += 1
                   }
                 }
-                this.total = res.data.total
               } else if (res.data.page > 1) {
                 this.currentPage -= 1
                 this.getInfo()
@@ -330,22 +347,24 @@ export default {
       let para = {}
       para.page = this.currentPage
       this.addedClientList = []
-      getKidVPNInfo(para).then(res => {
-        if (res.data.code === 200) {
-          if (this.currentPage === res.data.page) {
-            if (res.data.total !== 0) {
-              for (let i = 0; i < res.data.data.length; i++) {
-                if (res.data.data[i].type === 'servervpn') {
+      getKidVPNInfo(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            if (this.currentPage === res.data.page) {
+              if (res.data.total !== 0) {
+                for (let i = 0; i < res.data.data.length; i++) {
+                  if (res.data.data[i].type === 'servervpn') {
                   // console.log("in setver getServerInfo " + res.data.data[i])
-                  this.addedClientList.push(res.data.data[i])
+                    this.addedClientList.push(res.data.data[i])
+                    this.total += 1
+                  }
                 }
+              } else if (res.data.total === 0) {
+                this.addedClientList = []
               }
-            } else if (res.data.total === 0) {
-              this.addedClientList = []
             }
           }
-        }
-      })
+        })
     }
   },
   mounted() {
@@ -362,7 +381,7 @@ export default {
 }
 .form {
   overflow: hidden;
-  margin-top: 15px;
+  margin-top: 1rem;
   background: #bbbbbb;
 }
 .form > .el-form {

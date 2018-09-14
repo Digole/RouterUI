@@ -83,6 +83,9 @@ export const getAESKey = data => { return axios.post('action/kidvpnAesKeyGetActi
 export const delKidVPN = data => { return axios.post('action/kidvpnDelAction', data) }
 export const getKidVPNInfo = data => { return axios.post('action/kidvpnInfoGetAction', data) }
 export const saveAESKey = data => { return axios.post('action/kidvpnAesKeySaveAction', data) }
+export const getLinkStatus = data => { return axios.post('action/kidvpnLinkInfoGetAction', data) }
+//  请求目的/源地址
+export const getCityInfo = data => { return axios.post('action/kidvpnPosInfoGetAction', data) }
 
 // VLAN页面
 export const getVLAN = data => { return axios.post('action/vlanShowAction', data) }
@@ -107,6 +110,8 @@ export const getLog = data => { return axios.post(base + 'action/udialLogGetActi
 export const getOperaLog = data => { return axios.post(base + 'action/operLogGetAction', data) }
 // web上下线
 export const getWebInfo = data => { return axios.post(base + 'action/loginRecordQuery', data) }
+// vpn 日志
+export const getVPNLog = data => { return axios.post(base + 'action/vpnLogGetAction', data) }
 
 // DHCP
 export const dhcpServerConfigAction = data => { return axios.post(base + 'action/dhcpServerConfigAction', data) }
@@ -152,3 +157,10 @@ export const getVersion = data => { return axios.post(base + 'action/versionShow
 
 // 硬件参数
 export const getHardware = data => { return axios.post(base + 'action/hwInfoGetAction', data) }
+
+// shell 页面
+export const setQuagga = data => { return axios.post(base + 'action/quaggaHandleAction', data) }
+export const getQuaggaInfo = data => { return axios.post(base + 'action/quaggaStatGetAction', data) }
+export const setShell = data => { return axios.post(base + 'action/quaggaConfHandleAction', data) }
+export const getBtnInfo = data => { return axios.post(base + 'action/quaggaBtnStatusAction', data) }
+export const stopAllQuagga = data => { return axios.post(base + 'action/quaggaConfAllStopAction', data) }

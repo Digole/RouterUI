@@ -48,7 +48,11 @@ import basicSetting from './views/systemSetting/basicSetting.vue'
 import hardwareInfo from './views/systemSetting/hardwareInfo.vue'
 import restartShutdown from './views/systemSetting/restartShutdown.vue'
 import update from './views/systemSetting/update.vue'
+<<<<<<< HEAD
 import powerSetting from './views/systemSetting/powerSetting'
+=======
+import ports from './views/systemSetting/ports.vue'
+>>>>>>> a95d79cc6966b67b74d48c6cceffd02cd4103d57
 /*
 *flowControl
 */
@@ -69,16 +73,23 @@ import remoteManagement from './views/securitySetting/remoteManagement.vue'
 **tools
 */
 import ping from './views/tools/ping.vue'
+import speed from './views/tools/speed.vue'
 /*
 **log
 */
 import log from './views/log/log.vue'
 import operaLog from './views/log/operationLog.vue'
+import vpnLog from './views/log/vpnLog.vue'
 
 /*
 **shell
 */
-import shell from './views/shell/shell.vue'
+import ripd from './views/shell/ripd.vue'
+import ripngd from './views/shell/ripngd.vue'
+import ospfd from './views/shell/ospfd.vue'
+import isisd from './views/shell/isisd.vue'
+import bgpd from './views/shell/bgpd.vue'
+import pimd from './views/shell/pimd.vue'
 
 let routes = [
   {
@@ -162,7 +173,7 @@ let routes = [
     iconCls: 'fa fa-bar-chart',
     leaf: true, // 只有一个节点
     meta: {
-      title: 'systemSetting'
+      title: 'systemStatus'
     },
     children: [
       { path: '/systemStatus', component: systemStatus, name: '系统概况', meta: { title: 'systemStatus' } }
@@ -218,7 +229,11 @@ let routes = [
       { path: '/update', component: update, name: '版本升级', meta: { title: 'versionUpdate' } },
       { path: '/hardwareInfo', component: hardwareInfo, name: '硬件信息', meta: { title: 'hardwareInfo' } },
       { path: '/restartShutdown', component: restartShutdown, name: '重启关机', meta: { title: 'shutdownRestart' } },
+<<<<<<< HEAD
       { path: '/powerSetting', component: powerSetting, name: '权限管理', meta: { title: 'powerSetting' } }
+=======
+      { path: '/ports', component: ports, name: '端口自适应', meta: { title: 'ports' } }
+>>>>>>> a95d79cc6966b67b74d48c6cceffd02cd4103d57
     ]
   },
   {
@@ -271,9 +286,8 @@ let routes = [
       title: 'tools'
     },
     children: [
-      {
-        path: '/ping', component: ping, name: 'Ping测试', meta: { title: 'ping' }
-      }
+      { path: '/ping', component: ping, name: 'Ping测试', meta: { title: 'ping' } },
+      { path: '/speed', component: speed, name: 'Speed测试', meta: { title: 'speed' } }
     ]
   },
   {
@@ -286,20 +300,25 @@ let routes = [
     },
     children: [
       { path: '/log', component: log, name: '日志', meta: { title: 'dialLog' } },
-      { path: '/operationLog', component: operaLog, name: '操作日志', meta: { title: 'operaLog' } }
+      { path: '/operationLog', component: operaLog, name: '操作日志', meta: { title: 'operaLog' } },
+      { path: '/vpnLog', component: vpnLog, name: 'VPN日志', meta: { title: 'VPNLog' } }
     ]
   },
   {
     path: '/',
     component: Home,
-    name: 'shellpath',
+    name: 'shell',
     iconCls: 'fa fa-list',
-    leaf: true, // 只有一个节点
     meta: {
       title: 'shell'
     },
     children: [
-      { path: '/shell', component: shell, name: 'shell页面', meta: { title: 'shell' } }
+      { path: '/ripd', component: ripd, name: 'ripd页面', meta: { title: 'ripd' } },
+      { path: '/ripngd', component: ripngd, name: 'ripngd页面', meta: { title: 'ripngd' } },
+      { path: '/ospfd', component: ospfd, name: 'ospfd页面', meta: { title: 'ospfd' } },
+      { path: '/isisd', component: isisd, name: 'isisd页面', meta: { title: 'isisd' } },
+      { path: '/bgpd', component: bgpd, name: 'bgpd页面', meta: { title: 'bgpd' } },
+      { path: '/pimd', component: pimd, name: 'pimd页面', meta: { title: 'pimd' } }
     ]
   },
   // {

@@ -36,8 +36,12 @@ export default {
     dialLog: 'DialLog',
     tools: 'SystemTools',
     ping: 'PingTest',
+    speed: 'SpeedTest',
     operaLog: 'OperationLog',
-    Qos: 'Qos'
+    VPNLog: 'VPNLog',
+    Qos: 'QoS',
+    ports: 'adaptivePorts',
+    shell: 'DynamicRouting'
   },
 
   operation: {
@@ -185,6 +189,7 @@ export default {
       gateway: 'Gateway',
       mtu: 'MTU',
       vndid: 'Virtual Network Card ID',
+      serverLoc: 'Client Location',
       status: 'Status',
       title1: 'Create KidVPN Client Network',
       ipaddr: 'Local IP',
@@ -218,7 +223,8 @@ export default {
     status: {
       title: 'VPN status',
       ip: 'Client IP',
-      mac: 'Client MAC'
+      mac: 'Client MAC',
+      clientLoc: 'Server Location'
     }
   },
   staticRouter: {
@@ -337,7 +343,7 @@ export default {
     VersionDetection: 'VersionDetection:',
     DetectNewVersion: 'DetectNewVersion',
     RoutingSystemVersion: 'RoutingSystemVersion: ',
-    SylixOSVersion: 'SylixOSVersion: ',
+    versionStatus: 'VersionDetails',
     localUpdate: 'localUpdate: ',
     fileSelection: 'fileSelection',
     submitUpload: 'submitUpload',
@@ -346,10 +352,10 @@ export default {
     updateNow: 'updateNow',
     updateFinished: 'updateFinished',
     refreshAfter: 'refreshAfter',
-    sDoNotTurnOff: 'sDoNotTurnOff',
+    sDoNotTurnOff: 'sDoNotTurnOff'
 
   },
-  securitySetting:{
+  securitySetting: {
     ARPDefence: 'ARPDefence',
     status: 'status：',
     inUse: 'inUse',
@@ -389,6 +395,7 @@ export default {
     delete: 'delete',
     edit: 'edit',
     blacklist: 'blacklist',
+<<<<<<< HEAD
     time: 'time',
   },
   powerSetting:{
@@ -400,5 +407,8 @@ export default {
     detail: 'Detail',
     operator: "Operator",
     visitor: "Visitor",
+=======
+    time: 'time'
+>>>>>>> a95d79cc6966b67b74d48c6cceffd02cd4103d57
   }
 }

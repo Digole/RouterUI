@@ -20,7 +20,11 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 import { changePasswordAction } from '../api/api.js'
+=======
+import { changePasswd } from '@/api/api.js'
+>>>>>>> a95d79cc6966b67b74d48c6cceffd02cd4103d57
 import md5 from 'js-md5'
 export default {
   name: 'CreatePasswd',

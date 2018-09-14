@@ -36,86 +36,90 @@
 </template>
 
 <script>
-  import { setARP, getARPInfo } from '../../api/api.js'
-  export default {
-    name: 'ARPDefence',
-    data() {
-      return {
-        isInuse: false,
-        infoType: '0',
-        list: [],
-        currentPage: 1,
-        pagecount: 5,
-        total: 0
-      }
+import { setARP, getARPInfo } from '../../api/api.js'
+let stopSignal = ''
+export default {
+  name: 'ARPDefence',
+  data() {
+    return {
+      isInuse: false,
+      infoType: '0',
+      list: [],
+      currentPage: 1,
+      pagecount: 5,
+      total: 0
+    }
+  },
+  watch: {
+    infoType: function() {
+      this.getARPInfomation()
+    }
+  },
+  methods: {
+    headerStyle() {
+      return this.header()
     },
-    watch: {
-      infoType: function() {
-        this.getARPInfomation()
-      }
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.getARPInfomation()
     },
-    methods: {
-      headerStyle() {
-        return this.header()
-      },
-      handleCurrentChange(val) {
-        this.currentPage = val
-        this.getARPInfomation()
-      },
-      enable() {
-        let para = {}
-        para.en = 1
-        setARP(para)
-          .then(res => {
-            if (res.data.code === 200) {
+    enable() {
+      let para = {}
+      para.en = 1
+      setARP(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.isInuse = true
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    disable() {
+      let para = {}
+      para.en = 0
+      setARP(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.isInuse = false
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    getARPInfomation() {
+      let para = {}
+      para.page = this.currentPage
+      para.pagecount = this.pagecount
+      para.type = Number(this.infoType)
+      getARPInfo(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            if (res.data.status === 'open') {
               this.isInuse = true
-            }
-          })
-          .catch(err => {
-            console.log(err)
-          })
-      },
-      disable() {
-        let para = {}
-        para.en = 0
-        setARP(para)
-          .then(res => {
-            if (res.data.code === 200) {
+            } else {
               this.isInuse = false
             }
-          })
-          .catch(err => {
-            console.log(err)
-          })
-      },
-      getARPInfomation() {
-        let para = {}
-        para.page = this.currentPage
-        para.pagecount = this.pagecount
-        para.type = Number(this.infoType)
-        getARPInfo(para)
-          .then(res => {
-            if (res.data.code === 200) {
-              if (res.data.status === 'open') {
-                this.isInuse = true
-              } else {
-                this.isInuse = false
-              }
-              this.list = res.data.data
-              this.total = res.data.total
-            }
-          })
-          .catch(err => {
-            console.log(err)
-          })
-        console.log(this.isInuse)
-      }
-    },
-    mounted() {
-      this.getARPInfomation()
-      setInterval(this.getARPInfomation, 2000)
+            this.list = res.data.data
+            this.total = res.data.total
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      console.log(this.isInuse)
     }
+  },
+  mounted() {
+    this.getARPInfomation()
+    stopSignal = setInterval(this.getARPInfomation, 2000)
+  },
+  beforeDestroy() {
+    clearInterval(stopSignal)
   }
+}
 </script>
 
 <style lang="scss" scoped>

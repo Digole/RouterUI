@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="line_02"><span>{{$t('systemSetting.update')}}</span></div>
+    <div class="line_02"><span>{{$t('systemSetting.versionStatus')}}</span></div>
     <!--
       <div style="background-color: #EEF6F6">
           <p style="padding: 5px 10px; font-weight: bold">自动升级</p>
@@ -17,12 +17,12 @@
         <p style="margin-left: 50px; width:180px;">{{$t('systemSetting.RoutingSystemVersion')}}</p>
         <p style="margin-left: 100px;">{{version}}</p>
       </div>
-      <p style="display: flex">
+      <!-- <p style="display: flex">
         <span style="margin-left: 50px; width:180px;">{{$t('systemSetting.SylixOSVersion')}}</span>
         <span style="margin-left: 100px;">2.0.23</span>
-      </p>
+      </p> -->
     </div>
-    <div class="line_02"><span>{{$t('systemSetting.SylixOSVersion')}}</span></div>
+    <div class="line_02"><span>{{$t('systemSetting.update')}}</span></div>
     <!--
       <div style="background-color: #EEF6F6">
           <p style="padding: 5px 10px; font-weight: bold">手动升级</p>

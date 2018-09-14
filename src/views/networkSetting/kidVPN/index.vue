@@ -1,16 +1,17 @@
 <template>
   <section>
-    <!-- <client class="client"></client> -->
+    <client class="client"></client>
 
     <div class="line_02">
       <span>KidVPN服务器</span>
     </div>
 
-    <!-- <server class="server"></server> -->
+    <server class="server"></server>
 
-    <!-- <connection class="connection"></connection> -->
+    <connection class="connection"></connection>
     
     <visualization class="visualization"></visualization>
+
   </section>
 </template>
 
@@ -36,7 +37,8 @@ export default {
   width: 100%;
 }
 .visualization {
+  display: flex;
   height: 30%;
-  width: 100%;
+  width: 48%;
 }
 </style>
