@@ -123,8 +123,11 @@ export const getTime = data => { return axios.post(base + 'action/timeShowAction
 export const setName = data => { return axios.post(base + 'action/devNameConfigAction', data) }
 export const getName = data => { return axios.post(base + 'action/devNameGetAction', data) }
 // 密码修改
-export const changePasswd = data => { return axios.post(base + 'action/changePasswordAction', data) }
-
+export const changePasswordAction = data => { return axios.post(base + 'action/changePasswordAction', data) }
+export const queryUsersAction = data => { return axios.post(base + 'action/queryUsersAction', data) }
+export const addUserAction = data => { return axios.post(base + 'action/addUserAction', data) }
+export const delUserAction = data => { return axios.post(base + 'action/delUserAction', data) }
+export const disableUserAction = data => { return axios.post(base + 'action/disableUserAction', data) }
 // firewall
 export const showInfo = data => { return axios.post(base + 'action/npfShowAction', data) }
 export const handle = data => { return axios.post(base + 'action/npfConfigAction', data) }

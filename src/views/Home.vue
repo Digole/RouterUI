@@ -21,6 +21,14 @@
       </el-col>
 
       <el-col :span="4" class="userinfo">
+
+          <el-dropdown trigger="hover">
+         <span class="situationMode el-dropdown-link userinfo-inner"> {{$t('home.professional')}}</span>
+         <el-dropdown-menu slot="dropdown">
+           <el-dropdown-item @click.native="back">{{$t('home.change')}}</el-dropdown-item>
+          </el-dropdown-menu>
+         </el-dropdown>
+
         <el-dropdown trigger="hover">
           <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
           <el-dropdown-menu slot="dropdown">
@@ -141,6 +149,9 @@ export default {
     onSubmit() {
       console.log('submit!')
     },
+     back: function(){
+this.$router.push('/ModeChoose')
+    },
 
     // 退出登录
     logout: function() {
@@ -254,6 +265,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
@@ -290,6 +302,11 @@ export default {
           float: right;
         }
       }
+    }
+    .situationMode{
+      right: 100px;
+      padding-right: 35px;
+     
     }
     .logo {
       //width:230px;
