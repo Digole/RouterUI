@@ -48,11 +48,8 @@ import basicSetting from './views/systemSetting/basicSetting.vue'
 import hardwareInfo from './views/systemSetting/hardwareInfo.vue'
 import restartShutdown from './views/systemSetting/restartShutdown.vue'
 import update from './views/systemSetting/update.vue'
-<<<<<<< HEAD
 import powerSetting from './views/systemSetting/powerSetting'
-=======
 import ports from './views/systemSetting/ports.vue'
->>>>>>> a95d79cc6966b67b74d48c6cceffd02cd4103d57
 /*
 *flowControl
 */
@@ -229,11 +226,8 @@ let routes = [
       { path: '/update', component: update, name: '版本升级', meta: { title: 'versionUpdate' } },
       { path: '/hardwareInfo', component: hardwareInfo, name: '硬件信息', meta: { title: 'hardwareInfo' } },
       { path: '/restartShutdown', component: restartShutdown, name: '重启关机', meta: { title: 'shutdownRestart' } },
-<<<<<<< HEAD
-      { path: '/powerSetting', component: powerSetting, name: '权限管理', meta: { title: 'powerSetting' } }
-=======
+      { path: '/powerSetting', component: powerSetting, name: '权限管理', meta: { title: 'powerSetting' } },
       { path: '/ports', component: ports, name: '端口自适应', meta: { title: 'ports' } }
->>>>>>> a95d79cc6966b67b74d48c6cceffd02cd4103d57
     ]
   },
   {
@@ -339,8 +333,8 @@ let routes = [
     path: '*',
     hidden: true,
     redirect: { path: '/404' }
-  },
-  
+  }
+
 ]
 
 export default routes

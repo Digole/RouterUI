@@ -38,14 +38,10 @@ export default {
     ping: 'Ping测试',
     speed: '网速测试',
     operaLog: '操作日志',
-<<<<<<< HEAD
-    Qos: 'Qos'
-=======
     VPNLog: 'VPN日志',
     Qos: 'QoS设置',
     ports: '网口定位',
     shell: '动态路由'
->>>>>>> a95d79cc6966b67b74d48c6cceffd02cd4103d57
   },
 
   operation: {
@@ -66,9 +62,9 @@ export default {
     determine: '确定',
     search: '搜索'
   },
-  situationMode:{
+  situationMode: {
     situation: '情景模式',
-    change: '切换模式',
+    change: '切换模式'
   },
   home: {
     professional: '专家模式',
@@ -313,8 +309,7 @@ export default {
     portStart: '开始端口',
     portEnd: '结束端口'
   },
-<<<<<<< HEAD
-   systemSetting: {
+  systemSetting: {
     ifDelete: '是否要删除该账户',
     On: '启用',
     Off: '禁用',
@@ -328,10 +323,6 @@ export default {
     visitor: '游客',
     addAccount: '添加用户',
     AccountSetting: '用户管理',
-=======
-  systemSetting: {
-    AccountSetting: '账号设置',
->>>>>>> a95d79cc6966b67b74d48c6cceffd02cd4103d57
     username: '用户名',
     passwd: '密码',
     passwd1: '请输入密码',
@@ -410,10 +401,9 @@ export default {
     delete: '删除',
     edit: '编辑',
     blacklist: '黑名单',
-<<<<<<< HEAD
-    time: '时间',
+    time: '时间'
   },
-  powerSetting:{
+  powerSetting: {
     submitChange: '提交更改',
     ifsubmit: '是否提交更改？',
     powerSetting: '权限管理',
@@ -421,9 +411,6 @@ export default {
     all: '总类',
     detail: '具体权限',
     operator: '操作员',
-    visitor: '普通用户',
-=======
-    time: '时间'
->>>>>>> a95d79cc6966b67b74d48c6cceffd02cd4103d57
+    visitor: '普通用户'
   }
 }

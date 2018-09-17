@@ -20,11 +20,7 @@
 </template>
 
 <script>
-<<<<<<< HEAD
 import { changePasswordAction } from '../api/api.js'
-=======
-import { changePasswd } from '@/api/api.js'
->>>>>>> a95d79cc6966b67b74d48c6cceffd02cd4103d57
 import md5 from 'js-md5'
 export default {
   name: 'CreatePasswd',
@@ -44,7 +40,7 @@ export default {
         let para = Object.assign({}, this.form)
         para.passwd = md5(para.passwd)
         para.new_passwd = md5(para.new_passwd)
-        changePasswd(para)
+        changePasswordAction(para)
           .then(res => {
             if (res.data.code === 200) {
               this.$router.push('/ModeChoose')

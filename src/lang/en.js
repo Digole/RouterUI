@@ -62,9 +62,9 @@ export default {
     determine: 'Apply',
     search: 'Search'
   },
-  situationMode:{
+  situationMode: {
     situation: 'SituationMode',
-    change: 'ChangeMode',
+    change: 'ChangeMode'
   },
   home: {
     professional: 'ProfessionalMode',
@@ -395,20 +395,17 @@ export default {
     delete: 'delete',
     edit: 'edit',
     blacklist: 'blacklist',
-<<<<<<< HEAD
-    time: 'time',
+    time: 'time'
   },
-  powerSetting:{
+  powerSetting: {
     submitChange: 'Submit changes',
     ifsubmit: 'Are you sure to submit changes?',
     powerSetting: 'Power',
     addChange: 'Submit',
     all: 'General',
     detail: 'Detail',
-    operator: "Operator",
-    visitor: "Visitor",
-=======
+    operator: 'Operator',
+    visitor: 'Visitor',
     time: 'time'
->>>>>>> a95d79cc6966b67b74d48c6cceffd02cd4103d57
   }
 }

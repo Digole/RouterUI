@@ -11,14 +11,14 @@ import store from './store'
 import Vuex from 'vuex'
 
 import axios from 'axios'
-//import '@/components/js/popper.min.js'
-//import '@/components/js/bootstrap.min.js'
- //import '@/components/js/plugins.js'
- //import '@/components/js/active.js'
- 
-//import 'font-awesome/css/font-awesome.min.css'
-//import './assets/css/index.css'
-//import "./css/style.css";
+// import '@/components/js/popper.min.js'
+// import '@/components/js/bootstrap.min.js'
+// import '@/components/js/plugins.js'
+// import '@/components/js/active.js'
+
+// import 'font-awesome/css/font-awesome.min.css'
+// import './assets/css/index.css'
+// import "./css/style.css";
 // import Mock from './mock'
 // Mock.bootstrap()
 
