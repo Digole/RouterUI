@@ -153,7 +153,7 @@ export default {
             console.log(
               'array is ' + this.interactList[this.interactList.length - 1]
             )
-          } else if (result[0].length === 5 && result[0].charAt(4).charCodeAt() === 8) {
+          } else if (result[0].length === 7 && result[0].charAt(4).charCodeAt() === 8) {
           // 处理backspace,后端返回的值为code + '08 20 08' （ascii码）
             console.log(result[0])
             console.log('here it is! ' + result[0].charAt(4).charCodeAt())
@@ -163,12 +163,13 @@ export default {
           } else if (result[0].length > 5 && result[0].charAt(4).charCodeAt() !== 8) {
             // 处理上键的返回值
             this.lastLine = result[0].slice(4, result[0].length)
-          }  else if (result[0].length > 5 && result[0].charAt(4).charCodeAt() === 8) {
+          }  else if (result[0].length > 7 && result[0].charAt(4).charCodeAt() === 8) {
             // 处理两次及以上上键的返回值
             for (let i = 4; i < result[0].length; i++) {
               console.log(result[0].charAt(i).charCodeAt())
               if (result[0].charAt(i).charCodeAt() !== 8) {
-                this.lastLine = result[0].slice(i, result[0].length)
+                // 因为后端传回的有 /b * n + 空格 * n + /b * n，所以需要去掉3*(i-4)的内容
+                this.lastLine = result[0].slice(4 + (i - 4) * 3, result[0].length)
                 return true
               }
             }
@@ -445,10 +446,10 @@ export default {
   // position: relative;
   margin-top: 1rem;
   .shell_container {
-    height: 75vh;
+    height: 72vh;
     padding: 1rem 0.5rem;
     // background-color: RGB(1, 36, 86);
-    overflow: auto;
+    overflow: hidden;
     .line {
       height: 1rem;
       input {
