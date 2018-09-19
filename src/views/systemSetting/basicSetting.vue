@@ -111,7 +111,8 @@ export default {
           if (res.data.code === 200) {
             this.isSetTimeVisible = false
             this.$refs['form'].resetFields()
-            this.getSystemInfo()
+            clearInterval(this.timer) // 关闭计时器，否则会发生时间显示跳动现象
+            this.getSystemInfo('time')
           }
         })
         .catch(error => {
@@ -126,64 +127,83 @@ export default {
           if (res.data.code === 200) {
             this.isSetNameVisible = false
             this.$refs['form'].resetFields()
-            this.getSystemInfo()
+            this.getSystemInfo('name')
           }
         })
         .catch(error => {
           console.log(error)
         })
     },
-    getSystemInfo() {
-      getTime()
-        .then(res => {
-          if (res.data.code === 200) {
+    getSystemInfo(val) {
+      if (val === undefined || val === 'time') {
+        getTime()
+          .then(res => {
+            if (res.data.code === 200) {
             // this.deviceTime = res.data.date + ' ' + res.data.time
-            let date = res.data.date.split('/')
-            date = date.map(value => {
-              return parseInt(value, 10)
-            })
-            let date0 = date[0]
-            let date1 = date[1]
-            let date2 = date[2]
-            console.log('date is ' + date)
-            let time = res.data.time.split(':')
-            time = time.map(value => {
-              return parseInt(value, 10)
-            })
-            let val0 = time[0]
-            let val1 = time[1]
-            let val2 = time[2]
-            console.log('time is ' + time)
-            let para = date + ',' + time
-            console.log('para is ' + para)
-            let timeNumber = new Date(date0, date1, date2, val0, val1, val2)
-            this.deviceTime = new Date(timeNumber).toLocaleString()
-            console.log(timeNumber)
-            for (let i = 0; i < 60; i++) {
+              let date = res.data.date.split('/')
+              date = date.map(value => {
+                return parseInt(value, 10)
+              })
+              let date0 = date[0]
+              let date1 = date[1]
+              let date2 = date[2]
+              console.log('date is ' + date)
+              let time = res.data.time.split(':')
+              time = time.map(value => {
+                return parseInt(value, 10)
+              })
+              let val0 = time[0]
+              let val1 = time[1]
+              let val2 = time[2]
+              console.log('time is ' + time)
+              let para = date + ',' + time
+              console.log('para is ' + para)
+              let timeNumber = new Date(date0, date1 - 1, date2, val0, val1, val2)
+              this.deviceTime = new Date(timeNumber).toLocaleString()
+              console.log(timeNumber)
+              // for (let i = 0; i < 60; i++) {
+              //   if (this.isUsingTimer) {
+              //     setTimeout(() => {
+              //       timeNumber = +timeNumber + 1000
+              //       this.deviceTime = new Date(timeNumber).toLocaleString()
+              //       console.log(timeNumber)
+              //       if (i === 59) {
+              //         this.getSystemInfo()
+              //       }
+              //     }, 1000)
+              //   }
+              // }
+              let i = 0
               if (this.isUsingTimer) {
-                setTimeout(() => {
-                  timeNumber = +timeNumber + 1000
-                  this.deviceTime = new Date(timeNumber).toLocaleString()
-                  console.log(timeNumber)
-                  if (i === 59) {
-                    this.getSystemInfo()
+                this.timer = setInterval(() => {
+                  if (i < 60) {
+                    i++
+                    console.log(i)
+                    timeNumber = +timeNumber + 1000
+                    this.deviceTime = new Date(timeNumber).toLocaleString()
+                    console.log(timeNumber)
+                  } else {
+                    this.getSystemInfo('time')
+                    clearInterval(this.timer)
                   }
-                }, i * 1000)
+                }, 1000)
               }
             }
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        })
-      getName()
-        .then(res => {
-          if (res.data.code === 200) {
-            this.deviceName = res.data.dev_name
-          }
-        }).catch(error => {
-          console.log(error)
-        })
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
+      if (val === undefined || val === 'name') {
+        getName()
+          .then(res => {
+            if (res.data.code === 200) {
+              this.deviceName = res.data.dev_name
+            }
+          }).catch(error => {
+            console.log(error)
+          })
+      }
     },
     formCancel() {
       this.isSetTimeVisible = false
@@ -196,6 +216,9 @@ export default {
   },
   beforeDestroy () {
     this.isUsingTimer = false
+    if (this.timer) {
+      clearInterval(this.timer)
+    }
   }
 }
 </script>
