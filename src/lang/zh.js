@@ -1,3 +1,4 @@
+
 export default {
   route: {
     statusMonitor: '状态监控',
@@ -38,7 +39,9 @@ export default {
     ping: 'Ping测试',
     speed: '网速测试',
     operaLog: '操作日志',
-    Qos: 'Qos'
+    Qos: 'Qos',
+    ARPLog: 'ARP日志',
+    DHCPLog: 'DHCP日志'
   },
 
   operation: {
@@ -59,9 +62,9 @@ export default {
     determine: '确定',
     search: '搜索'
   },
-  situationMode:{
+  situationMode: {
     situation: '情景模式',
-    change: '切换模式',
+    change: '切换模式'
   },
   home: {
     professional: '专家模式',
@@ -306,7 +309,7 @@ export default {
     portStart: '开始端口',
     portEnd: '结束端口'
   },
-   systemSetting: {
+  systemSetting: {
     ifDelete: '是否要删除该账户',
     On: '启用',
     Off: '禁用',
@@ -398,16 +401,39 @@ export default {
     delete: '删除',
     edit: '编辑',
     blacklist: '黑名单',
-    time: '时间',
+    time: '时间'
   },
-  powerSetting:{
+  powerSetting: {
     submitChange: '提交更改',
     ifsubmit: '是否提交更改？',
     powerSetting: '权限管理',
     addChange: '提交更改',
     all: '总类',
     detail: '具体权限',
-    operator: '操作员',
-    visitor: '普通用户',
+    operator: '操作员权限',
+    visitor: '观察者权限'
+  },
+  ARPLog: {
+    ARPLog: 'ARP防御日志'
+  },
+  DHCPLog: {
+    DHCPLog: 'DHCP日志'
+  },
+  BMDisplay: {
+    web: 'WEB上下线',
+    search: '搜索',
+    clear: '全部清空',
+    provide: '默认提供最近24小时数据',
+    time: '时间',
+    name: '名称',
+    ip: '客户端IP',
+    result: '操作结果',
+    type: '操作类型'
+  },
+  BMControl: {
+    record: '行为记录管理',
+    DeviceRecord: '终端上下线记录：',
+    WebRecord: 'WEB上下线记录：',
+    on: '开启'
   }
 }

@@ -3,23 +3,7 @@
     <div class="line_02">
       <span>{{$t('systemSetting.AccountSetting')}}</span>
     </div>
-    <!-- <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true">
-				<el-form-item>
-					<el-button type="primary">添加</el-button>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary">启用</el-button>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary">停用</el-button>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary">删除</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col> -->
-
+   
     <!--添加账户的按钮-->
 	  <el-col :span="24">
 			<el-form :inline="true">
@@ -132,16 +116,16 @@ export default {
   name: 'accountSetting',
   data() {
     return {
-      new_passwd: "",
-      userNowRole: "",
-      userNowStatus: "",
-      userNowName: "",
-      userNowPasswd: "",
+      new_passwd: '',
+      userNowRole: '',
+      userNowStatus: '',
+      userNowName: '',
+      userNowPasswd: '',
       delete: 0,
       isInDelete: false,
-      status1: "",
-      passwd1: "",
-      passwd2: "",
+      status1: '',
+      passwd1: '',
+      passwd2: '',
       isInChanging: false,
       isInChangingStatus: false,
       sels: [],
@@ -152,23 +136,23 @@ export default {
       currentPage: 1,
       total: 0,
       selectPower: '',
-      user: {                         /*发送给后端的账号信息                       */
-         
-        cUsername: "",                /*  用户名                                  */
-        cPasswd: "",                  /*  密码                                    */
+      user: {                         /* 发送给后端的账号信息                       */
+
+        cUsername: '',                /*  用户名                                  */
+        cPasswd: '',                  /*  密码                                    */
         iRole: Number,                /*  角色权限 1:admin 2: operator 3: visitor */
-        iStatus: Number,              /*  状态 0：启用、1：禁用                    */
-                        
+        iStatus: Number              /*  状态 0：启用、1：禁用                    */
+
       },
-      userShow: [],                   /*显示出来的账号信息                       */
-     userRec: {                       /*从输入框得到的账号信息                       */
-        username: "" ,               
-        passwd: "",                 
-        role: "",               
-        status: Number,              
-                        
+      userShow: [],                   /* 显示出来的账号信息                       */
+      userRec: {                       /* 从输入框得到的账号信息                       */
+        username: '',
+        passwd: '',
+        role: '',
+        status: Number
+
       },
-       options: [
+      options: [
         {
           value: 1,
           label: 'admin'
@@ -180,37 +164,27 @@ export default {
         {
           value: 3,
           label: 'visitor'
-        },
-      ],
+        }
+      ]
     }
   },
- /* watch:{
-    'this.$store.state.app.language': function(){
-      console.log('watch start')
-      if(this.$store.state.app.language === "zh"){
-        this.nowLang = "zh"
-      }
-      else{
-        this.nowLang = "en"
-      }
-    }
-  },*/
+
   methods: {
     headerStyle() {
       return this.header()
     },
-    deleteCancel(){
-        this.isInDelete = false
-        this.$refs.checkForm.resetFields()
+    deleteCancel() {
+      this.isInDelete = false
+      this.$refs.checkForm.resetFields()
     },
-    deleteUser(val){
+    deleteUser(val) {
       console.log(val)
       this.userNowName = val.username
       this.isInDelete = true
     },
     addAccount() {
-        this.isAdd = true
-      },
+      this.isAdd = true
+    },
     selsChange: function(sels) {
       this.sels = sels
     },
@@ -225,49 +199,46 @@ export default {
       this.userNowName = val.username
       this.isInChangingStatus = true
     },
-    deldeteSubmit(){
-       let para = {}
-       para.username = this.userNowName
-       delUserAction(para).then(res => {
+    deldeteSubmit() {
+      let para = {}
+      para.username = this.userNowName
+      delUserAction(para).then(res => {
         if (res.data.code === 200) {
+          this.list[0].status = '修改成功'
+        } else {
+          this.list[0].status = '修改失败'
+        }
+        this.getUserInfo()
+        this.isInDelete = false
+      })
+    },
+    subChangeStatus() {
+      let para = {}
+      para.username = this.userNowName
+      if (this.status1 === '0') {
+        para.status = 0
+        disableUserAction(para).then(res => {
+          if (res.data.code === 200) {
             this.list[0].status = '修改成功'
           } else {
             this.list[0].status = '修改失败'
           }
           this.getUserInfo()
-          this.isInDelete = false
-        })
-    },
-    subChangeStatus(){
-      let para = {}
-      para.username = this.userNowName
-      if(this.status1 === "0")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-    {
-        para.status = 0
-        disableUserAction(para).then(res => {
-          if (res.data.code === 200) {
-            this.list[0].status = '修改成功'
-           } else {
-            this.list[0].status = '修改失败'
-          }
-          this.getUserInfo()
           this.isInChangingStatus = false
         })
-    }
-    else if(this.status1 === "1"){
+      } else if (this.status1 === '1') {
         para.status = 1
         disableUserAction(para).then(res => {
           if (res.data.code === 200) {
             this.list[0].status = '修改成功'
-           } else {
+          } else {
             this.list[0].status = '修改失败'
           }
           this.getUserInfo()
           this.isInChangingStatus = false
-         })
-    }
-    
-   },
+        })
+      }
+    },
     changeStatusCancel() {
       this.isInChangingStatus = false
       this.$refs.checkForm.resetFields()
@@ -288,8 +259,8 @@ export default {
           } else {
             this.list[0].status = '修改失败'
           }
-         })
-         this.getUserInfo()
+        })
+        this.getUserInfo()
       } else {
         this.$message({
           type: 'error',
@@ -299,8 +270,8 @@ export default {
         this.$refs.checkForm.resetFields()
       }
     },
-    addNewAccountCancel(){
-        this.isAdd = false
+    addNewAccountCancel() {
+      this.isAdd = false
     },
     addNewAccount() {
       if (this.passwd1 === this.passwd2) {
@@ -329,43 +300,36 @@ export default {
         this.$refs.checkForm.resetFields()
       }
     },
-   
-    getUserInfo(){
+
+    getUserInfo() {
       let para = {}
-      para.username = ""
-      para.passwd = ""
+      para.username = ''
+      para.passwd = ''
       para.role = 1
       para.status = 1
-      queryUsersAction(para).then(res =>
-      { 
+      queryUsersAction(para).then(res => {
         this.userShow = res.data.data
-        for(let i = 0;i < res.data.data.length;i++){
-        
-        if (this.userShow[i].role === 1){
-          this.userShow[i].role = "admin"
-        }
-        else if (this.userShow[i].role === 2){
-          this.userShow[i].role = "operator"
-        }
-        else{
-          this.userShow[i].role = "visitor"
-        }
-         if (res.data.data[i].status === 0){
-           if(this.$store.state.app.language === "zh"){
-             this.userShow[i].status = "启用"
-           }
-           else{
-             this.userShow[i].status = "on"
-           }
-         }
-        else{
-           if(this.$store.state.app.language === "zh"){
-              this.userShow[i].status = "禁用"
-           }
-           else{
-             this.userShow[i].status = "off"
-           }
-         }
+        for (let i = 0; i < res.data.data.length; i++) {
+          if (this.userShow[i].role === 1) {
+            this.userShow[i].role = 'admin'
+          } else if (this.userShow[i].role === 2) {
+            this.userShow[i].role = 'operator'
+          } else {
+            this.userShow[i].role = 'visitor'
+          }
+          if (res.data.data[i].status === 0) {
+            if (this.$store.state.app.language === 'zh') {
+              this.userShow[i].status = '启用'
+            } else {
+              this.userShow[i].status = 'on'
+            }
+          } else {
+            if (this.$store.state.app.language === 'zh') {
+              this.userShow[i].status = '禁用'
+            } else {
+              this.userShow[i].status = 'off'
+            }
+          }
         }
       })
     },

@@ -17,7 +17,7 @@
       <el-button @click="changeSettingTime" type="primary" size="small">修改设备时间</el-button>
     </div>
 
-    <el-dialog title="修改系统名称" :visible.sync="isSetTimeVisible">
+    <el-dialog title="修改系统时间" :visible.sync="isSetTimeVisible">
       <el-form ref="form" :model="form" label-width="5rem" inline>
         <el-form-item prop="date" label="时间设置">
           <el-col :span="10">
@@ -111,7 +111,7 @@ export default {
           if (res.data.code === 200) {
             this.isSetTimeVisible = false
             this.$refs['form'].resetFields()
-            this.getSystemInfo()
+            this.gettime()
           }
         })
         .catch(error => {
@@ -126,7 +126,62 @@ export default {
           if (res.data.code === 200) {
             this.isSetNameVisible = false
             this.$refs['form'].resetFields()
-            this.getSystemInfo()
+            this.getname()
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    getname() {
+      getName()
+        .then(res => {
+          if (res.data.code === 200) {
+            this.deviceName = res.data.dev_name
+          }
+        }).catch(error => {
+          console.log(error)
+        })
+    },
+    gettime() {
+      getTime()
+        .then(res => {
+          if (res.data.code === 200) {
+            // this.deviceTime = res.data.date + ' ' + res.data.time
+            let date = res.data.date.split('/')
+            date = date.map(value => {
+              return parseInt(value, 10)
+            })
+            let date0 = date[0]
+            let date1 = date[1] - 1
+            let date2 = date[2]
+            console.log('date is ' + date)
+            let time = res.data.time.split(':')
+            time = time.map(value => {
+              return parseInt(value, 10)
+            })
+            let val0 = time[0]
+            let val1 = time[1]
+            let val2 = time[2]
+            console.log('time is ' + time)
+            let para = date + ',' + time
+            console.log('para is ' + para)
+            let timeNumber = new Date(date0, date1, date2, val0, val1, val2)
+            this.deviceTime = new Date(timeNumber).toLocaleString()
+            console.log('TIMENUM' + timeNumber)
+            console.log('DT' + this.deviceTime)
+            for (let i = 0; i < 60; i++) {
+              if (this.isUsingTimer) {
+                setTimeout(() => {
+                  timeNumber = +timeNumber + 1000
+                  this.deviceTime = new Date(timeNumber).toLocaleString()
+                  console.log(timeNumber)
+                  if (i === 59) {
+                    this.gettime()
+                  }
+                }, i * 1000)
+              }
+            }
           }
         })
         .catch(error => {
@@ -158,7 +213,8 @@ export default {
             console.log('para is ' + para)
             let timeNumber = new Date(date0, date1, date2, val0, val1, val2)
             this.deviceTime = new Date(timeNumber).toLocaleString()
-            console.log(timeNumber)
+            console.log('TIMENUM' + date0 + date1 + date2 + val0 + val1 + val2)
+            console.log('DT' + this.deviceTime)
             for (let i = 0; i < 60; i++) {
               if (this.isUsingTimer) {
                 setTimeout(() => {

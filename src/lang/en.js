@@ -41,7 +41,9 @@ export default {
     VPNLog: 'VPNLog',
     Qos: 'QoS',
     ports: 'adaptivePorts',
-    shell: 'DynamicRouting'
+    shell: 'DynamicRouting',
+    ARPLog: 'ARPDefenceLog',
+    DHCPLog: 'DHCPLog'
   },
 
   operation: {
@@ -407,5 +409,28 @@ export default {
     operator: 'Operator',
     visitor: 'Visitor',
     time: 'time'
+  },
+  ARPLog: {
+    ARPLog: 'ARPDefenceLog'
+  },
+  DHCPLog: {
+    DHCPLog: 'DHCPLog'
+  },
+  BMDisplay: {
+    web: 'WebRecord',
+    search: 'Search',
+    clear: 'Clear all',
+    provide: 'Providing the latest 24 hours data by default',
+    time: 'Time',
+    name: 'UserName',
+    ip: 'ClientIP',
+    result: 'Result',
+    type: 'Type'
+  },
+  BMControl: {
+    record: 'RecordManagement',
+    DeviceRecord: 'DeviceRecord：',
+    WebRecord: 'WebRecord：',
+    on: 'On'
   }
 }

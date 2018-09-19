@@ -77,6 +77,8 @@ import speed from './views/tools/speed.vue'
 import log from './views/log/log.vue'
 import operaLog from './views/log/operationLog.vue'
 import vpnLog from './views/log/vpnLog.vue'
+import ARPLog from './views/log/ARPLog.vue'
+import DHCPLog from './views/log/DHCPLog.vue'
 
 /*
 **shell
@@ -295,7 +297,9 @@ let routes = [
     children: [
       { path: '/log', component: log, name: '日志', meta: { title: 'dialLog' } },
       { path: '/operationLog', component: operaLog, name: '操作日志', meta: { title: 'operaLog' } },
-      { path: '/vpnLog', component: vpnLog, name: 'VPN日志', meta: { title: 'VPNLog' } }
+      { path: '/vpnLog', component: vpnLog, name: 'VPN日志', meta: { title: 'VPNLog' } },
+      { path: '/ARPLog', component: ARPLog, name: 'ARP防御日志', meta: { title: 'ARPLog' } },
+      { path: '/DHCPLog', component: DHCPLog, name: 'DHCP日志', meta: { title: 'DHCPLog' } },
     ]
   },
   {

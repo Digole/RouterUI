@@ -3,7 +3,7 @@
   <!--标题栏-->
   <el-row class="container">
     <el-col :span="24" class="header">
-      <el-col :span="5" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
+      <el-col :span="5" class="logo"  :class="collapsed?'logo-collapse-width':'logo-width'">
         {{ collapsed?'':sysName }}
       </el-col>
       <el-col :span="1">
@@ -45,7 +45,7 @@
       
     <!--嵌入的html界面-->
     <!--<iframe id = "child" src="/static/situationMode.html#asd=2" width="1920" height="880" frameborder="0" scrolling="no" style="position:related;top: 2.8px;left: 0px;"></iframe>-->
-    <iframe id = "child" :src="Url" width="1920" height="880" frameborder="0" scrolling="no" style="position:related;top: 2.8px;left: 0px;"></iframe>
+    <iframe name = "child" id = "child" :src="Url" width="1920" height="880" frameborder="0" scrolling="no" style="position:related;top: 2.8px;left: 0px;"></iframe>
 
   </el-row>
 
@@ -102,6 +102,10 @@ export default {
     }
   },
   methods: {
+    callchild(){
+      let obj1=window.frames["child"];//获得对应iframe的window对象
+      alert(obj1.n);
+    },
     onSubmit() {
       console.log('submit!')
     },
@@ -210,24 +214,15 @@ this.$router.push('/ModeChoose')
     this.sysUserName = '翼辉Admin'
     // this.sysUserAvatar = 'static/avatar.jpg'
     this.sysUserAvatar = 'static/acoinfo.png'
-
+    
     this.getInfo()
   }
 }
 </script>
 
 <style scoped lang="scss">
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
-  min-height: 400px;
-}
-.icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.15em;
-  fill: currentColor;
-  overflow: hidden;
-}
+
+
 .container {
   position: absolute;
   top: 0;
@@ -300,84 +295,8 @@ this.$router.push('/ModeChoose')
       color: goldenrod;
     }
   }
-  .main {
-    display: flex;
-    // background: #324057;
-    position: absolute;
-    top: 60px;
-    bottom: 0;
-    overflow: hidden;
-    aside {
-      flex: 0 0 200px;
-      width: 200px;
-      // position: absolute;
-      // top: 0px;
-      // bottom: 0px;
-      .el-menu {
-        height: 100%;
-      }
-      .collapsed {
-        width: 65px;
-        .item {
-          position: relative;
-        }
-        .submenu {
-          position: absolute;
-          top: 0;
-          left: 65px;
-          z-index: 99999;
-          height: auto;
-          display: none;
-        }
-      }
-    }
-    .menu-collapsed {
-      flex: 0 0 60px;
-      width: 60px;
-    }
-    .menu-expanded {
-      flex: 0 0 200px;
-      width: 200px;
-    }
-    .content-container {
-      flex: 1;
-      overflow-y: scroll;
-      padding: 20px;
-      .breadcrumb-container {
-        //margin-bottom: 15px;
-        .title {
-          width: 200px;
-          float: left;
-          color: #475669;
-        }
-        .breadcrumb-inner {
-          float: left;
-        }
-        .breadcrumb-inner-right {
-          float: right;
-          margin-right: 30px;
-        }
-      }
-      .monitor {
-        float: right;
-        .inner-right {
-          display: inline-block;
-          width: 6rem;
-        }
-        .long {
-          display: inline-block;
-          width: 11rem;
-        }
-      }
-      .content-wrapper {
-        background-color: #fff;
-        box-sizing: border-box;
-      }
-    }
-  }
+  
 }
-.el-radio-button__inner {
-  background: blue;
-}
+
 </style>
 
