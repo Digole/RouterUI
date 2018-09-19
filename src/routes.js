@@ -1,4 +1,4 @@
-import situationMode from './views/situationMode.vue'
+import situationMode from './views/situationMode.vue'             //wyk914情景模式
 import Login from './views/Login.vue'
 import CreatePasswd from './views/CreatePasswd.vue'
 import ModeChoose from './views/ModeChoose.vue'
@@ -48,7 +48,7 @@ import basicSetting from './views/systemSetting/basicSetting.vue'
 import hardwareInfo from './views/systemSetting/hardwareInfo.vue'
 import restartShutdown from './views/systemSetting/restartShutdown.vue'
 import update from './views/systemSetting/update.vue'
-import powerSetting from './views/systemSetting/powerSetting'
+import powerSetting from './views/systemSetting/powerSetting'          //wyk914权限管理
 import ports from './views/systemSetting/ports.vue'
 /*
 *flowControl
@@ -226,7 +226,7 @@ let routes = [
       { path: '/update', component: update, name: '版本升级', meta: { title: 'versionUpdate' } },
       { path: '/hardwareInfo', component: hardwareInfo, name: '硬件信息', meta: { title: 'hardwareInfo' } },
       { path: '/restartShutdown', component: restartShutdown, name: '重启关机', meta: { title: 'shutdownRestart' } },
-      { path: '/powerSetting', component: powerSetting, name: '权限管理', meta: { title: 'powerSetting' } },
+      { path: '/powerSetting', component: powerSetting, name: '权限管理', meta: { title: 'powerSetting' } },          //wyk914权限管理
       { path: '/ports', component: ports, name: '端口自适应', meta: { title: 'ports' } }
     ]
   },
