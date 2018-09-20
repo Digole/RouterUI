@@ -258,7 +258,11 @@ export default {
       upstream: 'Upstream',
       downstream: 'Downstream',
       status: 'Link status',
-      terminal: 'Terminal online'
+      terminal: 'Terminal online',
+      day: 'Days',
+      hour: 'Hours',
+      min: 'Minutes',
+      sec: 'Seconds'
     },
     middle: {
       status: 'Interface State',

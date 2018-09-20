@@ -257,7 +257,11 @@ export default {
       upstream: '上行',
       downstream: '下行',
       status: '连接状态',
-      terminal: '终端在线'
+      terminal: '终端在线',
+      day: '天',
+      hour: '小时',
+      min: '分钟',
+      sec: '秒'
     },
     middle: {
       status: '接口状态',

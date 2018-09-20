@@ -164,3 +164,5 @@ export const getQuaggaInfo = data => { return axios.post(base + 'action/quaggaSt
 export const setShell = data => { return axios.post(base + 'action/quaggaConfHandleAction', data) }
 export const getBtnInfo = data => { return axios.post(base + 'action/quaggaBtnStatusAction', data) }
 export const stopAllQuagga = data => { return axios.post(base + 'action/quaggaConfAllStopAction', data) }
+// 获取公网连接状态
+export const getExtranetStatus = data => { return axios.post(base + 'action/internetStatusAction', data) }

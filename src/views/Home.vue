@@ -149,8 +149,8 @@ export default {
     onSubmit() {
       console.log('submit!')
     },
-     back: function(){
-this.$router.push('/ModeChoose')
+    back: function() {
+      this.$router.push('/ModeChoose')
     },
 
     // 退出登录

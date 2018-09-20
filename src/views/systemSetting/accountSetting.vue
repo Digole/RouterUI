@@ -106,11 +106,7 @@
 </template>
 
 <script>
-import { changePasswordAction } from '@/api/api.js'
-import { queryUsersAction } from '@/api/api.js'
-import { addUserAction } from '@/api/api.js'
-import { delUserAction } from '@/api/api.js'
-import { disableUserAction } from '@/api/api.js'
+import { changePasswordAction, queryUsersAction, addUserAction, delUserAction, disableUserAction } from '@/api/api.js'
 import md5 from 'js-md5'
 export default {
   name: 'accountSetting',

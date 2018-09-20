@@ -160,7 +160,8 @@ export default {
               console.log('para is ' + para)
               let timeNumber = new Date(date0, date1 - 1, date2, val0, val1, val2)
               this.deviceTime = new Date(timeNumber).toLocaleString()
-              console.log(timeNumber)
+              console.log('timen' + timeNumber)
+              console.log('deviceTime' + this.deviceTime)
               // for (let i = 0; i < 60; i++) {
               //   if (this.isUsingTimer) {
               //     setTimeout(() => {
