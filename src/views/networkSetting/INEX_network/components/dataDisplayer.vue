@@ -10,11 +10,11 @@
             </svg>
           </div>
           <div class="tip1">
-            <h2>{{wanNumber}}</h2>
+            <h2>{{ WAN }}</h2>
             <p class="bottomLine">{{$t('INEXNetwork.terminal.WANLinked')}}</p>
           </div>
           <div class="tip1">
-            <h2>0</h2>
+            <h2>{{ totalBnadWidth }}</h2>
             <p class="bottomLine">{{$t('INEXNetwork.terminal.bandWidth')}}</p>
           </div>
         </div>
@@ -28,15 +28,15 @@
             </svg>
           </div>
           <div class="tip">
-            <h2>1</h2>
+            <h2>{{ LAN }}</h2>
             <p class="bottomLine">{{$t('INEXNetwork.terminal.LANLinked')}}</p>
           </div>
           <div class="tip">
-            <h2>1</h2>
+            <h2>{{ terminal }}</h2>
             <p class="bottomLine">{{$t('INEXNetwork.terminal.terminalLinked')}}</p>
           </div>
           <div class="tip">
-            <h2>0</h2>
+            <h2>{{ DHCP }}</h2>
             <p class="bottomLine">{{$t('INEXNetwork.terminal. DHCP')}}</p>
           </div>
         </div>
@@ -50,7 +50,30 @@
 export default {
   name: 'dataDisplayer',
   data() {
-    return {}
+    return {
+      WAN: 0,
+      LAN: 0,
+      DHCP: 0,
+      terminal: this.$store.state.app.systemData.userNum,
+      totalBandWidth: 0
+    }
+  },
+  props: ['sendProtsInfo'],
+  watch: {
+    sendProtsInfo: function() {
+      this.WAN = this.LAN = this.DHCP = this.totalBandWidth = 0
+      this.sendProtsInfo.forEach(element => {
+        if (element.type === 'dhcp') {
+          this.DHCP++
+        }
+        if (element.function === 'LAN') {
+          this.LAN++
+        }
+        if (element.function === 'WAN') {
+          this.WAN++
+        }
+      })
+    }
   }
 }
 </script>

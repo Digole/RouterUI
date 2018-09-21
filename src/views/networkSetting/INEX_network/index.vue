@@ -3,13 +3,13 @@
     <!-- 终端设置部分 -->
     <div class="line_02"><span>{{$t('INEXNetwork.dividingLine.title1')}}</span></div>
 
-    <dataDisplayer class="setting"></dataDisplayer>
+    <dataDisplayer :sendPortsInfo="interfaces" class="setting"></dataDisplayer>
 
     <!-- 状态接口部分 -->
     <div class="line_02"><span>{{$t('INEXNetwork.dividingLine.title1')}}</span></div>
 
     <div class="router">
-      <router class="wholeRouter-out"></router>
+      <router class="wholeRouter-out" @getPortsInfo="handlePortsInfo"></router>
       <div class="tips">
         <div v-for="(item, index) in list" :key="index" class="row">
           <div class="container">
@@ -63,8 +63,14 @@
             tipEn: 'LAN',
             url: '#icon-pc'
           }
-        ]
+        ],
+        interfaces: []
 
+      }
+    },
+    methods: {
+      handlePortsInfo(val) {
+        this.interfaces = val
       }
     }
   }
