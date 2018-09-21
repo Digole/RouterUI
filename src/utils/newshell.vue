@@ -10,14 +10,23 @@
           <span>{{ type }}协议状态: {{ status }}</span>
         </el-form-item>
         <el-form-item>
-          <el-button v-if="proStatus && status !== '启用中'" type="primary" :disabled="btnStatus" @click="link">{{$t('operation.connect')}}</el-button>
-          <el-button v-else type="primary" @click="unlink">{{$t('operation.disconnect')}}</el-button>
+          <el-button 
+          type="primary" 
+          v-if="proStatus && status !== '启用中'"
+          :disabled="btnStatus" 
+          @click="link">{{$t('operation.connect')}}</el-button>
+          <el-button 
+          v-else
+          :disabled="status === '停止运行'"
+          type="primary"
+          @click="unlink">{{$t('operation.disconnect')}}</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="danger" :disabled="btnStatus" @click="stopWebSocketAll">关闭全部连接</el-button>
+          <el-button type="danger" :disabled="btnStatus" @click="stopAllWebSocket">关闭全部连接</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button v-if="shellStatus" type="primary" :disabled="btnStatus" @click="startWebSocket">启动动态路由配置</el-button>
+          <el-button v-if="shellStatus" type="primary" 
+          :disabled="btnStatus || status === '停止运行'" @click="startWebSocket">启动动态路由配置</el-button>
           <el-button v-else type="danger" @click="stopWebSocket">关闭配置</el-button>
         </el-form-item>
       </el-form>
@@ -39,16 +48,6 @@
           </vue-typer>
         </div>
 
-        <!-- <div class="shell_container" id="content-container">
-        <div class="line" v-for="(item,index) in interactList" :key="index" :class="{lastp: (index === (interactList.length - 1))}">
-          {{ item }}
-        </div>
-        <div class="line">{{ interactList }}</div>
-        <div class="send-line">
-          <input v-model="content" v-focus="focusStatus">
-        </div>
-      </div> -->
-
       </div>
     </div>
   </div>
@@ -64,9 +63,6 @@ import {
   getBtnInfo,
   stopAllQuagga
 } from '@/api/api.js'
-// Create WebSocket connection.
-let socket
-let username
 export default {
   name: 'sehll',
   props: ['code', 'type'],
@@ -75,22 +71,35 @@ export default {
   },
   data() {
     return {
-      content: '',
+      // content: '',
       interactList: [],
       lastLine: [],
       height: 0,
-      clearScreen: 0, // 清空屏幕
-      keyInUse: '', // 用来监听组合键
+
       focusStatus: true,
 
       status: '', // 协议状态
       btnStatus: false,
+
+      username: '',
 
       proStatus: true, // 用来判断协议按钮显示连接还是断开
       shellStatus: true // 用来判断动态路由按钮显示连接还是断开
     }
   },
   watch: {
+    // 'this.$store.state.app.webSocket.count': function() {
+    //   if (this.$store.state.app.webSocket.count > 1) {
+    //     this.initListener()
+    //   } else if (this.$store.state.app.webSocket.count === 1) {
+    //     console.log('in init socket')
+    //     this.initWebSocket()
+    //     this.initListener()
+    //   } else if (this.$store.state.app.webSocket.count === 0) {
+    //     this.closeWebSocket()
+    //     this.removeListener()
+    //   }
+    // },
     height: function() {
       let container = this.$el.querySelector('#content-container')
       container.scrollTop = container.scrollHeight
@@ -106,59 +115,43 @@ export default {
     }
   },
   methods: {
-    onTyped() {
-      console.log('onTyped!')
-    },
-    onTypedChar() {
-      console.log('onTypedChar')
-    },
-    startTelnet() {
+    initWebSocket() {
       this.$store.state.app.webSocket.socket = new WebSocket(
         'ws://10.9.0.13:8000'
       )
-      this.listerner()
+      console.log('in init websocket')
     },
 
-    // socket监听信息
-    listerner() {
-      socket = this.$store.state.app.webSocket.socket
+    closeWebSocket() {
+      this.$store.state.app.webSocket.socket.close()
+      console.log('close websocket')
+    },
 
-      // Connection opened
-      socket.addEventListener('open', function(event) {
-        console.log('opened!!!!!!!!!!!!!!!')
-      })
+    initListener() {
+      this.$store.state.app.webSocket.socket.addEventListener('message', this.onMessage)
+    },
 
-      socket.onopen = function(evt) {
-        console.log('in sending')
-      }
+    removeListener() {
+      this.$store.state.app.webSocket.socket.removeEventListener('message', this.onMessage)
+    },
 
-      socket.onmessage = evt => {
-        console.log('get response')
-        console.log(evt)
+    onMessage(evt) {
+      console.log('get response')
+      console.log('evt is ' + evt.data)
+      console.log('type is ' + typeof evt.data)
+      let result = []
+      if (typeof evt.data === 'string') {
+        result = evt.data.split('\r\n')
 
-        let result = evt.data.split('\r\n')
-        result.forEach(item => {
-          console.log(item)
-        })
         if (result.length === 1) {
-        // 处理键盘输入回显
-          if (result[0].length === 5 && result[0].charAt(4).charCodeAt() !== 8) {
-            console.log('it is a letter! ' + result[0])
+          // 处理键盘输入回显
+          // if (result[0].length === 5 && result[0].charAt(4).charCodeAt() !== 8) {
+          if (result[0].length === 5) {
             let letter = result[0].charAt(4)
-            console.log(
-              'array is ' + this.interactList[this.interactList.length - 1]
-            )
             // this.interactList[this.interactList.length - 1] += letter
             this.lastLine.push(letter)
-            console.log(
-              'array is ' + this.interactList[this.interactList.length - 1]
-            )
           } else if (result[0].length === 7 && result[0].charAt(4).charCodeAt() === 8) {
-          // 处理backspace,后端返回的值为code + '08 20 08' （ascii码）
-            console.log(result[0])
-            console.log('here it is! ' + result[0].charAt(4).charCodeAt())
-            console.log('it is backspace!')
-
+            // 处理backspace,后端返回的值为code + '08 20 08' （ascii码）
             this.lastLine = this.lastLine.slice(0, this.lastLine.length - 1)
           } else if (result[0].length > 5 && result[0].charAt(4).charCodeAt() !== 8) {
             // 处理上键的返回值
@@ -166,7 +159,6 @@ export default {
           }  else if (result[0].length > 7 && result[0].charAt(4).charCodeAt() === 8) {
             // 处理两次及以上上键的返回值
             for (let i = 4; i < result[0].length; i++) {
-              console.log(result[0].charAt(i).charCodeAt())
               if (result[0].charAt(i).charCodeAt() !== 8) {
                 // 因为后端传回的有 /b * n + 空格 * n + /b * n，所以需要去掉3*(i-4)的内容
                 this.lastLine = result[0].slice(4 + (i - 4) * 3, result[0].length)
@@ -182,6 +174,7 @@ export default {
               this.$store.state.app.webSocket.contentList.push(
                 this.code + element
               )
+              console.log('have pushed! ')
             }
             this.lastLine = []
             // 让屏幕保持在底部
@@ -193,23 +186,43 @@ export default {
       }
     },
 
-    send(val) {
-      // if (val === 'Enter') {
-      //   socket.send('Enter')
-      // } else {
-      //   console.log('this is conetent ' + this.content)
-
-      //   socket.send(this.code + this.content)
-
-      //   let lastContent = this.interactList[this.interactList.length - 1]
-      //   lastContent = lastContent + this.content
-      //   this.interactList[this.interactList.length - 1] = lastContent
-      //   this.$store.state.app.webSocket.contetnList[this.$store.state.app.webSocket.contetnList.length - 1] = lastContent
-      // }
-      // this.content = ''
-      // this.focusStatus = true
-      socket.send(this.code + val.key)
+    getHistory() {
+      this.$store.state.app.webSocket.contentList.forEach(element => {
+        console.log('history is ' + element)
+        if (element.slice(0, 3) === this.code) {
+          this.interactList.push(element.slice(3))
+        }
+      })
     },
+
+    socketStatus(val) {
+      if (val) {
+        this.$store.state.app.webSocket.count++
+        console.log('count++ ' + this.$store.state.app.webSocket.count)
+        if (this.$store.state.app.webSocket.count === 1) {
+          this.initWebSocket()
+          this.initListener()
+        }
+        if (this.$store.state.app.webSocket.count > 1) {
+          this.initListener()
+          this.getHistory()
+        }
+      } else {
+        this.$store.state.app.webSocket.count--
+        this.$store.state.app.webSocket.socket.removeEventListener('message', this.onmessage)
+        if (this.$store.state.app.webSocket.count === 0) {
+          this.closeWebSocket()
+        }
+      }
+    },
+
+    onClick(val) {
+      console.log(val.key)
+      if (this.$store.state.app.webSocket.socket) {
+        this.$store.state.app.webSocket.socket.send(this.code + val.key)
+      }
+    },
+
     // 启动动态路由协议
     link() {
       let para = {
@@ -233,32 +246,7 @@ export default {
           console.log(err)
         })
     },
-    // 开启动态路由配置
-    startWebSocket() {
-      let para = {
-        name: this.type,
-        usrname: username,
-        handle: 'start'
-      }
-      setShell(para)
-        .then(res => {
-          if (res.data.code === 200) {
-            // 启动按钮不显示
-            this.socketListener(1)
-            this.shellStatus = false
-            this.getQuagga()
-          }
-          if (res.data.code === 100) {
-            this.$message({
-              message: '其他用户正在配置中，请稍后再试',
-              type: 'warning'
-            })
-          }
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    },
+
     unlink() {
       let para = {
         name: this.type,
@@ -281,19 +269,54 @@ export default {
           console.log(err)
         })
     },
-    stopWebSocket() {
+
+    // 开启动态路由配置
+    startWebSocket() {
+      this.socketStatus(1)
+      setTimeout(() => {
+        this.setShellInfo()
+      }, 1000)
+    },
+
+    setShellInfo() {
       let para = {
         name: this.type,
-        usrname: username,
+        usrname: this.username,
+        handle: 'start'
+      }
+
+      setShell(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            // 启动按钮不显示
+            this.shellStatus = false
+            this.getQuagga()
+          }
+          if (res.data.code === 100) {
+            this.$message({
+              message: '其他用户正在配置中，请稍后再试',
+              type: 'warning'
+            })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+
+    stopWebSocket() {
+      // 处理websocket是否需要被清空
+      this.socketStatus(0)
+
+      let para = {
+        name: this.type,
+        usrname: this.username,
         handle: 'stop'
       }
       setShell(para)
         .then(res => {
           if (res.data.code === 200) {
             this.shellStatus = true
-
-            // 处理websocket是否需要被清空
-            this.socketListener(0)
 
             // 启动按钮不显示
             this.getQuagga()
@@ -308,14 +331,15 @@ export default {
         .catch(err => {
           console.log(err)
         })
+
+      this.interactList = []
     },
-    stopWebSocketAll() {
+
+    stopAllWebSocket() {
       stopAllQuagga()
         .then(res => {
           if (res.data.code === 200) {
-            this.$store.state.app.webSocket.count = 1
-            this.socketListener(0)
-            console.log('after closing all ' + socket)
+            this.$store.state.app.webSocket.count = 0
             this.shellStatus = true
             this.proStatus = true
             this.getQuagga()
@@ -326,6 +350,7 @@ export default {
         })
     },
 
+    // 获取当前页面状态信息
     getQuagga() {
       let para = {
         name: this.type
@@ -349,7 +374,7 @@ export default {
         })
 
       let para2 = {
-        usrname: username
+        usrname: this.username
       }
       console.log('before get btn info ' + para2.usrname)
       getBtnInfo(para2)
@@ -363,129 +388,21 @@ export default {
         .catch(err => {
           console.log(err)
         })
-    },
-
-    onClick(val) {
-      // if (this.keyInUse === 'c' || this.keyInUse === 'Control') {
-      //   if (this.keyInUse !== val.key) {
-      //     if (val.key === 'c' || val.key === 'Control') {
-      //       console.log('control + c')
-      //     }
-      //   }
-      // } else {
-      //   if (val.key === 'ArrowUp' || val.key === 'ArrowDown' || val.key === 'Enter') {
-      //     this.send(val.key)
-      //   }
-      // }
-      if (val.key === 'ArrowUp' || val.key === 'ArrowDown') {
-        this.send(val)
-        return false
-      } else {
-        this.send(val)
-      }
-    },
-    // 监听组合键的方法: 监听到keydown事件记录下当前按键，再通过keyup监听第二个按键，使用setTimeOut清空keydown事件
-    outClick(val) {
-      this.keyInUse = val.key
-      console.log(val.key)
-    },
-
-    socketListener(val) {
-      if (val) {
-        this.$store.state.app.webSocket.count++
-        console.log('count++ ' + this.$store.state.app.webSocket.count)
-        if (this.$store.state.app.webSocket.count === 1) {
-          this.startTelnet()
-        }
-      } else {
-        this.$store.state.app.webSocket.count--
-        console.log('count-- ' + this.$store.state.app.webSocket.count)
-        if (this.$store.state.app.webSocket.count === 0) {
-          this.$store.state.app.webSocket.socket.close()
-          console.log(
-            'close socket! ' + this.$store.state.app.webSocket.socket
-          )
-        }
-      }
-      socket = this.$store.state.app.webSocket.socket
     }
+
   },
   mounted() {
-    socket = this.$store.state.app.webSocket.socket
-    // 获得之前的交互记录
-    if (socket) {
-      this.listerner()
-      console.log('in mounted, listerner created ')
-      if (this.$store.state.app.webSocket.contetnList) {
-        this.$store.state.app.webSocket.contetnList.forEach((item, index) => {
-          if (item.slice(0, 3) === this.code) {
-            this.interactList.push(item.slice(3))
-          }
-        })
-      }
-    }
-
     let name = sessionStorage.getItem('user')
     name = JSON.parse(name)
-    username = name.userName
+    this.username = name.userName
 
     this.getQuagga()
 
     window.addEventListener('keyup', this.onClick)
-    window.addEventListener('keydown', this.outClick)
+  },
+  destroyed () {
+    window.removeEventListener('keyup', this.onClick)
+    // this.$store.state.app.webSocket.socket.removeEventListener('message', this.onmessage)
   }
 }
 </script>
-
-
-<style lang="scss" scoped>
-.col {
-  height: 4rem;
-}
-.container {
-  // position: relative;
-  margin-top: 1rem;
-  .shell_container {
-    height: 72vh;
-    padding: 1rem 0.5rem;
-    // background-color: RGB(1, 36, 86);
-    overflow: hidden;
-    .line {
-      height: 1rem;
-      input {
-        outline: none;
-        border: none;
-      }
-      .vue-typer {
-        span {
-          color: ghostwhite;
-        }
-      }
-      .lastp {
-        float: left;
-        height: 1rem;
-        margin: 0.1rem 0;
-        line-height: 1rem;
-        color: ghostwhite;
-      }
-      .send-line {
-        display: flex;
-        margin: 0.1rem 0;
-        input {
-          width: 100%;
-          height: 1.1rem;
-          line-height: 1rem;
-          padding: 0;
-          font-family: Helvetica Neue;
-          font-size: 14px;
-          // background-color: RGB(1, 36, 86);
-          border: none;
-          color: white;
-          outline: none;
-        }
-      }
-    }
-  }
-}
-</style>
-

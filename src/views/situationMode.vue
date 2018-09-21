@@ -62,7 +62,7 @@ export default {
   name: 'home',
   data() {
     return {
-      Url: "",
+      Url: '',
       sysName: 'OpenRT v0.1',
       collapsed: false,
       isCollapse: false,
@@ -85,13 +85,13 @@ export default {
       get() {
         console.log('get')
         console.log('in get ' + this.$store.state.app.language)
-        if(this.$store.state.app.language === "en"){
-          this.Url="/static/situationMode1.html"
-            console.log('en'+this.Url)
-       }else{
-            this.Url="/static/situationMode2.html"
-            console.log('zh'+this.Url)
-       }
+        if (this.$store.state.app.language === 'en') {
+          this.Url = '/static/situationMode1.html'
+          console.log('en' + this.Url)
+        } else {
+          this.Url = '/static/situationMode2.html'
+          console.log('zh' + this.Url)
+        }
         return this.$store.state.app.language
       },
       set(lang) {
@@ -129,8 +129,8 @@ export default {
           console.log(error)
         })
     },
-   back: function(){
-this.$router.push('/ModeChoose')
+    back: function() {
+      this.$router.push('/ModeChoose')
     },
     // 折叠导航栏
     collapse: function() {
@@ -151,8 +151,6 @@ this.$router.push('/ModeChoose')
       this.collapsed = !this.collapsed
       this.isCollapse = !this.isCollapse
     },
-
-   
 
     chooseLang(val) {
       this.lang = val

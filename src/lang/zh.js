@@ -182,7 +182,7 @@ export default {
     },
     client: {
       title: 'KidVPN客户端',
-      button1: '连接VPN服务器(创建客户端网络)',
+      button1: '连接VPN服务器',
       button2: '批量删除',
       serip: '服务器地址',
       locip: '本地地址',

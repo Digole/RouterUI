@@ -10,41 +10,62 @@
           <span>{{ type }}协议状态: {{ status }}</span>
         </el-form-item>
         <el-form-item>
-          <el-button v-if="proStatus && status !== '启用中'" type="primary" :disabled="btnStatus" @click="link">{{$t('operation.connect')}}</el-button>
-          <el-button v-else type="primary" @click="unlink">{{$t('operation.disconnect')}}</el-button>
+          <el-button 
+          type="primary" 
+          v-if="proStatus && status !== '启用中'"
+          :disabled="btnStatus" 
+          @click="link">{{$t('operation.connect')}}</el-button>
+          <el-button 
+          v-else
+          :disabled="!(status === '启用中')"
+          type="primary"
+          @click="unlink">{{$t('operation.disconnect')}}</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="danger" :disabled="btnStatus" @click="stopWebSocketAll">关闭全部连接</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button v-if="shellStatus" type="primary" :disabled="btnStatus" @click="startWebSocket">启动动态路由配置</el-button>
+          <el-button v-if="shellStatus" type="primary" 
+          :disabled="btnStatus || status === '停止运行'" @click="startWebSocket">启动动态路由配置</el-button>
           <el-button v-else type="danger" @click="stopWebSocket">关闭配置</el-button>
         </el-form-item>
       </el-form>
     </el-col>
 
     <div v-if="!shellStatus" class="container">
-
       <div class="shell_container" id="content-container">
-        <div class="line" v-for="(item,index) in interactList" :key="index" :class="{lastP: (index === (interactList.length - 1))}">
+
+        <div v-for="(item, index) in interactList" :key='index' class="line">
+          <vue-typer v-if="index !== (interactList.length - 1)" :text="item" :repeat="0" :typeDelay="0">
+          </vue-typer>
+        </div>
+        <div class="line">
+          <!-- <input v-model="interactList[interactList.length - 1]"> -->
+          <vue-typer :text="interactList[interactList.length -1]" :repeat="0" :typeDelay="0"></vue-typer>
+          <vue-typer
+          v-for="(item, index) in lastLine" :key="index"
+          :text="item" :repeat="0" :typeDelay="0">
+          </vue-typer>
+        </div>
+
+        <!-- <div class="shell_container" id="content-container">
+        <div class="line" v-for="(item,index) in interactList" :key="index" :class="{lastp: (index === (interactList.length - 1))}">
           {{ item }}
         </div>
+        <div class="line">{{ interactList }}</div>
         <div class="send-line">
           <input v-model="content" v-focus="focusStatus">
         </div>
-      </div>
-
-      <!-- <div class="send-line">
-        <el-input v-model="content"></el-input>
-        <el-button @click="send">发送</el-button>
       </div> -->
 
+      </div>
     </div>
   </div>
 
 </template>
 
 <script>
+import { VueTyper } from 'vue-typer'
 import {
   setQuagga,
   getQuaggaInfo,
@@ -58,10 +79,14 @@ let username
 export default {
   name: 'sehll',
   props: ['code', 'type'],
+  components: {
+    VueTyper
+  },
   data() {
     return {
       content: '',
       interactList: [],
+      lastLine: [],
       height: 0,
       clearScreen: 0, // 清空屏幕
       keyInUse: '', // 用来监听组合键
@@ -70,7 +95,7 @@ export default {
       status: '', // 协议状态
       btnStatus: false,
 
-      proStatus: true,  // 用来判断协议按钮显示连接还是断开
+      proStatus: true, // 用来判断协议按钮显示连接还是断开
       shellStatus: true // 用来判断动态路由按钮显示连接还是断开
     }
   },
@@ -90,56 +115,118 @@ export default {
     }
   },
   methods: {
-    startTelnet() {
-      this.$store.state.app.webSocket.socket = new WebSocket('ws://10.9.0.13:8000')
+    startWithoutSocket() {
 
+    },
+
+    startTelnet() {
+      this.$store.state.app.webSocket.socket = new WebSocket(
+        'ws://10.9.0.13:8000'
+      )
+      // this.initListener()
+    },
+
+    // socket监听信息
+    initListener() {
       socket = this.$store.state.app.webSocket.socket
+
       // Connection opened
       socket.addEventListener('open', function(event) {
         console.log('opened!!!!!!!!!!!!!!!')
       })
 
-      socket.onopen = function(evt) {
-        console.log('in sending')
-      }
+      socket.addEventListener('message', onmessage)
 
-      socket.onmessage = evt => {
+      onmessage = evt => {
         console.log('get response')
-        let result = evt.data.split('\r\n')
-        // console.log(result)
-        result.forEach((element, index) => {
-          if (index !== 0) {
-            // if (element.indexOf(this.code)) {
-            // element = element.subString(4)
-            this.interactList.push(element)
-            // }
-          }
-        })
-        setTimeout(() => {
-          this.height++
-        }, 100)
+        // console.log(evt)
 
-        // console.log(this.interactList)
+        let result = evt.data.split('\r\n')
+        result.forEach(item => {
+          console.log(item)
+        })
+        if (result.length === 1) {
+        // 处理键盘输入回显
+          if (result[0].length === 5 && result[0].charAt(4).charCodeAt() !== 8) {
+            let letter = result[0].charAt(4)
+
+            // this.interactList[this.interactList.length - 1] += letter
+            this.lastLine.push(letter)
+          } else if (result[0].length === 7 && result[0].charAt(4).charCodeAt() === 8) {
+          // 处理backspace,后端返回的值为code + '08 20 08' （ascii码）
+
+            this.lastLine = this.lastLine.slice(0, this.lastLine.length - 1)
+          } else if (result[0].length > 5 && result[0].charAt(4).charCodeAt() !== 8) {
+            // 处理上键的返回值
+            this.lastLine = result[0].slice(4, result[0].length)
+          }  else if (result[0].length > 7 && result[0].charAt(4).charCodeAt() === 8) {
+            // 处理两次及以上上键的返回值
+            for (let i = 4; i < result[0].length; i++) {
+              if (result[0].charAt(i).charCodeAt() !== 8) {
+                // 因为后端传回的有 /b * n + 空格 * n + /b * n，所以需要去掉3*(i-4)的内容
+                this.lastLine = result[0].slice(4 + (i - 4) * 3, result[0].length)
+                return true
+              }
+            }
+          }
+        } else {
+          // 处理非键盘回显
+          result.forEach((element, index) => {
+            if (index !== 0) {
+              this.interactList.push(element)
+              this.$store.state.app.webSocket.contentList.push(
+                this.code + element
+              )
+              console.log('have pushed! ')
+            }
+            this.lastLine = []
+            // 让屏幕保持在底部
+            setTimeout(() => {
+              this.height++
+            }, 100)
+          })
+        }
+      }
+    },
+
+    // 获取历史信息
+    getHistory() {
+      socket = this.$store.state.app.webSocket.socket
+      // 获得之前的交互记录
+      if (socket) {
+        // this.initListener()
+        // console.log('in mounted, initListener created ')
+        if (this.$store.state.app.webSocket.contetnList) {
+          this.$store.state.app.webSocket.contetnList.forEach(item => {
+            console.log('get history ' + item)
+            if (item.slice(0, 3) === this.code) {
+              this.interactList.push(item.slice(3))
+            }
+          })
+          console.log(typeof (this.$store.state.app.webSocket.contetnList) + '  ' +
+          this.$store.state.app.webSocket.contetnList)
+        }
       }
     },
 
     send(val) {
-      if (val !== '' && val !== undefined) {
-        console.log('this is val ' + val)
-        // socket.send(val)
-        socket.send(this.code + val)
-        // this.interactList.push(val)
-      } else {
-        console.log('this is conetent ' + this.content)
-        // socket.send(this.content)
-        socket.send(this.code + this.content)
-        let lastContent = this.interactList[this.interactList.length - 1]
-        lastContent = lastContent + this.content
-        this.interactList[this.interactList.length - 1] = lastContent
-      }
-      this.content = ''
-      this.focusStatus = true
+      // if (val === 'Enter') {
+      //   socket.send('Enter')
+      // } else {
+      //   console.log('this is conetent ' + this.content)
+
+      //   socket.send(this.code + this.content)
+
+      //   let lastContent = this.interactList[this.interactList.length - 1]
+      //   lastContent = lastContent + this.content
+      //   this.interactList[this.interactList.length - 1] = lastContent
+      //   this.$store.state.app.webSocket.contetnList[this.$store.state.app.webSocket.contetnList.length - 1] = lastContent
+      // }
+      // this.content = ''
+      // this.focusStatus = true
+      socket.send(this.code + val.key)
     },
+
     // 启动动态路由协议
     link() {
       let para = {
@@ -163,6 +250,7 @@ export default {
           console.log(err)
         })
     },
+
     // 开启动态路由配置
     startWebSocket() {
       let para = {
@@ -185,10 +273,12 @@ export default {
             })
           }
         })
+        .then(this.getHistory)
         .catch(err => {
           console.log(err)
         })
     },
+
     unlink() {
       let para = {
         name: this.type,
@@ -211,6 +301,7 @@ export default {
           console.log(err)
         })
     },
+
     stopWebSocket() {
       let para = {
         name: this.type,
@@ -238,7 +329,10 @@ export default {
         .catch(err => {
           console.log(err)
         })
+
+      this.interactList = []
     },
+
     stopWebSocketAll() {
       stopAllQuagga()
         .then(res => {
@@ -296,99 +390,71 @@ export default {
     },
 
     onClick(val) {
-      if (this.keyInUse === 'c' || this.keyInUse === 'Control') {
-        if (this.keyInUse !== val.key) {
-          if (val.key === 'c' || val.key === 'Control') {
-            // this.clearScreen++
-            console.log('control + c')
-          }
-        }
-      } else if (val.key === 'Enter' && this.content !== '') {
-        this.send()
+      // if (this.keyInUse === 'c' || this.keyInUse === 'Control') {
+      //   if (this.keyInUse !== val.key) {
+      //     if (val.key === 'c' || val.key === 'Control') {
+      //       console.log('control + c')
+      //     }
+      //   }
+      // } else {
+      //   if (val.key === 'ArrowUp' || val.key === 'ArrowDown' || val.key === 'Enter') {
+      //     this.send(val.key)
+      //   }
+      // }
+      if (val.key === 'ArrowUp' || val.key === 'ArrowDown') {
+        this.send(val)
+        return false
       } else {
-        if (val.key === 'ArrowUp' || val.key === 'ArrowDown') {
-          this.send(val.key)
-        }
+        this.send(val)
       }
     },
     // 监听组合键的方法: 监听到keydown事件记录下当前按键，再通过keyup监听第二个按键，使用setTimeOut清空keydown事件
     outClick(val) {
       this.keyInUse = val.key
-      console.log(val.key)
     },
 
     socketListener(val) {
       if (val) {
         this.$store.state.app.webSocket.count++
-        console.log('count++ ' + this.$store.state.app.webSocket.count)
+        // console.log('count++ ' + this.$store.state.app.webSocket.count)
         if (this.$store.state.app.webSocket.count === 1) {
           this.startTelnet()
         }
       } else {
         this.$store.state.app.webSocket.count--
-        console.log('count-- ' + this.$store.state.app.webSocket.count)
+        // console.log('count-- ' + this.$store.state.app.webSocket.count)
         if (this.$store.state.app.webSocket.count === 0) {
           this.$store.state.app.webSocket.socket.close()
-          console.log('close socket! ' + this.$store.state.app.webSocket.socket)
+          // console.log(
+          //   'close socket! ' + this.$store.state.app.webSocket.socket
+          // )
         }
       }
       socket = this.$store.state.app.webSocket.socket
     }
   },
   mounted() {
-    socket = this.$store.state.app.webSocket.socket
-    if (socket) {
-      // Connection opened
-      socket.addEventListener('open', function(event) {
-        console.log('opened!!!!!!!!!!!!!!!')
-      })
-
-      socket.onopen = function(evt) {
-        console.log('in sending')
-      }
-
-      socket.onmessage = evt => {
-        console.log('get response')
-        let result = evt.data.split('\r\n')
-        // console.log(result)
-        result.forEach((element, index) => {
-          if (index !== 0) {
-            // if (element.indexOf(this.code)) {
-            // element = element.subString(4)
-            this.interactList.push(element)
-            // }
-          }
-        })
-        setTimeout(() => {
-          this.height++
-        }, 100)
-
-        // console.log(this.interactList)
-      }
-    }
-
     let name = sessionStorage.getItem('user')
     name = JSON.parse(name)
     username = name.userName
+
+    socket = this.$store.state.app.webSocket.socket
+    // 获得之前的交互记录
+    if (socket) {
+      this.initListener()
+    }
 
     this.getQuagga()
 
     window.addEventListener('keyup', this.onClick)
     window.addEventListener('keydown', this.outClick)
-
-    // // Listen for messages
-    // socket.addEventListener('message', event => {
-    //   console.log('Message from server ', event.data)
-    //   this.interactList.push(event.data)
-    // })
   },
-
-  beforeDestroy() {
-    // socket.close()
+  destroyed () {
+    window.removeEventListener('keyup', this.onClick)
+    window.removeEventListener('keydown', this.outClick)
   }
 }
 </script>
-
 
 <style lang="scss" scoped>
 .col {
@@ -398,37 +464,43 @@ export default {
   // position: relative;
   margin-top: 1rem;
   .shell_container {
-    height: 75vh;
+    height: 72vh;
     padding: 1rem 0.5rem;
-    background-color: RGB(1, 36, 86);
-    overflow: auto;
+    // background-color: RGB(1, 36, 86);
+    overflow: hidden;
     .line {
       height: 1rem;
-      margin: 0.1rem 0;
-      line-height: 1rem;
-      color: ghostwhite;
-    }
-    .lastP {
-      float: left;
-      height: 1rem;
-      margin: 0.1rem 0;
-      line-height: 1rem;
-      color: ghostwhite;
-    }
-    .send-line {
-      display: flex;
-      margin: 0.1rem 0;
       input {
-        width: 100%;
-        height: 1.1rem;
-        line-height: 1rem;
-        padding: 0;
-        font-family: Helvetica Neue;
-        font-size: 14px;
-        background-color: RGB(1, 36, 86);
-        border: none;
-        color: white;
         outline: none;
+        border: none;
+      }
+      .vue-typer {
+        span {
+          color: ghostwhite;
+        }
+      }
+      .lastp {
+        float: left;
+        height: 1rem;
+        margin: 0.1rem 0;
+        line-height: 1rem;
+        color: ghostwhite;
+      }
+      .send-line {
+        display: flex;
+        margin: 0.1rem 0;
+        input {
+          width: 100%;
+          height: 1.1rem;
+          line-height: 1rem;
+          padding: 0;
+          font-family: Helvetica Neue;
+          font-size: 14px;
+          // background-color: RGB(1, 36, 86);
+          border: none;
+          color: white;
+          outline: none;
+        }
       }
     }
   }

@@ -833,6 +833,7 @@ export default {
           this.checked = res.data.code
           // this.ports = JSON.parse(JSON.stringify(res.data.interfaces))
           this.ports = res.data.interfaces
+          this.$emit('getPortsInfo', this.ports)
         })
         .catch(error => {
           console.log(error)

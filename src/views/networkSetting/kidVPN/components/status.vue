@@ -44,8 +44,10 @@ export default {
       this.getInfo()
     },
     getInfo() {
-      let para = {}
-      para.page = this.currentPage
+      let para = {
+        page: this.currentPage,
+        pagecount: 10
+      }
       getLinkStatus(para)
         .then(res => {
           if (res.data.code === 200) {

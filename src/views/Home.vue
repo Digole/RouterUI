@@ -22,12 +22,14 @@
 
       <el-col :span="4" class="userinfo">
 
-          <el-dropdown trigger="hover">
+        <!-- wyk 18.09.21 -->
+        <el-dropdown trigger="hover">
          <span class="situationMode el-dropdown-link userinfo-inner"> {{$t('home.professional')}}</span>
          <el-dropdown-menu slot="dropdown">
            <el-dropdown-item @click.native="back">{{$t('home.change')}}</el-dropdown-item>
           </el-dropdown-menu>
-         </el-dropdown>
+        </el-dropdown>
+        <!-- 09.21 -->
 
         <el-dropdown trigger="hover">
           <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
@@ -205,11 +207,13 @@ export default {
     generateTitle,
 
     getInfo() {
-      this.update()
-      setInterval(() => {
-        this.update()
-        this.$store.dispatch('pushSystemData', this.data)
-      }, 5000)
+      // 18.09.17 pky
+      // 注销请求，太烦了，生产环境恢复
+      // this.update()
+      // setInterval(() => {
+      //   this.update()
+      //   this.$store.dispatch('pushSystemData', this.data)
+      // }, 5000)
     },
 
     async update() {
