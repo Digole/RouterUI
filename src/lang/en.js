@@ -249,20 +249,20 @@ export default {
   },
   systemStatus: {
     top: {
-      title1: 'Not Configured',
-      title2: 'Configured',
+      title1: 'Disconnected',
+      title2: 'Connected',
       subtitle: 'Extranet',
       subtitle1: 'Intranet',
-      subtitle2: 'In running',
+      subtitle2: 'In running:  ',
       rate: 'Rate',
       upstream: 'Upstream',
       downstream: 'Downstream',
       status: 'Link status',
       terminal: 'Terminal online',
-      day: 'Days',
-      hour: 'Hours',
-      min: 'Minutes',
-      sec: 'Seconds'
+      day: ' D   ',
+      hour: ' H   ',
+      min: ' M   ',
+      sec: ' S   '
     },
     middle: {
       status: 'Interface State',
@@ -290,12 +290,25 @@ export default {
     dynamicARP: 'Dynamic ARP'
   },
   log: {
+    log: 'Log',
+    note: 'Provide the latest 24 hours data by default',
+    clear: 'Clear',
     index: 'Index',
     time: 'Time',
     line: 'Line',
     detail: 'Log Details'
   },
-
+  operaLog: {
+    log: 'OperationLog',
+    search: 'Search',
+    clear: 'Clear',
+    time: 'Time',
+    ip: 'ClientIP',
+    operator: 'Operator',
+    module: 'Module',
+    result: 'Result',
+    content: 'Content'
+  },
   Qos: {
     QosSetting: 'QosSetting',
     netif: 'netif',

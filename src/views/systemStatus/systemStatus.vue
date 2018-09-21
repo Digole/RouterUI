@@ -11,7 +11,7 @@
             <div id = "statusColor" class="topLeftLeft2">
               <p style="padding-top: 20px;">OpenRT</p><br/>
               <p><span style="font-size: 30px; margin: 10px 20px 10px 0px;">{{this.title}}</span>{{$t('systemStatus.top.subtitle')}}</p><br/>
-             <p>{{$t('systemStatus.top.subtitle2')}}:{{this.MonitorInfo.time[0]}}{{$t('systemStatus.top.day')}}{{this.MonitorInfo.time[1]}}{{$t('systemStatus.top.hour')}}{{this.MonitorInfo.time[2]}}{{$t('systemStatus.top.min')}}{{this.MonitorInfo.time[3]}}{{$t('systemStatus.top.sec')}}</p>
+             <p>{{$t('systemStatus.top.subtitle2')}}{{this.MonitorInfo.time[0]}}{{$t('systemStatus.top.day')}}{{this.MonitorInfo.time[1]}}{{$t('systemStatus.top.hour')}}{{this.MonitorInfo.time[2]}}{{$t('systemStatus.top.min')}}{{this.MonitorInfo.time[3]}}{{$t('systemStatus.top.sec')}}</p>
               
             </div>
             <div class="topLeftText">
@@ -175,7 +175,7 @@
 
 <script>
 import systemStatus from 'echarts'
-import { getPorts, getMonitorInfo, getExtranetStatus, setTime, getTime, setName, getName } from '../../api/api'
+import { getPorts, getMonitorInfo, getExtranetStatus } from '../../api/api'
 import { pieChart, lineChart } from './components'
 import { conversion } from '../../utils/rateUnitExchange.js'
 // import { conversion } from '../../utils/rateUnitExchange.js'
@@ -287,14 +287,14 @@ export default {
           if (this.MonitorInfo.status === 'failed') {
             obj.className = 'topLeftLeft2'
             if (this.$store.state.app.language === 'en') {
-              this.title = 'Not Configured'
-            } else { this.title = '未配置' }
+              this.title = 'Disconnected'
+            } else { this.title = '未连接' }
             console.log('title:' + this.title)
           } else {
             obj.className = 'topLeftLeft1'
             if (this.$store.state.app.language === 'en') {
-              this.title = 'Configured'
-            } else { this.title = '已配置' }
+              this.title = 'Connected'
+            } else { this.title = '已连接' }
           }
 
           // this.MonitorInfo.time[3] = parseInt(this.MonitorInfo.time[3]) + this.n
@@ -410,6 +410,9 @@ export default {
 
         this.ports = res.data.interfaces
       })
+      setTimeout(() => {
+        this.getPortsInfo()
+      }, 3000)
     },
 
     pushToINEX: function() {
@@ -680,8 +683,8 @@ export default {
     translate() {
       if (this.$store.state.app.language === 'en') {
         if (this.MonitorInfo.status === 'failed') {
-          this.title = 'Not Configured'
-        } else { this.title = 'Configured' }
+          this.title = 'Disconnected'
+        } else { this.title = 'Connected' }
         option.legend.data = [
           'HTTP',
           'Vedio',
@@ -705,8 +708,8 @@ export default {
       }
       if (this.$store.state.app.language === 'zh') {
         if (this.MonitorInfo.status === 'failed') {
-          this.title = '未配置'
-        } else { this.title = '已配置' }
+          this.title = '未连接'
+        } else { this.title = '已连接' }
         option.legend.data = [
           'HTTP协议',
           '网络视频',
@@ -765,7 +768,7 @@ p {
    .topLeftLeft1 {
     width: 60%;
     
-    background-color: rgb(9, 211, 100);
+    background-color: #98FB98  ;
     p {
       margin: auto 20px;
       color: white;

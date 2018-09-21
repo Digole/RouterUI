@@ -2,7 +2,7 @@
   <section>
 
     <div class="line_02">
-      <span>操作日志</span>
+      <span>{{$t('operaLog.log')}}</span>
     </div>
 
     <!--工具条-->
@@ -29,10 +29,10 @@
           </el-input>
         </el-form-item>
         <el-form-item class="clear">
-          <el-button @click="search">搜索</el-button>
+          <el-button @click="search">{{$t('operaLog.search')}}</el-button>
         </el-form-item>
         <el-form-item class="clear">
-          <el-button @click="empty">全部清空</el-button>
+          <el-button @click="empty">{{$t('operaLog.clear')}}</el-button>
         </el-form-item>
         <!-- <el-form-item>
           <span class="tip" v-if="request.time === ''">默认提供最近24小时数据</span>
@@ -41,17 +41,17 @@
     </el-col>
 
     <el-table :data="form" style="width: 100%" :header-cell-style="headerStyle">
-      <el-table-column prop="oper_time" label="操作时间">
+      <el-table-column prop="oper_time" :label="$t('operaLog.time')">
       </el-table-column>
-      <el-table-column prop="client_ip" label="客户端IP">
+      <el-table-column prop="client_ip" :label="$t('operaLog.ip')">
       </el-table-column>
-      <el-table-column prop="operator" label="操作者">
+      <el-table-column prop="operator" :label="$t('operaLog.operator')">
       </el-table-column>
-      <el-table-column prop="module_name" label="模块名">
+      <el-table-column prop="module_name" :label="$t('operaLog.module')">
       </el-table-column>
-      <el-table-column prop="result" label="操作结果">
+      <el-table-column prop="result" :label="$t('operaLog.result')">
       </el-table-column>
-      <el-table-column prop="oper_log" label="操作日志内容">
+      <el-table-column prop="oper_log" :label="$t('operaLog.content')">
       </el-table-column>
     </el-table>
 
