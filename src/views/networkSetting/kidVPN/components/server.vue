@@ -38,13 +38,13 @@
     </div> -->
 
     <el-table :data="addedClientList" :header-cell-style="headerStyle">
+      <el-table-column prop="vndid" :label="$t('kidVPN.server.vndid')" min-width="120"></el-table-column>
       <el-table-column prop="serip" :label="$t('kidVPN.server.serip')" min-width="150"></el-table-column>
       <el-table-column prop="locip" :label="$t('kidVPN.server.locip')" min-width="120"></el-table-column>
       <el-table-column prop="netmask" :label="$t('kidVPN.server.netmask')" min-width="120"></el-table-column>
       <el-table-column prop="gateway" :label="$t('kidVPN.server.gateway')" min-width="120"></el-table-column>
       <el-table-column prop="mac" :label="$t('kidVPN.server.mac')" min-width="120"></el-table-column>
       <el-table-column prop="mtu" :label="$t('kidVPN.server.mtu')" min-width="120"></el-table-column>
-      <el-table-column prop="vndid" :label="$t('kidVPN.server.vndid')" min-width="120"></el-table-column>
       <el-table-column :label="$t('operation.operation')" min-width="120">
         <template slot-scope="scope">
           <el-button size="small" @click="delServer(scope.index, scope.row)">{{ $t('operation.delete') }}</el-button>
@@ -107,7 +107,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="danger" @click="initAESKey">{{$t('kidVPN.server.button4')}}</el-button>
-        <el-button type="primary" @click="saveKey">{{$t('kidVPN.server.button5')}}</el-button>
+        <el-button type="primary" :disabled="!isGettingKey" @click="saveKey">{{$t('kidVPN.server.button5')}}</el-button>
       </div>
     </el-dialog>
 

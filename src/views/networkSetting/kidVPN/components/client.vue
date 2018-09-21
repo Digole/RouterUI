@@ -16,13 +16,13 @@
     </el-col>
 
     <el-table :data="addedClientList" style="width: 100%" @selection-change="selChange" :header-cell-style="headerStyle">
+      <el-table-column prop="vndid" :label="$t('kidVPN.client.vndid')" min-width="120"></el-table-column>
       <el-table-column type="selection" min-width="30"></el-table-column>
       <el-table-column prop="serip" :label="$t('kidVPN.client.serip')" min-width="120"></el-table-column>
       <el-table-column prop="locip" :label="$t('kidVPN.client.locip')" min-width="120"></el-table-column>
       <el-table-column prop="netmask" :label="$t('kidVPN.client.netmask')" min-width="120"></el-table-column>
       <el-table-column prop="gateway" :label="$t('kidVPN.client.gateway')" min-width="120"></el-table-column>
       <el-table-column prop="mtu" :label="$t('kidVPN.client.mtu')" min-width="60"></el-table-column>
-      <el-table-column prop="vndid" :label="$t('kidVPN.client.vndid')" min-width="120"></el-table-column>
       <el-table-column prop="position" :label="$t('kidVPN.client.serverLoc')" min-width="120"></el-table-column>
       <el-table-column prop="status" :label="$t('kidVPN.client.status')" min-width="120"></el-table-column>
       <el-table-column :label="$t('operation.operation')" min-width="60">
@@ -285,6 +285,11 @@ export default {
                   }
                 }
                 console.log(param)
+                if (param.status === 'OFF') {
+                  param.status = '连接成功'
+                } else {
+                  param.status = '炼铁失败'
+                }
                 this.addedClientList = param
                 console.log(this.addedClientList)
               } else if (res.data.page > 1) {
