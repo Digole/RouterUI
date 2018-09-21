@@ -21,6 +21,16 @@
       </el-col>
 
       <el-col :span="4" class="userinfo">
+
+        <!-- wyk 18.09.21 -->
+        <el-dropdown trigger="hover">
+         <span class="situationMode el-dropdown-link userinfo-inner"> {{$t('home.professional')}}</span>
+         <el-dropdown-menu slot="dropdown">
+           <el-dropdown-item @click.native="back">{{$t('home.change')}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <!-- 09.21 -->
+
         <el-dropdown trigger="hover">
           <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
           <el-dropdown-menu slot="dropdown">
@@ -127,12 +137,11 @@ export default {
   computed: {
     lang: {
       get() {
-        console.log('get')
-        console.log('in get ' + this.$store.state.app.language)
+        // console.log('get')
         return this.$store.state.app.language
       },
       set(lang) {
-        console.log('set')
+        // console.log('set')
         this.$i18n.locale = lang
         this.$store.dispatch('setLanguage', lang)
       }
@@ -141,6 +150,9 @@ export default {
   methods: {
     onSubmit() {
       console.log('submit!')
+    },
+    back: function() {
+      this.$router.push('/ModeChoose')
     },
 
     // 退出登录
@@ -195,11 +207,13 @@ export default {
     generateTitle,
 
     getInfo() {
-      this.update()
-      setInterval(() => {
-        this.update()
-        this.$store.dispatch('pushSystemData', this.data)
-      }, 5000)
+      // 18.09.17 pky
+      // 注销请求，太烦了，生产环境恢复
+      // this.update()
+      // setInterval(() => {
+      //   this.update()
+      //   this.$store.dispatch('pushSystemData', this.data)
+      // }, 5000)
     },
 
     async update() {
@@ -255,6 +269,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
@@ -291,6 +306,11 @@ export default {
           float: right;
         }
       }
+    }
+    .situationMode{
+      right: 100px;
+      padding-right: 35px;
+     
     }
     .logo {
       //width:230px;

@@ -1,79 +1,50 @@
 <template>
   <section>
     <div class="line_02">
-<<<<<<< HEAD
-      <span>账号设置</span>
-=======
       <span>{{$t('systemSetting.AccountSetting')}}</span>
->>>>>>> wuyunke1
     </div>
-    <!-- <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
+   
+    <!--添加账户的按钮-->
+	  <el-col :span="24">
 			<el-form :inline="true">
 				<el-form-item>
-					<el-button type="primary">添加</el-button>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary">启用</el-button>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary">停用</el-button>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary">删除</el-button>
+					<el-button type="danger" @click="addAccount" >{{$t('systemSetting.addAccount')}}</el-button>
 				</el-form-item>
 			</el-form>
-		</el-col> -->
+		</el-col>
 
-    <el-table :data="list" @selection-change="selsChange" style="width: 100%;" :header-cell-style="headerStyle">
+    <!--表格头-->
+    <el-table :data="userShow" @selection-change="selsChange" style="width: 100%;" :header-cell-style="headerStyle">
       <el-table-column type="selection" width="55">
       </el-table-column>
-<<<<<<< HEAD
-      <el-table-column prop="username" label="用户名" min-width="120">
-      </el-table-column>
-      <el-table-column prop="passwd" label="密码" min-width="180">
-      </el-table-column>
-      <el-table-column prop="status" label="状态" min-width="180">
-      </el-table-column>
-      <el-table-column prop="behaviour" label="操作" min-width="180">
-        <template slot-scope="scope">
-          <el-button size="small" @click="changePasswd">修改密码</el-button>
-=======
       <el-table-column prop="username" :label="$t('systemSetting.username')" min-width="120">
       </el-table-column>
       <el-table-column prop="passwd" :label="$t('systemSetting.passwd')" min-width="180">
       </el-table-column>
+       <el-table-column prop="role" :label="$t('systemSetting.role')" min-width="180">
+      </el-table-column>
       <el-table-column prop="status" :label="$t('systemSetting.status')" min-width="180">
       </el-table-column>
       <el-table-column prop="behaviour" :label="$t('systemSetting.behaviour')" min-width="180">
-        <template slot-scope="scope">
-          <el-button size="small" @click="changePasswd">{{$t('systemSetting.changePasswd')}}</el-button>
->>>>>>> wuyunke1
-        </template>
+      <template slot-scope="scope">
+      <el-button size="small" @click="changePasswd(scope.row)">{{$t('systemSetting.changePasswd')}}</el-button>
+        <el-button size="small" @click="deleteUser(scope.row)">{{$t('systemSetting.deleteUser')}}</el-button>
+        <el-button size="small" @click="changeStatus(scope.row)">{{$t('systemSetting.changeStatus')}}</el-button>
+      </template>
       </el-table-column>
     </el-table>
 
-<<<<<<< HEAD
-    <el-dialog title="修改密码" :visible.sync="isInChanging">
-      <el-form :model="checkForm" ref="addForm">
-        <el-form-item prop="old" label="请输入原密码">
-          <el-input type="password" v-model="checkForm.old"></el-input>
-        </el-form-item>
-        <el-form-item prop="one" label="请输入新密码">
-          <el-input type="password" v-model="checkForm.one"></el-input>
-        </el-form-item>
-        <el-form-item prop="two" label="请再次输入新密码">
-=======
+    <!--修改密码的功能实现-->
     <el-dialog :title="$t('systemSetting.changePasswd')" :visible.sync="isInChanging">
       <el-form :model="checkForm" ref="addForm">
         <el-form-item prop="old" :label="$t('systemSetting.old')">
-          <el-input type="password" v-model="checkForm.old"></el-input>
+          <el-input type="password" v-model="checkForm.old" placeholder="请输入原密码"></el-input>
         </el-form-item>
         <el-form-item prop="one" :label="$t('systemSetting.one')">
-          <el-input type="password" v-model="checkForm.one"></el-input>
+          <el-input type="password" v-model="checkForm.one" placeholder="请输入新密码"></el-input>
         </el-form-item>
         <el-form-item prop="two" :label="$t('systemSetting.two')">
->>>>>>> wuyunke1
-          <el-input type="password" v-model="checkForm.two"></el-input>
+          <el-input type="password" v-model="checkForm.two" placeholder="请再次输入新密码"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -82,31 +53,191 @@
       </div>
     </el-dialog>
 
+    <!--更改权限的功能实现-->
+    <el-dialog :title="$t('systemSetting.changeStatus')" :visible.sync="isInChangingStatus">
+      <el-form ref="form" :model="userRec" label-width="8rem">
+        <el-form-item prop="status" :label="$t('systemSetting.selectStatus')">
+          <el-radio v-model="status1" label = "0">{{$t('systemSetting.On') }} </el-radio>
+          <el-radio v-model="status1" label = "1">{{$t('systemSetting.Off')}}</el-radio>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="danger" @click="changeStatusCancel">{{$t('operation.cancel')}}</el-button>
+        <el-button type="primary" @click="subChangeStatus">{{$t('operation.submit')}}</el-button>
+      </div>
+    </el-dialog>
+
+    <!--删除用户的功能实现-->
+    <el-dialog :title="$t('systemSetting.deleteUser')" :visible.sync="isInDelete">
+      <el-form ref="form" :model="userRec" label-width="16rem">
+        <el-form-item prop="delete" :label="$t('systemSetting.ifDelete')"></el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="danger" @click="deleteCancel">{{$t('operation.cancel')}}</el-button>
+        <el-button type="primary" @click="deldeteSubmit">{{$t('operation.submit')}}</el-button>
+      </div>
+    </el-dialog>
+
+    <!--添加用户弹出界面的功能实现-->
+    <el-dialog :title="$t('systemSetting.addAccount')" :visible.sync="isAdd">
+      <el-form ref="form" :model="userRec" label-width="8rem">
+        <el-form-item prop="username" :label="$t('systemSetting.username')">
+          <el-input v-model="userRec.username" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item prop="passwd" :label="$t('systemSetting.passwd1')">
+          <el-input type="password" v-model="passwd1" placeholder="请输入密码"></el-input>
+        </el-form-item>
+        <el-form-item prop="passwd" :label="$t('systemSetting.passwd2')">
+          <el-input type="password" v-model="passwd2" placeholder="请再次输入密码"></el-input>
+        </el-form-item>
+        <el-form-item prop="role" :label="$t('systemSetting.selectPower')">
+          <el-select v-model="userRec.role" placeholder="请选择">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="small" @click="addNewAccountCancel" >{{$t('operation.cancel')}}</el-button>
+        <el-button size="small" @click="addNewAccount" >{{$t('operation.submit')}}</el-button>
+      </div>
+    </el-dialog>
+
   </section>
 </template>
 
 <script>
-import { changePasswd } from '@/api/api.js'
+import { changePasswordAction, queryUsersAction, addUserAction, delUserAction, disableUserAction } from '@/api/api.js'
 import md5 from 'js-md5'
 export default {
   name: 'accountSetting',
   data() {
     return {
+      new_passwd: '',
+      userNowRole: '',
+      userNowStatus: '',
+      userNowName: '',
+      userNowPasswd: '',
+      delete: 0,
+      isInDelete: false,
+      status1: '',
+      passwd1: '',
+      passwd2: '',
       isInChanging: false,
+      isInChangingStatus: false,
       sels: [],
       checkForm: {},
-      list: []
+      list: [{status: ''}],
+      form: [],
+      isAdd: false,
+      currentPage: 1,
+      total: 0,
+      selectPower: '',
+      user: {                         /* 发送给后端的账号信息                       */
+
+        cUsername: '',                /*  用户名                                  */
+        cPasswd: '',                  /*  密码                                    */
+        iRole: Number,                /*  角色权限 1:admin 2: operator 3: visitor */
+        iStatus: Number              /*  状态 0：启用、1：禁用                    */
+
+      },
+      userShow: [],                   /* 显示出来的账号信息                       */
+      userRec: {                       /* 从输入框得到的账号信息                       */
+        username: '',
+        passwd: '',
+        role: '',
+        status: Number
+
+      },
+      options: [
+        {
+          value: 1,
+          label: 'admin'
+        },
+        {
+          value: 2,
+          label: 'operator'
+        },
+        {
+          value: 3,
+          label: 'visitor'
+        }
+      ]
     }
   },
+
   methods: {
     headerStyle() {
       return this.header()
     },
+    deleteCancel() {
+      this.isInDelete = false
+      this.$refs.checkForm.resetFields()
+    },
+    deleteUser(val) {
+      console.log(val)
+      this.userNowName = val.username
+      this.isInDelete = true
+    },
+    addAccount() {
+      this.isAdd = true
+    },
     selsChange: function(sels) {
       this.sels = sels
     },
-    changePasswd() {
+    changePasswd(val) {
+      console.log(val)
+      this.userNowName = val.username
+      this.userNowPasswd = val.passwd
       this.isInChanging = true
+    },
+    changeStatus(val) {
+      console.log(val)
+      this.userNowName = val.username
+      this.isInChangingStatus = true
+    },
+    deldeteSubmit() {
+      let para = {}
+      para.username = this.userNowName
+      delUserAction(para).then(res => {
+        if (res.data.code === 200) {
+          this.list[0].status = '修改成功'
+        } else {
+          this.list[0].status = '修改失败'
+        }
+        this.getUserInfo()
+        this.isInDelete = false
+      })
+    },
+    subChangeStatus() {
+      let para = {}
+      para.username = this.userNowName
+      if (this.status1 === '0') {
+        para.status = 0
+        disableUserAction(para).then(res => {
+          if (res.data.code === 200) {
+            this.list[0].status = '修改成功'
+          } else {
+            this.list[0].status = '修改失败'
+          }
+          this.getUserInfo()
+          this.isInChangingStatus = false
+        })
+      } else if (this.status1 === '1') {
+        para.status = 1
+        disableUserAction(para).then(res => {
+          if (res.data.code === 200) {
+            this.list[0].status = '修改成功'
+          } else {
+            this.list[0].status = '修改失败'
+          }
+          this.getUserInfo()
+          this.isInChangingStatus = false
+        })
+      }
+    },
+    changeStatusCancel() {
+      this.isInChangingStatus = false
+      this.$refs.checkForm.resetFields()
     },
     addCancel() {
       this.isInChanging = false
@@ -115,16 +246,47 @@ export default {
     addSubmit() {
       if (this.checkForm.one === this.checkForm.two) {
         let para = {}
-        para.username = this.list[0].username
+        para.username = this.userNowName
         para.passwd = md5(this.checkForm.old)
         para.new_passwd = md5(this.checkForm.one)
-        changePasswd(para).then(res => {
+        changePasswordAction(para).then(res => {
           if (res.data.code === 200) {
             this.list[0].status = '修改成功'
           } else {
             this.list[0].status = '修改失败'
           }
-          this.isInChanging = false
+        })
+        this.getUserInfo()
+      } else {
+        this.$message({
+          type: 'error',
+          message: '两次输入密码不一致！'
+        })
+        this.getUserInfo()
+        this.$refs.checkForm.resetFields()
+      }
+    },
+    addNewAccountCancel() {
+      this.isAdd = false
+    },
+    addNewAccount() {
+      if (this.passwd1 === this.passwd2) {
+        this.user.cUsername = this.userRec.username
+        this.user.iRole = this.userRec.role
+        this.user.iStatus = 0
+        let para = {}
+        para.username = this.user.cUsername
+        para.passwd = md5(this.passwd1)
+        para.role = this.user.iRole
+        para.status = this.user.iStatus
+        addUserAction(para).then(res => {
+          if (res.data.code === 200) {
+            this.list[0].status = '修改成功'
+            this.getUserInfo()
+          } else {
+            this.list[0].status = '修改失败'
+          }
+          this.isAdd = false
         })
       } else {
         this.$message({
@@ -133,6 +295,39 @@ export default {
         })
         this.$refs.checkForm.resetFields()
       }
+    },
+
+    getUserInfo() {
+      let para = {}
+      para.username = ''
+      para.passwd = ''
+      para.role = 1
+      para.status = 1
+      queryUsersAction(para).then(res => {
+        this.userShow = res.data.data
+        for (let i = 0; i < res.data.data.length; i++) {
+          if (this.userShow[i].role === 1) {
+            this.userShow[i].role = 'admin'
+          } else if (this.userShow[i].role === 2) {
+            this.userShow[i].role = 'operator'
+          } else {
+            this.userShow[i].role = 'visitor'
+          }
+          if (res.data.data[i].status === 0) {
+            if (this.$store.state.app.language === 'zh') {
+              this.userShow[i].status = '启用'
+            } else {
+              this.userShow[i].status = 'on'
+            }
+          } else {
+            if (this.$store.state.app.language === 'zh') {
+              this.userShow[i].status = '禁用'
+            } else {
+              this.userShow[i].status = 'off'
+            }
+          }
+        }
+      })
     },
     getInfo() {
       let data = JSON.parse(sessionStorage.getItem('user'))
@@ -146,7 +341,8 @@ export default {
     }
   },
   mounted() {
-    this.getInfo()
+    // this.getInfo()
+    this.getUserInfo()
   }
 }
 </script>

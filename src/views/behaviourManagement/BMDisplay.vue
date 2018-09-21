@@ -1,7 +1,7 @@
 <template>
   <section>
 
-    <div class="line_02"><span>WEB上下线</span></div>
+    <div class="line_02"><span>{{$t('BMDisplay.web')}}</span></div>
 
     <!--工具条-->
     <el-col :span="24">
@@ -22,27 +22,27 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="search">搜索</el-button>
+          <el-button @click="search">{{$t('BMDisplay.search')}}</el-button>
         </el-form-item>
         <el-form-item class="clear">
-          <el-button @click="empty">全部清空</el-button>
+          <el-button @click="empty">{{$t('BMDisplay.clear')}}</el-button>
         </el-form-item>
         <el-form-item>
-          <span class="tip" v-if="request.time === ''">默认提供最近24小时数据</span>
+          <span class="tip" v-if="request.time === ''">{{$t('BMDisplay.provide')}}</span>
         </el-form-item>
       </el-form>
     </el-col>
 
     <el-table :data="form" style="width: 100%" :header-cell-style="headerStyle">
-      <el-table-column prop="time"  label="时间">
+      <el-table-column prop="time"  :label="$t('BMDisplay.time')">
       </el-table-column>
-      <el-table-column prop="username"  label="名称">
+      <el-table-column prop="username"  :label="$t('BMDisplay.name')">
       </el-table-column>
-      <el-table-column prop="clientIp"  label="客户端IP">
+      <el-table-column prop="clientIp"  :label="$t('BMDisplay.ip')">
       </el-table-column>
-      <el-table-column prop="result"  label="操作结果">
+      <el-table-column prop="result"  :label="$t('BMDisplay.result')">
       </el-table-column>
-      <el-table-column prop="type"  label="操作类型">
+      <el-table-column prop="type"  :label="$t('BMDisplay.type')">
       </el-table-column>
     </el-table>
 

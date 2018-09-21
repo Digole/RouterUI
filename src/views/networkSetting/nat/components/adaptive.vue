@@ -205,6 +205,13 @@ export default {
       formLabelWidth: '130px'
     }
   },
+  watch: {
+    checked: function() {
+      if (this.checked !== 200) {
+        this.sortingHandle()
+      }
+    }
+  },
   methods: {
     interval() {
       stopSignal1 = setInterval(this.getPortsInfo, 5000)

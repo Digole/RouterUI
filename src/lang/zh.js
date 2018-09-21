@@ -1,3 +1,4 @@
+
 export default {
   route: {
     statusMonitor: '状态监控',
@@ -17,6 +18,7 @@ export default {
     systemSetting: '系统设置',
     basicSetting: '基础设置',
     accountSetting: '账号设置',
+    powerSetting: '权限管理',
     versionUpdate: '版本升级',
     hardwareInfo: '硬件信息',
     shutdownRestart: '重启关机',
@@ -35,12 +37,11 @@ export default {
     dialLog: '拨号日志',
     tools: '系统工具',
     ping: 'Ping测试',
-<<<<<<< HEAD
-    operaLog: '操作日志'
-=======
+    speed: '网速测试',
     operaLog: '操作日志',
-    Qos: 'Qos'
->>>>>>> wuyunke1
+    Qos: 'Qos',
+    ARPLog: 'ARP日志',
+    DHCPLog: 'DHCP日志'
   },
 
   operation: {
@@ -61,8 +62,13 @@ export default {
     determine: '确定',
     search: '搜索'
   },
-
+  situationMode: {
+    situation: '情景模式',
+    change: '切换模式'
+  },
   home: {
+    professional: '专家模式',
+    change: '切换模式',
     ram: '内存',
     up: '上行速率',
     down: '下行速率',
@@ -176,14 +182,15 @@ export default {
     },
     client: {
       title: 'KidVPN客户端',
-      button1: '连接VPN服务器(创建客户端网络)',
+      button1: '连接VPN服务器',
       button2: '批量删除',
       serip: '服务器地址',
       locip: '本地地址',
       netmask: '子网掩码',
       gateway: '网关地址',
       mtu: 'MTU',
-      vndid: '虚拟网卡ID',
+      vndid: 'VPN编号',
+      serverLoc: '客户端地理位置',
       status: '连接状态',
       title1: '创建KidVPN客户端网络',
       ipaddr: '本地IP地址',
@@ -202,7 +209,7 @@ export default {
       gateway: '网关地址',
       mac: 'MAC',
       mtu: 'MTU',
-      vndid: '虚拟网卡ID',
+      vndid: 'VPN编号',
       aeskey: 'AES Key',
       ipaddr: '本地IP地址',
       button3: '创建虚拟网络',
@@ -217,7 +224,8 @@ export default {
     status: {
       title: 'VPN连接状态',
       ip: '客户端IP地址',
-      mac: '客户端MAC地址'
+      mac: '客户端MAC地址',
+      clientLoc: '服务端地理位置'
     }
   },
   staticRouter: {
@@ -240,8 +248,8 @@ export default {
   },
   systemStatus: {
     top: {
-      title1: '未配置',
-      title2: '已配置',
+      title1: '未连接',
+      title2: '已连接',
       subtitle: '外网',
       subtitle1: '内网',
       subtitle2: '已运行',
@@ -249,7 +257,11 @@ export default {
       upstream: '上行',
       downstream: '下行',
       status: '连接状态',
-      terminal: '终端在线'
+      terminal: '终端在线',
+      day: '天',
+      hour: '小时',
+      min: '分钟',
+      sec: '秒'
     },
     middle: {
       status: '接口状态',
@@ -282,14 +294,26 @@ export default {
     dynamicARP: 'ARP表'
   },
   log: {
+    note: '默认提供最近24小时数据',
+    log: '日志中心',
+    clear: '全部清空',
     index: '编号',
     time: '时间',
     line: '线路',
     detail: '日志详情'
-<<<<<<< HEAD
-=======
-  },
 
+  },
+  operaLog: {
+    log: '操作日志',
+    search: '搜索',
+    clear: '全部清空',
+    time: '操作时间',
+    ip: '客户端IP',
+    operator: '操作者',
+    module: '模块名',
+    result: '操作结果',
+    content: '操作日志内容'
+  },
   Qos: {
     QosSetting: 'Qos配置',
     netif: '网卡接口',
@@ -301,12 +325,26 @@ export default {
     dontDrop: '丢包选项',
     addNewQos: '添加新Qos',
     portStart: '开始端口',
-    portEnd: '结束端口',
+    portEnd: '结束端口'
   },
   systemSetting: {
-    AccountSetting: '账号设置',
+    ifDelete: '是否要删除该账户',
+    On: '启用',
+    Off: '禁用',
+    selectStatus: '选择状态',
+    changeStatus: '修改状态',
+    deleteUser: '删除',
+    role: '角色',
+    selectPower: '权限',
+    admin: '主管',
+    operator: '管理员',
+    visitor: '游客',
+    addAccount: '添加用户',
+    AccountSetting: '用户管理',
     username: '用户名',
     passwd: '密码',
+    passwd1: '请输入密码',
+    passwd2: '请再次输入密码',
     status: '状态',
     behaviour: '操作',
     changePasswd: '修改密码',
@@ -330,7 +368,7 @@ export default {
     VersionDetection: '版本检测：',
     DetectNewVersion: '检测新版本',
     RoutingSystemVersion: '路由系统版本：',
-    SylixOSVersion: 'SylixOS操作系统版本：',
+    versionStatus: '版本状态',
     localUpdate: '本地升级：',
     fileSelection: '选取文件',
     submitUpload: '上传到服务器',
@@ -339,7 +377,81 @@ export default {
     updateNow: '立即升级',
     updateFinished: '上传完成',
     refreshAfter: '预计',
-    sDoNotTurnOff: '秒后刷新页面，请勿关闭电源',
->>>>>>> wuyunke1
+    sDoNotTurnOff: '秒后刷新页面，请勿关闭电源'
+  },
+  securitySetting: {
+    ARPDefence: 'ARP防御',
+    status: '状态：',
+    inUse: '使用中',
+    stopped: '已停用',
+    stop: '停用',
+    start: '启用',
+    showInfo: '显示全部信息',
+    showConflict: '显示冲突信息',
+    IP: 'IP地址',
+    MACInfo: 'MAC信息',
+    conflictMACAddr: '冲突MAC地址',
+    firewall: '规则防火墙',
+    add: '添加',
+    port: '网口',
+    type: '策略类型',
+    ipSE: 'IP开始地址-结束地址',
+    mac: 'MAC地址',
+    portSE: '端口开始地址-结束地址',
+    enable: '操作',
+    disablePort: '禁用网卡',
+    disableSubmit: '禁用',
+    Cancle: '取消',
+    isInEnabling: '启用网卡',
+    enableSubmit: '启用',
+    selectStrategy: '请选择策略',
+    isTcpRule: '添加TCP策略',
+    ips: 'IP开始地址',
+    ipe: 'IP结束地址',
+    tcps: 'TCP开始端口',
+    tcpe: 'TCP结束端口',
+    isUdpRule: '添加UDP策略',
+    udps: 'UDP开始端口',
+    udpe: 'UDP结束端口',
+    isIpRule: '添加IP策略',
+    isMacRule: '添加MAC策略',
+    whitelist: '白名单',
+    delete: '删除',
+    edit: '编辑',
+    blacklist: '黑名单',
+    time: '时间'
+  },
+  powerSetting: {
+    submitChange: '提交更改',
+    ifsubmit: '是否提交更改？',
+    powerSetting: '权限管理',
+    addChange: '提交更改',
+    all: '总类',
+    detail: '具体权限',
+    operator: '操作员权限',
+    visitor: '观察者权限'
+  },
+  ARPLog: {
+    ARPLog: 'ARP防御日志'
+  },
+  DHCPLog: {
+    DHCPLog: 'DHCP日志'
+  },
+  BMDisplay: {
+    web: 'WEB上下线',
+    search: '搜索',
+    clear: '全部清空',
+    provide: '默认提供最近24小时数据',
+    time: '时间',
+    name: '名称',
+    ip: '客户端IP',
+    result: '操作结果',
+    type: '操作类型'
+  },
+  BMControl: {
+    record: '行为记录管理',
+    DeviceRecord: '终端上下线记录：',
+    WebRecord: 'WEB上下线记录：',
+    on: '开启'
   }
 }

@@ -1,14 +1,20 @@
 <template>
   <div>
     <div class="line_02">
-      <span>日志中心</span>
+      <span>{{$t('log.log')}}</span>
     </div>
 
     <!--工具条-->
     <el-col :span="24">
       <el-form :model="request" :inline="true" ref="request">
         <el-form-item prop="time">
-          <el-date-picker v-model="request.time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @change="getTime">
+          <el-date-picker 
+            v-model="request.time" 
+            type="datetimerange" 
+            range-separator="至" 
+            start-placeholder="开始日期" 
+            end-placeholder="结束日期" 
+            @change="getTime">
           </el-date-picker>
         </el-form-item>
         <el-form-item prop="keyword">
@@ -17,10 +23,10 @@
           </el-input>
         </el-form-item>
         <el-form-item class="clear">
-          <el-button @click="empty">全部清空</el-button>
+          <el-button @click="empty">{{$t('log.clear')}}</el-button>
         </el-form-item>
         <el-form-item>
-          <span class="tip" v-if="request.time === ''">默认提供最近24小时数据</span>
+          <span class="tip" v-if="request.time === ''">{{$t('log.note')}}</span>
         </el-form-item>
       </el-form>
     </el-col>

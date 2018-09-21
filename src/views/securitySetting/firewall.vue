@@ -2,19 +2,19 @@
   <div>
 
     <div class="line_02">
-      <span>规则防火墙</span>
+      <span>{{$t('securitySetting.firewall')}}</span>
     </div>
 
     <el-col :span="24">
       <el-form :inline="true">
         <el-form-item>
-          <el-button type="primary" @click="handleAdd">添加</el-button>
+          <el-button type="primary" @click="handleAdd">{{$t('securitySetting.add')}}</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleEnable">启用</el-button>
+          <el-button type="primary" @click="handleEnable">{{$t('securitySetting.start')}}</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="danger" @click="handleDisable">禁用</el-button>
+          <el-button type="danger" @click="handleDisable">{{$t('securitySetting.stop')}}</el-button>
         </el-form-item>
         <el-form-item>
           <el-input v-model="portChoosen" placeholder="根据网口搜索" style="width: 100%;"></el-input>
@@ -50,13 +50,15 @@
     </el-table> -->
 
     <el-table :data="rulesList" :header-cell-style="headerStyle">
-      <el-table-column prop="port" label="网口" align="center"></el-table-column>
-      <el-table-column prop="type" label="策略类型" align="center"></el-table-column>
-      <el-table-column prop="ipSE" label="IP开始地址-结束地址" align="center"></el-table-column>
-      <el-table-column prop="mac" label="MAC地址" align="center"></el-table-column>
-      <el-table-column prop="portSE" label="端口开始地址-结束地址" align="center"></el-table-column>
-      <el-table-column prop="status" label="状态" align="center"></el-table-column>
-      <el-table-column prop="enable" align="center" label="操作">
+      <el-table-column prop="port" :label="$t('securitySetting.port')" align="center"></el-table-column>
+      <el-table-column prop="type" :label="$t('securitySetting.type')" align="center"></el-table-column>
+      <el-table-column prop="ipSE" :label="$t('securitySetting.ipSE')" align="center"></el-table-column>
+      <el-table-column prop="mac" :label="$t('securitySetting.mac')" align="center"></el-table-column>
+      <el-table-column prop="portSE" :label="$t('securitySetting.portSE')" align="center"></el-table-column>
+      <el-table-column prop="status" :label="$t('securitySetting.status')" align="center"></el-table-column>
+      <el-table-column prop="enable" align="center" :label="$t('securitySetting.enable')">
+      <el-table-column prop="direct" align="center" label="导向">
+      <el-table-column prop="mangle" align="center" label="权限">     
         <template slot-scope="scope">
           <el-button type="text" @click="deleteRule(scope.$index, scope.row)">{{$t('operation.delete')}}</el-button>
         </template>
@@ -72,25 +74,25 @@
     </el-pagination>
 
     <!-- 禁用网卡页面 -->
-    <el-dialog title="禁用网卡" :visible.sync="isInDisabling">
+    <el-dialog :title="$t('securitySetting.disablePort')" :visible.sync="isInDisabling">
       <el-select v-model="disablePort" placeholder="请选择禁用网卡">
         <el-option v-for="item in disablePortList" :label="item" :value="item" :key="item"></el-option>
       </el-select>
-      <el-button @click="disableSubmit" type="danger">禁用</el-button>
-      <el-button @click="enableCancle">取消</el-button>
+      <el-button @click="disableSubmit" type="danger">{{$t('securitySetting.disableSubmit')}}</el-button>
+      <el-button @click="enableCancle">{{$t('securitySetting.Cancle')}}</el-button>
     </el-dialog>
 
     <!-- 启用网卡页面 -->
-    <el-dialog title="启用网卡" :visible.sync="isInEnabling">
+    <el-dialog :title="$t('securitySetting.isInEnabling')" :visible.sync="isInEnabling">
       <el-select v-model="enablePort" placeholder="请选择启用网卡">
         <el-option v-for="item in enablePortList" :label="item" :value="item" :key="item"></el-option>
       </el-select>
-      <el-button @click="enableSubmit" type="primary">启用</el-button>
-      <el-button @click="enableCancle">取消</el-button>
+      <el-button @click="enableSubmit" type="primary">{{$t('securitySetting.enableSubmit')}}</el-button>
+      <el-button @click="enableCancle">{{$t('securitySetting.Cancle')}}</el-button>
     </el-dialog>
 
     <!-- 添加页面 策略/端口选择 -->
-    <el-dialog title="请选择策略" :visible.sync="isAdding">
+    <el-dialog :title="$t('securitySetting.selectStrategy')" :visible.sync="isAdding">
       <el-select v-model="ifaceChoosen" placeholder="请选择端口">
         <el-option v-for="item in nameList" :key="item.name" :label="item.name" :value="item.name"></el-option>
       </el-select>
@@ -104,18 +106,18 @@
     </el-dialog>
 
     <!-- TCP的策略页面 -->
-    <el-dialog title="添加TCP策略" :visible.sync="isTcpRule">
+    <el-dialog :title="$t('securitySetting.isTcpRule')" :visible.sync="isTcpRule">
       <el-form :model="addForm" ref="addForm" :rules="validateRules">
-        <el-form-item prop="ips" label="IP开始地址">
+        <el-form-item prop="ips" :label="$t('securitySetting.ips')">
           <el-input v-model="addForm.ips"></el-input>
         </el-form-item>
-        <el-form-item prop="ipe" label="IP结束地址">
+        <el-form-item prop="ipe" :label="$t('securitySetting.ipe')">
           <el-input v-model="addForm.ipe"></el-input>
         </el-form-item>
-        <el-form-item prop="tcps" label="TCP开始端口">
+        <el-form-item prop="tcps" :label="$t('securitySetting.tcps')">
           <el-input v-model="addForm.ports"></el-input>
         </el-form-item>
-        <el-form-item prop="tcpe" label="TCP结束端口">
+        <el-form-item prop="tcpe" :label="$t('securitySetting.tcpe')">
           <el-input v-model="addForm.porte"></el-input>
         </el-form-item>
       </el-form>
@@ -126,18 +128,18 @@
     </el-dialog>
 
     <!-- UDP策略 -->
-    <el-dialog title="添加UDP策略" :visible.sync="isUdpRule">
+    <el-dialog :title="$t('securitySetting.isUdpRule')" :visible.sync="isUdpRule">
       <el-form :model="addForm" ref="addForm" :rules="validateRules">
-        <el-form-item prop="ips" label="IP开始地址">
+        <el-form-item prop="ips" :label="$t('securitySetting.ips')">
           <el-input v-model="addForm.ips"></el-input>
         </el-form-item>
-        <el-form-item prop="ipe" label="IP结束地址">
+        <el-form-item prop="ipe" :label="$t('securitySetting.ipe')">
           <el-input v-model="addForm.ipe"></el-input>
         </el-form-item>
-        <el-form-item prop="udps" label="UDP开始端口">
+        <el-form-item prop="udps" :label="$t('securitySetting.udps')">
           <el-input v-model="addForm.ports"></el-input>
         </el-form-item>
-        <el-form-item prop="udpe" label="UDP结束端口">
+        <el-form-item prop="udpe" :label="$t('securitySetting.udpe')">
           <el-input v-model="addForm.porte"></el-input>
         </el-form-item>
       </el-form>
@@ -148,12 +150,12 @@
     </el-dialog>
 
     <!-- IP策略 -->
-    <el-dialog title="添加IP策略" :visible.sync="isIpRule">
+    <el-dialog :title="$t('securitySetting.isIpRule')" :visible.sync="isIpRule">
       <el-form :model="addForm" ref="addForm" :rules="validateRules">
-        <el-form-item prop="ips" label="IP开始地址">
+        <el-form-item prop="ips" :label="$t('securitySetting.ips')">
           <el-input v-model="addForm.ips"></el-input>
         </el-form-item>
-        <el-form-item prop="ipe" label="IP结束地址">
+        <el-form-item prop="ipe" :label="$t('securitySetting.ipe')">
           <el-input v-model="addForm.ipe"></el-input>
         </el-form-item>
       </el-form>
@@ -164,9 +166,9 @@
     </el-dialog>
 
     <!-- mac策略 -->
-    <el-dialog title="添加MAC策略" :visible.sync="isMacRule">
+    <el-dialog :title="$t('securitySetting.isMacRule')" :visible.sync="isMacRule">
       <el-form :model="addForm" ref="addFrom" :rules="validateRules">
-        <el-form-item prop="mac" label="MAC地址">
+        <el-form-item prop="mac" :label="$t('securitySetting.mac')">
           <el-input v-model="addForm.mac"></el-input>
         </el-form-item>
       </el-form>
@@ -521,6 +523,8 @@ export default {
       para.port = item.iface
       para.type = getType()
       para.status = getStatus(item.enable)
+      para.direct = item.direct
+      para.mangle = item.mangle
       for (let i in item) {
         if (i === 'ips') {
           para.ipSE = item.ips + '-' + item.ipe
@@ -541,6 +545,7 @@ export default {
           }
         }
       }
+
       this.rulesList.push(para)
 
       function getType() {

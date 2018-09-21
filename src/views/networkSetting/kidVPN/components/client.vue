@@ -15,14 +15,15 @@
       </el-form>
     </el-col>
 
-    <el-table :data="addedClientList" style="width: 100%" :header-cell-style="headerStyle">
+    <el-table :data="addedClientList" style="width: 100%" @selection-change="selChange" :header-cell-style="headerStyle">
+      <el-table-column prop="vndid" :label="$t('kidVPN.client.vndid')" min-width="120"></el-table-column>
       <el-table-column type="selection" min-width="30"></el-table-column>
       <el-table-column prop="serip" :label="$t('kidVPN.client.serip')" min-width="120"></el-table-column>
       <el-table-column prop="locip" :label="$t('kidVPN.client.locip')" min-width="120"></el-table-column>
       <el-table-column prop="netmask" :label="$t('kidVPN.client.netmask')" min-width="120"></el-table-column>
       <el-table-column prop="gateway" :label="$t('kidVPN.client.gateway')" min-width="120"></el-table-column>
       <el-table-column prop="mtu" :label="$t('kidVPN.client.mtu')" min-width="60"></el-table-column>
-      <el-table-column prop="vndid" :label="$t('kidVPN.client.vndid')" min-width="120"></el-table-column>
+      <el-table-column prop="position" :label="$t('kidVPN.client.serverLoc')" min-width="120"></el-table-column>
       <el-table-column prop="status" :label="$t('kidVPN.client.status')" min-width="120"></el-table-column>
       <el-table-column :label="$t('operation.operation')" min-width="60">
         <template slot-scope="scope">
@@ -62,6 +63,12 @@
       <el-form :model="kidVPNForm" :label-width="labelWidth">
         <el-form-item prop="ipaddr" :label="$t('kidVPN.client.ipaddr1')">
           <el-input v-model="kidVPNForm.ipaddr"></el-input>
+        </el-form-item>
+        <el-form-item prop="port" label="服务器端口">
+          <el-input type="number" v-model="kidVPNForm.port"></el-input>
+        </el-form-item> 
+        <el-form-item prop="passwd" label='密码'>
+          <el-input v-model="kidVPNForm.passwd"></el-input>
         </el-form-item>
         <el-form-item prop="aeskey" :label="$t('kidVPN.client.aeskey')">
           <textarea v-model="kidVPNForm.aeskey"></textarea>
@@ -113,13 +120,15 @@ export default {
       kidVPNForm: {
         vndid: Number, // 虚拟网卡IP
         ipaddr: '', // IP地址
+        port: '',
         aeskey: '', // AES KEY
         mtu: '', // MTU
+        passwd: '',
         handle: ''
       },
       vndid: '',
       chosenItems: [],
-      labelWidth: '120px',
+      labelWidth: '8rem',
 
       rules: {
         ipaddr: [
@@ -253,7 +262,6 @@ export default {
       for (i = 0; i < this.chosenItems.length; i++) {
         await this.deleteClient(i, this.chosenItems[i])
       }
-      this.getInfo()
     },
     getInfo() {
       // let result
@@ -265,17 +273,25 @@ export default {
             if (this.currentPage === res.data.page) {
               if (res.data.data.length !== 0) {
                 console.log('infor ' + res.data.data.length)
-                for (let i = 0; i < res.data.data.length; i++) {
-                  console.log(res.data.data[i].type)
-                  if (res.data.data[i].type === 'servervpn') {
-                    console.log('in clinet getInfo' + res.data.data[i])
-                  // result = res.data.data.splice(i,1)
+
+                let param = res.data.data
+                this.total = res.data.total
+
+                for (let i = 0; i < param.length; i++) {
+                  if (param[i].type === 'servervpn') {
+                    console.log('in clinet getInfo' + JSON.stringify(param[i]))
+                    param.splice(i, 1)
+                    this.total -= 1
                   }
                 }
-                console.log(res.data.data)
-                this.addedClientList = res.data.data
+                console.log(param)
+                if (param.status === 'OFF') {
+                  param.status = '连接成功'
+                } else {
+                  param.status = '炼铁失败'
+                }
+                this.addedClientList = param
                 console.log(this.addedClientList)
-                this.total = res.data.total
               } else if (res.data.page > 1) {
                 this.currentPage -= 1
                 this.getInfo()

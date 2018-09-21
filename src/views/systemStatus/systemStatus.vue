@@ -5,56 +5,47 @@
     </div>
     <div id="top">
       <el-row :gutter="10">
+        <!--第一行左边-->
         <el-col :md="10" :lg="10" :xl="10">
           <div class="topLeft">
-            <div class="topLeftLeft">
-              <p style="padding-top: 20px;">OpenRT</p>
-              <p style="font-size: 30px; margin: 10px 20px;">{{$t('systemStatus.top.title1')}}</p>
-              <p>{{$t('systemStatus.top.subtitle')}}</p>
-              <p>{{$t('systemStatus.top.subtitle2')}}:</p>
+            <div id = "statusColor" class="topLeftLeft2">
+              <p style="padding-top: 20px;">OpenRT</p><br/>
+              <p><span style="font-size: 30px; margin: 10px 20px 10px 0px;">{{this.title}}</span>{{$t('systemStatus.top.subtitle')}}</p><br/>
+             <p>{{$t('systemStatus.top.subtitle2')}}{{this.MonitorInfo.time[0]}}{{$t('systemStatus.top.day')}}{{this.MonitorInfo.time[1]}}{{$t('systemStatus.top.hour')}}{{this.MonitorInfo.time[2]}}{{$t('systemStatus.top.min')}}{{this.MonitorInfo.time[3]}}{{$t('systemStatus.top.sec')}}</p>
+              
             </div>
             <div class="topLeftText">
               <p>{{$t('systemStatus.top.rate')}}</p>
               <div class="rate">
-                <p>{{$t('systemStatus.top.upstream')}}:</p>
+                <p>{{$t('systemStatus.top.upstream')}}:{{this.data.up}}</p>
                 <p style="font-size: 18px;"></p>
                 <p>B/s</p>
               </div>
               <div class="rate">
-                <p>{{$t('systemStatus.top.downstream')}}:</p>
+                <p>{{$t('systemStatus.top.downstream')}}:{{this.data.down}}</p>
                 <p style="font-size: 18px;"></p>
                 <p>B/s</p>
               </div>
             </div>
           </div>
         </el-col>
+        <!--第一行右边-->
         <el-col :md="14" :lg="14" :xl="14">
           <div class="topRight">
             <p>{{$t('systemStatus.top.status')}}</p>
             <div class="topRightBottom">
               <div class="topRightBottomText">
-                <p style="font-size: 36px;">1</p>
+                <p style="font-size: 36px;">{{this.terminalNum}}</p>
                 <p>{{$t('systemStatus.top.terminal')}}</p>
               </div>
-              <div class="topRightBottomText">
-                <p style="font-size: 36px">0</p>
-                <p>{{$t('systemStatus.top.terminal')}}</p>
-              </div>
-              <div class="topRightBottomText">
-                <p style="font-size: 36px">0</p>
-                <p>{{$t('systemStatus.top.terminal')}}</p>
-              </div>
-              <div class="topRightBottomText">
-                <p style="font-size: 36px">0</p>
-                <p>{{$t('systemStatus.top.terminal')}}</p>
-              </div>
+            
 
             </div>
           </div>
         </el-col>
       </el-row>
     </div>
-
+<!--第二行左边上面-->
     <div id="middle">
       <el-row :gutter="10">
         <el-col :md="14" :lg="14" :xl="14">
@@ -82,6 +73,7 @@
                 </div>
               </div>
             </div>
+            <!--第二行左边下面-->
             <div class="middleBottom">
               <div class="router">
                 <div v-for="(item, index) in ports" class="port" @click="pushToINEX" :key="index">
@@ -129,7 +121,7 @@
             </div>
           </div>
         </el-col>
-
+<!--第二行右边-->
         <el-col :md="10" :lg="10" :xl="10">
           <div class="middleRight">
             <div style="height: 20%;">
@@ -145,7 +137,7 @@
 
       </el-row>
     </div>
-
+<!--第三行-->
     <div id="bottom">
       <el-row :gutter="10">
         <el-col :md="8" :lg="8" :xl="8">
@@ -171,8 +163,8 @@
         </el-col>
         <el-col :md="16" :lg="16" :xl="16">
           <div class="bottomRight">
-            <!-- <div id="chartLine1" style="width:100%; height:160px; margin-top: 10px"></div> -->
-            <!-- <div id="chartLine2" style="width:100%; height:160px; margin-top: 10px"></div> -->
+            <div id="chartLine1" style="width:100%; height:160px; margin-top: 10px"></div> 
+             <div id="chartLine2" style="width:100%; height:160px; margin-top: 10px"></div> 
             <line-chart></line-chart>
           </div>
         </el-col>
@@ -183,8 +175,9 @@
 
 <script>
 import systemStatus from 'echarts'
-import { getPorts } from '../../api/api'
+import { getPorts, getMonitorInfo, getExtranetStatus } from '../../api/api'
 import { pieChart, lineChart } from './components'
+import { conversion } from '../../utils/rateUnitExchange.js'
 // import { conversion } from '../../utils/rateUnitExchange.js'
 require('echarts/theme/walden')
 
@@ -199,6 +192,23 @@ export default {
   name: 'systemStatus',
   data() {
     return {
+      // n: 0,
+      title: '',
+      MonitorInfo: {            // 外网连接状态
+        status: '',
+        time: ''
+      },
+
+      terminalNum: '',         // 连接终端数量
+      data: {                  // 上下行速率以及相关信息
+        up: '',
+        down: '',
+        upStorage: '',
+        downStorage: '',
+        cpu: '',
+        memory: '',
+        userNum: ''
+      },
       ports: [
         {
           id: '0',
@@ -267,6 +277,103 @@ export default {
   },
 
   methods: {
+    getNetInfo () {                                   // 获取外网连接信息
+      getExtranetStatus().then(res => {
+        if (res.data.code === 200) {
+          this.MonitorInfo.status = res.data.status
+          this.MonitorInfo.time = res.data.time.split(':')
+
+          let obj = document.getElementById('statusColor')
+          if (this.MonitorInfo.status === 'failed') {
+            obj.className = 'topLeftLeft2'
+            if (this.$store.state.app.language === 'en') {
+              this.title = 'Disconnected'
+            } else { this.title = '未连接' }
+            console.log('title:' + this.title)
+          } else {
+            obj.className = 'topLeftLeft1'
+            if (this.$store.state.app.language === 'en') {
+              this.title = 'Connected'
+            } else { this.title = '已连接' }
+          }
+
+          // this.MonitorInfo.time[3] = parseInt(this.MonitorInfo.time[3]) + this.n
+          // this.n++
+          // console.log(this.MonitorInfo.time[3])
+          setTimeout(() => {
+            this.getNetInfo()
+          }, 1000)
+          // for (let i = 0; i < 60; i++) {
+          // console.log(i)
+          // this.MonitorInfo.time[3] = parseInt(this.MonitorInfo.time[3]) + 1
+          // console.log(this.MonitorInfo.time[3])
+          // }
+        }
+      })
+    },
+
+    getTerminalInfo() {                                     // 获取终端数量
+      let para = Object.assign({}, this.form)
+      para.type = 1
+      para.page = this.currentPage
+      getMonitorInfo(para)
+        .then((res) => {
+          if (res.data.code === 200) {
+            if (res.data.data.length !== 0) {
+              this.terminalNum = res.data.total
+              console.log(this.terminalNum)
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        },
+        setTimeout(() => {
+          this.getTerminalInfo()
+        }, 3000)
+        )
+    },
+    getInfo() {                                          // 获取上下行速率
+      this.update()
+      setInterval(() => {
+        this.update()
+        this.$store.dispatch('pushSystemData', this.data)
+      }, 5000)
+    },
+
+    async update() {
+      let para = {}
+      para.page = 1
+      para.type = 5
+      await getMonitorInfo(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.data.upStorage = res.data.data[0].recv_rate
+            this.data.downStorage = res.data.data[0].send_rate
+            this.data.up = conversion(res.data.data[0].recv_rate)
+            this.data.down = conversion(res.data.data[0].send_rate)
+            // console.log(this.data.up)
+            // this.$store.dispatch('pushSystemData', this.data)
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      let para1 = {}
+      para1.type = 6
+      await getMonitorInfo(para1)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.data.cpu = (res.data.cpu_usage).toFixed(0)
+            this.data.memory = (res.data.memory_usage).toFixed(0)
+            this.data.userNum = res.data.online_users
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      // this.$store.dispatch('pushSystemData', this.data)
+    },
     // 选择LAN,WAN口对应图标
     selectUrl(para) {
       // if(para === "空闲")
@@ -295,8 +402,17 @@ export default {
       // });
 
       getPorts().then(res => {
+        let checked = res.data.code
+        if (checked !== 200) {
+          this.$store.dispatch('setAdaptive', checked)
+          this.$router.push('ports')
+        }
+
         this.ports = res.data.interfaces
       })
+      setTimeout(() => {
+        this.getPortsInfo()
+      }, 3000)
     },
 
     pushToINEX: function() {
@@ -561,11 +677,14 @@ export default {
     drawCharts() {
       this.drawLineChart1()
       this.drawLineChart2()
-      // this.drawPieChart()
+      this.drawPieChart()
     },
 
     translate() {
       if (this.$store.state.app.language === 'en') {
+        if (this.MonitorInfo.status === 'failed') {
+          this.title = 'Disconnected'
+        } else { this.title = 'Connected' }
         option.legend.data = [
           'HTTP',
           'Vedio',
@@ -588,6 +707,9 @@ export default {
         option2.title.subtext = 'Downlink Rate'
       }
       if (this.$store.state.app.language === 'zh') {
+        if (this.MonitorInfo.status === 'failed') {
+          this.title = '未连接'
+        } else { this.title = '已连接' }
         option.legend.data = [
           'HTTP协议',
           '网络视频',
@@ -618,7 +740,11 @@ export default {
   mounted: function() {
     // this.drawCharts()
     this.getPortsInfo()
+    this.getInfo()
+    this.getTerminalInfo()
+    this.getNetInfo()
   }
+
 }
 </script>
 
@@ -630,9 +756,19 @@ p {
   height: 150px;
   display: flex;
   border: 1px solid lightgrey;
-  .topLeftLeft {
+  .topLeftLeft2 {
     width: 60%;
     background-color: lightgrey;
+    
+    p {
+      margin: auto 20px;
+      color: white;
+    }
+  }
+   .topLeftLeft1 {
+    width: 60%;
+    
+    background-color: #98FB98  ;
     p {
       margin: auto 20px;
       color: white;

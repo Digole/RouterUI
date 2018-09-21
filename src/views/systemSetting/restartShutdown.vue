@@ -1,16 +1,21 @@
 <template>
 	<section>
 <<<<<<< HEAD
+<<<<<<< HEAD
 		<div class="line_02"><span>重启关机</span></div>
+=======
+		<div class="line_02"><span>{{$t('systemSetting.restartShutdown')}}</span></div>
+>>>>>>> master
 		<el-col :span="24">
 			<el-form :inline="true">
 				<el-form-item>
-					<el-button type="danger" @click="restartNow" >立即重启</el-button>
+					<el-button type="danger" @click="restartNow" >{{$t('systemSetting.restartNow')}}</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="danger" @click="powerOffNow" right>立即关机</el-button>
+					<el-button type="danger" @click="powerOffNow" right>{{$t('systemSetting.powerOffNow')}}</el-button>
 				</el-form-item>
 				<el-form-item>
+<<<<<<< HEAD
 					<el-button type="danger" @click="addTrigger" right>添加事件</el-button>
 =======
 		<div class="line_02"><span>{{$t('systemSetting.restartShutdown')}}</span></div>
@@ -25,6 +30,9 @@
 				<el-form-item>
 					<el-button type="danger" @click="addTrigger" right>{{$t('systemSetting.addTrigger')}}</el-button>
 >>>>>>> wuyunke1
+=======
+					<el-button type="danger" @click="addTrigger" right>{{$t('systemSetting.addTrigger')}}</el-button>
+>>>>>>> master
 				</el-form-item>
 				<!-- <el-form-item>
 					<el-button type="danger" right>删除事件</el-button>
@@ -33,12 +41,17 @@
 		</el-col>
 		<el-table :data="form" style="width: 100%" :header-cell-style="headerStyle">
 <<<<<<< HEAD
+<<<<<<< HEAD
 			<el-table-column prop="event" label="事件">
+=======
+			<el-table-column prop="event" :label="$t('systemSetting.event')">
+>>>>>>> master
 			</el-table-column>
-			<el-table-column prop="date"  label="预设时间">
+			<el-table-column prop="date"  :label="$t('systemSetting.date')">
 			</el-table-column>
-			<el-table-column prop="oper_type" label="操作">
+			<el-table-column prop="oper_type" :label="$t('systemSetting.oper_type')">
 				<template slot-scope="scope">
+<<<<<<< HEAD
 						<el-button v-if="scope.row.status" size="small" @click="handleStart(scope.$index, scope.row)">停用</el-button>
 						<el-button v-else size="small" @click="handleStop(scope.$index, scope.row)">启用</el-button>
 						<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
@@ -53,6 +66,11 @@
 						<el-button v-else size="small" @click="handleStop(scope.$index, scope.row)">{{$t('systemSetting.handleStop')}}</el-button>
 						<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">{{$t('systemSetting.handleDel')}}</el-button>
 >>>>>>> wuyunke1
+=======
+						<el-button v-if="!scope.row.status" size="small" @click="handleStart(scope.$index, scope.row)">{{$t('systemSetting.handleStart')}}</el-button>
+						<el-button v-else size="small" @click="handleStop(scope.$index, scope.row)">{{$t('systemSetting.handleStop')}}</el-button>
+						<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">{{$t('systemSetting.handleDel')}}</el-button>
+>>>>>>> master
 				</template>
 			</el-table-column>
 		</el-table>
@@ -66,15 +84,24 @@
     </el-pagination>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     <el-dialog title="添加事件" :visible.sync="isAdd">
       <el-form ref="form" :model="powerEvent" label-width="3rem">
         <el-form-item prop="event" label="事件">
           <el-radio v-model="powerEvent.oper_type" label="shutdown"></el-radio>
           <el-radio v-model="powerEvent.oper_type" label="restart"></el-radio>
+=======
+    <el-dialog :title="$t('systemSetting.addTrigger')" :visible.sync="isAdd">
+      <el-form ref="form" :model="powerEvent" label-width="6rem">
+        <el-form-item prop="event" :label="$t('systemSetting.event')">
+          <el-radio v-model="powerEvent.event" label="shutdown">{{ $t('systemSetting.shutdown') }}</el-radio>
+          <el-radio v-model="powerEvent.event" label="restart">{{ $t('systemSetting.restart') }}</el-radio>
+>>>>>>> master
         </el-form-item>
-        <el-form-item prop="date" label="日期">
+        <el-form-item prop="date" :label="$t('systemSetting.date')">
           <el-input v-model="powerEvent.date" placeholder="示例: 20180808"></el-input>
         </el-form-item>
+<<<<<<< HEAD
         <el-form-item prop="time" label="事件">
 =======
     <el-dialog :title="$t('systemSetting.addTrigger')" :visible.sync="isAdd">
@@ -88,6 +115,9 @@
         </el-form-item>
         <el-form-item prop="time" :label="$t('systemSetting.event')">
 >>>>>>> wuyunke1
+=======
+        <el-form-item prop="time" :label="$t('systemSetting.event')">
+>>>>>>> master
           <el-input v-model="powerEvent.time" placeholder="示例: 02:30"></el-input>
         </el-form-item>
       </el-form>
@@ -135,7 +165,8 @@
         isAdd: false,
 
         currentPage: 1,
-        total: 0
+        total: 0,
+        event_id: 0
   
       }
     },
@@ -157,6 +188,7 @@
         let para = Object.assign({}, this.powerEvent)
         para.oper_type = 'add'
         this.setInfo(para)
+        this.isAdd = !this.isAdd
       },
 
       handleDel(index, val) {
@@ -165,15 +197,17 @@
         this.setInfo(para)
       },
 
-      handStart(index, val) {
+      handleStart(index, val) {
         let para = Object.assign(val)
         para.oper_type = 'update'
+        para.status = 1               // 状态改为启用
         this.setInfo(para)
       },
 
       handleStop(index, val) {
         let para = Object.assign(val)
         para.oper_type = 'stop'
+        para.status = 0               // 状态改为禁用
         this.setInfo(para)
       },
 
@@ -221,6 +255,8 @@
           .then(res => {
             if (res.data.code === 200) {
               this.form = res.data.data
+              this.total = res.data.total
+              this.event_id = res.data.max_event_id
             }
           })
           .catch(error => {
@@ -232,6 +268,8 @@
         if (para === '' || para === null) {
           para = Object.assign({}, this.powerEvent)
         }
+        para.event_id = this.event_id + 1
+        para.status = 1
         setEvent(para)
           .then(res => {
             if (res.data.code === 200) {

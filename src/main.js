@@ -11,12 +11,14 @@ import store from './store'
 import Vuex from 'vuex'
 
 import axios from 'axios'
+// import '@/components/js/popper.min.js'
+// import '@/components/js/bootstrap.min.js'
+// import '@/components/js/plugins.js'
+// import '@/components/js/active.js'
 
-import jsonp from 'vue-jsonp'
-
-import 'font-awesome/css/font-awesome.min.css'
-import './assets/css/index.css'
-
+// import 'font-awesome/css/font-awesome.min.css'
+// import './assets/css/index.css'
+// import "./css/style.css";
 // import Mock from './mock'
 // Mock.bootstrap()
 
@@ -32,8 +34,6 @@ Vue.use(ElementUI, {
 Vue.use(VueRouter)
 Vue.use(Vuex)
 
-Vue.use(jsonp)
-
 // Vue.use(validateForm)
 
 // NProgress.configure({ showSpinner: false });
@@ -44,17 +44,26 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   // NProgress.start();
-  if (to.path === '/login') {
-    sessionStorage.removeItem('user')
-  }
-  let user = JSON.parse(sessionStorage.getItem('user'))
 
-  if (!user && to.path !== '/login') {
-    // 搞完记得恢复
-    // next({path: '/login'})
-  } else {
-    next()
-  }
+  // if (to.path === '/login') {
+  //   sessionStorage.removeItem('user')
+  //   next()
+  // }
+
+  // let user = JSON.parse(sessionStorage.getItem('user'))
+
+  // if (!user && to.path !== '/login') {
+  //   next({path: '/login'})
+  //   return false
+  //   // next()
+  // } else if (to.path !== '/ports' && store.state.app.adaptiveCode === 500) {
+  //   // 验证是否已完成自适应操作
+  //   console.log('def ' + store.state.app.adaptiveCode)
+  //   next({path: '/ports'})
+  // } else {
+  //   next()
+  // }
+
   next()
 })
 

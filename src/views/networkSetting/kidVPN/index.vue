@@ -11,6 +11,7 @@
     <connection class="connection"></connection>
     
     <visualization class="visualization"></visualization>
+
   </section>
 </template>
 
@@ -36,7 +37,8 @@ export default {
   width: 100%;
 }
 .visualization {
+  display: flex;
   height: 30%;
-  width: 100%;
+  width: 48%;
 }
 </style>

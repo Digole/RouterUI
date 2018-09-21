@@ -1,10 +1,12 @@
 <template>
   <section>
-    <p>{{$t('kidVPN.status.title')}}:</p>
+    <span>{{$t('kidVPN.status.title')}}:</span>
     <el-table :data="VPNList" :header-cell-style="headerStyle" style="width: 100%">
       <el-table-column type="selection" min-width="30"></el-table-column>
-      <el-table-column prop="ip" :label="$t('kidVPN.status.ip')" min-width="120"></el-table-column>
-      <el-table-column prop="mac" :label="$t('kidVPN.status.mac')" min-width="120"></el-table-column>
+      <el-table-column prop="vndid" label="虚拟网卡ID" min-width="120"></el-table-column>
+      <el-table-column prop="cliip" :label="$t('kidVPN.status.ip')" min-width="120"></el-table-column>
+      <el-table-column prop="climac" :label="$t('kidVPN.status.mac')" min-width="120"></el-table-column>
+      <el-table-column prop="positon" :label="$t('kidVPN.status.clientLoc')" min-width="120"></el-table-column>
       <el-table-column :label="$t('operation.operation')" min-width="60">
         <template slot-scope="scope">
           <el-button size="small" @click="deleteClient(scope.$index, scope.row)">{{$t('operation.delete')}}</el-button>
@@ -17,13 +19,20 @@
 </template>
 
 <script>
+import { getLinkStatus } from '@/api/api.js'
 export default {
   name: 'status',
   data() {
     return {
       currentPage: 1,
       total: 0,
-      VPNList: []
+      VPNList: [],
+
+      form: {
+        vndid: Number,
+        cliip: '',
+        climac: ''
+      }
     }
   },
   methods: {
@@ -32,8 +41,24 @@ export default {
     },
     handleCurrentChange(val) {
       this.currentPage = val
-      // this.getInfo()
+      this.getInfo()
+    },
+    getInfo() {
+      let para = {
+        page: this.currentPage,
+        pagecount: 10
+      }
+      getLinkStatus(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.VPNList = res.data.data
+            this.total = res.data.total
+          }
+        })
     }
+  },
+  mounted() {
+    this.getInfo()
   }
 }
 </script>

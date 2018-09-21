@@ -1,13 +1,9 @@
 <template>
   <section>
     <div class="line_02">
-<<<<<<< HEAD
-      <span>硬件信息</span>
-=======
       <span>{{$t('systemSetting.hardwareInfo')}}</span>
->>>>>>> wuyunke1
     </div>
-    <el-table :data="hardwareInfo" style="width: 100%">
+    <el-table :data="hardwareInfo" style="width: 100%" header-cell-style="padding: 0">
       <el-table-column prop="name" width="180">
       </el-table-column>
       <el-table-column prop="hardware" min-width="360">
@@ -17,7 +13,7 @@
 </template>
 
 <script>
-import { getHardware } from '../../api/api'
+import { getHardware, getPorts } from '../../api/api'
 export default {
   name: 'hardwareInfo',
 
@@ -35,8 +31,14 @@ export default {
         {
           name: '内存',
           hardware: ''
+        },
+        {
+          name: '网卡',
+          hardware: ''
         }
-      ]
+      ],
+      ports: [],
+      deviceName: []
     }
   },
   methods: {
@@ -49,10 +51,25 @@ export default {
             this.hardwareInfo[2].hardware = res.data.mem
           }
         })
+    },
+    getPortsInfo() {
+      this.deviceName = []
+      getPorts()
+        .then(res => {
+          if (res.data.code === 200) {
+            this.ports = res.data.interfaces
+            this.ports.forEach(item => {
+              this.deviceName.push(item.devname)
+              console.log(this.deviceName)
+            })
+          }
+          this.hardwareInfo[3].hardware = this.deviceName.join(', ')
+        })
     }
   },
   mounted() {
     this.getInfo()
+    this.getPortsInfo()
   }
 }
 </script>

@@ -116,6 +116,7 @@ export default {
     addVLAN() {
       let para = Object.assign({}, this.addForm)
       para.oper_type = 'set'
+      para.vlan_id = Number(para.vlan_id)
       para.page = this.currentPage
       handleVLAN(para)
         .then(res => {
@@ -136,7 +137,7 @@ export default {
     deleteInfo(index, row) {
       let para = Object.assign({}, row)
       para.oper_type = 'clear'
-      para.vlan_id += ''
+      para.vlan_id = Number(para.vlan_id)
       console.log(para.vlan_id)
       handleVLAN(para)
         .then(res => {
@@ -157,6 +158,7 @@ export default {
       function del(index, row) {
         let para = Object.assign({}, row)
         para.oper_type = 'clear'
+        para.vlan_id = Number(para.vlan_id)
         handleVLAN(para)
           .then(res => {
             if (res.sata.code !== 200) {

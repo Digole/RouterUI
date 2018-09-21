@@ -4,13 +4,13 @@
     <div class="line_02"><span>监控</span></div>
 
     <el-table :data="final" title="线路监控" :header-cell-style="headerStyle">
-      <el-table-column prop="lineName" label="线路名称" min-width="120">
+      <el-table-column prop="lineName" label="线路名称">
       </el-table-column>
       <el-table-column prop="function" label="功能" min-width="120">
       </el-table-column>
       <el-table-column prop="ip" label="IP" min-width="120">
       </el-table-column>
-      <el-table-column prop="mac" label="Mac" min-width="120">
+      <el-table-column prop="mac" label="Mac" min-width="130">
       </el-table-column>
       <el-table-column prop="recv_rate" label="上行速率" min-width="120">
       </el-table-column>
@@ -20,9 +20,9 @@
       </el-table-column>
       <el-table-column prop="send_total_length" label="下行总流量" min-width="120">
       </el-table-column>
-      <el-table-column prop="recv_total_packets" label="上行包总数" min-width="120">
+      <el-table-column prop="recv_total_packets" label="上行包总数">
       </el-table-column>
-      <el-table-column prop="send_total_packets" label="下行包总数" min-width="120">
+      <el-table-column prop="send_total_packets" label="下行包总数">
       </el-table-column>
     </el-table>
 
@@ -31,7 +31,8 @@
       :current-page="currentPage"
       :page-size="10"
       layout="total, prev, pager, next, jumper"
-      :total="this.total">
+      :total="this.total"
+      style="float:right">
     </el-pagination>
   </section>
 </template>
@@ -139,13 +140,21 @@ export default {
           for (let j = 0; j < ports.length; j++) {
             if (line[i].ifname === ports[j].enname) {
               line[i].lineName = ports[j].webname
-              line[i].function = ports[j].function
+              if (ports[j].function === 'normal') {
+                line[i].function = '--'
+              } else {
+                line[i].function = ports[j].function
+              }
               // if (line[i].function.length === 3) {
               //   line[i].function + '   '
               // }
               if (ports[j].type !== '') {
                 line[i].function += '/'
-                line[i].function += ports[j].type
+                if (ports[j].type === 'normal') {
+                  line[i].function += '--'
+                } else {
+                  line[i].function += ports[j].type
+                }
               }
             }
           }

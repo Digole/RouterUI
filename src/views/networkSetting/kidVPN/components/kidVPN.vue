@@ -6,6 +6,7 @@
 <script>
 import kidVPN from 'echarts'
 import axios from 'axios'
+import { getCityInfo } from '@/api/api.js'
 // import chinaJson from '../../static/china.json';
 
 export default {
@@ -18,41 +19,63 @@ export default {
   },
 
   methods: {
-    getTestData: function() {
+    getTestData: async function() {
       let local
       let purposeList = []
 
       let purposeJsonList = []
       let localJson = {}
 
+      let reg = new RegExp('"', 'g')
+
       /**
        * 此处需要的数据为VPN地址的列表，
        * IP解析是否由后台进行
        */
+      await getCityInfo()
+        .then(res => {
+          if (res.data.code === 200) {
+            if (res.data.data !== undefined) {
+              res.data.data.forEach(item => {
+                console.log(item)
+                let para = item.cli_pos.split(',', 3)
+                para[2] = para[2].replace(reg, '')    // 去除双引号
+                console.log(para[2])
 
-      this.$jsonp('http://freeapi.ipip.net/118.28.8.8')
-        .then(json => {
-          console.log(json)
+                // 临时措施
+                if (para[2] === '') {
+                  para[2] = '北京'
+                }
+
+                purposeList.push(para[2])
+                console.log('purposeList ' + purposeList)
+                let server = item.ser_pos.split(',', 3)
+                local = server[2].replace(reg, '')
+                console.log(local)
+              })
+
+              // purposeList = ['北京']
+              // purposeList.push("上海","北京","广州");
+              // local = '南京'
+
+              localJson.name = local
+              for (let i = 0; i < purposeList.length; i++) {
+                let purposeJson = {}
+                purposeJson.name = purposeList[i]
+
+                purposeJsonList.push([localJson, purposeJson])
+              // console.log(i + "   " + JSON.stringify(purposeJsonList));
+              }
+              this.testData = purposeJsonList
+            }
+          }
         })
+        .then(
+          this.drawMap()
+        )
         .catch(err => {
           console.log(err)
         })
-
-      purposeList = ['上海', '北京', '广州', '深圳']
-      // purposeList.push("上海","北京","广州");
-
-      local = '南京'
-      localJson.name = local
-
-      for (let i = 0; i < purposeList.length; i++) {
-        let purposeJson = {}
-        purposeJson.name = purposeList[i]
-
-        purposeJsonList.push([localJson, purposeJson])
-        // console.log(i + "   " + JSON.stringify(purposeJsonList));
-      }
-
-      this.testData = purposeJsonList
     },
 
     drawMap: function() {
@@ -60,13 +83,15 @@ export default {
 
       let chinaJson
 
+      let testData
+
       axios.get('../../static/china.json').then(res => {
         chinaJson = res.data
         // console.log(chinaJson);
         setMap(chinaJson)
       })
 
-      let testData = this.testData
+      testData = this.testData
 
       function setMap() {
         kidVPN.registerMap('china', chinaJson) // 注册地图
@@ -189,35 +214,36 @@ export default {
         }
 
         // let SHData = [
-        //   [{name:'上海'},{name:'包头',value:50}],
-        //   [{name:'上海'},{name:'昆明',value:50}],
-        //   [{name:'上海'},{name:'广州',value:50}],
-        //   [{name:'上海'},{name:'郑州',value:50}],
-        //   [{name:'上海'},{name:'长春',value:50}],
-        //   [{name:'上海'},{name:'重庆',value:50}],
-        //   [{name:'上海'},{name:'长沙',value:50}],
-        //   [{name:'上海'},{name:'北京',value:50}],
-        //   [{name:'上海'},{name:'丹东',value:50}],
-        //   [{name:'上海'},{name:'大连',value:50}]
+        //   [{name:'上海'},{name:'广州',value:50}], 数据示例
+        //   [{name:'上海'},{name:'成都',value:30}] 数据示例
         // ]
-
-        // let planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 
         let convertData = function(data) {
           let res = []
           for (let i = 0; i < data.length; i++) {
             let dataItem = data[i]
+            console.log(i)
+            console.log('dataItem is ' + JSON.stringify(dataItem))
             let fromCoord = geoCoordMap[dataItem[0].name]
+            console.log('formCoord is ' + fromCoord)
             let toCoord = geoCoordMap[dataItem[1].name]
             if (fromCoord && toCoord) {
-              res.push([
+              res.push(
+                // [
                 {
-                  coord: fromCoord
-                },
-                {
-                  coord: toCoord
+                  name: dataItem[0].name,         // 用于显示源城市名称
+                  fromName: dataItem[0].name,
+                  toName: dataItem[1].name,
+                  // coord: fromCoord
+                  coords: [fromCoord, toCoord]
                 }
-              ])
+                //   {
+                //     fromName: dataItem[0].name,
+                //     toName: dataItem[1].name,
+                //     coord: toCoord
+                //   }
+                // ]
+              )
             }
           }
           // console.log("res is: "+JSON.stringify(res));
@@ -225,101 +251,118 @@ export default {
         }
 
         let color = ['#a6c84c', '#ffa022', '#46bee9']
-        let series = [];
-        [['南京', testData]].forEach(function(item) {
-          // console.log(JSON.stringify(item)+"   "+i);
-          series.push(
+        let series = []
+
+        if (Object.keys(testData).length !== 0) {
+          [['南京', testData]].forEach(function(item) {
+            console.log(JSON.stringify(item) + '   ')
+            series.push(
             // 这是最低图层1，渲染了数据流动的动态效果
-            {
-              name: item[0] + ' Top10',
-              type: 'lines',
-              zlevel: 1, // zlevel用于 Canvas 分层， zlevel 大的 Canvas 会放在 zlevel 小的 Canvas 的上面。
-              effect: {
-                show: true,
-                period: 3,
-                constantSpeed: 50,
-                trailLength: 0.3,
-                color: '#fff',
-                symbolSize: 3
-              },
-              lineStyle: {
-                normal: {
-                  color: color[2],
-                  width: 0,
-                  curveness: 0.2
-                }
-              },
-              data: convertData(item[1])
-            },
-
-            // 这是图层2，是点与点之间的连线
-            {
-              name: item[0] + ' Top10',
-              type: 'lines',
-              zlevel: 2,
-              effect: {
-                show: true,
-                period: 6,
-                trailLength: 0,
-                symbol: 'none',
-                symbolSize: 15 // 标记的大小，因为这里symbol为none，所以该属性无效
-              },
-              lineStyle: {
-                normal: {
-                  color: color[2],
-                  width: 1,
-                  opacity: 0.4,
-                  curveness: 0.2 // 连线的弧度
-                }
-              },
-              data: convertData(item[1])
-            },
-
-            // 这是图层3，渲染了城市的标志和文字
-            {
-              name: 'VPN服务器所在地', // 这里的name是目的城市名的tooltip里的name
-              type: 'effectScatter', // 带有涟漪特效动画的散点（气泡）图。利用动画特效可以将某些想要突出的数据进行视觉突出。
-              coordinateSystem: 'geo', // 坐标系
-              zlevel: 2,
-              rippleEffect: {
-                brushType: 'stroke' // 波纹的绘制方式，可选 'stroke' 和 'fill'。
-              },
-              label: {
-                // 目的城市名称显示选项
-                normal: {
+              {
+                name: item[0],
+                type: 'lines',
+                zlevel: 1, // zlevel用于 Canvas 分层， zlevel 大的 Canvas 会放在 zlevel 小的 Canvas 的上面。
+                effect: {
                   show: true,
-                  position: 'right',
-                  formatter: '{b}' // 标签内容格式器，支持字符串模板和回调函数两种形式
-                }
-              },
-              // symbolSize: function (val) {
-              //   return val[2] / 8;
-              // },
-              symbolSize: 5,
-              itemStyle: {
-                normal: {
-                  color: color[2]
-                }
+                  period: 3,
+                  constantSpeed: 50,
+                  trailLength: 0.3,
+                  color: '#fff',
+                  symbolSize: 3
+                },
+                // 显示源城市名称
+                label: {
+                  normal: {
+                    show: true,
+                    position: 'right',
+                    formatter: '{b}'
+                  }
+                },
+                lineStyle: {
+                  normal: {
+                    color: color[2],
+                    width: 0,
+                    curveness: 0.2
+                  }
+                },
+                data: convertData(item[1])
               },
 
-              data: item[1].map(function(dataItem) {
-                return {
-                  name: dataItem[1].name,
-                  value: geoCoordMap[dataItem[1].name].concat([
-                    dataItem[1].value
-                  ])
-                }
-              })
-            }
-          )
-          console.log(JSON.stringify(series[2].data))
-        })
+              // 这是图层2，是点与点之间的连线
+              {
+                name: item[0],
+                type: 'lines',
+                zlevel: 2,
+                effect: {
+                  show: true,
+                  period: 6,
+                  trailLength: 0,
+                  symbol: 'none',
+                  symbolSize: 15 // 标记的大小，因为这里symbol为none，所以该属性无效
+                },
+                label: {
+                  normal: {
+                    show: true,
+                    position: 'right',
+                    formatter: '{b}'
+                  }
+                },
+                lineStyle: {
+                  normal: {
+                    color: color[2],
+                    width: 1,
+                    opacity: 0.4,
+                    curveness: 0.2 // 连线的弧度
+                  }
+                },
+                data: convertData(item[1])
+              },
+
+              // 这是图层3，渲染了城市的标志和文字
+              {
+                name: item[0], // 这里的name是目的城市名的tooltip里的name
+                type: 'effectScatter', // 带有涟漪特效动画的散点（气泡）图。利用动画特效可以将某些想要突出的数据进行视觉突出。
+                coordinateSystem: 'geo', // 坐标系
+                zlevel: 2,
+                rippleEffect: {
+                  brushType: 'stroke' // 波纹的绘制方式，可选 'stroke' 和 'fill'。
+                },
+                label: {
+                // 目的城市名称显示选项
+                  normal: {
+                    show: true,
+                    position: 'right',
+                    formatter: '{b}' // 标签内容格式器，支持字符串模板和回调函数两种形式
+                  }
+                },
+                // symbolSize: function (val) {
+                //   return val[2] / 8;
+                // },
+                symbolSize: 5,
+                itemStyle: {
+                  normal: {
+                    color: color[2]
+                  }
+                },
+
+                data: item[1].map(function(dataItem) {
+                  return {
+                    name: dataItem[1].name,
+                    value: geoCoordMap[dataItem[1].name].concat([
+                      dataItem[1].value
+                    ])
+                  }
+                })
+              }
+            )
+            console.log(JSON.stringify(series[2].data))
+          })
+        }
 
         let option = {
           backgroundColor: '#404a59',
           title: {
             text: 'VPN连接',
-            subtext: '数据纯属虚构',
             left: 'center',
             textStyle: {
               color: '#fff'
@@ -332,7 +375,7 @@ export default {
             orient: 'vertical',
             top: 'bottom',
             left: 'right',
-            data: ['上海 Top10'],
+            data: ['南京'],
             textStyle: {
               color: '#fff'
             },
@@ -369,7 +412,7 @@ export default {
 
   mounted() {
     this.getTestData()
-    this.drawMap()
+    // this.drawMap()
   }
 }
 </script>

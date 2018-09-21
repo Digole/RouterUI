@@ -17,6 +17,7 @@ export default {
     systemSetting: 'SystemSetting',
     basicSetting: 'Basic',
     accountSetting: 'Account',
+    powerSetting: 'Power',
     versionUpdate: 'Update',
     hardwareInfo: 'HardwareInfo',
     shutdownRestart: 'Shutdown&Restart',
@@ -35,12 +36,14 @@ export default {
     dialLog: 'DialLog',
     tools: 'SystemTools',
     ping: 'PingTest',
-<<<<<<< HEAD
-    operaLog: 'OperationLog'
-=======
+    speed: 'SpeedTest',
     operaLog: 'OperationLog',
-    Qos: 'Qos'
->>>>>>> wuyunke1
+    VPNLog: 'VPNLog',
+    Qos: 'QoS',
+    ports: 'adaptivePorts',
+    shell: 'DynamicRouting',
+    ARPLog: 'ARPDefenceLog',
+    DHCPLog: 'DHCPLog'
   },
 
   operation: {
@@ -61,8 +64,13 @@ export default {
     determine: 'Apply',
     search: 'Search'
   },
-
+  situationMode: {
+    situation: 'SituationMode',
+    change: 'ChangeMode'
+  },
   home: {
+    professional: 'ProfessionalMode',
+    change: 'ChangeMode',
     ram: 'RAM',
     up: 'Uplink Rate',
     down: 'Downlink Rate',
@@ -183,6 +191,7 @@ export default {
       gateway: 'Gateway',
       mtu: 'MTU',
       vndid: 'Virtual Network Card ID',
+      serverLoc: 'Client Location',
       status: 'Status',
       title1: 'Create KidVPN Client Network',
       ipaddr: 'Local IP',
@@ -216,7 +225,8 @@ export default {
     status: {
       title: 'VPN status',
       ip: 'Client IP',
-      mac: 'Client MAC'
+      mac: 'Client MAC',
+      clientLoc: 'Server Location'
     }
   },
   staticRouter: {
@@ -239,16 +249,20 @@ export default {
   },
   systemStatus: {
     top: {
-      title1: 'Not Configured',
-      title2: 'Configured',
+      title1: 'Disconnected',
+      title2: 'Connected',
       subtitle: 'Extranet',
       subtitle1: 'Intranet',
-      subtitle2: 'In running',
+      subtitle2: 'In running:  ',
       rate: 'Rate',
       upstream: 'Upstream',
       downstream: 'Downstream',
       status: 'Link status',
-      terminal: 'Terminal online'
+      terminal: 'Terminal online',
+      day: ' D   ',
+      hour: ' H   ',
+      min: ' M   ',
+      sec: ' S   '
     },
     middle: {
       status: 'Interface State',
@@ -276,14 +290,25 @@ export default {
     dynamicARP: 'Dynamic ARP'
   },
   log: {
+    log: 'Log',
+    note: 'Provide the latest 24 hours data by default',
+    clear: 'Clear',
     index: 'Index',
     time: 'Time',
     line: 'Line',
     detail: 'Log Details'
-<<<<<<< HEAD
-=======
   },
-
+  operaLog: {
+    log: 'OperationLog',
+    search: 'Search',
+    clear: 'Clear',
+    time: 'Time',
+    ip: 'ClientIP',
+    operator: 'Operator',
+    module: 'Module',
+    result: 'Result',
+    content: 'Content'
+  },
   Qos: {
     QosSetting: 'QosSetting',
     netif: 'netif',
@@ -294,14 +319,26 @@ export default {
     dontDrop: 'dontDrop',
     addNewQos: 'addNewQos',
     portStart: 'portStart',
-    portEnd: 'portEnd',
-    portStart: 'portStart',
-    
+    portEnd: 'portEnd'
   },
   systemSetting: {
+    ifDelete: 'Are you sure to delete this account?',
+    On: 'On',
+    Off: 'Off',
+    selectStatus: 'Status',
+    changeStatus: 'changeStatus',
+    deleteUser: 'Delete',
+    role: 'role',
+    selectPower: 'selectPower',
+    admin: 'admin',
+    operator: 'operator',
+    visitor: 'visitor',
+    addAccount: 'addAccount',
     AccountSetting: 'AccountSetting',
     username: 'username',
     passwd: 'passwd',
+    passwd1: 'passwd',
+    passwd2: 'passwdAgain',
     status: 'status',
     behaviour: 'behaviour',
     changePasswd: 'changePasswd',
@@ -325,7 +362,7 @@ export default {
     VersionDetection: 'VersionDetection:',
     DetectNewVersion: 'DetectNewVersion',
     RoutingSystemVersion: 'RoutingSystemVersion: ',
-    SylixOSVersion: 'SylixOSVersion: ',
+    versionStatus: 'VersionDetails',
     localUpdate: 'localUpdate: ',
     fileSelection: 'fileSelection',
     submitUpload: 'submitUpload',
@@ -334,7 +371,83 @@ export default {
     updateNow: 'updateNow',
     updateFinished: 'updateFinished',
     refreshAfter: 'refreshAfter',
-    sDoNotTurnOff: 'sDoNotTurnOff',
->>>>>>> wuyunke1
+    sDoNotTurnOff: 'sDoNotTurnOff'
+
+  },
+  securitySetting: {
+    ARPDefence: 'ARPDefence',
+    status: 'status：',
+    inUse: 'inUse',
+    stopped: 'stopped',
+    stop: 'stop',
+    start: 'start',
+    showInfo: 'showInfo',
+    showConflict: 'showConflict',
+    IP: 'IP',
+    MACInfo: 'MACInfo',
+    conflictMACAddr: 'conflictMACAddr',
+    firewall: 'firewall',
+    add: 'add',
+    port: 'port',
+    type: 'type',
+    ipSE: 'ipSE',
+    mac: 'mac',
+    portSE: 'portSE',
+    enable: 'enable',
+    disablePort: 'disablePort',
+    disableSubmit: 'disableSubmit',
+    Cancle: 'Cancle',
+    isInEnabling: 'isInEnabling',
+    enableSubmit: 'enableSubmit',
+    selectStrategy: 'selectStrategy',
+    isTcpRule: 'isTcpRule',
+    ips: 'ips',
+    ipe: 'ipe',
+    tcps: 'tcps',
+    tcpe: 'tcpe',
+    isUdpRule: 'isUdpRule',
+    udps: 'udps',
+    udpe: 'udpe',
+    isIpRule: 'isIpRule',
+    isMacRule: 'isMacRule',
+    whitelist: 'whitelist',
+    delete: 'delete',
+    edit: 'edit',
+    blacklist: 'blacklist',
+    time: 'time'
+  },
+  powerSetting: {
+    submitChange: 'Submit changes',
+    ifsubmit: 'Are you sure to submit changes?',
+    powerSetting: 'Power',
+    addChange: 'Submit',
+    all: 'General',
+    detail: 'Detail',
+    operator: 'Operator',
+    visitor: 'Visitor',
+    time: 'time'
+  },
+  ARPLog: {
+    ARPLog: 'ARPDefenceLog'
+  },
+  DHCPLog: {
+    DHCPLog: 'DHCPLog'
+  },
+  BMDisplay: {
+    web: 'WebRecord',
+    search: 'Search',
+    clear: 'Clear all',
+    provide: 'Providing the latest 24 hours data by default',
+    time: 'Time',
+    name: 'UserName',
+    ip: 'ClientIP',
+    result: 'Result',
+    type: 'Type'
+  },
+  BMControl: {
+    record: 'RecordManagement',
+    DeviceRecord: 'DeviceRecord：',
+    WebRecord: 'WebRecord：',
+    on: 'On'
   }
 }
