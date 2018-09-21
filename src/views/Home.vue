@@ -22,12 +22,14 @@
 
       <el-col :span="4" class="userinfo">
 
-          <el-dropdown trigger="hover">
+        <!-- wyk 18.09.21 -->
+        <el-dropdown trigger="hover">
          <span class="situationMode el-dropdown-link userinfo-inner"> {{$t('home.professional')}}</span>
          <el-dropdown-menu slot="dropdown">
            <el-dropdown-item @click.native="back">{{$t('home.change')}}</el-dropdown-item>
           </el-dropdown-menu>
-         </el-dropdown>
+        </el-dropdown>
+        <!-- 09.21 -->
 
         <el-dropdown trigger="hover">
           <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
