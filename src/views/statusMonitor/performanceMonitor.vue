@@ -223,7 +223,8 @@ export default {
 
   mounted: function() {
     this.drawCharts()
-    this.getInfo()
+    // 18.09.17 pky 太烦，生成环境恢复
+    // this.getInfo()
     // this.getSystemInfo()
   }
 }

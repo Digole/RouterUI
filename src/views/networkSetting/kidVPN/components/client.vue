@@ -15,7 +15,7 @@
       </el-form>
     </el-col>
 
-    <el-table :data="addedClientList" style="width: 100%" :header-cell-style="headerStyle">
+    <el-table :data="addedClientList" style="width: 100%" @selection-change="selChange" :header-cell-style="headerStyle">
       <el-table-column type="selection" min-width="30"></el-table-column>
       <el-table-column prop="serip" :label="$t('kidVPN.client.serip')" min-width="120"></el-table-column>
       <el-table-column prop="locip" :label="$t('kidVPN.client.locip')" min-width="120"></el-table-column>
@@ -64,6 +64,9 @@
         <el-form-item prop="ipaddr" :label="$t('kidVPN.client.ipaddr1')">
           <el-input v-model="kidVPNForm.ipaddr"></el-input>
         </el-form-item>
+        <el-form-item prop="port" label="服务器端口">
+          <el-input type="number" v-model="kidVPNForm.port"></el-input>
+        </el-form-item> 
         <el-form-item prop="passwd" label='密码'>
           <el-input v-model="kidVPNForm.passwd"></el-input>
         </el-form-item>
@@ -117,6 +120,7 @@ export default {
       kidVPNForm: {
         vndid: Number, // 虚拟网卡IP
         ipaddr: '', // IP地址
+        port: '',
         aeskey: '', // AES KEY
         mtu: '', // MTU
         passwd: '',
@@ -124,7 +128,7 @@ export default {
       },
       vndid: '',
       chosenItems: [],
-      labelWidth: '120px',
+      labelWidth: '8rem',
 
       rules: {
         ipaddr: [
@@ -258,7 +262,6 @@ export default {
       for (i = 0; i < this.chosenItems.length; i++) {
         await this.deleteClient(i, this.chosenItems[i])
       }
-      this.getInfo()
     },
     getInfo() {
       // let result

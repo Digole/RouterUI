@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import shell from '@/utils/shell.vue'
+import shell from '@/utils/shellnew.vue'
 export default {
   name: 'ripng',
   data() {

@@ -57,6 +57,8 @@
       <el-table-column prop="portSE" :label="$t('securitySetting.portSE')" align="center"></el-table-column>
       <el-table-column prop="status" :label="$t('securitySetting.status')" align="center"></el-table-column>
       <el-table-column prop="enable" align="center" :label="$t('securitySetting.enable')">
+      <el-table-column prop="direct" align="center" label="导向">
+      <el-table-column prop="mangle" align="center" label="权限">     
         <template slot-scope="scope">
           <el-button type="text" @click="deleteRule(scope.$index, scope.row)">{{$t('operation.delete')}}</el-button>
         </template>
@@ -521,6 +523,8 @@ export default {
       para.port = item.iface
       para.type = getType()
       para.status = getStatus(item.enable)
+      para.direct = item.direct
+      para.mangle = item.mangle
       for (let i in item) {
         if (i === 'ips') {
           para.ipSE = item.ips + '-' + item.ipe
@@ -541,6 +545,7 @@ export default {
           }
         }
       }
+
       this.rulesList.push(para)
 
       function getType() {

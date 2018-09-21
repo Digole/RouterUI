@@ -149,8 +149,8 @@ export default {
     onSubmit() {
       console.log('submit!')
     },
-     back: function(){
-this.$router.push('/ModeChoose')
+    back: function() {
+      this.$router.push('/ModeChoose')
     },
 
     // 退出登录
@@ -205,11 +205,13 @@ this.$router.push('/ModeChoose')
     generateTitle,
 
     getInfo() {
-      this.update()
-      setInterval(() => {
-        this.update()
-        this.$store.dispatch('pushSystemData', this.data)
-      }, 5000)
+      // 18.09.17 pky
+      // 注销请求，太烦了，生产环境恢复
+      // this.update()
+      // setInterval(() => {
+      //   this.update()
+      //   this.$store.dispatch('pushSystemData', this.data)
+      // }, 5000)
     },
 
     async update() {

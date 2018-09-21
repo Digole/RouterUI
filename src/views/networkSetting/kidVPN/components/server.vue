@@ -90,6 +90,9 @@
         <el-form-item prop="ipaddr" :label="$t('kidVPN.server.ipaddr1')">
           <el-input v-model="initAESKeyForm.ipaddr"></el-input>
         </el-form-item>
+        <el-form-item prop="port" label="服务器端口">
+          <el-input type="number" v-model="initAESKeyForm.port"></el-input>
+        </el-form-item> 
         <el-form-item prop="bit" :label="$t('kidVPN.server.bit')">
           <el-select v-model="initAESKeyForm.bit">
             <el-option v-for="(item, index) in bitList" :key="index" :label="item" :value="item"></el-option>
@@ -154,6 +157,7 @@ export default {
       initAESKeyForm: {
         vndid: '',
         ipaddr: '',
+        port: '',
         bit: '',
         aeskey: '',
         password: ''
