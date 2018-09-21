@@ -248,8 +248,8 @@ export default {
   },
   systemStatus: {
     top: {
-      title1: '未配置',
-      title2: '已配置',
+      title1: '未连接',
+      title2: '已连接',
       subtitle: '外网',
       subtitle1: '内网',
       subtitle2: '已运行',
@@ -294,11 +294,25 @@ export default {
     dynamicARP: 'ARP表'
   },
   log: {
+    note: '默认提供最近24小时数据',
+    log: '日志中心',
+    clear: '全部清空',
     index: '编号',
     time: '时间',
     line: '线路',
     detail: '日志详情'
 
+  },
+  operaLog: {
+    log: '操作日志',
+    search: '搜索',
+    clear: '全部清空',
+    time: '操作时间',
+    ip: '客户端IP',
+    operator: '操作者',
+    module: '模块名',
+    result: '操作结果',
+    content: '操作日志内容'
   },
   Qos: {
     QosSetting: 'Qos配置',
