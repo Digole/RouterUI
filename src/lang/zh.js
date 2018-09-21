@@ -1,3 +1,4 @@
+
 export default {
   route: {
     statusMonitor: '状态监控',
@@ -38,7 +39,9 @@ export default {
     ping: 'Ping测试',
     speed: '网速测试',
     operaLog: '操作日志',
-    Qos: 'Qos'
+    Qos: 'Qos',
+    ARPLog: 'ARP日志',
+    DHCPLog: 'DHCP日志'
   },
 
   operation: {
@@ -254,7 +257,11 @@ export default {
       upstream: '上行',
       downstream: '下行',
       status: '连接状态',
-      terminal: '终端在线'
+      terminal: '终端在线',
+      day: '天',
+      hour: '小时',
+      min: '分钟',
+      sec: '秒'
     },
     middle: {
       status: '接口状态',
@@ -407,7 +414,30 @@ export default {
     addChange: '提交更改',
     all: '总类',
     detail: '具体权限',
-    operator: '操作员',
-    visitor: '普通用户'
+    operator: '操作员权限',
+    visitor: '观察者权限'
+  },
+  ARPLog: {
+    ARPLog: 'ARP防御日志'
+  },
+  DHCPLog: {
+    DHCPLog: 'DHCP日志'
+  },
+  BMDisplay: {
+    web: 'WEB上下线',
+    search: '搜索',
+    clear: '全部清空',
+    provide: '默认提供最近24小时数据',
+    time: '时间',
+    name: '名称',
+    ip: '客户端IP',
+    result: '操作结果',
+    type: '操作类型'
+  },
+  BMControl: {
+    record: '行为记录管理',
+    DeviceRecord: '终端上下线记录：',
+    WebRecord: 'WEB上下线记录：',
+    on: '开启'
   }
 }

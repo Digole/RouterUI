@@ -23,15 +23,15 @@
       style="width: 100%; margin-top: 20px" :header-cell-style="headerStyle">
       <el-table-column
         prop="all"
-        label="总类"
+        :label="$t('powerSetting.all')"
         width="180">
       </el-table-column>
       <el-table-column
         prop="detail"
-        label="具体权限">
+        :label="$t('powerSetting.detail')">
       </el-table-column>
       
-      <el-table-column property="operator" label="operator" width="200">
+      <el-table-column property="operator" :label="$t('powerSetting.operator')" width="200">
         <template scope="scope1">
                         <el-switch
                             on-text ="是"
@@ -45,7 +45,7 @@
                         </template>
                         </el-table-column>
 
-        <el-table-column property="visitor" label="visitor" width="200">
+        <el-table-column property="visitor" :label="$t('powerSetting.visitor')" width="200">
            <template scope="scope2">
                         <el-switch
                             on-text ="启用"

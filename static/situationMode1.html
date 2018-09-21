@@ -7,8 +7,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
-
+     <!-- 点击图片返回数据 -->
+    <script>
+        var n = 0;
+        function FN()
+        {
+            n = 1;
+            //alert('hello1'+n);
+        }
+        function EN()
+        {
+            n = 2;
+            //alert('hello1'+n);
+        }
+        function ER()
+        {
+            n = 3;
+            //alert('hello1'+n);
+        }
+        function GN()
+        {
+            n = 4;
+            //alert('hello1'+n);
+        }
+        </script>
    
 
     <!-- Style CSS -->
@@ -22,13 +44,14 @@
     <section class="hero-area">
         <div class="hero-slides owl-carousel">
             <!-- Single Hero Slide -->
-            <div class="single-hero-slide bg-img slide-background-overlay" style="background-image: url(img/slide1.jpg);">
+            <div class="single-hero-slide bg-img slide-background-overlay" onclick="FN()" style="background-image: url(img/slide1.jpg) ;">
                 <div class="container h-100">
                     <div class="row h-100 align-items-end">
                         <div class="col-12">
                             <div class="hero-slides-content">
                                 <div class="line"></div>
                                 <h2>FamilyNetwork</h2>
+                                
                                 <p>123</p>
                             </div>
                         </div>
@@ -36,7 +59,7 @@
                 </div>
             </div>
             <!-- Single Hero Slide -->
-            <div class="single-hero-slide bg-img slide-background-overlay" style="background-image: url(img/slide2.jpg);">
+            <div class="single-hero-slide bg-img slide-background-overlay" onclick="EN()" style="background-image: url(img/slide2.jpg);">
                 <div class="container h-100">
                     <div class="row h-100 align-items-end">
                         <div class="col-12">
@@ -50,7 +73,7 @@
                 </div>
             </div>
             <!-- Single Hero Slide -->
-            <div class="single-hero-slide bg-img slide-background-overlay" style="background-image: url(img/slide3.jpg);">
+            <div class="single-hero-slide bg-img slide-background-overlay" onclick="ER()" style="background-image: url(img/slide3.jpg);">
                 <div class="container h-100">
                     <div class="row h-100 align-items-end">
                         <div class="col-12">
@@ -65,7 +88,7 @@
             </div>
            
             <!-- Single Hero Slide -->
-            <div class="single-hero-slide bg-img slide-background-overlay" style="background-image: url(img/slide4.jpg);">
+            <div class="single-hero-slide bg-img slide-background-overlay" onclick="GN()" style="background-image: url(img/slide4.jpg);">
                 <div class="container h-100">
                     <div class="row h-100 align-items-end">
                         <div class="col-12">

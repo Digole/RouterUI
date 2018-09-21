@@ -17,7 +17,7 @@
       <el-button @click="changeSettingTime" type="primary" size="small">修改设备时间</el-button>
     </div>
 
-    <el-dialog title="修改系统名称" :visible.sync="isSetTimeVisible">
+    <el-dialog title="修改系统时间" :visible.sync="isSetTimeVisible">
       <el-form ref="form" :model="form" label-width="5rem" inline>
         <el-form-item prop="date" label="时间设置">
           <el-col :span="10">
@@ -160,7 +160,8 @@ export default {
               console.log('para is ' + para)
               let timeNumber = new Date(date0, date1 - 1, date2, val0, val1, val2)
               this.deviceTime = new Date(timeNumber).toLocaleString()
-              console.log(timeNumber)
+              console.log('timen' + timeNumber)
+              console.log('deviceTime' + this.deviceTime)
               // for (let i = 0; i < 60; i++) {
               //   if (this.isUsingTimer) {
               //     setTimeout(() => {
