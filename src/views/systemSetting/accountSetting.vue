@@ -19,7 +19,7 @@
       </el-table-column>
       <el-table-column prop="username" :label="$t('systemSetting.username')" min-width="120">
       </el-table-column>
-      <el-table-column prop="passwd" :label="$t('systemSetting.passwd')" min-width="180">
+      <el-table-column prop="passwdShow" :label="$t('systemSetting.passwd')" min-width="180">
       </el-table-column>
        <el-table-column prop="role" :label="$t('systemSetting.role')" min-width="180">
       </el-table-column>
@@ -28,8 +28,8 @@
       <el-table-column prop="behaviour" :label="$t('systemSetting.behaviour')" min-width="180">
       <template slot-scope="scope">
       <el-button size="small" @click="changePasswd(scope.row)">{{$t('systemSetting.changePasswd')}}</el-button>
-        <el-button size="small" @click="deleteUser(scope.row)">{{$t('systemSetting.deleteUser')}}</el-button>
-        <el-button size="small" @click="changeStatus(scope.row)">{{$t('systemSetting.changeStatus')}}</el-button>
+        <el-button size="small" :disabled="scope.row.username == 'admin'" @click="deleteUser(scope.row)">{{$t('systemSetting.deleteUser')}}</el-button>  <!--wyk0930修改管理员账号不可删除与禁用-->
+        <el-button size="small" :disabled="scope.row.username == 'admin'" @click="changeStatus(scope.row)">{{$t('systemSetting.changeStatus')}}</el-button>
       </template>
       </el-table-column>
     </el-table>
@@ -252,6 +252,7 @@ export default {
         changePasswordAction(para).then(res => {
           if (res.data.code === 200) {
             this.list[0].status = '修改成功'
+            this.isInChanging = false
           } else {
             this.list[0].status = '修改失败'
           }
@@ -306,6 +307,7 @@ export default {
       queryUsersAction(para).then(res => {
         this.userShow = res.data.data
         for (let i = 0; i < res.data.data.length; i++) {
+          this.userShow[i].passwdShow = '******'
           if (this.userShow[i].role === 1) {
             this.userShow[i].role = 'admin'
           } else if (this.userShow[i].role === 2) {
@@ -327,6 +329,7 @@ export default {
             }
           }
         }
+        console.log(this.userShow)
       })
     },
     getInfo() {
