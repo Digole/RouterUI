@@ -1,14 +1,7 @@
 <template>
   <div>
     <div class="line_02">
-
-      <span>Qos配置</span>
-
       <span>{{$t('Qos.QosSetting')}}</span>
-
-
-      <span>{{$t('Qos.QosSetting')}}</span>
-
     </div>
 
     <el-col :span="24">
@@ -20,21 +13,6 @@
     </el-col>
 
     <el-table :data="data" :header-cell-style="headerStyle">
-
-
-      <el-table-column prop="netif" :label="$t('Qos.netif')">
-
-      </el-table-column>
-      <el-table-column prop="rule" :label="$t('Qos.rule')">
-      </el-table-column>
-      <el-table-column prop="ipStart" :label="$t('Qos.ipStart')">
-      </el-table-column>
-      <el-table-column prop="ipEnd" :label="$t('Qos.ipEnd')">
-      </el-table-column>
-      <el-table-column prop="cmpMethod" :label="$t('Qos.cmpMethod')">
-      </el-table-column>
-      <el-table-column prop="priority" :label="$t('Qos.priority')">
-      </el-table-column>
       <el-table-column prop="netif" :label="$t('Qos.netif')">
       </el-table-column>
       <el-table-column prop="rule" :label="$t('Qos.rule')">
@@ -48,9 +26,6 @@
       <el-table-column prop="priority" :label="$t('Qos.priority')">
       </el-table-column>
       <el-table-column prop="dontDrop" :label="$t('Qos.dontDrop')">
-
-      <el-table-column prop="dontDrop" :label="$t('Qos.dontDrop')">
-
       </el-table-column>
       <el-table-column>
         <template slot-scope="scope">
@@ -66,20 +41,9 @@
       :page-size="pageSize">
     </el-pagination>
 
-
-    <el-dialog title="添加新Qos" :visible.sync="isShow">
-      <el-form :model="addForm" ref="addForm" label-width="5rem">
-        <el-form-item prop="netif" label="网卡接口">
-
     <el-dialog :title="$t('Qos.addNewQos')" :visible.sync="isShow">
       <el-form :model="addForm" ref="addForm" label-width="5rem">
         <el-form-item prop="netif" :label="$t('Qos.netif')">
-
-
-    <el-dialog :title="$t('Qos.addNewQos')" :visible.sync="isShow">
-      <el-form :model="addForm" ref="addForm" label-width="5rem">
-        <el-form-item prop="netif" :label="$t('Qos.netif')">
-
           <el-select v-model="addForm.netif" placeholder="请选择网卡">
             <el-option 
               v-for="(item, index) in netList" 
@@ -89,13 +53,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-
-        <el-form-item prop="rule" label="规则">
-
         <el-form-item prop="rule" :label="$t('Qos.rule')">
-
-        <el-form-item prop="rule" :label="$t('Qos.rule')">
-
           <el-select v-model="addForm.rule" placeholder="请选择规则" @change="changeHandle">
             <el-option 
               v-for="(item, index) in ruleList" 
@@ -105,22 +63,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-
-        <el-form-item prop="ipStart" label="起始IP地址">
-
-        <el-form-item prop="ipStart" :label="$t('Qos.ipStart')">
-
-          <el-input v-model="addForm.ipStart" placeholder="请填写起始IP"></el-input>
-        </el-form-item>
-        <el-form-item prop="ipEnd" :label="$t('Qos.ipEnd')">
-          <el-input v-model="addForm.ipEnd" placeholder="请填写结束IP"></el-input>
-        </el-form-item>
-        <el-form-item prop="portStart" :label="$t('Qos.portStart')">
-          <el-input v-model="addForm.portStart" :disabled="isIP" placeholder="请填写开始端口"></el-input>
-        </el-form-item>
-        <el-form-item prop="portEnd" :label="$t('Qos.portEnd')">
-          <el-input v-model="addForm.portEnd" :disabled="isIP" placeholder="请填写结束端口"></el-input>
-        </el-form-item>
         <el-form-item prop="ipStart" :label="$t('Qos.ipStart')">
           <el-input v-model="addForm.ipStart" placeholder="请填写起始IP"></el-input>
         </el-form-item>
@@ -134,9 +76,6 @@
           <el-input v-model="addForm.portEnd" :disabled="isIP" placeholder="请填写结束端口"></el-input>
         </el-form-item>
         <el-form-item prop="cmpMethod" :label="$t('Qos.cmpMethod')">
-
-        <el-form-item prop="cmpMethod" :label="$t('Qos.cmpMethod')">
-
           <el-select v-model="addForm.cmpMethod" placeholder="请选择比较方法">
             <el-option 
               v-for="(item, index) in methodList" 
@@ -147,9 +86,6 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="priority" :label="$t('Qos.priority')">
-
-        <el-form-item prop="priority" :label="$t('Qos.priority')">
-
           <el-select v-model="addForm.priority" placeholder="请选择优先级">
             <el-option 
               v-for="item in 7" 
@@ -159,13 +95,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-
-        <el-form-item prop="dontDrop" label="dontDrop">
-
         <el-form-item prop="dontDrop" :label="$t('Qos.dontDrop')">
-
-        <el-form-item prop="dontDrop" :label="$t('Qos.dontDrop')">
-
           <el-radio v-model="addForm.dontDrop" label="0">No</el-radio>
           <el-radio v-model="addForm.dontDrop" label="1">Yes</el-radio>
         </el-form-item>
@@ -286,6 +216,20 @@ export default {
             this.getQosInfo()
             this.isShow = false
             this.$refs.addForm.resetFields()
+          } else if (res.data.code === 500) {                    // wyk930返回500报配置错误
+            if (this.$store.state.app.language === 'zh') {
+              this.$confirm('配置数据有误，请重新配置', '提示', {
+                confirmButtonText: '确定',
+
+                type: 'warning'
+              })
+            } else {
+              this.$confirm('The configuration information is incorrect. Please reconfigure it.', 'Warning', {
+                confirmButtonText: 'OK',
+
+                type: 'warning'
+              })
+            }
           }
         })
         .catch(error => {
