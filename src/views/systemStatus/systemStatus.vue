@@ -8,11 +8,12 @@
         <!--第一行左边-->
         <el-col :md="10" :lg="10" :xl="10">
           <div class="topLeft">
-            <div id = "statusColor" class="topLeftLeft2">
+            <div id="statusColor" class="topLeftLeft2">
               <p style="padding-top: 20px;">OpenRT</p><br/>
-              <p><span style="font-size: 30px; margin: 10px 20px 10px 0px;">{{this.title}}</span>{{$t('systemStatus.top.subtitle')}}</p><br/>
-             <p>{{$t('systemStatus.top.subtitle2')}}:{{this.MonitorInfo.time[0]}}{{$t('systemStatus.top.day')}}{{this.MonitorInfo.time[1]}}{{$t('systemStatus.top.hour')}}{{this.MonitorInfo.time[2]}}{{$t('systemStatus.top.min')}}{{this.MonitorInfo.time[3]}}{{$t('systemStatus.top.sec')}}</p>
-              
+              <p>
+                <span style="font-size: 30px; margin: 10px 20px 10px 0px;">{{this.title}}</span>{{$t('systemStatus.top.subtitle')}}</p><br/>
+              <p>{{$t('systemStatus.top.subtitle2')}}:{{this.MonitorInfo.time[0]}}{{$t('systemStatus.top.day')}}{{this.MonitorInfo.time[1]}}{{$t('systemStatus.top.hour')}}{{this.MonitorInfo.time[2]}}{{$t('systemStatus.top.min')}}{{this.MonitorInfo.time[3]}}{{$t('systemStatus.top.sec')}}</p>
+
             </div>
             <div class="topLeftText">
               <p>{{$t('systemStatus.top.rate')}}</p>
@@ -38,14 +39,13 @@
                 <p style="font-size: 36px;">{{this.terminalNum}}</p>
                 <p>{{$t('systemStatus.top.terminal')}}</p>
               </div>
-            
 
             </div>
           </div>
         </el-col>
       </el-row>
     </div>
-<!--第二行左边上面-->
+    <!--第二行左边上面-->
     <div id="middle">
       <el-row :gutter="10">
         <el-col :md="14" :lg="14" :xl="14">
@@ -108,12 +108,12 @@
                     </el-tooltip>
                     <div class="textArea">
                       <p class="text">
-                        <span v-show="item.category !== '空闲'">
+                        <span v-show="item.function !== 'normal'">
                           <svg class="icon">
-                            <use :xlink:href=selectIcon(item.category)></use>
+                            <use :xlink:href="selectIcon(item.function)"></use>
                           </svg>
                         </span>
-                        en{{index}}</p>
+                        {{ item.webname }}</p>
                     </div>
                   </div>
                 </div>
@@ -121,7 +121,7 @@
             </div>
           </div>
         </el-col>
-<!--第二行右边-->
+        <!--第二行右边-->
         <el-col :md="10" :lg="10" :xl="10">
           <div class="middleRight">
             <div style="height: 20%;">
@@ -137,7 +137,7 @@
 
       </el-row>
     </div>
-<!--第三行-->
+    <!--第三行-->
     <div id="bottom">
       <el-row :gutter="10">
         <el-col :md="8" :lg="8" :xl="8">
@@ -163,8 +163,8 @@
         </el-col>
         <el-col :md="16" :lg="16" :xl="16">
           <div class="bottomRight">
-            <div id="chartLine1" style="width:100%; height:160px; margin-top: 10px"></div> 
-             <div id="chartLine2" style="width:100%; height:160px; margin-top: 10px"></div> 
+            <div id="chartLine1" style="width:100%; height:160px; margin-top: 10px"></div>
+            <div id="chartLine2" style="width:100%; height:160px; margin-top: 10px"></div>
             <line-chart></line-chart>
           </div>
         </el-col>
@@ -175,7 +175,11 @@
 
 <script>
 import systemStatus from 'echarts'
-import { getPorts, getMonitorInfo, getExtranetStatus, setTime, getTime, setName, getName } from '../../api/api'
+import {
+  getPorts,
+  getMonitorInfo,
+  getExtranetStatus
+} from '../../api/api'
 import { pieChart, lineChart } from './components'
 import { conversion } from '../../utils/rateUnitExchange.js'
 // import { conversion } from '../../utils/rateUnitExchange.js'
@@ -194,13 +198,15 @@ export default {
     return {
       // n: 0,
       title: '',
-      MonitorInfo: {            // 外网连接状态
+      MonitorInfo: {
+        // 外网连接状态
         status: '',
         time: ''
       },
 
-      terminalNum: '',         // 连接终端数量
-      data: {                  // 上下行速率以及相关信息
+      terminalNum: '', // 连接终端数量
+      data: {
+        // 上下行速率以及相关信息
         up: '',
         down: '',
         upStorage: '',
@@ -277,7 +283,8 @@ export default {
   },
 
   methods: {
-    getNetInfo () {                                   // 获取外网连接信息
+    getNetInfo() {
+      // 获取外网连接信息
       getExtranetStatus().then(res => {
         if (res.data.code === 200) {
           this.MonitorInfo.status = res.data.status
@@ -288,13 +295,17 @@ export default {
             obj.className = 'topLeftLeft2'
             if (this.$store.state.app.language === 'en') {
               this.title = 'Not Configured'
-            } else { this.title = '未配置' }
+            } else {
+              this.title = '未配置'
+            }
             console.log('title:' + this.title)
           } else {
             obj.className = 'topLeftLeft1'
             if (this.$store.state.app.language === 'en') {
               this.title = 'Configured'
-            } else { this.title = '已配置' }
+            } else {
+              this.title = '已配置'
+            }
           }
 
           // this.MonitorInfo.time[3] = parseInt(this.MonitorInfo.time[3]) + this.n
@@ -312,12 +323,13 @@ export default {
       })
     },
 
-    getTerminalInfo() {                                     // 获取终端数量
+    getTerminalInfo() {
+      // 获取终端数量
       let para = Object.assign({}, this.form)
       para.type = 1
       para.page = this.currentPage
       getMonitorInfo(para)
-        .then((res) => {
+        .then(res => {
           if (res.data.code === 200) {
             if (res.data.data.length !== 0) {
               this.terminalNum = res.data.total
@@ -325,15 +337,17 @@ export default {
             }
           }
         })
-        .catch(error => {
-          console.log(error)
-        },
-        setTimeout(() => {
-          this.getTerminalInfo()
-        }, 3000)
+        .catch(
+          error => {
+            console.log(error)
+          },
+          setTimeout(() => {
+            this.getTerminalInfo()
+          }, 3000)
         )
     },
-    getInfo() {                                          // 获取上下行速率
+    getInfo() {
+      // 获取上下行速率
       this.update()
       setInterval(() => {
         this.update()
@@ -364,8 +378,8 @@ export default {
       await getMonitorInfo(para1)
         .then(res => {
           if (res.data.code === 200) {
-            this.data.cpu = (res.data.cpu_usage).toFixed(0)
-            this.data.memory = (res.data.memory_usage).toFixed(0)
+            this.data.cpu = res.data.cpu_usage.toFixed(0)
+            this.data.memory = res.data.memory_usage.toFixed(0)
             this.data.userNum = res.data.online_users
           }
         })
@@ -681,7 +695,9 @@ export default {
       if (this.$store.state.app.language === 'en') {
         if (this.MonitorInfo.status === 'failed') {
           this.title = 'Not Configured'
-        } else { this.title = 'Configured' }
+        } else {
+          this.title = 'Configured'
+        }
         option.legend.data = [
           'HTTP',
           'Vedio',
@@ -706,7 +722,9 @@ export default {
       if (this.$store.state.app.language === 'zh') {
         if (this.MonitorInfo.status === 'failed') {
           this.title = '未配置'
-        } else { this.title = '已配置' }
+        } else {
+          this.title = '已配置'
+        }
         option.legend.data = [
           'HTTP协议',
           '网络视频',
@@ -741,7 +759,6 @@ export default {
     this.getTerminalInfo()
     this.getNetInfo()
   }
-
 }
 </script>
 
@@ -756,15 +773,15 @@ p {
   .topLeftLeft2 {
     width: 60%;
     background-color: lightgrey;
-    
+
     p {
       margin: auto 20px;
       color: white;
     }
   }
-   .topLeftLeft1 {
+  .topLeftLeft1 {
     width: 60%;
-    
+
     background-color: rgb(9, 211, 100);
     p {
       margin: auto 20px;

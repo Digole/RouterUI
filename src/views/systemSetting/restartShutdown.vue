@@ -46,10 +46,18 @@
           <el-radio v-model="powerEvent.event" label="restart">{{ $t('systemSetting.restart') }}</el-radio>
         </el-form-item>
         <el-form-item prop="date" :label="$t('systemSetting.date')">
-          <el-input v-model="powerEvent.date" placeholder="示例: 20180808"></el-input>
+          <!-- <el-input v-model="powerEvent.date" placeholder="示例: 20180808"></el-input> -->
+          <el-date-picker v-model="powerEvent.date"
+           type="date" 
+           value-format="yyyyMMdd"
+           placeholder="选择日期"></el-date-picker>
         </el-form-item>
-        <el-form-item prop="time" :label="$t('systemSetting.event')">
-          <el-input v-model="powerEvent.time" placeholder="示例: 02:30"></el-input>
+        <el-form-item prop="time" :label="$t('systemSetting.time')">
+          <!-- <el-input v-model="powerEvent.time" placeholder="示例: 02:30"></el-input> -->
+          <el-time-picker v-model="powerEvent.time"
+          :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+          value-format="HHmmss"
+          placeholder="选择时间"></el-time-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

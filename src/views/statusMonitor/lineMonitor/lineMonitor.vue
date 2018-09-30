@@ -120,7 +120,7 @@ export default {
         .then((res) => {
           if (res.data.code === 200) {
             this.ports = res.data.interfaces
-            console.log(this.ports)
+            // console.log(this.ports)
           }
         })
         .catch(error => {
@@ -131,8 +131,11 @@ export default {
       await this.getLineInfo()
       await this.getPortsInfo()
       this.final = getNameAndFunc(this.lineForm, this.ports)
-      console.log('lineForm' + this.lineForm)
-      console.log('final' + this.final)
+      // console.log('lineForm' + this.lineForm)
+      console.log('final' + JSON.stringify(this.final))
+      this.final.sort((a, b) => {
+        return a.lineName[3] - b.lineName[3]
+      })
 
       function getNameAndFunc (line, ports) {
         console.log('in nameandfunc' + line + ports)

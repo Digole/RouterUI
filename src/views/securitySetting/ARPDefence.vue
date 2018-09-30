@@ -99,10 +99,16 @@ export default {
           if (res.data.code === 200) {
             if (res.data.status === 'open') {
               this.isInuse = true
+
+              this.list = res.data.data
+              this.list.forEach(element => {
+                if (element.newmac === '00:00:00:00:00:00') {
+                  element.newmac = '无'
+                }
+              })
             } else {
               this.isInuse = false
             }
-            this.list = res.data.data
             this.total = res.data.total
           }
         })

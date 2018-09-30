@@ -211,6 +211,7 @@ export default {
 
     linkKidVPN() {
       let para = Object.assign({}, this.kidVPNForm)
+      para.port = Number(para.port)
       para.vndid = this.vndid
       para.mtu = this.VNDForm.mtu
       para.handle = 'addClient'

@@ -40,132 +40,129 @@ export default {
   name: 'powerSetting',
   data() {
     return {
-      cmd: "",
+      cmd: '',
       submit: 0,
       isSubmit: false,
       isM1: false,
       isM2: false,
       isM3: false,
-      cmd1: "",
-      cmd2: "",
-      cmd3: "",
-      cmd4: "",
-      cmd5: "",
-      cmd6: "",
-      cmd7: "",
-      cmd8: "",
-      cmd9: "",
-      cmd10: "",
-      cmd11: "",
-      cmd12: "",
-      powerRec:[{}],
-      powerShow:[{
-          roleIDS: "",
-          roleNameS: "",
-         
-          ModuleName1S: "",
-          ModuleName2S: "",
-          ModuleName3S: "",
-          
-          
-          cmdID1S: "",
-          cmdID2S: "",
-          cmdID3S: "",
-          cmdID4S: "",
-          cmdID5S: "",
-          cmdID6S: "",
-          cmdID7S: "",
-          cmdID8S: "",
-          cmdID9S: "",
-          cmdID10S: "",
-          cmdID11S: "",
-          cmdID12S: "",
-         
+      cmd1: '',
+      cmd2: '',
+      cmd3: '',
+      cmd4: '',
+      cmd5: '',
+      cmd6: '',
+      cmd7: '',
+      cmd8: '',
+      cmd9: '',
+      cmd10: '',
+      cmd11: '',
+      cmd12: '',
+      powerRec: [{}],
+      powerShow: [{
+        roleIDS: '',
+        roleNameS: '',
 
-          cmdNameS: ""
+        ModuleName1S: '',
+        ModuleName2S: '',
+        ModuleName3S: '',
+
+        cmdID1S: '',
+        cmdID2S: '',
+        cmdID3S: '',
+        cmdID4S: '',
+        cmdID5S: '',
+        cmdID6S: '',
+        cmdID7S: '',
+        cmdID8S: '',
+        cmdID9S: '',
+        cmdID10S: '',
+        cmdID11S: '',
+        cmdID12S: '',
+
+        cmdNameS: ''
       }],
-      powerPost:[{
-          roleIDP: "",
-          roleNameP: "",
-          ModuleName1P: "",
-          ModuleName2P: "",
-          ModuleName3P: "",
-          ModuleName4P: "",
-          ModuleName5P: "",
-          ModuleName6P: "",
-          ModuleID1P: "",
-          ModuleID2P: "",
-          ModuleID3P: "",
-          ModuleID4P: "",
-          ModuleID5P: "",
-          ModuleID6P: "",
-          cmdIDP: "",
-          cmdNameP: ""
+      powerPost: [{
+        roleIDP: '',
+        roleNameP: '',
+        ModuleName1P: '',
+        ModuleName2P: '',
+        ModuleName3P: '',
+        ModuleName4P: '',
+        ModuleName5P: '',
+        ModuleName6P: '',
+        ModuleID1P: '',
+        ModuleID2P: '',
+        ModuleID3P: '',
+        ModuleID4P: '',
+        ModuleID5P: '',
+        ModuleID6P: '',
+        cmdIDP: '',
+        cmdNameP: ''
       }],
-       powerRec:[{
-          roleIDR: "",
-          roleNameR: "",
-          ModuleName1R: "",
-          ModuleName2R: "",
-          ModuleName3R: "",
-          ModuleName4R: "",
-          ModuleName5R: "",
-          ModuleName6R: "",
-          ModuleID1R: "",
-          ModuleID2R: "",
-          ModuleID3R: "",
-          ModuleID4R: "",
-          ModuleID5R: "",
-          ModuleID6R: "",
-          cmdIDR: "",
-          cmdNameR: ""
+      powerRec: [{
+        roleIDR: '',
+        roleNameR: '',
+        ModuleName1R: '',
+        ModuleName2R: '',
+        ModuleName3R: '',
+        ModuleName4R: '',
+        ModuleName5R: '',
+        ModuleName6R: '',
+        ModuleID1R: '',
+        ModuleID2R: '',
+        ModuleID3R: '',
+        ModuleID4R: '',
+        ModuleID5R: '',
+        ModuleID6R: '',
+        cmdIDR: '',
+        cmdNameR: ''
       }],
-      sels: [],
+      sels: []
     }
   },
- 
 
   methods: {
-    Module1(){
+    Module1() {
       this.isM1 = true
     },
-    Module2(){
+    Module2() {
       this.isM2 = true
     },
-    Module3(){
+    Module3() {
       this.isM3 = true
     },
-    submitCancel1(){
+    submitCancel1() {
       this.isM1 = false
     },
-    submitCancel2(){
+    submitCancel2() {
       this.isM2 = false
     },
-    submitCancel3(){
+    submitCancel3() {
       this.isM3 = false
     },
-    submitChange1(){
+    submitChange1() {
       this.isM1 = false
     },
-    submitChange2(){
+    submitChange2() {
       this.isM2 = false
     },
-    submitChange3(){
+    submitChange3() {
       this.isM3 = false
     },
     selsChange: function(sels) {
       this.sels = sels
     },
-    getNowPower(){
+    getNowPower() {
 
     }
   },
-   headerStyle() {
-      return this.header()
-    },
+  headerStyle() {
+    return this.header()
+  },
   mounted() {
     this.getNowPower()
-    }
+  }
 }
 </script>
 

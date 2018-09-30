@@ -6,7 +6,7 @@
       <div class="power-button">
         <img style="width: 60px; height: 50px; border-radius: 5px;" :src="powerButton" />
         <div class="text-area">
-          <p class="text">调试</p>
+          <p class="text">调试333</p>
         </div>
       </div>
     </div>
@@ -327,6 +327,8 @@ export default {
     WANLANSubmit: function() {
       this.WANForm.handle = 1
       let para = Object.assign({}, this.WANForm)
+      para.index = this.ports[para.index].webname
+      console.log('hhh ' + para.index + ' ' + this.ports[para.index].webname)
       console.log(para)
       this.WANLANLoading = true
       // console.log(typeof(para.index));

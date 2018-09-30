@@ -435,6 +435,9 @@ export default {
             this.ports = res.data.interfaces
             console.log(this.ports)
           }
+          // else if (res.data.code === 123) {
+
+          // }
         })
         .catch(error => {
           console.log(error)

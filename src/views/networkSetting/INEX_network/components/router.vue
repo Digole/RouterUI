@@ -79,7 +79,7 @@
             <el-input v-model="lanForm.gateway" prop="gateway" auto-complete="off" placeholder=""></el-input>
           </el-form-item>
           <el-form-item label="启用为 LAN口" :label-width="formLabelWidth">
-            <el-checkbox v-model="isLANPort" @click="setPort('lan')"></el-checkbox>
+            <el-checkbox v-model="isLANPort" @click.native="setPort('lan')"></el-checkbox>
           </el-form-item>
 
           <!--components of collapse-->
@@ -100,9 +100,9 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item :label="$t('INEXNetwork.cardConfig.LANControl')" prop="control" :label-width="formLabelWidth">
+                <!-- <el-form-item :label="$t('INEXNetwork.cardConfig.LANControl')" prop="control" :label-width="formLabelWidth">
                   <el-checkbox v-model="advancedLANForm.control">{{$t('INEXNetwork.cardConfig.LANOptions')}}</el-checkbox>
-                </el-form-item>
+                </el-form-item> -->
               </el-form>
             </el-collapse-item>
           </el-collapse>
@@ -163,7 +163,7 @@
             <el-input v-model="wanForm.gateway" :disabled="isASDLVisible||isDHCP" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="启用为WAN口" :label-width="formLabelWidth">
-            <el-checkbox v-model="isWANPort" @click="setPort('wan')"></el-checkbox>
+            <el-checkbox v-model="isWANPort" @click.native="setPort('wan')"></el-checkbox>
           </el-form-item>
           <!-- <el-form-item :label="$t('INEXNetwork.cardConfig.primaryDNS')" prop="primaryDNS" :label-width="formLabelWidth">
             <el-button type="primary" :disabled="isASDLVisible" @click="pushDNS">{{$t('operation.setting')}}</el-button>
@@ -176,7 +176,7 @@
         <!--components of collapse-->
         <el-collapse class="advancedSetting">
           <el-collapse-item :title="$t('INEXNetwork.cardConfig.collapseTitle')" name="1">
-            <el-form :model="advancedWANForm" label-position="left" size="small" ref="advanceWANForm">
+            <el-form :model="advancedWANForm" label-position="left" size="small" ref="advancedWANForm">
               <el-form-item :label="$t('INEXNetwork.cardConfig.workingMode')" prop="mode" :label-width="formLabelWidth">
                 <el-select v-model="advancedWANForm.mode" placeholder="请选择" style="width: 100%;" value="">
                   <el-option v-for="item in modeOptions" :key="item.value" :label="item.label" :value="item.value">
@@ -209,7 +209,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="danger" @click="unbind" :disabled="unbindEnable">{{$t('operation.unbind')}}</el-button>
+        <el-button type="danger" @click="unbindGeneral" :disabled="unbindEnable">{{$t('operation.unbind')}}</el-button>
         <el-button type="primary" @click="nextStep">{{$t('operation.next')}}</el-button>
       </div>
     </el-dialog>
@@ -349,7 +349,7 @@ export default {
         id: ''
       },
 
-      formLabelWidth: '100px',
+      formLabelWidth: '8rem',
       tooltipLabelWidth: '80px',
       powerButton: 'static/port3.png'
     }
@@ -376,7 +376,7 @@ export default {
           this.isAfterConnection = false
           this.isDHCP = false
           this.$refs['wanForm'].resetFields()
-          this.$refs['advanceWANForm'].resetFields()
+          this.$refs['advancedWANForm'].resetFields()
         }
       }
     }
@@ -632,8 +632,8 @@ export default {
     },
     // 设置为WAN/LAN
     setPort(val) {
-      this.WANForm.handle = 1
-      let para = Object.assign({}, this.WANForm)
+      this.wanForm.handle = 1
+      let para = Object.assign({}, this.wanForm)
       para.use = val
       console.log(para)
       sendWANLAN(para)
@@ -655,6 +655,45 @@ export default {
             })
           }
         })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    // WAN,LAN口解绑功能
+    unbindGeneral: function(val) {
+      // let index = this.WANForm.index
+      // this.WANForm.use = this.ports[index].function
+      // this.WANForm.handle = 0
+      // this.WANLANLoading = true
+      // let para = Object.assign({}, this.WANForm)
+
+      let para = Object.assign({}, this.formDialUp)
+      let enname = this.formDialUp.enname
+      this.ports.forEach(element => {
+        if (element.enname === enname) {
+          para.use = element.function
+          para.index = element.webindex
+        }
+      })
+      para.handle = 0
+
+      sendWANLAN(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.$message({
+              message: '发送成功',
+              type: 'success'
+            })
+          }
+        })
+        .then(() => {
+          if (this.ports[para.index - 1].type === 'dhcp') {
+            this.DHCPDisconnect()
+          } else if (this.ports[para.index - 1].type === 'adsl') {
+            this.unbind()
+          }
+        })
+        // .then(this.getPortsInfo())
         .catch(error => {
           console.log(error)
         })

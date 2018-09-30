@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { getVPNLog, getCityInfo } from '../../api/api.js'
+import { getVPNLog } from '../../api/api.js'
 export default {
   name: 'log',
   data() {
@@ -78,6 +78,15 @@ export default {
       }
     }
   },
+  watch: {
+    'request.vndid': function() {
+      if (this.request.vndid === '') {
+        this.dialForm.vndid = -1
+      } else {
+        this.dialForm.vndid = Number(this.request.vndid)
+      }
+    }
+  },
   methods: {
     headerStyle() {
       return this.header()
@@ -85,12 +94,6 @@ export default {
     getTime() {
       this.dialForm.starttime = this.transform(this.request.time[0])
       this.dialForm.endtime = this.transform(this.request.time[1])
-      if (this.request.vndid === '') {
-        this.dialForm.vndid = -1
-      } else {
-        this.dialForm.vndid = this.request.vndid
-      }
-      this.currentPage = 1
       // this.getLogInfo()
     },
     sendTime() {
@@ -137,6 +140,7 @@ export default {
         this.dialForm.endtime = this.transform(now)
         para.endtime = this.dialForm.endtime
       }
+      this.currentPage = 1
       para.page = this.currentPage
       para.pagecount = 10
       console.log(para)

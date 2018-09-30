@@ -144,7 +144,8 @@ export default {
     // 获得alias信息
     getAliasInfo: function() {
       let para = {
-        page: this.aliasPage
+        page: this.aliasPage,
+        count: 5
       }
       getAlias(para)
         .then(res => {

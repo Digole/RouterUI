@@ -267,6 +267,7 @@ export default {
     },
     saveKey() {
       let para = Object.assign({}, this.initAESKeyForm)
+      para.port = Number(para.port)
       para.handle = 'addServer'
       para.vndid = this.vndid
       para.mtu = this.form.mtu

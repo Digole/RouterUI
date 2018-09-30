@@ -8,7 +8,7 @@
             <el-button type="primary" @click="addMappingHandle">{{$t('operation.add')}}</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="danger" @click="delMappingHandle()" :disabled="this.mappingSelections.length===0">{{$t('operation.delete')}}</el-button>
+            <el-button type="danger" @click="delMappingHandle" :disabled="this.mappingSelections.length===0">{{$t('operation.delete')}}</el-button>
           </el-form-item>
           <el-pagination layout="prev, pager, next" @current-change="mappingHandleCurrentChange" :page-size="5" :total=mappingTotal style="float:right;">
           </el-pagination>
@@ -188,7 +188,8 @@ export default {
     // 获得mapping信息
     getMappingInfo: function() {
       let para = {
-        page: this.mappingPage
+        page: this.mappingPage,
+        count: 5
       }
       getMapping(para)
         .then(res => {
@@ -277,6 +278,8 @@ export default {
         let para = Object.assign({}, item)
         para.handle = 1
         para.assport = para.assport + ''
+        para.ipcnt = String(para.ipcnt)
+        para.localport = String(para.localport)
         console.log(para.assport)
         delMapping(para)
           .then(() => {})

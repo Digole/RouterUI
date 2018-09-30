@@ -56,8 +56,8 @@
       <el-table-column prop="mac" :label="$t('securitySetting.mac')" align="center"></el-table-column>
       <el-table-column prop="portSE" :label="$t('securitySetting.portSE')" align="center"></el-table-column>
       <el-table-column prop="status" :label="$t('securitySetting.status')" align="center"></el-table-column>
-      <el-table-column prop="enable" align="center" :label="$t('securitySetting.enable')">
-      <el-table-column prop="direct" align="center" label="导向">
+      <el-table-column prop="enable" align="center" :label="$t('securitySetting.enable')"></el-table-column>
+      <el-table-column prop="direct" align="center" label="导向"></el-table-column>
       <el-table-column prop="mangle" align="center" label="权限">     
         <template slot-scope="scope">
           <el-button type="text" @click="deleteRule(scope.$index, scope.row)">{{$t('operation.delete')}}</el-button>
@@ -167,7 +167,7 @@
 
     <!-- mac策略 -->
     <el-dialog :title="$t('securitySetting.isMacRule')" :visible.sync="isMacRule">
-      <el-form :model="addForm" ref="addFrom" :rules="validateRules">
+      <el-form :model="addForm" ref="addForm" :rules="validateRules">
         <el-form-item prop="mac" :label="$t('securitySetting.mac')">
           <el-input v-model="addForm.mac"></el-input>
         </el-form-item>
@@ -332,7 +332,7 @@ export default {
       this.$refs['addForm'].resetFields()
     },
     addSubmit() {
-      this.$refs['addFrom'].validate((valid) => {
+      this.$refs['addForm'].validate((valid) => {
         console.log('val is ' + valid)
 
         if (valid) {
@@ -350,6 +350,8 @@ export default {
           object.optype = 'add'
           object.rules = setRules(this.rulesChoosen)
           object.iface = this.ifaceChoosen
+          object.direct = 'output'
+          object.mangle = 'deny'
           // console.log('submit rules is ' + object.rules)
           para.data.push(object)
           // console.log('编号是 ' + this.rulesChoosen)

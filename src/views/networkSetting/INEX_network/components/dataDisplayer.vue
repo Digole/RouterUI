@@ -14,7 +14,7 @@
             <p class="bottomLine">{{$t('INEXNetwork.terminal.WANLinked')}}</p>
           </div>
           <div class="tip1">
-            <h2>{{ totalBnadWidth }}</h2>
+            <h2>{{ totalBandWidth }}</h2>
             <p class="bottomLine">{{$t('INEXNetwork.terminal.bandWidth')}}</p>
           </div>
         </div>
@@ -37,7 +37,7 @@
           </div>
           <div class="tip">
             <h2>{{ DHCP }}</h2>
-            <p class="bottomLine">{{$t('INEXNetwork.terminal. DHCP')}}</p>
+            <p class="bottomLine">{{$t('INEXNetwork.terminal.DHCP')}}</p>
           </div>
         </div>
       </el-col>
@@ -58,18 +58,21 @@ export default {
       totalBandWidth: 0
     }
   },
-  props: ['sendProtsInfo'],
+  props: ['sendPortsInfo'],
   watch: {
-    sendProtsInfo: function() {
-      this.WAN = this.LAN = this.DHCP = this.totalBandWidth = 0
-      this.sendProtsInfo.forEach(element => {
+    sendPortsInfo: function() {
+      this.DHCP = this.LAN = this.WAN = 0
+      if (!this.terminal) {
+        this.terminal = 0
+      }
+      this.sendPortsInfo.forEach(element => {
         if (element.type === 'dhcp') {
           this.DHCP++
         }
-        if (element.function === 'LAN') {
+        if (element.function === 'lan') {
           this.LAN++
         }
-        if (element.function === 'WAN') {
+        if (element.function === 'wan') {
           this.WAN++
         }
       })

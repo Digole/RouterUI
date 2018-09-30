@@ -7,10 +7,10 @@
 
     <div class="top">
       <span>当前网口状态: {{ status }}</span>
-      <el-button type="primary" @click="readapt">重新定位</el-button>
+      <el-button type="primary" @click.native="readapt">重新定位</el-button>
     </div>
 
-      <adaptive :adaptiveStatus="adaStatus" @finishSorting="finishSorting" class="whole-router"></adaptive>
+      <adaptive ref="router" class="whole-router"></adaptive>
 
   </div>
 </template>
@@ -21,9 +21,7 @@ export default {
   name: 'ports',
   data() {
     return {
-      status: '已完成定位',
-      code: this.$store.state.app.adaptiveCode,
-      adaStatus: 1  // 1: 需要重新定位   0: 不需要
+      status: '已完成定位'
     }
   },
   components: {
@@ -40,16 +38,7 @@ export default {
   },
   methods: {
     readapt() {
-      this.adaStatus = 1
-      this.$store.dispatch('setAdaptive', 0)
-    },
-    finishSorting(val) {
-      console.log(val)
-      if (val === 'finish') {
-        this.adaStatus = 1
-      } else if (val === 'cancel') {
-        this.adaStatus = 0
-      }
+      this.$refs.router.modifyChecked()
     }
   }
 }
@@ -67,6 +56,6 @@ p {
 }
 .whole-router {
   width: 80%;
-  margin: auto;
+  margin: 2rem auto;
 }
 </style>
