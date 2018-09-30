@@ -177,6 +177,26 @@ export default {
       dialFail: 'Dial failed'
     }
   },
+  DHCP: {
+    addNew: 'Add',
+    add: 'Add',
+    interface: 'Interface',
+    start: 'Start',
+    end: 'End',
+    mask: 'Mask',
+    gateway: 'Gateway',
+    dns1: 'FirstDNS',
+    dns2: 'SecondDNS',
+    lease: 'Lease',
+    status: 'Status',
+    behaviour: 'Behaviour',
+    deleteDHCP: 'Delete',
+    editDHCP: 'Edit',
+    edit: 'Edit',
+
+    ifDelete: 'Are you sure to delete this interface?'
+
+  },
   kidVPN: {
     index: {
       title: 'KidVPN Server'
@@ -432,6 +452,12 @@ export default {
   },
   DHCPLog: {
     DHCPLog: 'DHCPLog'
+  },
+  vpnLog: {
+    log: 'vpnLog',
+    confirm: 'Confirm',
+    clear: 'Clear',
+    provide: 'Providing the latest 24 hours data by default'
   },
   BMDisplay: {
     web: 'WebRecord',

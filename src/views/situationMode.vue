@@ -102,9 +102,9 @@ export default {
     }
   },
   methods: {
-    callchild(){
-      let obj1=window.frames["child"];//获得对应iframe的window对象
-      alert(obj1.n);
+    callchild() {
+      let obj1 = window.frames['child']// 获得对应iframe的window对象
+      alert(obj1.n)
     },
     onSubmit() {
       console.log('submit!')
@@ -212,7 +212,7 @@ export default {
     this.sysUserName = '翼辉Admin'
     // this.sysUserAvatar = 'static/avatar.jpg'
     this.sysUserAvatar = 'static/acoinfo.png'
-    
+
     this.getInfo()
   }
 }

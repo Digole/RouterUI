@@ -116,6 +116,7 @@ export const getVPNLog = data => { return axios.post(base + 'action/vpnLogGetAct
 // DHCP
 export const dhcpServerConfigAction = data => { return axios.post(base + 'action/dhcpServerConfigAction', data) }
 export const dhcpServerShowAction = data => { return axios.post(base + 'action/dhcpServerShowAction', data) }
+export const dhcpServerDelAction = data => { return axios.post(base + 'action/dhcpServerDelAction', data) }
 
 // 系统信息
 export const setTime = data => { return axios.post(base + 'action/timeConfigAction', data) }
