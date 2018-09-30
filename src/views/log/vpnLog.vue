@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="line_02">
-      <span>VPN日志</span>
+      <span>{{$t('vpnLog.log')}}</span>
     </div>
 
     <!--工具条-->
@@ -23,13 +23,13 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="sendTime">确认</el-button>
+          <el-button type="primary" @click="sendTime">{{$t('vpnLog.confirm')}}</el-button>
         </el-form-item>
         <el-form-item class="clear">
-          <el-button @click="empty">全部清空</el-button>
+          <el-button @click="empty">{{$t('vpnLog.clear')}}</el-button>
         </el-form-item>
         <el-form-item>
-          <span class="tip" v-if="request.time === ''">默认提供最近24小时数据</span>
+          <span class="tip" v-if="request.time === ''">{{$t('vpnLog.provide')}}</span>
         </el-form-item>
       </el-form>
     </el-col>

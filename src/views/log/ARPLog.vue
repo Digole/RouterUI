@@ -11,29 +11,29 @@
     </template>
 
 <script>
-
     import md5 from 'js-md5'
 export default {
   name: 'ARPLog',
   data() {
     return {
-      
-     
+    
     }
-    },
-     methods: {
+  },
+      methods: {
     headerStyle() {
-      return this.header()
-    },
-     },
+          return this.header()
+    }
+      },
       mounted() {
-    // this.getInfo()	
-      document.getElementById('div1').innerHTML = '读取中...';
-        $(document).ready(function(){
-	        $.ajax({async: true, url:"arplog",success:function(result){
-                $("#div1").html(result);
-		    }});
-	    });
+    // this.getInfo()
+        document.getElementById('div1').innerHTML = '读取中...'
+    $(document).ready(function() {
+	        $.ajax({async: true,
+            url: 'arplog',
+            success: function(result) {
+              $('#div1').html(result)
+		    }})
+	    })
   }
 }
 </script>
