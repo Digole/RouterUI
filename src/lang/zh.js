@@ -39,7 +39,10 @@ export default {
     ping: 'Ping测试',
     speed: '网速测试',
     operaLog: '操作日志',
-    Qos: 'Qos',
+    VPNLog: 'VPN日志',
+    Qos: 'QoS',
+    ports: '网口定位',
+    shell: '动态路由',
     ARPLog: 'ARP日志',
     DHCPLog: 'DHCP日志'
   },
@@ -248,8 +251,8 @@ export default {
   },
   systemStatus: {
     top: {
-      title1: '未配置',
-      title2: '已配置',
+      title1: '未连接',
+      title2: '已连接',
       subtitle: '外网',
       subtitle1: '内网',
       subtitle2: '已运行',
@@ -294,14 +297,28 @@ export default {
     dynamicARP: 'ARP表'
   },
   log: {
+    note: '默认提供最近24小时数据',
+    log: '日志中心',
+    clear: '全部清空',
     index: '编号',
     time: '时间',
     line: '线路',
     detail: '日志详情'
 
   },
+  operaLog: {
+    log: '操作日志',
+    search: '搜索',
+    clear: '全部清空',
+    time: '操作时间',
+    ip: '客户端IP',
+    operator: '操作者',
+    module: '模块名',
+    result: '操作结果',
+    content: '操作日志内容'
+  },
   Qos: {
-    QosSetting: 'Qos配置',
+    QosSetting: 'QoS配置',
     netif: '网卡接口',
     rule: '规则',
     ipStart: 'ip起始',
@@ -309,7 +326,7 @@ export default {
     cmpMethod: '比较方法',
     priority: '优先级',
     dontDrop: '丢包选项',
-    addNewQos: '添加新Qos',
+    addNewQos: '添加新QoS',
     portStart: '开始端口',
     portEnd: '结束端口'
   },
@@ -345,7 +362,8 @@ export default {
     event: '事件',
     shutdown: '关机',
     restart: '重启',
-    date: '预设时间',
+    date: '预设日期',
+    time: '预设事件',
     oper_type: '操作',
     handleStart: '停用',
     handleStop: '启用',
@@ -376,7 +394,7 @@ export default {
     showConflict: '显示冲突信息',
     IP: 'IP地址',
     MACInfo: 'MAC信息',
-    conflictMACAddr: '冲突MAC地址',
+    conflictMACAddr: '攻击MAC',
     firewall: '规则防火墙',
     add: '添加',
     port: '网口',

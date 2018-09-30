@@ -142,7 +142,6 @@ import {
 let stopSignal1, stopSignal3, stopSignal4
 export default {
   name: 'adaptive',
-  props: ['adaptiveStatus'],    // 0表示不需要重新定位，1表示需要
   data() {
     return {
       dialogFormVisible: false, // LAN,WAN设置
@@ -164,9 +163,9 @@ export default {
       },
 
       WANForm: {
-        index: '', // 端口编号，唯一，通过index确认端口
-        use: '', // 选择功能LAN/WAN
-        handle: '' // 添加为1，解绑为0
+        index: '',  // 端口编号，唯一，通过index确认端口
+        use: '',    // 选择功能LAN/WAN
+        handle: ''  // 添加为1，解绑为0
       },
 
       portsName: {
@@ -209,19 +208,30 @@ export default {
   watch: {
     checked: function() {
       if (this.checked !== 200) {
-        this.sortingHandle()
-      }
-    },
-    adaptiveStatus: function() {
-      if (this.adaptiveStatus) {
-        setTimeout({}, 200)
-        this.getPortsInfo()
-      } else {
-        return true
+        this.$confirm('此操作将删除当前端口排序, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '开始重新定位!'
+          })
+          this.sortingHandle()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+        })
       }
     }
   },
   methods: {
+    modifyChecked() {
+      this.checked = 0
+    },
+
     interval() {
       stopSignal1 = setInterval(this.getPortsInfo, 5000)
     },

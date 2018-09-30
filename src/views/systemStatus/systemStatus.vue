@@ -175,11 +175,7 @@
 
 <script>
 import systemStatus from 'echarts'
-import {
-  getPorts,
-  getMonitorInfo,
-  getExtranetStatus
-} from '../../api/api'
+import { getPorts, getMonitorInfo, getExtranetStatus } from '../../api/api'
 import { pieChart, lineChart } from './components'
 import { conversion } from '../../utils/rateUnitExchange.js'
 // import { conversion } from '../../utils/rateUnitExchange.js'
@@ -424,6 +420,9 @@ export default {
 
         this.ports = res.data.interfaces
       })
+      setTimeout(() => {
+        this.getPortsInfo()
+      }, 3000)
     },
 
     pushToINEX: function() {

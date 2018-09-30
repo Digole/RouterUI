@@ -57,7 +57,7 @@ import flowControl from './views/flowControl/flowControl.vue'
 /*
 **behaviourManagement
 */
-import BMControl from './views/behaviourManagement/BMControl.vue'
+// import BMControl from './views/behaviourManagement/BMControl.vue'
 import BMDisplay from './views/behaviourManagement/BMDisplay.vue'
 /*
 **securitySetting
@@ -65,7 +65,7 @@ import BMDisplay from './views/behaviourManagement/BMDisplay.vue'
 import ARP from './views/securitySetting/ARP.vue'
 import ARPDefence from './views/securitySetting/ARPDefence.vue'
 import firewall from './views/securitySetting/firewall.vue'
-import remoteManagement from './views/securitySetting/remoteManagement.vue'
+// import remoteManagement from './views/securitySetting/remoteManagement.vue'
 /*
 **tools
 */
@@ -254,7 +254,7 @@ let routes = [
       title: 'behaviourManagement'
     },
     children: [
-      { path: '/BMControl', component: BMControl, name: '行为记录管理', meta: { title: 'recordManagement' } },
+      // { path: '/BMControl', component: BMControl, name: '行为记录管理', meta: { title: 'recordManagement' } },
       { path: '/BMDisplay', component: BMDisplay, name: '行为记录显示', meta: { title: 'recordDisplay' } }
     ]
   },
@@ -269,7 +269,7 @@ let routes = [
     children: [
       { path: '/ARP', component: ARP, name: 'ARP绑定', meta: { title: 'ARPBinding' } },
       { path: '/ARPDefence', component: ARPDefence, name: 'ARP防御', meta: { title: 'ARPDefence' } },
-      { path: '/remoteManagement', component: remoteManagement, name: '远程登陆管理', meta: { title: 'remoteLoginManagement' } },
+      // { path: '/remoteManagement', component: remoteManagement, name: '远程登陆管理', meta: { title: 'remoteLoginManagement' } },
       { path: '/firewall', component: firewall, name: '规则防火墙', meta: { title: 'firewall' } }
     ]
   },
