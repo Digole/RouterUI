@@ -20,12 +20,12 @@
               <div class="rate">
                 <p>{{$t('systemStatus.top.upstream')}}:{{this.data.up}}</p>
                 <p style="font-size: 18px;"></p>
-                <p>B/s</p>
+                
               </div>
               <div class="rate">
                 <p>{{$t('systemStatus.top.downstream')}}:{{this.data.down}}</p>
                 <p style="font-size: 18px;"></p>
-                <p>B/s</p>
+                
               </div>
             </div>
           </div>

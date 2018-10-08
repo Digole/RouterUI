@@ -32,7 +32,7 @@
         <!-- 09.21 -->
 
         <el-dropdown trigger="hover">
-          <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
+          <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{this.sysUserName}}</span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="logout">{{$t('home.logout')}}</el-dropdown-item>
           </el-dropdown-menu>
@@ -176,6 +176,9 @@ export default {
     },
     // 折叠导航栏
     collapse: function() {
+      let user = sessionStorage.getItem('user')
+      user = JSON.parse(user)
+      console.log(user.userName)
       /*
         if(this.collapsed === false) {
           setTimeout((() => {
@@ -254,12 +257,14 @@ export default {
   created() {},
   mounted() {
     let user = sessionStorage.getItem('user')
-    if (user) {
-      user = JSON.parse(user)
-      this.sysUserName = user.name || ''
-      this.sysUserAvatar = user.avatar || ''
-    }
-    this.sysUserName = '翼辉Admin'
+
+    // if (user) {
+    //  user = JSON.parse(user)
+    // this.sysUserName = user.name || ''
+    //  this.sysUserAvatar = user.avatar || ''
+    // }
+    user = JSON.parse(user)
+    this.sysUserName = user.userName
     // this.sysUserAvatar = 'static/avatar.jpg'
     this.sysUserAvatar = 'static/acoinfo.png'
 

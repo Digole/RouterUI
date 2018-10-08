@@ -103,8 +103,7 @@ export default {
   },
   methods: {
     callchild() {
-      let obj1 = window.frames['child']
-      // 获得对应iframe的window对象
+      let obj1 = window.frames['child']// 获得对应iframe的window对象
       alert(obj1.n)
     },
     onSubmit() {
