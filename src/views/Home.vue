@@ -254,7 +254,6 @@ export default {
     }
   },
 
-  created() {},
   mounted() {
     let user = sessionStorage.getItem('user')
 

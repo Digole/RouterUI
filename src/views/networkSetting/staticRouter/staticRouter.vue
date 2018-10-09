@@ -72,7 +72,7 @@
         </el-form-item>
         <el-form-item prop="iface" :label="$t('staticRouter.iface')" :label-width="formLabelWidth" required>
           <el-select v-model="addRouterForm.iface" placeholder="请选择" value="">
-            <el-option v-for="(item, index) in ports" :key="index" :label="item.webname" :value="item.enname"></el-option>
+            <el-option v-for="(item, index) in ports" :key="index" :label="item.webname" :value="item.webname"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="metric" :label="$t('staticRouter.metric')" :label-width="formLabelWidth">
@@ -99,7 +99,7 @@
         </el-form-item>
         <el-form-item prop="iface" :label="$t('staticRouter.iface')" :label-width="formLabelWidth" required>
           <el-select v-model="addRouterForm.iface" placeholder="请选择" value="">
-            <el-option v-for="(item, index) in ports" :key="index" :label="item.webname" :value="item.enname"></el-option>
+            <el-option v-for="(item, index) in ports" :key="index" :label="item.webname" :value="item.webname"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="metric" :label="$t('staticRouter.metric')" :label-width="formLabelWidth">
@@ -120,7 +120,7 @@
         </el-form-item>        -->
         <el-form-item prop="iface" :label="$t('staticRouter.iface')" :label-width="formLabelWidth" required>
           <el-select v-model="addRouterForm.iface" placeholder="请选择" value="">
-            <el-option v-for="(item, index) in ports" :key="index" :label="item.webname" :value="item.enname"></el-option>
+            <el-option v-for="(item, index) in ports" :key="index" :label="item.webname" :value="item.webname"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -138,7 +138,7 @@
         </el-form-item>
         <el-form-item prop="iface" :label="$t('staticRouter.iface')" :label-width="formLabelWidth">
           <el-select v-model="addRouterForm.iface" placeholder="请选择" value="">
-            <el-option v-for="(item, index) in ports" :key="index" :label="item.webname" :value="item.enname"></el-option>
+            <el-option v-for="(item, index) in ports" :key="index" :label="item.webname" :value="item.webname"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
