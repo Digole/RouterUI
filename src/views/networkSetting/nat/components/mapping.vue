@@ -41,7 +41,7 @@
     </div>
 
     <!--新增端口映射-->
-    <el-dialog title="新增端口映射" :visible.sync="mappingFormVisible" width="50%">
+    <el-dialog :title="$t('NAT.mapping.add')" :visible.sync="mappingFormVisible" width="50%">
       <el-form :model="mappingForm" :rules="rules" label-position="left" ref="mappingForm" size="small">
         <el-form-item :label="$t('NAT.mapping.assPort')" :label-width="tooltipLabelWidth" prop="assport">
           <el-input v-model="mappingForm.assport"></el-input>

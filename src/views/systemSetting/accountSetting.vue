@@ -149,10 +149,7 @@ export default {
 
       },
       options: [
-        {
-          value: 1,
-          label: 'admin'
-        },
+
         {
           value: 2,
           label: 'operator'
@@ -164,6 +161,36 @@ export default {
       ]
     }
   },
+
+  /* watch: {
+    listenstage: function(ov, nv) {
+      console.log('watch start……')
+      if (this.$store.state.app.language === 'en') {
+        console.log('1')
+        for (let i = 0; i < this.userShow.length; i++) {
+          if (this.userShow[i].status === '启用') {
+            console.log('2')
+            this.userShow[i].status = 'On'
+          } else if (this.userShow[i].status === '禁用') {
+            this.userShow[i].status = 'Off'
+            console.log('3')
+          }
+        }
+      } else {
+        console.log('4')
+        for (let i = 0; i < this.userShow.length; i++) {
+          if (this.userShow[i].status === 'On') {
+            console.log('5')
+            this.userShow[i].status = '启用'
+          } else if (this.userShow[i].status === 'Off') {
+            this.userShow[i].status = '禁用'
+          }
+        }
+      }
+
+      console.log('watch stop……')
+    }
+  }, */
 
   methods: {
     headerStyle() {
@@ -215,6 +242,7 @@ export default {
         para.status = 0
         disableUserAction(para).then(res => {
           if (res.data.code === 200) {
+            console.log('ccc')
             this.list[0].status = '修改成功'
           } else {
             this.list[0].status = '修改失败'
@@ -226,6 +254,7 @@ export default {
         para.status = 1
         disableUserAction(para).then(res => {
           if (res.data.code === 200) {
+            console.log('ddd')
             this.list[0].status = '修改成功'
           } else {
             this.list[0].status = '修改失败'

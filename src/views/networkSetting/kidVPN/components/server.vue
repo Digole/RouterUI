@@ -3,7 +3,7 @@
     <el-col :span="24" class="title">
       <el-form inline>
         <el-form-item>
-        <el-button type="primary" @click="addServer" v-if="isEmpty">创建VPN服务器</el-button>
+        <el-button type="primary" @click="addServer" v-if="isEmpty">{{$t('kidVPN.server.button5')}}</el-button>
         <!-- <el-button type="danger" size="mini" @click="delServer">{{$t('kidVPN.server.button1')}}</el-button> -->
         </el-form-item>
       </el-form>

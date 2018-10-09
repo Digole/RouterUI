@@ -13,7 +13,7 @@
       </el-form>
     </el-col>
     <!--新增网络别名-->
-    <el-dialog title="新增网络别名" :visible.sync="aliasFormVisible" width="50%">
+    <el-dialog :title="$t('NAT.alias.add')" :visible.sync="aliasFormVisible" width="50%">
       <el-form ref="aliasForm" :rules="rules" :model="aliasForm" label-position="left" size="small">
         <el-form-item prop="aliasip" :label="$t('NAT.alias.aliasAddress')" :label-width="formLabelWidth">
           <el-input v-model="aliasForm.aliasip"></el-input>
@@ -207,7 +207,7 @@ export default {
     addAliasSubmit: function() {
       let para = Object.assign({}, this.aliasForm)
       para.handle = 0
-
+      console.log('66666')
       console.log(para)
       addAlias(para)
         .then(() => {
@@ -234,7 +234,7 @@ export default {
       function del(item) {
         let para = Object.assign({}, item)
         para.handle = 1
-        para.assport = para.assport + ''
+        // para.assport = para.assport + ''
         delAlias(para)
           .then(() => {})
           .catch(error => {

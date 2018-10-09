@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-form :model="form" ref="form">
-      <el-form-item prop="address" label="IP地址或域名" label-width="6rem">
-        <el-input v-model="form.address">目的地址</el-input>
+      <el-form-item prop="address" :label="$t('ping.ping')" label-width="6rem">
+        <el-input v-model="form.address">{{$t('ping.addr')}}</el-input>
       </el-form-item>
       <!-- <el-form-item prop="length">
         <el-input v-model="form.length">长度</el-input>
@@ -10,13 +10,13 @@
       <el-form-item prop="amount">
         <el-input v-model="form.amount">次数</el-input>
       </el-form-item> -->
-      <el-form-item porp="address" label="检测结果" label-width="6rem">
+      <el-form-item porp="address" :label="$t('ping.result')" label-width="6rem">
         <el-input v-model="text" type="textarea" :rows="12" placeholder="检测结果" id="container"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" :disabled="isInTest" @click.native="start">开始测试</el-button>
-      <el-button type="danger" :disabled="!isInTest" @click.native="stop">停止测试</el-button>
+      <el-button type="primary" :disabled="isInTest" @click.native="start">{{$t('ping.start')}}</el-button>
+      <el-button type="danger" :disabled="!isInTest" @click.native="stop">{{$t('ping.stop')}}</el-button>
     </div>
   </div>
 </template>

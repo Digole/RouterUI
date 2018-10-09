@@ -2,24 +2,24 @@
   <section>
 
     <div class="line_02">
-      <span>基础设置</span>
+      <span>{{$t('basicSetting.basicSetting')}}</span>
     </div>
 
     <div class="name">
-      <div class="name-title">设备名称:</div>
+      <div class="name-title">{{$t('basicSetting.device')}}</div>
       <div class="content">{{ deviceName }}</div>
-      <el-button @click="changeSettingName" type="primary" size="small">修改设备名称</el-button>
+      <el-button @click="changeSettingName" type="primary" size="small">{{$t('basicSetting.SetName')}}</el-button>
     </div>
 
     <div class="name">
-      <div class="name-title">设备时间:</div>
+      <div class="name-title">{{$t('basicSetting.time')}}</div>
       <div class="content">{{ deviceTime }}</div>
-      <el-button @click="changeSettingTime" type="primary" size="small">修改设备时间</el-button>
+      <el-button @click="changeSettingTime" type="primary" size="small">{{$t('basicSetting.SetTime')}}</el-button>
     </div>
 
-    <el-dialog title="修改系统时间" :visible.sync="isSetTimeVisible">
+    <el-dialog :title="$t('basicSetting.SetTime')" :visible.sync="isSetTimeVisible">
       <el-form ref="form" :model="form" label-width="5rem" inline>
-        <el-form-item prop="date" label="时间设置">
+        <el-form-item prop="date" :label="$t('basicSetting.timeSetting')">
           <el-col :span="10">
             <el-date-picker 
               type="date" 
@@ -44,20 +44,20 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="formCancel">取消</el-button>
-        <el-button @click="submitTime" type="primary">确认</el-button>
+        <el-button @click="formCancel">{{$t('basicSetting.cancel')}}</el-button>
+        <el-button @click="submitTime" type="primary">{{$t('basicSetting.submit')}}</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog title="修改设备名称" :visible.sync="isSetNameVisible">
+    <el-dialog :title="$t('basicSetting.SetName')" :visible.sync="isSetNameVisible">
       <el-form ref="form" :model="form" label-width="5rem">
-        <el-form-item prop="dev_name" label="设备名" label-position="left">
+        <el-form-item prop="dev_name" :label="$t('basicSetting.device')" label-position="left">
           <el-input v-model="form.dev_name"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="formCancel">取消</el-button>
-        <el-button @click="submitName" type="primary">确认</el-button>
+        <el-button @click="formCancel">{{$t('basicSetting.cancel')}}</el-button>
+        <el-button @click="submitName" type="primary">{{$t('basicSetting.submit')}}</el-button>
       </div>
     </el-dialog>
 

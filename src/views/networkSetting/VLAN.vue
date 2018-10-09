@@ -8,10 +8,10 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true">
         <el-form-item>
-          <el-button type="primary" @click="showAddForm">添加VLAN</el-button>
+          <el-button type="primary" @click="showAddForm">{{$t('VLAN.add')}}</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="danger" @click="batchDelete">批量删除</el-button>
+          <el-button type="danger" @click="batchDelete">{{$t('VLAN.delete')}}</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -19,13 +19,13 @@
     <el-table :data="form" @selection-change="selsChange" class="table" :header-cell-style="headerStyle">
       <el-table-column type="selection" min-width="30">
       </el-table-column>
-      <el-table-column prop="iface" label="网口" min-width="120">
+      <el-table-column prop="iface" :label="$t('VLAN.interface')" min-width="120">
       </el-table-column>
-      <el-table-column prop="vlan_id" label="VLAN标识" min-width="120">
+      <el-table-column prop="vlan_id" :label="$t('VLAN.id')" min-width="120">
       </el-table-column>
-      <el-table-column prop="tag" label="TAG" min-width="120">
+      <el-table-column prop="tag" :label="$t('VLAN.tag')" min-width="120">
       </el-table-column>
-      <el-table-column prop="priority" label="优先级" min-width="120">
+      <el-table-column prop="priority" :label="$t('VLAN.priority')" min-width="120">
       </el-table-column>
       <el-table-column :label="$t('operation.operation')" min-width="60">
         <template slot-scope="scope">
@@ -43,20 +43,20 @@
     </el-pagination>
 
     <!--新增界面-->
-    <el-dialog title="新增" :visible.sync="addFormVisible" class="dialog">
+    <el-dialog :title="$t('VLAN.add')" :visible.sync="addFormVisible" class="dialog">
       <el-form :model="addForm" :rules="rules" label-width="100px" ref="addForm">
-        <el-form-item label="VLAN标识" prop="vlan_id" required>
+        <el-form-item :label="$t('VLAN.id')" prop="vlan_id" required>
           <el-input v-model="addForm.vlan_id"></el-input>
         </el-form-item>
-        <el-form-item label="网口" prop="iface" required>
+        <el-form-item :label="$t('VLAN.interface')" prop="iface" required>
           <el-select v-model="addForm.iface" placeholder="请选择">
             <el-option v-for="(item, index) in ports" :key="index" :label="item.webname" :value="item.enname"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cancelForm">取消</el-button>
-        <el-button type="primary" @click="addVLAN">确认</el-button>
+        <el-button @click="cancelForm">{{$t('VLAN.cancel')}}</el-button>
+        <el-button type="primary" @click="addVLAN">{{$t('VLAN.submit')}}</el-button>
       </div>
     </el-dialog>
   </section>

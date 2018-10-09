@@ -2,16 +2,16 @@
   <section>
 
     <div class="line_02">
-      <span>流控策略管理</span>
+      <span>{{$t('flowControl.flowControl')}}</span>
     </div>
 
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true">
         <el-form-item>
-          <el-button type="primary" @click="showChooseFCType">添加策略</el-button>
+          <el-button type="primary" @click="showChooseFCType">{{$t('flowControl.addStrategy')}}</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="danger" @click="batchDelete">批量删除</el-button>
+          <el-button type="danger" @click="batchDelete">{{$t('flowControl.delete')}}</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -19,23 +19,23 @@
     <el-table :data="form" @selection-change="selsChange" class="table" :header-cell-style="headerStyle">
       <el-table-column type="selection" min-width="30">
       </el-table-column>
-      <el-table-column prop="fc_start" label="起始IP地址" min-width="120">
+      <el-table-column prop="fc_start" :label="$t('flowControl.start')" min-width="120">
       </el-table-column>
-      <el-table-column prop="fc_end" label="结束IP地址" min-width="120">
+      <el-table-column prop="fc_end" :label="$t('flowControl.end')" min-width="120">
       </el-table-column>
-      <el-table-column prop="fc_proto" label="协议" min-width="120">
+      <el-table-column prop="fc_proto" :label="$t('flowControl.protocol')" min-width="120">
       </el-table-column>
       <!-- <el-table-column prop="fc_sport" label="起始端口" min-width="120">
       </el-table-column>
       <el-table-column prop="fc_eport" label="结束端口" min-width="120">
       </el-table-column> -->
-      <el-table-column prop="fc_ifname" label="网口" min-width="120">
+      <el-table-column prop="fc_ifname" :label="$t('flowControl.interface')" min-width="120">
       </el-table-column>
-      <el-table-column prop="fc_uprate" label="上行网速" min-width="120">
+      <el-table-column prop="fc_uprate" :label="$t('flowControl.upRate')" min-width="120">
       </el-table-column>
-      <el-table-column prop="fc_downrate" label="下行网速" min-width="120">
+      <el-table-column prop="fc_downrate" :label="$t('flowControl.downRate')" min-width="120">
       </el-table-column>
-      <el-table-column prop="fc_bufsize" label="缓冲区大小" min-width="120">
+      <el-table-column prop="fc_bufsize" :label="$t('flowControl.bufferSize')" min-width="120">
       </el-table-column>
       <el-table-column :label="$t('operation.operation')" min-width="80">
         <template slot-scope="scope">
@@ -50,13 +50,13 @@
     <el-table :data="netForm" @selection-change="selsChange" class="table1" :header-cell-style="headerStyle">
       <el-table-column type="selection" min-width="30">
       </el-table-column>
-      <el-table-column prop="fc_uprate" label="上行网速" min-width="120">
+      <el-table-column prop="fc_uprate" :label="$t('flowControl.upRate')" min-width="120">
       </el-table-column>
-      <el-table-column prop="fc_downrate" label="下行网速" min-width="120">
+      <el-table-column prop="fc_downrate" :label="$t('flowControl.downRate')" min-width="120">
       </el-table-column>
-      <el-table-column prop="fc_bufsize" label="缓冲区大小" min-width="120">
+      <el-table-column prop="fc_bufsize" :label="$t('flowControl.bufferSize')" min-width="120">
       </el-table-column>
-      <el-table-column prop="fc_ifname" label="网口" min-width="120">
+      <el-table-column prop="fc_ifname" :label="$t('flowControl.interface')" min-width="120">
       </el-table-column>
       <el-table-column :label="$t('operation.operation')" min-width="60">
         <template slot-scope="scope">

@@ -123,6 +123,8 @@ export const setTime = data => { return axios.post(base + 'action/timeConfigActi
 export const getTime = data => { return axios.post(base + 'action/timeShowAction', data) }
 export const setName = data => { return axios.post(base + 'action/devNameConfigAction', data) }
 export const getName = data => { return axios.post(base + 'action/devNameGetAction', data) }
+export const getpower = data => { return axios.post(base + 'action/userAuthShowAction', data) }
+export const setpower = data => { return axios.post(base + 'action/userAuthHandleAction', data) }
 // 密码修改
 export const changePasswordAction = data => { return axios.post(base + 'action/changePasswordAction', data) }
 export const queryUsersAction = data => { return axios.post(base + 'action/queryUsersAction', data) }

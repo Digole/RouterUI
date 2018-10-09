@@ -94,6 +94,7 @@ export default {
       IP: 'LAN IP'
     },
     mapping: {
+      add: '新增端口映射',
       assPort: '外网端口',
       localPort: '内网端口',
       IP: '内网起始IP',
@@ -102,6 +103,7 @@ export default {
       placeholder: '请选择功能'
     },
     alias: {
+      add: '新增网络别名',
       aliasAddress: '别名地址',
       initialAddress: 'LAN起始地址',
       endAddress: 'LAN结束地址'
@@ -224,6 +226,7 @@ export default {
     },
     server: {
       title: 'VPN服务器信息',
+      title1: 'KidVPN服务器',
       button1: '删除VPN服务器',
       serip: '服务器网络地址',
       locip: '本地地址',
@@ -239,7 +242,7 @@ export default {
       ipaddr1: '服务器地址',
       bit: 'AES Key bit位数',
       button4: '生成AESKey',
-      button5: '创建服务器',
+      button5: '创建VPN服务器',
       title3: 'KidVPN服务器信息',
       button6: '关闭'
     },
@@ -247,7 +250,8 @@ export default {
       title: 'VPN连接状态',
       ip: '客户端IP地址',
       mac: '客户端MAC地址',
-      clientLoc: '服务端地理位置'
+      clientLoc: '服务端地理位置',
+      vndid: '虚拟网卡ID'
     }
   },
   staticRouter: {
@@ -404,7 +408,7 @@ export default {
   },
   securitySetting: {
     ARPDefence: 'ARP防御',
-    status: '状态：',
+    status: '状态',
     inUse: '使用中',
     stopped: '已停用',
     stop: '停用',
@@ -442,7 +446,9 @@ export default {
     delete: '删除',
     edit: '编辑',
     blacklist: '黑名单',
-    time: '时间'
+    time: '时间',
+    role: '权限',
+    direct: '导向'
   },
   powerSetting: {
     submitChange: '提交更改',
@@ -482,5 +488,48 @@ export default {
     DeviceRecord: '终端上下线记录：',
     WebRecord: 'WEB上下线记录：',
     on: '开启'
+  },
+  basicSetting: {
+    basicSetting: '基础设置',
+    device: '设备名称：',
+    SetName: '修改设备名称',
+    SetTime: '修改设备时间',
+    time: '设备时间：',
+    cancel: '取消',
+    submit: '确认',
+    timeSetting: '时间设置'
+  },
+  flowControl: {
+    flowControl: '流控策略管理',
+    addStrategy: '添加策略',
+    delete: '批量删除',
+    start: '起始IP地址',
+    end: '结束IP地址',
+    protocol: '协议',
+    interface: '网口',
+    upRate: '上行网速',
+    downRate: '下行网速',
+    bufferSize: '缓冲区大小'
+  },
+  ping: {
+    ping: 'IP地址或域名',
+    addr: '目的地址',
+    result: '检测结果',
+    start: '开始测试',
+    stop: '停止测试'
+  },
+  DNS: {
+    dns1: '首选DNS',
+    dns2: '备选DNS'
+  },
+  VLAN: {
+    add: '添加VLAN',
+    delete: '批量删除',
+    interface: '网口',
+    id: 'VLAN标识',
+    tag: 'TAG',
+    priority: '优先级',
+    cancel: '取消',
+    submit: '确认'
   }
 }

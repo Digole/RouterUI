@@ -4,11 +4,11 @@
       <span>DNS</span>
     </div>
 
-    <el-form ref="form" :model="form" label-width="80px" @submit.prevent="onSubmit" style="margin:20px;width:60%;min-width:600px;">
-      <el-form-item label="首选DNS">
+    <el-form ref="form" :model="form" label-width="100px" @submit.prevent="onSubmit" style="margin:20px;width:60%;min-width:600px;">
+      <el-form-item :label="$t('DNS.dns1')">
         <el-input v-model="form.primary"></el-input>
       </el-form-item>
-      <el-form-item label="备选DNS">
+      <el-form-item :label="$t('DNS.dns2')">
         <el-input v-model="form.second"></el-input>
       </el-form-item>
       <el-form-item>

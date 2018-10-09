@@ -8,7 +8,7 @@
      -->
     <div>
       <div style="display: flex;">
-        <p style="margin-left: 50px; width:180px;">{{$t('systemSetting.VersionDetection')}}:</p>
+        <p style="margin-left: 50px; width:180px;">{{$t('systemSetting.VersionDetection')}}</p>
         <el-form>
           <el-button type="primary" size="small" @click="checkVersion">{{$t('systemSetting.DetectNewVersion')}}</el-button>
         </el-form>

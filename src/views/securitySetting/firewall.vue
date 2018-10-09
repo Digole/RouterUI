@@ -57,8 +57,8 @@
       <el-table-column prop="portSE" :label="$t('securitySetting.portSE')" align="center"></el-table-column>
       <el-table-column prop="status" :label="$t('securitySetting.status')" align="center"></el-table-column>
       <el-table-column prop="enable" align="center" :label="$t('securitySetting.enable')"></el-table-column>
-      <el-table-column prop="direct" align="center" label="导向"></el-table-column>
-      <el-table-column prop="mangle" align="center" label="权限">     
+      <el-table-column prop="direct" align="center" :label="$t('securitySetting.direct')"></el-table-column>
+      <el-table-column prop="mangle" align="center" :label="$t('securitySetting.role')">     
         <template slot-scope="scope">
           <el-button type="text" @click="deleteRule(scope.$index, scope.row)">{{$t('operation.delete')}}</el-button>
         </template>

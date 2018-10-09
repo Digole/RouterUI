@@ -3,7 +3,7 @@
     <span>{{$t('kidVPN.status.title')}}:</span>
     <el-table :data="VPNList" :header-cell-style="headerStyle" style="width: 100%">
       <el-table-column type="selection" min-width="30"></el-table-column>
-      <el-table-column prop="vndid" label="虚拟网卡ID" min-width="120"></el-table-column>
+      <el-table-column prop="vndid" :label="$t('kidVPN.status.vndid')" min-width="120"></el-table-column>
       <el-table-column prop="cliip" :label="$t('kidVPN.status.ip')" min-width="120"></el-table-column>
       <el-table-column prop="climac" :label="$t('kidVPN.status.mac')" min-width="120"></el-table-column>
       <el-table-column prop="positon" :label="$t('kidVPN.status.clientLoc')" min-width="120"></el-table-column>
