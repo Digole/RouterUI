@@ -16,8 +16,8 @@
     </el-col>
 
     <el-table :data="addedClientList" style="width: 100%" @selection-change="selChange" :header-cell-style="headerStyle">
-      <el-table-column prop="vndid" :label="$t('kidVPN.client.vndid')" min-width="120"></el-table-column>
       <el-table-column type="selection" min-width="30"></el-table-column>
+      <el-table-column prop="vndid" :label="$t('kidVPN.client.vndid')" min-width="120"></el-table-column>
       <el-table-column prop="serip" :label="$t('kidVPN.client.serip')" min-width="120"></el-table-column>
       <el-table-column prop="locip" :label="$t('kidVPN.client.locip')" min-width="120"></el-table-column>
       <el-table-column prop="netmask" :label="$t('kidVPN.client.netmask')" min-width="120"></el-table-column>

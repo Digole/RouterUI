@@ -153,11 +153,12 @@ export default {
       // data.push(randomData())
       myChart1.setOption(option1)
 
-      setInterval(function() {
+      let mychart1 = setInterval(function() {
         data.shift()
         data.push(newData(para.up))
         myChart1.setOption(option1)
       }, 2000)
+      this.$store.state.app.timers.mychart1 = mychart1
 
       window.addEventListener('resize', function() {
         myChart1.resize()
@@ -207,11 +208,12 @@ export default {
 
       myChart2.setOption(option2)
 
-      setInterval(function() {
+      let linecharts2 = setInterval(function() {
         data.shift()
         data.push(newData(para.down))
         myChart2.setOption(option2)
       }, 2000)
+      this.$store.state.app.timers.linecharts2 = linecharts2
       window.addEventListener('resize', function() {
         myChart2.resize()
       })

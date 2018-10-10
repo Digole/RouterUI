@@ -39,7 +39,7 @@ export default {
               res.data.data.forEach(item => {
                 console.log(item)
                 let para = item.cli_pos.split(',', 3)
-                para[2] = para[2].replace(reg, '')    // 去除双引号
+                para[2] = para[2].replace(reg, '').replace(/\s+/g, '')    // 去除双引号
                 console.log(para[2])
 
                 // 临时措施
@@ -50,7 +50,9 @@ export default {
                 purposeList.push(para[2])
                 console.log('purposeList ' + purposeList)
                 let server = item.ser_pos.split(',', 3)
-                local = server[2].replace(reg, '')
+                console.log('server is ' + server)
+                // 去除括号，然后还会有左空格号，再去掉空格号
+                local = server[2].replace(reg, '').replace(/\s+/g, '')
                 console.log(local)
               })
 
@@ -67,18 +69,18 @@ export default {
               // console.log(i + "   " + JSON.stringify(purposeJsonList));
               }
               this.testData = purposeJsonList
+              console.log('purposrJsonList is ' + purposeJsonList)
             }
           }
         })
-        .then(
-          this.drawMap()
-        )
         .catch(err => {
           console.log(err)
         })
+      this.drawMap()
     },
 
     drawMap: function() {
+      console.log('in drawmap')
       let IPMap = kidVPN.init(document.getElementById('map'))
 
       let chinaJson
@@ -92,6 +94,7 @@ export default {
       })
 
       testData = this.testData
+      console.log('getcha! ' + testData)
 
       function setMap() {
         kidVPN.registerMap('china', chinaJson) // 注册地图
@@ -348,9 +351,8 @@ export default {
                 data: item[1].map(function(dataItem) {
                   return {
                     name: dataItem[1].name,
-                    value: geoCoordMap[dataItem[1].name].concat([
-                      dataItem[1].value
-                    ])
+                    // value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
+                    value: geoCoordMap[dataItem[1].name]
                   }
                 })
               }

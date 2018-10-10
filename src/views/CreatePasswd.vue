@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="backgroundDiv">
 		<el-form ref="form" :model="form" label-position="left" label-width="0px" class="demo-ruleForm login-container">
 			<h3 class="title">密码修改</h3>
 			<el-form-item prop="username">

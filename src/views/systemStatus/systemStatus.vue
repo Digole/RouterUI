@@ -301,9 +301,11 @@ export default {
           // this.MonitorInfo.time[3] = parseInt(this.MonitorInfo.time[3]) + this.n
           // this.n++
           // console.log(this.MonitorInfo.time[3])
-          setTimeout(() => {
-            this.getNetInfo()
-          }, 1000)
+          if (this.$store.state.app.timers.inuse) {
+            setTimeout(() => {
+              this.getNetInfo()
+            }, 1000)
+          }
           // for (let i = 0; i < 60; i++) {
           // console.log(i)
           // this.MonitorInfo.time[3] = parseInt(this.MonitorInfo.time[3]) + 1
@@ -330,19 +332,24 @@ export default {
         .catch(
           error => {
             console.log(error)
-          },
-          setTimeout(() => {
-            this.getTerminalInfo()
-          }, 3000)
+          }
         )
+
+      if (this.$store.state.app.timers.inuse) {
+        setTimeout(() => {
+          this.getTerminalInfo()
+        }, 3000)
+      }
     },
     getInfo() {
       // 获取上下行速率
       this.update()
-      setInterval(() => {
+      let intervalOfInterface = setInterval(() => {
         this.update()
         this.$store.dispatch('pushSystemData', this.data)
       }, 5000)
+      console.log('intervalOfInterface is what ' + intervalOfInterface)
+      this.$store.state.app.timers.intervalOfInterface = intervalOfInterface
     },
 
     async update() {
@@ -414,9 +421,13 @@ export default {
 
         this.ports = res.data.interfaces
       })
-      setTimeout(() => {
-        this.getPortsInfo()
-      }, 3000)
+      console.log('this.$store.state.app.timers.inuse ' + this.$store.state.app.timers.inuse)
+      if (this.$store.state.app.timers.inuse) {
+        console.log('this.$store.state.app.timers.inuse ' + this.$store.state.app.timers.inuse)
+        setTimeout(() => {
+          this.getPortsInfo()
+        }, 3000)
+      }
     },
 
     pushToINEX: function() {
@@ -746,6 +757,8 @@ export default {
   },
 
   mounted: function() {
+    // 允许递归
+    this.$store.dispatch('setTimer', true)
     // this.drawCharts()
     this.getPortsInfo()
     this.getInfo()
