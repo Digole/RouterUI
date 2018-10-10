@@ -365,7 +365,7 @@ export default {
     admin: '主管',
     operator: '管理员',
     visitor: '游客',
-    addAccount: '添加用户',
+    addAccount: '添加用户（暂未支持）',
     AccountSetting: '用户管理',
     username: '用户名',
     passwd: '密码',
@@ -531,5 +531,9 @@ export default {
     priority: '优先级',
     cancel: '取消',
     submit: '确认'
+  },
+  newshell: {
+    connect: '启用协议',
+    disconnect: '停用协议'
   }
 }

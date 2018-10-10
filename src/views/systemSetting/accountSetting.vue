@@ -8,7 +8,7 @@
 	  <el-col :span="24">
 			<el-form :inline="true">
 				<el-form-item>
-					<el-button type="danger" @click="addAccount" >{{$t('systemSetting.addAccount')}}</el-button>
+					<el-button type="danger" disabled="false" @click="addAccount" >{{$t('systemSetting.addAccount')}}</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>

@@ -161,7 +161,11 @@ export default {
         secondaryDNS: '', // 备选DNS
         status: '未连接' // 连接状态，ASDL使用该属性
       },
-
+      sendForm: {
+        webnetif: '', // 端口编号，唯一，通过index确认端口
+        use: '', // 选择功能LAN/WAN
+        handle: '' // 添加为1，解绑为0
+      },
       WANForm: {
         index: '',  // 端口编号，唯一，通过index确认端口
         use: '',    // 选择功能LAN/WAN
@@ -346,10 +350,27 @@ export default {
     // WANLAN绑定
     WANLANSubmit: function() {
       this.WANForm.handle = 1
-      let para = Object.assign({}, this.WANForm)
-      console.log(para)
+      let bara = Object.assign({}, this.WANForm)
+      console.log(bara)
       this.WANLANLoading = true
       // console.log(typeof(para.index));
+      let para = {}
+      if (bara.index === 0) {
+        para.webnetif = 'ETH0'
+      } else if (bara.index === 1) {
+        para.webnetif = 'ETH1'
+      } else if (bara.index === 2) {
+        para.webnetif = 'ETH2'
+      } else if (bara.index === 3) {
+        para.webnetif = 'ETH3'
+      } else if (bara.index === 4) {
+        para.webnetif = 'ETH4'
+      } else if (bara.index === 5) {
+        para.webnetif = 'ETH5'
+      }
+      para.use = bara.use
+      para.handle = bara.handle
+      console.log(para)
       sendWANLAN(para)
         .then(res => {
           if (res.data.code === 200) {
@@ -373,10 +394,25 @@ export default {
     // WAN,LAN口解绑功能
     unbind: function() {
       let index = this.WANForm.index
-      this.WANForm.use = this.ports[index].function
-      this.WANForm.handle = 0
+      if (this.WANForm.index === 0) {
+        this.sendForm.webnetif = 'ETH0'
+      } else if (this.WANForm.index === 1) {
+        this.sendForm.webnetif = 'ETH1'
+      } else if (this.WANForm.index === 2) {
+        this.sendForm.webnetif = 'ETH2'
+      } else if (this.WANForm.index === 3) {
+        this.sendForm.webnetif = 'ETH3'
+      } else if (this.WANForm.index === 4) {
+        this.sendForm.webnetif = 'ETH4'
+      } else if (this.WANForm.index === 5) {
+        this.sendForm.webnetif = 'ETH5'
+      }
+      this.sendForm.use = this.ports[index].function
+      this.sendForm.handle = 0
       this.WANLANLoading = true
-      let para = Object.assign({}, this.WANForm)
+      let para = Object.assign({}, this.sendForm)
+      console.log('hhh1')
+      console.log(para)
       sendWANLAN(para)
         .then(res => {
           if (res.data.code === 200) {

@@ -357,7 +357,7 @@ export default {
     admin: 'admin',
     operator: 'operator',
     visitor: 'visitor',
-    addAccount: 'AddAccount',
+    addAccount: 'AddAccount(Not support)',
     AccountSetting: 'AccountSetting',
     username: 'Username',
     passwd: 'Passwd',
@@ -525,5 +525,9 @@ export default {
     priority: 'Priority',
     cancel: 'Cancel',
     submit: 'Submit'
+  },
+  newshell: {
+    connect: 'Enable',
+    disconnect: 'Disenable'
   }
 }

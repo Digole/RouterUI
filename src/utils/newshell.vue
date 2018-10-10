@@ -4,30 +4,31 @@
       <span>动态路由</span>
     </div>
 
-    <el-col :span="24" class="col">
+    <el-col  >
       <el-form :inline="true">
         <el-form-item>
-          <span>{{ type }}协议状态: {{ status }}</span>
+          <span style="width:200px;">协议状态: {{ status }} </span>
         </el-form-item>
-        <el-form-item>
+        <el-form-item class="right1"> <!--加空格保证右边按钮位置不变-->
           <el-button 
-          type="primary" 
-          v-if="proStatus && status !== '启用中'"
-          :disabled="btnStatus" 
-          @click="link">{{$t('operation.connect')}}</el-button>
+          type="primary"                         
+          v-if="proStatus && status !== '启用中'+' '"    
+          :disabled = "btnStatus" 
+          @click="link">{{$t('newshell.connect')}}</el-button>
           <el-button 
           v-else
           :disabled="status === '停止运行'"
           type="primary"
-          @click="unlink">{{$t('operation.disconnect')}}</el-button>
+          @click = "unlink">{{$t('newshell.disconnect')}}</el-button>
         </el-form-item>
-        <el-form-item>
-          <el-button type="danger" :disabled="btnStatus" @click="stopAllWebSocket">关闭全部连接</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button v-if="shellStatus" type="primary" 
+        
+        <el-form-item class="right2">
+          <el-button v-if="shellStatus"   type="primary" 
           :disabled="btnStatus || status === '停止运行'" @click="startWebSocket">启动动态路由配置</el-button>
           <el-button v-else type="danger" @click="stopWebSocket">关闭配置</el-button>
+        </el-form-item>
+        <el-form-item class="right3">
+          <el-button type="danger" :disabled="btnStatus"   @click="stopAllWebSocket">关闭所有配置shell</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -362,10 +363,10 @@ export default {
               this.status = '停止运行'
             }
             if (res.data.status === 1) {
-              this.status = '启用中'
+              this.status = '启用中' + '  '   // 加空格保证右边按钮位置不变
             }
             if (res.data.status === 2) {
-              this.status = '配置中'
+              this.status = '配置中 '
             }
           }
         })
@@ -406,3 +407,24 @@ export default {
   }
 }
 </script>
+
+<style>
+.right1 {
+    position: absolute;
+    margin-right: 1700px;
+    
+  }
+  .right2 {
+    position: absolute;
+    margin-left: 110px;
+    margin-right: 1800px;
+    
+  }
+  .right3 {
+    position: absolute;
+    margin-left: 1350px;
+    margin-right: 10px;
+    
+  }
+  
+</style>

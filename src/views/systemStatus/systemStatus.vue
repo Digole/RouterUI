@@ -55,10 +55,7 @@
                 <p>{{$t('systemStatus.middle.status')}}</p>
               </div>
               <div class="middleLeftTopText">
-                <div class="middleLeftTopTextChild">
-                  <p style="font-size: 36px">1</p>
-                  <p>Kbps{{$t('systemStatus.middle.bandWidth')}}</p>
-                </div>
+                
                 <div class="middleLeftTopTextChild">
                   <p style="font-size: 36px">{{wanNumber}}</p>
                   <p>{{$t('systemStatus.middle.WAN')}}</p>
@@ -67,10 +64,7 @@
                   <p style="font-size: 36px">{{lanNumber}}</p>
                   <p>{{$t('systemStatus.middle.LAN')}}</p>
                 </div>
-                <div class="middleLeftTopTextChild">
-                  <p style="font-size: 36px">0</p>
-                  <p>{{$t('systemStatus.middle.DHCP')}}</p>
-                </div>
+                
               </div>
             </div>
             <!--第二行左边下面-->
@@ -874,7 +868,7 @@ p {
     background-color: grey;
     display: inline-flex;
     text-align: center;
-    margin: 10px 10px;
+    margin: 10px 45px;
     img:hover {
       cursor: pointer;
     }
