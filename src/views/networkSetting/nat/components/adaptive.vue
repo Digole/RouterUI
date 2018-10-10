@@ -222,6 +222,7 @@ export default {
       getPorts()
         .then(res => {
           if (res.data.code === 200) {
+            console.log('aaaaaaa')
             this.wanLimit = res.data.wancount
             this.lanLimit = res.data.lancount
             let lanCount = 0
@@ -229,7 +230,7 @@ export default {
             for (let i = 0; i < res.data.interfaces.length; i++) {
               if (res.data.interfaces[i].function.toLowerCase() === 'wan') {
                 wanCount++
-                console.log('wanCount is ' + wanCount)
+                console.log('wanCount is bbbbbb' + wanCount)
               }
               if (res.data.interfaces[i].function.toLowerCase() === 'lan') {
                 lanCount++
@@ -265,10 +266,11 @@ export default {
           this.lanLimit = res.data.lancount
           let lanCount = 0
           let wanCount = 0
+          console.log('bbbbbb')
           for (let i = 0; i < res.data.interfaces.length; i++) {
             if (res.data.interfaces[i].function.toLowerCase() === 'wan') {
               wanCount++
-              console.log('wanCount is ' + wanCount)
+              console.log('wanCount is aaaaaa' + wanCount)
             }
             if (res.data.interfaces[i].function.toLowerCase() === 'lan') {
               lanCount++
@@ -354,11 +356,17 @@ export default {
     },
     // WAN,LAN口解绑功能
     unbind: function() {
+      console.log('777')
+      const hello = 89766
+      console.log(hello)
+
       let index = this.WANForm.index
       this.WANForm.use = this.ports[index].function
       this.WANForm.handle = 0
       this.WANLANLoading = true
       let para = Object.assign({}, this.WANForm)
+      console.log(para)
+      console.log('88888')
       sendWANLAN(para)
         .then(res => {
           if (res.data.code === 200) {
@@ -368,6 +376,7 @@ export default {
             })
           }
         })
+      console.log('09999')
         .then(this.getPortsInfo())
         .then(() => {
           this.dialogFormVisible = false
