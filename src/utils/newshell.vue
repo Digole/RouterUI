@@ -22,7 +22,7 @@
           @click = "unlink">{{$t('newshell.disconnect')}}</el-button>
         </el-form-item>
         
-        <el-form-item class="right2">
+        <el-form-item class="right2"> <!--wyk1010修改按钮位置-->
           <el-button v-if="shellStatus"   type="primary" 
           :disabled="btnStatus || status === '停止运行'" @click="startWebSocket">启动动态路由配置</el-button>
           <el-button v-else type="danger" @click="stopWebSocket">关闭配置</el-button>

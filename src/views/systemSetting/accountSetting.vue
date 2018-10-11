@@ -5,10 +5,10 @@
     </div>
    
     <!--添加账户的按钮-->
-	  <el-col :span="24">
+	  <el-col :span="50">
 			<el-form :inline="true">
 				<el-form-item>
-					<el-button type="danger" disabled="false" @click="addAccount" >{{$t('systemSetting.addAccount')}}</el-button>
+					<el-button type="danger" disabled="false" @click="addAccount" >{{$t('systemSetting.addAccount')}}</el-button>  <!--wyk1010禁用添加按钮-->
 				</el-form-item>
 			</el-form>
 		</el-col>

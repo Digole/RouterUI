@@ -55,7 +55,7 @@
                 <p>{{$t('systemStatus.middle.status')}}</p>
               </div>
               <div class="middleLeftTopText">
-                
+                <!--wyk1010修改至只显示两个状态-->
                 <div class="middleLeftTopTextChild">
                   <p style="font-size: 36px">{{wanNumber}}</p>
                   <p>{{$t('systemStatus.middle.WAN')}}</p>
@@ -70,7 +70,7 @@
             <!--第二行左边下面-->
             <div class="middleBottom">
               <div class="router">
-                <div v-for="(item, index) in ports" class="port" @click="pushToINEX" :key="index">
+                <div v-for="(item, index) in ports" class="port" @click="pushToINEX" :key="index">                <!--wyk1010修改图片间距使均匀分布-->
                   <div>
                     <el-tooltip class="item" effect="light">
                       <img style="width: 50px; height: 50px; border-radius: 5px;" :src=selectUrl(item.linkstatus) />
@@ -284,17 +284,17 @@ export default {
           if (this.MonitorInfo.status === 'failed') {
             obj.className = 'topLeftLeft2'
             if (this.$store.state.app.language === 'en') {
-              this.title = 'Not Configured'
+              this.title = 'Disconnected'
             } else {
-              this.title = '未配置'
+              this.title = '未连接'
             }
             console.log('title:' + this.title)
           } else {
             obj.className = 'topLeftLeft1'
             if (this.$store.state.app.language === 'en') {
-              this.title = 'Configured'
+              this.title = 'Connected'
             } else {
-              this.title = '已配置'
+              this.title = '已连接'
             }
           }
 

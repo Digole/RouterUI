@@ -11,11 +11,12 @@
           <el-button type="primary" @click="handleAdd">{{$t('securitySetting.add')}}</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleEnable">{{$t('securitySetting.start')}}</el-button>
+         <!-- wyk1011删除启用停用按钮-->
+          <!--el-button type="primary" @click="handleEnable">{{$t('securitySetting.start')}}</el-button>                 
         </el-form-item>
         <el-form-item>
           <el-button type="danger" @click="handleDisable">{{$t('securitySetting.stop')}}</el-button>
-        </el-form-item>
+        </el-form-item-->
         <el-form-item>
           <el-input v-model="portChoosen" placeholder="根据网口搜索" style="width: 100%;"></el-input>
         </el-form-item>
@@ -72,24 +73,24 @@
       :total="total" 
       style="float:right;">
     </el-pagination>
-
-    <!-- 禁用网卡页面 -->
+ <!-- wyk1011删除启用停用按钮-->
+    <!-- 禁用网卡页面 
     <el-dialog :title="$t('securitySetting.disablePort')" :visible.sync="isInDisabling">
       <el-select v-model="disablePort" placeholder="请选择禁用网卡">
         <el-option v-for="item in disablePortList" :label="item" :value="item" :key="item"></el-option>
       </el-select>
       <el-button @click="disableSubmit" type="danger">{{$t('securitySetting.disableSubmit')}}</el-button>
       <el-button @click="enableCancle">{{$t('securitySetting.Cancle')}}</el-button>
-    </el-dialog>
+    </el-dialog>-->
 
-    <!-- 启用网卡页面 -->
+    <!-- 启用网卡页面 
     <el-dialog :title="$t('securitySetting.isInEnabling')" :visible.sync="isInEnabling">
       <el-select v-model="enablePort" placeholder="请选择启用网卡">
         <el-option v-for="item in enablePortList" :label="item" :value="item" :key="item"></el-option>
       </el-select>
       <el-button @click="enableSubmit" type="primary">{{$t('securitySetting.enableSubmit')}}</el-button>
       <el-button @click="enableCancle">{{$t('securitySetting.Cancle')}}</el-button>
-    </el-dialog>
+    </el-dialog>-->
 
     <!-- 添加页面 策略/端口选择 -->
     <el-dialog :title="$t('securitySetting.selectStrategy')" :visible.sync="isAdding">
@@ -291,12 +292,13 @@ export default {
       return this.header()
     },
     handleCurrentChange() {},
-    handleDisable() {
+    /* handleDisable() {                       //wyk1011删除启用停用按钮
       this.isInDisabling = true
     },
+
     handleEnable() {
       this.isInEnabling = true
-    },
+    }, */
     handleAdd() {
       this.isAdding = true
     },
@@ -386,7 +388,8 @@ export default {
         return i
       }
     },
-    disableSubmit() {
+    /*
+    disableSubmit() {                            //wyk1011删除启用停用按钮
       let para = {
         data: []
       }
@@ -423,7 +426,7 @@ export default {
         .catch(error => {
           console.log(error)
         })
-    },
+    }, */
     deleteRule(index, val) {
       console.log(val)
       let para = {
@@ -443,10 +446,11 @@ export default {
           console.log(err)
         })
     },
+    /*                                      //wyk1011删除启用停用按钮
     enableCancle() {
       this.isInEnabling = false
       this.isInDisabling = false
-    },
+    }, */
 
     // 开始处理拿到的数组
     // getRules() {
@@ -684,8 +688,8 @@ export default {
     getPortsName(item) {
       // console.log('item ' + item)
       let para = {}
-      para.name = item.enname
-      this.enlist.push(item.enname)
+      para.name = item.webname
+      this.enlist.push(item.webname)
       para.enable = getEnable(item)
 
       this.nameList.push(para)

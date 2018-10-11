@@ -48,7 +48,7 @@ import basicSetting from './views/systemSetting/basicSetting.vue'
 import hardwareInfo from './views/systemSetting/hardwareInfo.vue'
 import restartShutdown from './views/systemSetting/restartShutdown.vue'
 import update from './views/systemSetting/update.vue'
-// import powerSetting from './views/systemSetting/powerSetting'          // wyk914权限管理
+// import powerSetting from './views/systemSetting/powerSetting'          // wyk914权限管理，1010将权限管理隐藏
 import ports from './views/systemSetting/ports.vue'
 /*
 *flowControl

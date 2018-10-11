@@ -225,6 +225,7 @@ export default {
   name: 'IN-EX_network',
   data() {
     return {
+      portInfo: {},  // 启用为wanlan口时存储信息
       isSettingNetcardVisible: false, // 控制点击port之后的父级dialog
       isLANInnerVisible: false, // LAN的子级dialog
       isWANInnerVisible: false, // WAN的子级dialog
@@ -633,7 +634,10 @@ export default {
     // 设置为WAN/LAN
     setPort(val) {
       this.wanForm.handle = 1
-      let para = Object.assign({}, this.wanForm)
+      this.portInfo = Object.assign({}, this.wanForm)
+      this.portInfo.use = val
+
+      /* let para = Object.assign({}, this.wanForm)
       para.use = val
       console.log(para)
       sendWANLAN(para)
@@ -657,7 +661,7 @@ export default {
         })
         .catch(error => {
           console.log(error)
-        })
+        }) */
     },
     // WAN,LAN口解绑功能
     unbindGeneral: function(val) {
@@ -762,7 +766,31 @@ export default {
     LANFormSubmit: function() {
       this.triggerSettingNetcardVisible()
       this.triggerLANInnerVisible()
+      /* let bara = this.portInfo
 
+      console.log(bara)
+      sendWANLAN(bara)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.$message({
+              message: '发送成功',
+              type: 'success'
+            })
+            if (val === 'wan') {
+              this.isWANPort = true
+            } else if (val === 'lan') {
+              this.isLANPort = true
+            }
+          } else {
+            this.$message({
+              message: '发送失败',
+              type: 'warning'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        }) */
       let para = {}
       para.enname = this.formDialUp.enname
       para.ipaddr = this.lanForm.ip
