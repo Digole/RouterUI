@@ -19,13 +19,13 @@
       </el-table-column>
       <el-table-column prop="mac" label="Mac" min-width="140">
       </el-table-column>
-      <el-table-column prop="recv_rate" label="上行速率" min-width="120">
+      <el-table-column prop="send_rate" label="上行速率" min-width="120">
       </el-table-column>
-      <el-table-column prop="send_rate" label="下行速率" min-width="120">
+      <el-table-column prop="recv_rate" label="下行速率" min-width="120">
       </el-table-column>
-      <el-table-column prop="recv_total_length" label="累计上行" min-width="120">
+      <el-table-column prop="send_total_length" label="累计上行" min-width="120">
       </el-table-column>
-      <el-table-column prop="send_total_length" label="累计下行" min-width="120">
+      <el-table-column prop="recv_total_length" label="累计下行" min-width="120">
       </el-table-column>
       <el-table-column prop="duration" label="在线时长" min-width="120">
       </el-table-column>
@@ -125,7 +125,9 @@ export default {
           { validator: validate('mac', '请输入正确IP或MAC'), trigger: 'blur' }
         ]
       },
-      rule: 'ip'
+      rule: 'ip',
+
+      timer: 0
     }
   },
   methods: {
@@ -133,6 +135,7 @@ export default {
       return this.header()
     },
     forbidLInk() {
+      // 功能暂时不需要
     },
     limitLink(val) {
       this.isLimitVisible = true
@@ -173,31 +176,48 @@ export default {
       }
     },
     inquery() {
-      let para = Object.assign({}, this.form)
-      para.type = 1
-      para.page = this.currentPage
-      para[this.rule] = this.request.data
+      let para
 
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          getMonitorInfo(para)
-            .then((res) => {
-              if (res.data.data.length !== 0) {
+      let interval = function() {
+        getMonitorInfo(para)
+          .then((res) => {
+            if (res.data.data.length !== 0) {
+              this.terminalForm = res.data.data
+              this.total = res.data.total
+              for (let i = 0; i < res.data.data.length; i++) {
+                this.terminalForm[i].send_rate = conversion(this.terminalForm[i].send_rate)
+                this.terminalForm[i].recv_rate = conversion(this.terminalForm[i].recv_rate)
+                this.terminalForm[i].send_total_length = conversionUnit(this.terminalForm[i].send_total_length)
+                this.terminalForm[i].recv_total_length = conversionUnit(this.terminalForm[i].recv_total_length)
+                this.terminalForm[i].duration = time(this.terminalForm[i].duration)
+              }
+            } else {
+              if (res.data.total === 0) {
                 this.terminalForm = res.data.data
                 this.total = res.data.total
               } else {
-                if (res.data.total === 0) {
-                  this.terminalForm = res.data.data
-                  this.total = res.data.total
-                } else {
-                  this.currentPage -= 1
-                  this.getTerminalInfo()
-                }
+                this.currentPage -= 1
+                this.getTerminalInfo()
               }
-            })
-            .catch(error => {
-              console.log(error)
-            })
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }.bind(this)
+
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          // 清除现在正在使用的定时器
+          clearInterval(this.timer)
+
+          para = Object.assign({}, this.form)
+          para.type = 1
+          para.page = this.currentPage
+          para[this.rule] = this.request.data
+
+          interval()
+          this.timer = setInterval(interval, 2000)
         }
       })
     },
@@ -210,6 +230,13 @@ export default {
           if (res.data.code === 200) {
             this.terminalForm = res.data.data
             this.total = res.data.total
+            for (let i = 0; i < res.data.data.length; i++) {
+              this.terminalForm[i].send_rate = conversion(this.terminalForm[i].send_rate)
+              this.terminalForm[i].recv_rate = conversion(this.terminalForm[i].recv_rate)
+              this.terminalForm[i].send_total_length = conversionUnit(this.terminalForm[i].send_total_length)
+              this.terminalForm[i].recv_total_length = conversionUnit(this.terminalForm[i].recv_total_length)
+              this.terminalForm[i].duration = time(this.terminalForm[i].duration)
+            }
           }
           this.currentPage = val
         })
@@ -252,6 +279,12 @@ export default {
   },
   mounted() {
     this.getTerminalInfo()
+    this.timer = setInterval(() => {
+      this.getTerminalInfo()
+    }, 2000)
+  },
+  destroyed () {
+    clearInterval(this.timer)
   }
 }
 </script>

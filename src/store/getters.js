@@ -4,7 +4,8 @@ const getters = {
   language: state => state.app.language,
   systemData: state => state.app.systemData,
   adaptiveCode: state => state.app.adaptiveCode,
-  socket: state => state.app.socket
+  socket: state => state.app.socket,
+  timers: state => state.app.timers
 }
 
 export default getters

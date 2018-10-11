@@ -15,17 +15,17 @@
 
     <!--表格头-->
     <el-table :data="userShow" @selection-change="selsChange" style="width: 100%;" :header-cell-style="headerStyle">
-      <el-table-column type="selection" width="55">
-      </el-table-column>
+      <!-- <el-table-column type="selection" width="55">
+      </el-table-column> -->
       <el-table-column prop="username" :label="$t('systemSetting.username')" min-width="120">
       </el-table-column>
-      <el-table-column prop="passwdShow" :label="$t('systemSetting.passwd')" min-width="180">
+      <el-table-column prop="passwdShow" :label="$t('systemSetting.passwd')" min-width="120">
       </el-table-column>
-       <el-table-column prop="role" :label="$t('systemSetting.role')" min-width="180">
+       <el-table-column prop="role" :label="$t('systemSetting.role')" min-width="120">
       </el-table-column>
-      <el-table-column prop="status" :label="$t('systemSetting.status')" min-width="180">
+      <el-table-column prop="status" :label="$t('systemSetting.status')" min-width="120">
       </el-table-column>
-      <el-table-column prop="behaviour" :label="$t('systemSetting.behaviour')" min-width="180">
+      <el-table-column prop="behaviour" :label="$t('systemSetting.behaviour')" min-width="240">
       <template slot-scope="scope">
       <el-button size="small" @click="changePasswd(scope.row)">{{$t('systemSetting.changePasswd')}}</el-button>
         <el-button size="small" :disabled="scope.row.username == 'admin'" @click="deleteUser(scope.row)">{{$t('systemSetting.deleteUser')}}</el-button>  <!--wyk0930修改管理员账号不可删除与禁用-->

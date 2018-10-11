@@ -45,24 +45,41 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   // NProgress.start();
 
-  // if (to.path === '/login') {
-  //   sessionStorage.removeItem('user')
-  //   next()
-  // }
+  if (to.path === '/login') {
+    sessionStorage.removeItem('user')
 
-  // let user = JSON.parse(sessionStorage.getItem('user'))
+    store.dispatch('setTimer', false)
 
-  // if (!user && to.path !== '/login') {
-  //   next({path: '/login'})
-  //   return false
-  //   // next()
-  // } else if (to.path !== '/ports' && store.state.app.adaptiveCode === 500) {
-  //   // 验证是否已完成自适应操作
-  //   console.log('def ' + store.state.app.adaptiveCode)
-  //   next({path: '/ports'})
-  // } else {
-  //   next()
-  // }
+    let timer = store.state.app.timers
+    Object.keys(timer).forEach(element => {
+      if (element && (typeof (timer[element]) === 'number')) {
+        clearInterval(timer[element])
+      }
+    })
+    next()
+  }
+
+  let user = JSON.parse(sessionStorage.getItem('user'))
+
+  if (to.path === '/CreatePasswd') {
+    console.log('createppasswd')
+    console.log(user)
+    // 首次登陆跳转到修改密码
+    next()
+    next()
+  } else if (!user && to.path !== '/login') {
+    next({path: '/login'})
+    return false
+    // next()
+  } else if (to.path !== '/ports' && store.state.app.adaptiveCode === 500) {
+    // 验证是否已完成自适应操作
+    console.log('def ' + store.state.app.adaptiveCode)
+    next({path: '/ports'})
+  } else if (to.path === '/') {
+    next({path: '/systemStatus'})
+  } else {
+    next()
+  }
 
   next()
 })

@@ -22,11 +22,15 @@
 			</el-table-column>
 			<el-table-column prop="date"  :label="$t('systemSetting.date')">
 			</el-table-column>
+      <el-table-column prop="time"  label="预设时间">
+			</el-table-column>
+      <el-table-column prop="desc"  label="事件描述">
+			</el-table-column>
 			<el-table-column prop="oper_type" :label="$t('systemSetting.oper_type')">
 				<template slot-scope="scope">
-						<el-button v-if="!scope.row.status" size="small" @click="handleStart(scope.$index, scope.row)">{{$t('systemSetting.handleStart')}}</el-button>
-						<el-button v-else size="small" @click="handleStop(scope.$index, scope.row)">{{$t('systemSetting.handleStop')}}</el-button>
-						<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">{{$t('systemSetting.handleDel')}}</el-button>
+          <el-button v-if="scope.row.status" size="small" @click="handleStart(scope.$index, scope.row)">{{$t('systemSetting.handleStart')}}</el-button>
+          <el-button v-else size="small" @click="handleStop(scope.$index, scope.row)">{{$t('systemSetting.handleStop')}}</el-button>
+          <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">{{$t('systemSetting.handleDel')}}</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -56,7 +60,7 @@
           <!-- <el-input v-model="powerEvent.time" placeholder="示例: 02:30"></el-input> -->
           <el-time-picker v-model="powerEvent.time"
           :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
-          value-format="HHmmss"
+          value-format="HHmm"
           placeholder="选择时间"></el-time-picker>
         </el-form-item>
       </el-form>
@@ -83,7 +87,7 @@
         },
         powerEvent: {
           event_id: Number,
-          event: '',
+          event: 'shutdown',
           date: '',
           time: '',
           status: Number,
@@ -126,6 +130,7 @@
       submitAdd() {
         let para = Object.assign({}, this.powerEvent)
         para.oper_type = 'add'
+        para.time = para.time.splice(2, 0, ':')
         this.setInfo(para)
         this.isAdd = !this.isAdd
       },
@@ -140,6 +145,8 @@
         let para = Object.assign(val)
         para.oper_type = 'update'
         para.status = 1               // 状态改为启用
+        console.log('hfowhowfheow')
+        console.log(val)
         this.setInfo(para)
       },
 
@@ -207,8 +214,16 @@
         if (para === '' || para === null) {
           para = Object.assign({}, this.powerEvent)
         }
-        para.event_id = this.event_id + 1
-        para.status = 1
+        if (para.oper_type === 'add') {
+          para.event_id = this.event_id + 1
+        } else if (para.oper_type === 'update') {
+          para.event_id = this.event_id
+        } else if (para.oper_type === 'delete') {
+          para.event_id = this.event_id
+          delete para.number
+        }
+        para.time = para.time.splice(2, 0, ':')
+        para.status = 0
         setEvent(para)
           .then(res => {
             if (res.data.code === 200) {

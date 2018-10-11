@@ -212,11 +212,11 @@ export default {
     getInfo() {
       // 18.09.17 pky
       // 注销请求，太烦了，生产环境恢复
-      // this.update()
-      // setInterval(() => {
-      //   this.update()
-      //   this.$store.dispatch('pushSystemData', this.data)
-      // }, 5000)
+      this.update()
+      setInterval(() => {
+        this.update()
+        this.$store.dispatch('pushSystemData', this.data)
+      }, 5000)
     },
 
     async update() {
@@ -231,7 +231,7 @@ export default {
             this.data.up = conversion(res.data.data[0].recv_rate)
             this.data.down = conversion(res.data.data[0].send_rate)
             // console.log(this.data.up)
-            // this.$store.dispatch('pushSystemData', this.data)
+            this.$store.dispatch('pushSystemData', this.data)
           }
         })
         .catch(error => {
@@ -250,7 +250,7 @@ export default {
         .catch(error => {
           console.log(error)
         })
-      // this.$store.dispatch('pushSystemData', this.data)
+      this.$store.dispatch('pushSystemData', this.data)
     }
   },
 

@@ -20,6 +20,12 @@ const app = {
       socket: '',
       count: 0,
       contentList: []
+    },
+    timers: {
+      intervalOfInterface: 0,
+      linecharts2: 0,
+      mychart1: 0,
+      inuse: false
     }
   },
   mutations: {
@@ -53,6 +59,9 @@ const app = {
     },
     SET_ADAPTIVE: (state, adaptiveCode) => {
       state.adaptiveCode = adaptiveCode
+    },
+    SET_TIMER: (state, inuse) => {
+      state.timers.inuse = inuse
     }
 
   },
@@ -66,6 +75,9 @@ const app = {
     // 判断是否需要跳转去做自适应
     setAdaptive({ commit }, adaptiveCode) {
       commit('SET_ADAPTIVE', adaptiveCode)
+    },
+    setTimer({ commit }, inuse) {
+      commit('SET_TIMER', inuse)
     }
   }
 }
