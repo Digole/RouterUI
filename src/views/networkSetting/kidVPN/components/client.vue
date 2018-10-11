@@ -71,7 +71,7 @@
           <el-input v-model="kidVPNForm.passwd"></el-input>
         </el-form-item>
         <el-form-item prop="aeskey" :label="$t('kidVPN.client.aeskey')">
-          <textarea v-model="kidVPNForm.aeskey"></textarea>
+          <textarea v-model="kidVPNForm.aeskey" class=aeskey></textarea>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -327,5 +327,9 @@ export default {
 }
 textarea {
   resize: none;
+  width: 80%;
+  height: 100%;
+  padding: 0;
+  margin-top: .5rem;
 }
 </style>

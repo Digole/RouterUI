@@ -100,11 +100,11 @@
                         </el-form>
                       </div>
                     </el-tooltip>
-                    <div class="textArea">
+                    <div class="text-area">
                       <p class="text">
                         <span v-show="item.function !== 'normal'">
                           <svg class="icon">
-                            <use :xlink:href="selectIcon(item.function)"></use>
+                            <use :xlink:href=selectIcon(item.function)></use>
                           </svg>
                         </span>
                         {{ item.webname }}</p>
@@ -348,7 +348,6 @@ export default {
         this.update()
         this.$store.dispatch('pushSystemData', this.data)
       }, 5000)
-      console.log('intervalOfInterface is what ' + intervalOfInterface)
       this.$store.state.app.timers.intervalOfInterface = intervalOfInterface
     },
 
@@ -364,7 +363,7 @@ export default {
             this.data.up = conversion(res.data.data[0].recv_rate)
             this.data.down = conversion(res.data.data[0].send_rate)
             // console.log(this.data.up)
-            // this.$store.dispatch('pushSystemData', this.data)
+            this.$store.dispatch('pushSystemData', this.data)
           }
         })
         .catch(error => {
@@ -383,7 +382,7 @@ export default {
         .catch(error => {
           console.log(error)
         })
-      // this.$store.dispatch('pushSystemData', this.data)
+      this.$store.dispatch('pushSystemData', this.data)
     },
     // 选择LAN,WAN口对应图标
     selectUrl(para) {
@@ -396,9 +395,9 @@ export default {
     },
 
     selectIcon(para) {
-      if (para === 'WAN') {
+      if (para === 'wan') {
         return '#icon-wan'
-      } else if (para === 'LAN') {
+      } else if (para === 'lan') {
         return '#icon-pc'
       } else {
         return '#'
@@ -421,9 +420,7 @@ export default {
 
         this.ports = res.data.interfaces
       })
-      console.log('this.$store.state.app.timers.inuse ' + this.$store.state.app.timers.inuse)
       if (this.$store.state.app.timers.inuse) {
-        console.log('this.$store.state.app.timers.inuse ' + this.$store.state.app.timers.inuse)
         setTimeout(() => {
           this.getPortsInfo()
         }, 3000)
@@ -759,7 +756,7 @@ export default {
   mounted: function() {
     // 允许递归
     this.$store.dispatch('setTimer', true)
-    // this.drawCharts()
+    this.drawCharts()
     this.getPortsInfo()
     this.getInfo()
     this.getTerminalInfo()
@@ -886,6 +883,11 @@ p {
       cursor: pointer;
     }
   }
+}
+
+.text-area p {
+  display: flex;
+  // margin: 0;
 }
 
 .icon {

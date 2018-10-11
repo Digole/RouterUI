@@ -259,11 +259,16 @@ export default {
     initAESKey() {
       let para = {}
       para.bit = this.initAESKeyForm.bit
-      generateAESKey(para).then(res => {
-        if (res.data.code === 200) {
-          this.initAESKeyForm.aeskey = res.data.aeskey
-        }
-      })
+      generateAESKey(para)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.initAESKeyForm.aeskey = res.data.aeskey
+            this.triggerGettingKey()
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     saveKey() {
       let para = Object.assign({}, this.initAESKeyForm)

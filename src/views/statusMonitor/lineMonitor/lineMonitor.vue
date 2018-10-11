@@ -12,17 +12,17 @@
       </el-table-column>
       <el-table-column prop="mac" label="Mac" min-width="130">
       </el-table-column>
-      <el-table-column prop="recv_rate" label="上行速率" min-width="120">
+      <el-table-column prop="send_rate" label="上行速率" min-width="120">
       </el-table-column>
-      <el-table-column prop="send_rate" label="下行速率" min-width="120">
+      <el-table-column prop="recv_rate" label="下行速率" min-width="120">
       </el-table-column>
-      <el-table-column prop="recv_total_length" label="上行总流量" min-width="120">
+      <el-table-column prop="send_total_length" label="上行总流量" min-width="120">
       </el-table-column>
-      <el-table-column prop="send_total_length" label="下行总流量" min-width="120">
+      <el-table-column prop="recv_total_length" label="下行总流量" min-width="120">
       </el-table-column>
-      <el-table-column prop="recv_total_packets" label="上行包总数">
+      <el-table-column prop="send_total_packets" label="上行包总数">
       </el-table-column>
-      <el-table-column prop="send_total_packets" label="下行包总数">
+      <el-table-column prop="recv_total_packets" label="下行包总数">
       </el-table-column>
     </el-table>
 
@@ -65,7 +65,9 @@ export default {
       ports: [],
       lineForm: [],
       currentPage: 1,
-      total: 0
+      total: 0,
+
+      timer: 0
     }
   },
   methods: {
@@ -168,6 +170,12 @@ export default {
   },
   mounted() {
     this.generateData()
+    this.timer = setInterval(() => {
+      this.generateData()
+    }, 4000)
+  },
+  destroyed () {
+    clearInterval(this.timer)
   }
 }
 </script>
