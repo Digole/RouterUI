@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="line_02">
-      <span></span>
+      <span>{{$t('route.systemStatus')}}</span><!-- wyk1011添加系统概况-->
     </div>
     <div id="top">
       <el-row :gutter="10">
@@ -756,7 +756,7 @@ export default {
   mounted: function() {
     // 允许递归
     this.$store.dispatch('setTimer', true)
-    this.drawCharts()
+    // this.drawCharts()
     this.getPortsInfo()
     this.getInfo()
     this.getTerminalInfo()

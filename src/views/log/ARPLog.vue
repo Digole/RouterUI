@@ -15,25 +15,25 @@
 export default {
   name: 'ARPLog',
   data() {
-    return {
+        return {
     
-    }
+        }
   },
       methods: {
-    headerStyle() {
+        headerStyle() {
           return this.header()
-    }
+        }
       },
       mounted() {
-    // this.getInfo()
-        document.getElementById('div1').innerHTML = '读取中...'
-    $(document).ready(function() {
-	        $.ajax({async: true,
+        // this.getInfo()
+        document.getElementById('div1').innerHTML = '读取中...'                    // wyk读取日志文件
+        $(document).ready(function() {
+          $.ajax({async: true,
             url: 'arplog',
             success: function(result) {
               $('#div1').html(result)
-		    }})
-	    })
+            }})
+    })
   }
 }
 </script>

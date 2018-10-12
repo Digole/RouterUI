@@ -2,9 +2,10 @@
 	<div class="backgroundDiv">
 		<el-form ref="form" :model="form" label-position="left" label-width="0px" class="demo-ruleForm login-container">
 			<h3 class="title">密码修改</h3>
-			<el-form-item prop="username">
+      <!-- wyk1011首次登陆bug-->
+			<!--el-form-item prop="username">                            
 				<el-input v-model="form.username" type="text" auto-complete="off" placeholder="账号"></el-input>
-			</el-form-item>
+			</el-form-item-->
 			<el-form-item prop="new_passwd">
 				<el-input v-model="form.new_passwd" type="password" auto-complete="off" placeholder="请输入新密码"></el-input>
 			</el-form-item>
@@ -27,7 +28,7 @@ export default {
   data() {
     return {
       form: {
-        username: '',
+        username: 'admin',
         passwd: 'admin',
         new_passwd: '',
         new_passwd2: ''

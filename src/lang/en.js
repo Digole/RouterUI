@@ -260,7 +260,7 @@ export default {
     genmask: 'Subnet Mask',
     gateway: 'Gateway',
     flags: 'Type',
-    metric: 'metric',
+    metric: 'Metric',
     iface: 'Interface',
     button3: 'Edit',
     title2: 'Add Static Route',

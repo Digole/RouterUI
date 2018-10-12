@@ -12,28 +12,28 @@
     </template>
 
 <script>
-
     import md5 from 'js-md5'
 export default {
   name: 'DHCPLog',
   data() {
     return {
-      
-     
+    
     }
-    },
-     methods: {
+  },
+      methods: {
     headerStyle() {
-      return this.header()
-    },
-     },
-      mounted() { 
-        document.getElementById('div1').innerHTML = '读取中...';
-        $(document).ready(function(){
-	        $.ajax({async: true, url:"dhcpdlog",success:function(result){
-                $("#div1").html(result);
-		    }});
-	    });
+          return this.header()
     }
+      },
+      mounted() {
+        document.getElementById('div1').innerHTML = '读取中...'                   // wyk读取日志文件
+    $(document).ready(function() {
+	        $.ajax({async: true,
+            url: 'dhcpdlog',
+            success: function(result) {
+              $('#div1').html(result)
+		    }})
+	    })
+  }
 }
 </script>

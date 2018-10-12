@@ -79,8 +79,7 @@
             <el-input v-model="lanForm.gateway" prop="gateway" auto-complete="off" placeholder=""></el-input>
           </el-form-item>
           <el-form-item label="启用为 LAN口" :label-width="formLabelWidth">
-            <!-- <el-checkbox v-model="isLANPort" @click.native="setPort('lan')"></el-checkbox> -->
-            <el-checkbox v-model="isLANPort"></el-checkbox>
+            <el-checkbox v-model="isLANPort" @click.native="setLanPort('lan')"></el-checkbox>
           </el-form-item>
 
           <!--components of collapse-->
@@ -157,15 +156,14 @@
           <el-form-item :label="$t('INEXNetwork.cardConfig.IPAddress')" prop="ip" :label-width="formLabelWidth">
             <el-input v-model="wanForm.ip" :disabled="isASDLVisible||isDHCP" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('INEXNetwork.cardConfig.mask')" prop="netmask" :label-width="formLabelWidth">
+          <el-form-item :label="$t('INEXNetwork.cardConfig.mask')" prop="mask" :label-width="formLabelWidth">
             <el-input v-model="wanForm.netmask" :disabled="isASDLVisible||isDHCP" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('INEXNetwork.cardConfig.gateway')" prop="gateway" :label-width="formLabelWidth">
             <el-input v-model="wanForm.gateway" :disabled="isASDLVisible||isDHCP" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="启用为WAN口" :label-width="formLabelWidth">
-            <!-- <el-checkbox v-model="isWANPort" @click.native="setPort('wan')"></el-checkbox> -->
-            <el-checkbox v-model="isWANPort"></el-checkbox>
+            <el-checkbox v-model="isWANPort" @click.native="setWanPort('wan')"></el-checkbox>
           </el-form-item>
           <!-- <el-form-item :label="$t('INEXNetwork.cardConfig.primaryDNS')" prop="primaryDNS" :label-width="formLabelWidth">
             <el-button type="primary" :disabled="isASDLVisible" @click="pushDNS">{{$t('operation.setting')}}</el-button>
@@ -205,8 +203,8 @@
       <el-form :model="optionForm" label-position="left" size="small" ref="optionForm">
         <el-form-item :label="$t('INEXNetwork.cardConfig.chooseFunc')" prop="id" :label-width="formLabelWidth">
           <el-select v-model="optionForm.id" placeholder="请选择内外网" value="">
-            <el-option :label="$t('INEXNetwork.cardConfig.LAN')" value="lan" :disabled="isLANPort"></el-option>
-            <el-option :label="$t('INEXNetwork.cardConfig.WAN')" value="wan" :disabled="isWANPort"></el-option>
+            <el-option :label="$t('INEXNetwork.cardConfig.LAN')" value="lan" :disabled="isWANPort"></el-option>            <!--wyk修改disabled反了的bug-->
+            <el-option :label="$t('INEXNetwork.cardConfig.WAN')" value="wan" :disabled="isLANPort"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -227,7 +225,8 @@ export default {
   name: 'IN-EX_network',
   data() {
     return {
-      portInfo: {},  // 启用为wanlan口时存储信息
+      lanPortInfo: {},  // 启用为lan口时存储信息
+      wanPortInfo: {},  // 启用为wan口时存储信息
       isSettingNetcardVisible: false, // 控制点击port之后的父级dialog
       isLANInnerVisible: false, // LAN的子级dialog
       isWANInnerVisible: false, // WAN的子级dialog
@@ -342,6 +341,7 @@ export default {
         rate: ''
       },
       formDialUp: {
+        webnetif: '',    // 添加了该变量储存eth
         webindex: '',
         account: '',
         passwd: '',
@@ -457,9 +457,6 @@ export default {
       // 获得对应端口的enname，DHCP要用
       this.formDialUp.enname = obj.enname
 
-      // 待修改
-      this.formDialUp.status = '未连接'
-
       // 获取DHCP连接状态
       if (obj.type === 'dhcp') {
         this.DHCPStatus = '已连接'
@@ -558,6 +555,7 @@ export default {
         clearInterval(stopSignal1)
       }
     },
+    // 修改拨号eth
     dialLink: function() {
       // buttonChange "上一步"按钮不显示
       this.isButtonVisible = false
@@ -602,7 +600,7 @@ export default {
       // keep dialog alive
       this.isWANInnerVisible = true
       this.isSettingNetcardVisible = true
-      // this.$refs['formDialUp'].resetFields()
+      this.$refs['formDialUp'].resetFields()
       this.getPortsInfo()
     },
     dialCancel() {
@@ -637,15 +635,20 @@ export default {
       this.$refs['formDialUp'].resetFields()
     },
     // 设置为WAN/LAN
-    setPort(val) {
+    setWanPort(val) {
       this.wanForm.handle = 1
-      this.portInfo = Object.assign({}, this.wanForm)
-      this.portInfo.use = val
-
-      /* let para = Object.assign({}, this.wanForm)
+      this.wanPortInfo = Object.assign({}, this.wanForm)
+      this.wanPortInfo.use = val
+      console.log(this.wanPortInfo)
+    },
+    setLanPort(val) {
+      this.lanForm.handle = 1
+      this.lanPortInfo = Object.assign({}, this.lanForm)
+      this.lanPortInfo.use = val
+      console.log(this.lanPortInfo)
+    },
+    /* let para = Object.assign({}, this.wanForm)
       para.use = val
-      para.handle = 1
-
       console.log(para)
       sendWANLAN(para)
         .then(res => {
@@ -669,7 +672,7 @@ export default {
         .catch(error => {
           console.log(error)
         }) */
-    },
+
     // WAN,LAN口解绑功能
     unbindGeneral: function(val) {
       // let index = this.WANForm.index
@@ -684,11 +687,13 @@ export default {
         if (element.enname === enname) {
           para.use = element.function
           para.index = element.webindex
-          para.netwebif = element.webname
+          para.webnetif = 'ETH' + element.webindex
         }
       })
       para.handle = 0
 
+      console.log('para:')
+      console.log(para)
       sendWANLAN(para)
         .then(res => {
           if (res.data.code === 200) {
@@ -699,9 +704,15 @@ export default {
           }
         })
         .then(() => {
-          if (this.ports[para.index - 1].type === 'dhcp') {
+          console.log('768')
+          console.log(this.ports[para.index - 1].type)                // 分别解绑dhcp或者adsl
+          console.log('567')
+          console.log(this.ports[para.index].type)
+          if (this.ports[para.index].type === 'dhcp') {
+            console.log('进入dhcp')
             this.DHCPDisconnect()
-          } else if (this.ports[para.index - 1].type === 'adsl') {
+          } else if (this.ports[para.index].type === 'adsl') {
+            console.log('进入adsl')
             this.unbind()
           }
         })
@@ -735,6 +746,7 @@ export default {
     DHCPDisconnect() {
       let para = {}
       para.netifname = this.formDialUp.enname
+      console.log('dhcp' + para.netifname)
       para.handle = 'disable'
 
       DHCP(para)
@@ -750,6 +762,7 @@ export default {
           console.log(error)
         })
       this.isDHCPConnected = false
+      this.isSettingNetcardVisible = false
     },
     stopAsking() {
       clearInterval(stopSignal2)
@@ -772,12 +785,35 @@ export default {
     },
     // 提交内部LAN dialog 信息
     LANFormSubmit: function() {
+      let bara = {}
+      bara.use = this.lanPortInfo.use
+      bara.handle = this.lanPortInfo.handle
+      bara.webnetif = this.lanPortInfo.webname
+      sendWANLAN(bara)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.$message({
+              message: '发送成功',
+              type: 'success'
+            })
+
+            this.isLANPort = true
+          } else {
+            this.$message({
+              message: '发送失败',
+              type: 'warning'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
       this.triggerSettingNetcardVisible()
       this.triggerLANInnerVisible()
-      /* let bara = this.portInfo
-
-      console.log(bara)
-      sendWANLAN(bara)
+      /* let ara =
+      para.use = val
+      console.log(para)
+      sendWANLAN(para)
         .then(res => {
           if (res.data.code === 200) {
             this.$message({
@@ -831,13 +867,32 @@ export default {
       this.triggerLANInnerVisible()
     },
     WANFormSubmit: function() {
+      let bara = {}
+      bara.use = this.wanPortInfo.use
+      bara.handle = this.wanPortInfo.handle
+      bara.webnetif = this.wanPortInfo.webname
+      console.log(bara.webnetif)
+      sendWANLAN(bara)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.$message({
+              message: '发送成功',
+              type: 'success'
+            })
+
+            this.isWANPort = true
+          } else {
+            this.$message({
+              message: '发送失败',
+              type: 'warning'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
       this.triggerSettingNetcardVisible()
       this.triggerWANInnerVisible()
-
-      // 设定为WAN口的起功能
-      if (this.isWANPort) {
-        this.setPort('wan')
-      }
 
       if (this.wanForm.accessMode === '1') {
         let para = {}

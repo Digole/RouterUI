@@ -21,7 +21,8 @@ export default {
   name: 'ports',
   data() {
     return {
-      status: '已完成定位'
+      status: '已完成定位',
+      code: 0
     }
   },
   components: {
@@ -29,10 +30,14 @@ export default {
   },
   watch: {
     code: function(code) {
+      this.code = this.$refs.router.checked
+      console.log('7771' + this.code)
       if (code === 200) {
+        console.log('7771')
         this.status = '已完成定位'
-      } else if (code === 0) {
+      } else {
         this.status = '请完成网口定位'
+        console.log('7772')
       }
     }
   },

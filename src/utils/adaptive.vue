@@ -212,7 +212,7 @@ export default {
   watch: {
     checked: function() {
       if (this.checked !== 200) {
-        this.$confirm('此操作将删除当前端口排序, 是否继续?', '提示', {
+        this.$confirm('即将进行网口定位操作, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -228,6 +228,7 @@ export default {
             message: '已取消'
           })
         })
+        this.getPortsInfoBegin()
       }
     }
   },
@@ -355,6 +356,8 @@ export default {
       this.WANLANLoading = true
       // console.log(typeof(para.index));
       let para = {}
+      para.webnetif = 'ETH' + bara.index               // WYK 改为发送ETH
+      /*
       if (bara.index === 0) {
         para.webnetif = 'ETH0'
       } else if (bara.index === 1) {
@@ -367,7 +370,7 @@ export default {
         para.webnetif = 'ETH4'
       } else if (bara.index === 5) {
         para.webnetif = 'ETH5'
-      }
+      } */
       para.use = bara.use
       para.handle = bara.handle
       console.log(para)
@@ -394,7 +397,10 @@ export default {
     // WAN,LAN口解绑功能
     unbind: function() {
       let index = this.WANForm.index
-      if (this.WANForm.index === 0) {
+      console.log('this.WANForm')
+      console.log(this.WANForm)
+      this.sendForm.webnetif = 'ETH' + this.WANForm.index                // WYK转为发送ETH
+      /* if (this.WANForm.index === 0) {
         this.sendForm.webnetif = 'ETH0'
       } else if (this.WANForm.index === 1) {
         this.sendForm.webnetif = 'ETH1'
@@ -406,7 +412,7 @@ export default {
         this.sendForm.webnetif = 'ETH4'
       } else if (this.WANForm.index === 5) {
         this.sendForm.webnetif = 'ETH5'
-      }
+      } */
       this.sendForm.use = this.ports[index].function
       this.sendForm.handle = 0
       this.WANLANLoading = true
