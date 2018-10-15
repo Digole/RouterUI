@@ -396,6 +396,21 @@ export default {
     deleteInfo(index, row) {
       let para = Object.assign({}, row)
       para.oper_type = 'del'
+      getPorts()                                       // wyk修改删除发送enname
+        .then(res => {
+          if (res.data.code === 200) {
+            this.ports = res.data.interfaces
+            console.log(this.ports)
+          }
+          // else if (res.data.code === 123) {
+
+          // }
+        })
+      for (let i = 0; i < this.ports.length; i++) {
+        if (this.ports[i].webname === para.fc_ifname) {
+          para.fc_ifname = this.ports[i].enname
+        }
+      }
       handleFC(para)
         .then(res => {
           if (res.data.code === 200) {

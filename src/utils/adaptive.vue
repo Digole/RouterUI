@@ -353,27 +353,16 @@ export default {
       this.WANForm.handle = 1
       let bara = Object.assign({}, this.WANForm)
       console.log(bara)
+      console.log('777')
       this.WANLANLoading = true
       // console.log(typeof(para.index));
       let para = {}
       para.webnetif = 'ETH' + bara.index               // WYK 改为发送ETH
-      /*
-      if (bara.index === 0) {
-        para.webnetif = 'ETH0'
-      } else if (bara.index === 1) {
-        para.webnetif = 'ETH1'
-      } else if (bara.index === 2) {
-        para.webnetif = 'ETH2'
-      } else if (bara.index === 3) {
-        para.webnetif = 'ETH3'
-      } else if (bara.index === 4) {
-        para.webnetif = 'ETH4'
-      } else if (bara.index === 5) {
-        para.webnetif = 'ETH5'
-      } */
+
       para.use = bara.use
       para.handle = bara.handle
       console.log(para)
+      console.log('777')
       sendWANLAN(para)
         .then(res => {
           if (res.data.code === 200) {
@@ -400,19 +389,7 @@ export default {
       console.log('this.WANForm')
       console.log(this.WANForm)
       this.sendForm.webnetif = 'ETH' + this.WANForm.index                // WYK转为发送ETH
-      /* if (this.WANForm.index === 0) {
-        this.sendForm.webnetif = 'ETH0'
-      } else if (this.WANForm.index === 1) {
-        this.sendForm.webnetif = 'ETH1'
-      } else if (this.WANForm.index === 2) {
-        this.sendForm.webnetif = 'ETH2'
-      } else if (this.WANForm.index === 3) {
-        this.sendForm.webnetif = 'ETH3'
-      } else if (this.WANForm.index === 4) {
-        this.sendForm.webnetif = 'ETH4'
-      } else if (this.WANForm.index === 5) {
-        this.sendForm.webnetif = 'ETH5'
-      } */
+
       this.sendForm.use = this.ports[index].function
       this.sendForm.handle = 0
       this.WANLANLoading = true
@@ -433,6 +410,7 @@ export default {
           this.dialogFormVisible = false
           this.WANLANLoading = false
         })
+
         .catch(error => {
           console.log(error)
         })

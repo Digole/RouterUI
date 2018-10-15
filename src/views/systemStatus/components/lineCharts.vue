@@ -20,8 +20,16 @@ export default {
   data() {
     return {
       option: {
-        title: {
-          text: '近5分钟上下行速率',
+        title1: {
+          text: '近5分钟上行速率',
+          // subtext: '上行速率',
+          textStyle: {
+            fontWeight: 'normal',
+            fontSize: 14
+          }
+        },
+        title2: {
+          text: '近5分钟下行速率',
           // subtext: '上行速率',
           textStyle: {
             fontWeight: 'normal',
@@ -118,7 +126,7 @@ export default {
       // }
 
       option1 = {
-        title: this.option.title,
+        title: this.option.title1,
         tooltip: this.option.tooltip,
         grid: this.option.grid,
         xAxis: this.option.xAxis,
@@ -155,6 +163,8 @@ export default {
 
       let mychart1 = setInterval(function() {
         data.shift()
+        console.log('data')
+        console.log(data)
         data.push(newData(para.up))
         myChart1.setOption(option1)
       }, 2000)
@@ -163,6 +173,8 @@ export default {
       window.addEventListener('resize', function() {
         myChart1.resize()
       })
+      console.log('mychart1')
+      console.log(myChart1)
     },
 
     drawLineChart2: function() {
@@ -190,7 +202,7 @@ export default {
       }
 
       option2 = {
-        title: this.option.title,
+        title: this.option.title2,
         tooltip: this.option.tooltip,
         grid: this.option.grid,
         xAxis: this.option.xAxis,
@@ -217,6 +229,8 @@ export default {
       window.addEventListener('resize', function() {
         myChart2.resize()
       })
+      console.log('myChart2')
+      console.log(myChart2)
     },
 
     translate() {

@@ -135,7 +135,7 @@ import {
   delKidVPN
 } from '../../../../api/api.js'
 import validate from '../../../../utils/rules.js'
-
+let timerDel     // 删除定时器
 export default {
   name: 'server',
   data() {
@@ -375,11 +375,17 @@ export default {
             }
           }
         })
+    },
+    startgetServerInfo() {
+      timerDel = setInterval(this.getServerInfo, 1000)
     }
   },
   mounted() {
     // this.getInfo()
-    this.getServerInfo()
+    this.startgetServerInfo()
+  },
+  destroyed() {                         // wyk清除定时器
+    clearInterval(timerDel)
   }
 }
 </script>

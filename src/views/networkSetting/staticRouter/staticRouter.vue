@@ -152,7 +152,7 @@
 </template>
 
 <script>
-import { handleRouter, getRouterInfo, getPorts } from '../../../api/api'
+import { handleRouter, vndinterfaceGetAction, getRouterInfo, getPorts } from '../../../api/api'
 import { systemRouter, systemRouterIpv6 } from './components'
 import validate from '../../../utils/rules.js'
 
@@ -541,7 +541,7 @@ export default {
       this.updateSignal = !this.updateSignal
     },
     getPortsInfo: function() {
-      getPorts()
+      vndinterfaceGetAction()
         .then(res => {
           if (res.data.code === 200) {
             this.ports = res.data.interfaces

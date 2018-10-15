@@ -3,21 +3,22 @@
     <!--1-->
     <div>
       <div class="line_02">
-        <span>{{$t('NAT.dividingLine.title1')}}</span>
+         <span>{{$t('NAT.dividingLine.title2')}}</span>
+       
       </div>
     </div>
     <div class="top">
-      <adaptive class="whole-router"></adaptive>
+      <echarts></echarts>
       <fragment class="tips"></fragment>
     </div>
 
-    <!--2-->
+    <!--2
     <div>
       <div class="line_02">
-        <span>{{$t('NAT.dividingLine.title2')}}</span>
+       
       </div>
-    </div>
-    <echarts></echarts>
+    </div>-->
+    
 
     <!--3-->
     <div>
@@ -82,7 +83,7 @@ p {
 
 .tips {
   flex-grow: 1;
-  margin-left: 50px;
+  margin-left: 40px;
   border: 1px solid lightgrey;
 }
 

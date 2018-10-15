@@ -8,7 +8,7 @@ import kidVPN from 'echarts'
 import axios from 'axios'
 import { getCityInfo } from '@/api/api.js'
 // import chinaJson from '../../static/china.json';
-
+let timerDel     // 删除定时器
 export default {
   name: 'kidVPN',
 
@@ -52,7 +52,7 @@ export default {
                 let server = item.ser_pos.split(',', 3)
                 console.log('server is ' + server)
                 // 去除括号，然后还会有左空格号，再去掉空格号
-                local = server[2].replace(reg, '').replace(/\s+/g, '')
+                // local = server[2].replace(reg, '').replace(/\s+/g, '')
                 console.log(local)
               })
 
@@ -250,7 +250,11 @@ export default {
             }
           }
           // console.log("res is: "+JSON.stringify(res));
-          return res
+          if (res) {
+            return res
+          } else {
+            return false
+          }
         }
 
         let color = ['#a6c84c', '#ffa022', '#46bee9']
@@ -409,12 +413,18 @@ export default {
         }
         IPMap.setOption(option)
       }
+    },
+    startgetTestData() {
+      timerDel = setInterval(this.getTestData, 1000)
     }
   },
 
   mounted() {
-    this.getTestData()
+    this.startgetTestData()
     // this.drawMap()
+  },
+  destroyed() {                          // wyk清除定时器
+    clearInterval(timerDel)
   }
 }
 </script>

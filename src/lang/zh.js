@@ -295,7 +295,7 @@ export default {
       WAN: 'WAN已启用',
       LAN: 'LAN已启用',
       DHCP: 'DHCP池剩余',
-      average: '带宽平均使用率'
+      average: '带宽'
     },
     bottom: {
       chartsTitle: '协议分布流量',
@@ -448,7 +448,8 @@ export default {
     blacklist: '黑名单',
     time: '时间',
     role: '权限',
-    direct: '导向'
+    direct: '报文方向',
+    mangle: '策略类型'
   },
   powerSetting: {
     submitChange: '提交更改',

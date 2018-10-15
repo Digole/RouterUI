@@ -4,7 +4,7 @@
     <div class="line_02"><span>监控</span></div>
 
     <el-table :data="final" title="线路监控" :header-cell-style="headerStyle">
-      <el-table-column prop="lineName" label="线路名称">
+      <el-table-column prop="webname" label="线路名称">                    <!--wyk1012改用webname-->
       </el-table-column>
       <el-table-column prop="function" label="功能" min-width="120">
       </el-table-column>
@@ -53,6 +53,7 @@ export default {
         mac: '',
         alias: '',
         ifname: '',
+        webname: '',                              // wyk1012改用webname
         duration: Number,
         send_rate: Number,
         recv_rate: Number,
@@ -66,7 +67,6 @@ export default {
       lineForm: [],
       currentPage: 1,
       total: 0,
-
       timer: 0
     }
   },
@@ -98,6 +98,8 @@ export default {
         if (res.data.code === 200) {
           if (res.data.data.length !== 0) {
             this.lineForm = res.data.data
+            console.log('oooo')
+            console.log(this.lineForm)
             this.total = res.data.total
             for (let i = 0; i < res.data.data.length; i++) {
               this.lineForm[i].send_rate = conversion(this.lineForm[i].send_rate)
@@ -135,35 +137,50 @@ export default {
       this.final = getNameAndFunc(this.lineForm, this.ports)
       // console.log('lineForm' + this.lineForm)
       console.log('final' + JSON.stringify(this.final))
-      this.final.sort((a, b) => {
+      /* this.final.sort((a, b) => {
         return a.lineName[3] - b.lineName[3]
-      })
+      }) */
 
       function getNameAndFunc (line, ports) {
-        console.log('in nameandfunc' + line + ports)
+        console.log('in nameandfunc' + line + ports)                // wyk1012改用webname删掉了根据interface边webname
         for (let i = 0; i < line.length; i++) {
           for (let j = 0; j < ports.length; j++) {
-            if (line[i].ifname === ports[j].enname) {
-              line[i].lineName = ports[j].webname
-              if (ports[j].function === 'normal') {
-                line[i].function = '--'
+            if (ports[j].function === 'normal') {
+              line[i].function = '--'
+            } else {
+              line[i].function = ports[j].function
+            }
+            // if (line[i].function.length === 3) {
+            //   line[i].function + '   '
+            // }
+            if (ports[j].type !== '') {
+              line[i].function += '/'
+              if (ports[j].type === 'normal') {
+                line[i].function += '--'
               } else {
-                line[i].function = ports[j].function
-              }
-              // if (line[i].function.length === 3) {
-              //   line[i].function + '   '
-              // }
-              if (ports[j].type !== '') {
-                line[i].function += '/'
-                if (ports[j].type === 'normal') {
-                  line[i].function += '--'
-                } else {
-                  line[i].function += ports[j].type
-                }
+                line[i].function += ports[j].type
               }
             }
           }
         }
+        let show = []
+        for (let i = 0; i < line.length; i++) {
+          show[i] = line[i]
+        }
+
+        for (let j = 0; j < ports.length; j++) {
+          console.log('in1')
+          for (let i = 0; i < line.length; i++) {
+            console.log('in2')
+            if (line[i].webname === ports[j].webname) {
+              show[j] = line[i]
+              console.log('in3')
+            }
+          }
+        }
+        line = show
+        console.log('show')
+        console.log(show)
         return line
       }
     }

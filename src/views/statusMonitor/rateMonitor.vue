@@ -21,7 +21,7 @@ require('echarts/theme/walden')
 
 let myChartUp, myChartDown
 let optionUp, optionDown
-
+let timerDel
 export default {
   data() {
     return {
@@ -213,7 +213,7 @@ export default {
       myChartDown = rateMonitor.init(document.getElementById('chartLine2'), 'walden')
       let option = {
         title: {
-          text: '上行速率'
+          text: '下行速率'
         },
         tooltip: this.tooltip,
         legend: {
@@ -263,6 +263,8 @@ export default {
       window.addEventListener('resize', function() {
         myChartDown.resize()
       })
+      // console.log('myChartDown')
+      // console.log(myChartUp)
     },
 
     async getRateInfo() {
@@ -308,6 +310,10 @@ export default {
             },
         series: this.seriesDown
       }
+      console.log('this.seriesUp')
+      console.log(this.seriesUp)
+      console.log('this.seriesDown')
+      console.log(this.seriesDown)
       await this.getRateInfo()
       let axisData = (new Date()).toLocaleTimeString().replace(/^\D*/, '')
       optionUp.xAxis.data.shift()
@@ -326,17 +332,24 @@ export default {
     },
 
     startUpdate () {
-      setInterval(this.update, 2000)
+      timerDel = setInterval(this.update, 2000)       // wyk清除定时器
     },
 
     drawLineChart() {
       this.drawLineChart1()
       this.drawLineChart2()
+
       this.startUpdate()
     }
+
   },
   mounted () {
     this.drawLineChart()
+  },
+  destroyed() {                                             // wyk清除定时器
+    clearInterval(timerDel)
+    rateMonitor.dispose(document.getElementById('chartLine1'), 'walden')
+    rateMonitor.dispose(document.getElementById('chartLine2'), 'walden')
   }
 }
 </script>

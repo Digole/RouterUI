@@ -225,6 +225,7 @@ export default {
   name: 'IN-EX_network',
   data() {
     return {
+      mapPorts: [],      // 存储接口信息用来匹配替换webname
       lanPortInfo: {},  // 启用为lan口时存储信息
       wanPortInfo: {},  // 启用为wan口时存储信息
       isSettingNetcardVisible: false, // 控制点击port之后的父级dialog
@@ -499,6 +500,7 @@ export default {
         dialUp(para)
           .then(res => {
             if (res.data.code === 200) {
+              this.formDialUp.status = res.data.status
               this.translate(res.data.status)
               this.formDialUp.account = res.data.account
               this.formDialUp.passwd = res.data.passwd
@@ -539,11 +541,15 @@ export default {
       if (val === 'run') {
         this.formDialUp.status = '拨号成功'
         // buttonChange
+        this.isConnectionShow = false
         this.isLoading = false
-        this.isAfterConnection = true
+        this.isAfterConnection = true                // wyk拨号成功按键状态修改
+        this.isFinishConnection = true
         clearInterval(stopSignal1)
       } else if (val === 'init') {
         this.formDialUp.status = '拨号初始化'
+        this.isConnectionShow = false
+        this.isFinishConnection = false
       } else if (val === 'auth') {
         this.formDialUp.status = '用户验证'
       } else if (val === 'disconnect') {
@@ -553,6 +559,9 @@ export default {
         this.isLoading = false
         this.isConnectionShow = true
         clearInterval(stopSignal1)
+      } else if (val === '') {
+        this.formDialUp.status = ''
+        this.isConnectionShow = true
       }
     },
     // 修改拨号eth
@@ -600,8 +609,7 @@ export default {
       // keep dialog alive
       this.isWANInnerVisible = true
       this.isSettingNetcardVisible = true
-      this.$refs['formDialUp'].resetFields()
-      this.getPortsInfo()
+      // wyk1012设置不清空拨号信息
     },
     dialCancel() {
       this.isLoading = false
@@ -609,7 +617,25 @@ export default {
       // this.isInCancel = true;
       clearInterval(stopSignal2)
       let para = Object.assign({}, this.formDialUp)
+      console.log('formDialUp')
       console.log(this.formDialUp)
+      console.log('para')
+      console.log(para)
+      getPorts()                                       // wyk修改删除发送enname
+        .then(res => {
+          if (res.data.code === 200) {
+            this.mapPorts = res.data.interfaces
+            console.log(this.ports)
+          }
+          // else if (res.data.code === 123) {
+
+          // }
+        })
+      for (let i = 0; i < this.mapPorts.length; i++) {
+        if (this.mapPorts[i].enname === para.enname) {
+          para.webnetif = this.mapPorts[i].webname
+        }
+      }
       para.handle = 0
       stopSignal2 = setInterval(() => {
         dialUp(para)
@@ -630,9 +656,10 @@ export default {
             console.log(error)
           })
       }, 1000)
-      this.isConnectionShow = true
+      // this.isConnectionShow = true
+      this.getPortsInfo()
       // 清空form是清空接如方式 这一栏
-      this.$refs['formDialUp'].resetFields()
+      // wyk1012设置不清空拨号信息
     },
     // 设置为WAN/LAN
     setWanPort(val) {
@@ -687,11 +714,25 @@ export default {
         if (element.enname === enname) {
           para.use = element.function
           para.index = element.webindex
-          para.webnetif = 'ETH' + element.webindex
         }
       })
       para.handle = 0
 
+      getPorts()                                       // wyk修改删除发送enname
+        .then(res => {
+          if (res.data.code === 200) {
+            this.mapPorts = res.data.interfaces
+            console.log(this.ports)
+          }
+          // else if (res.data.code === 123) {
+
+          // }
+        })
+      for (let i = 0; i < this.mapPorts.length; i++) {
+        if (this.mapPorts[i].enname === para.enname) {
+          para.webnetif = this.mapPorts[i].webname
+        }
+      }
       console.log('para:')
       console.log(para)
       sendWANLAN(para)
@@ -720,6 +761,7 @@ export default {
         .catch(error => {
           console.log(error)
         })
+      this.isSettingNetcardVisible = false
     },
     // DHCP连接
     DHCPLink() {
@@ -871,26 +913,34 @@ export default {
       bara.use = this.wanPortInfo.use
       bara.handle = this.wanPortInfo.handle
       bara.webnetif = this.wanPortInfo.webname
+      console.log('bara')
+      console.log(bara.use)
+      console.log(bara.handle)
       console.log(bara.webnetif)
-      sendWANLAN(bara)
-        .then(res => {
-          if (res.data.code === 200) {
-            this.$message({
-              message: '发送成功',
-              type: 'success'
-            })
+      if (bara.handle === 1) {
+        sendWANLAN(bara)
+          .then(res => {
+            if (res.data.code === 200) {
+              this.$message({
+                message: '发送成功',
+                type: 'success'
+              })
 
-            this.isWANPort = true
-          } else {
-            this.$message({
-              message: '发送失败',
-              type: 'warning'
-            })
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        })
+              this.isWANPort = true
+            } else {
+              this.$message({
+                message: '发送失败',
+                type: 'warning'
+              })
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      } else {
+
+      }
+
       this.triggerSettingNetcardVisible()
       this.triggerWANInnerVisible()
 
@@ -915,6 +965,8 @@ export default {
 
       this.$refs['advancedWANForm'].resetFields()
       this.$refs['wanForm'].resetFields()
+      this.isWANInnerVisible = false
+      this.isSettingNetcardVisible = false
     },
     WANFormCancel: function() {
       this.triggerSettingNetcardVisible()
@@ -947,8 +999,7 @@ export default {
           })
           // dataBind
           let index = this.formDialUp.webindex
-          this.ports[index].function = 'normal' // change icon status
-          this.$refs['formDialUp'].resetFields()
+          this.ports[index].function = 'normal' // change icon status   wyk1012设置不清空拨号信息
         })
         .catch(error => {
           console.log(error)

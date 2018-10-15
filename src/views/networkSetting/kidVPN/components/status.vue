@@ -20,6 +20,7 @@
 
 <script>
 import { getLinkStatus } from '@/api/api.js'
+let timerDel     // 删除定时器
 export default {
   name: 'status',
   data() {
@@ -55,10 +56,16 @@ export default {
             this.total = res.data.total
           }
         })
+    },
+    startgetInfo() {
+      timerDel = setInterval(this.getInfo, 1000)
     }
   },
   mounted() {
-    this.getInfo()
+    this.startgetInfo()
+  },
+  destroyed() {
+    clearInterval(timerDel)                     // wyk清除定时器
   }
 }
 </script>

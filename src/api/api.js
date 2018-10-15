@@ -73,6 +73,7 @@ export const sortingCancel = data => { return axios.post('action/intAdaCancelAct
 // 静态路由页面添加
 export const handleRouter = data => { return axios.post('action/routeConfigAction', data) }
 export const getRouterInfo = data => { return axios.post('action/routeInfoGetAction', data) }
+export const vndinterfaceGetAction = data => { return axios.post('action/vndinterfaceGetAction', data) }
 export const addKidVpn = data => { return axios.post('action/kidvpnHandleAction', data) }
 
 // VND页面的请求

@@ -121,8 +121,13 @@
             <div style="height: 20%;">
               <p style="float: left;">{{$t('systemStatus.middle.average')}}</p>
             </div>
-            <div>
-              <span style="font-size: 36px; margin-left: 20px;">0</span>
+            <div style="height: 80%; width: 100%">
+             <!-- <table id="Bq" style="height: 100%; width: 100%">
+                <tr>
+                  <td id="stWrap"></td>
+                </tr>
+              </table>-->
+              <span style="font-size: 36px; margin-left: 20px;">0</span>          
               <span>%</span>
             </div>
 
@@ -362,7 +367,8 @@ export default {
             this.data.downStorage = res.data.data[0].send_rate
             this.data.up = conversion(res.data.data[0].recv_rate)
             this.data.down = conversion(res.data.data[0].send_rate)
-            // console.log(this.data.up)
+            console.log('this.data.up')
+            console.log(this.data.up)
             this.$store.dispatch('pushSystemData', this.data)
           }
         })
@@ -901,6 +907,16 @@ p {
 @font-face {
   font-family: Roboto-Thin;
   src: url("../../assets/font/Roboto-Thin.ttf");
+}
+
+table {
+  height: 10rem;
+  width: 10rem;
+}
+
+iframe {
+  height: 10rem;
+  width: 10rem;
 }
 </style>
 

@@ -17,9 +17,12 @@
         <el-form-item>
           <el-button type="danger" @click="handleDisable">{{$t('securitySetting.stop')}}</el-button>
         </el-form-item-->
-        <el-form-item>
+        <!--el-form-item>
           <el-input v-model="portChoosen" placeholder="根据网口搜索" style="width: 100%;"></el-input>
-        </el-form-item>
+        </el-form-item-->
+        <el-select v-model="portChoosen" placeholder="根据网口搜索">
+        <el-option v-for="item in selectList" :key="item.name" :label="item.name" :value="item.name"></el-option>
+      </el-select>
         <el-form-item>
           <el-button @click.native="search" type="primary">{{$t('operation.search')}}</el-button>
         </el-form-item>
@@ -59,7 +62,8 @@
       <el-table-column prop="status" :label="$t('securitySetting.status')" align="center"></el-table-column>
       <el-table-column prop="enable" align="center" :label="$t('securitySetting.enable')"></el-table-column>
       <el-table-column prop="direct" align="center" :label="$t('securitySetting.direct')"></el-table-column>
-      <el-table-column prop="mangle" align="center" :label="$t('securitySetting.role')">     
+      <el-table-column prop="mangle" align="center" :label="$t('securitySetting.mangle')">   </el-table-column>
+      <el-table-column prop="mangle" align="center" :label="$t('securitySetting.role')"> 
         <template slot-scope="scope">
           <el-button type="text" @click="deleteRule(scope.$index, scope.row)">{{$t('operation.delete')}}</el-button>
         </template>
@@ -110,10 +114,10 @@
     <el-dialog :title="$t('securitySetting.isTcpRule')" :visible.sync="isTcpRule">
       <el-form :model="addForm" ref="addForm" :rules="validateRules">
         <el-form-item prop="ips" :label="$t('securitySetting.ips')">
-          <el-input v-model="addForm.ips"></el-input>
+          <el-input v-model="addForm.ips" class="tcp1"></el-input>
         </el-form-item>
         <el-form-item prop="ipe" :label="$t('securitySetting.ipe')">
-          <el-input v-model="addForm.ipe"></el-input>
+          <el-input v-model="addForm.ipe" class="tcp1"></el-input>
         </el-form-item>
         <el-form-item prop="tcps" :label="$t('securitySetting.tcps')">
           <el-input v-model="addForm.ports"></el-input>
@@ -121,7 +125,18 @@
         <el-form-item prop="tcpe" :label="$t('securitySetting.tcpe')">
           <el-input v-model="addForm.porte"></el-input>
         </el-form-item>
+        <el-form-item  :label="$t('securitySetting.direct')">               
+        <el-select v-model="directChoosen" placeholder="请选择报文方向" class="tcp2">             <!-- wyk添加报文方向以及策略类型，后面每个新增都添加了 -->
+        <el-option v-for="item in directList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+      </el-select>
+      </el-form-item>
+       <el-form-item  :label="$t('securitySetting.mangle')">
+      <el-select v-model="mangleChoosen" placeholder="请选择策略类型" class="tcp2">                <!-- wyk修改格式使输入框对齐，后面都是这个-->
+        <el-option v-for="item in mangleList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+      </el-select>
+      </el-form-item>
       </el-form>
+     
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="addCancel">{{$t('operation.cancel')}}</el-button>
         <el-button @click.native="addSubmit" type="primary">{{$t('operation.submit')}}</el-button>
@@ -132,10 +147,10 @@
     <el-dialog :title="$t('securitySetting.isUdpRule')" :visible.sync="isUdpRule">
       <el-form :model="addForm" ref="addForm" :rules="validateRules">
         <el-form-item prop="ips" :label="$t('securitySetting.ips')">
-          <el-input v-model="addForm.ips"></el-input>
+          <el-input class="udp1" v-model="addForm.ips"></el-input>
         </el-form-item>
         <el-form-item prop="ipe" :label="$t('securitySetting.ipe')">
-          <el-input v-model="addForm.ipe"></el-input>
+          <el-input class="udp1" v-model="addForm.ipe"></el-input>
         </el-form-item>
         <el-form-item prop="udps" :label="$t('securitySetting.udps')">
           <el-input v-model="addForm.ports"></el-input>
@@ -143,7 +158,18 @@
         <el-form-item prop="udpe" :label="$t('securitySetting.udpe')">
           <el-input v-model="addForm.porte"></el-input>
         </el-form-item>
+        <el-form-item  :label="$t('securitySetting.direct')">
+        <el-select class="udp2" v-model="directChoosen" placeholder="请选择报文方向">
+        <el-option v-for="item in directList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+      </el-select>
+      </el-form-item>
+       <el-form-item  :label="$t('securitySetting.mangle')">
+      <el-select class="udp2" v-model="mangleChoosen" placeholder="请选择策略类型">
+        <el-option v-for="item in mangleList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+      </el-select>
+      </el-form-item>
       </el-form>
+      
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="addCancel">{{$t('operation.cancel')}}</el-button>
         <el-button @click.native="addSubmit" type="primary">{{$t('operation.submit')}}</el-button>
@@ -159,7 +185,18 @@
         <el-form-item prop="ipe" :label="$t('securitySetting.ipe')">
           <el-input v-model="addForm.ipe"></el-input>
         </el-form-item>
+        <el-form-item  :label="$t('securitySetting.direct')">
+        <el-select class="ip1" v-model="directChoosen" placeholder="请选择报文方向">
+        <el-option v-for="item in directList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+      </el-select>
+      </el-form-item>
+       <el-form-item  :label="$t('securitySetting.mangle')">
+      <el-select class="ip1" v-model="mangleChoosen" placeholder="请选择策略类型">
+        <el-option v-for="item in mangleList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+      </el-select>
+      </el-form-item>
       </el-form>
+      
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="addCancel">{{$t('operation.cancel')}}</el-button>
         <el-button @click.native="addSubmit" type="primary">{{$t('operation.submit')}}</el-button>
@@ -169,10 +206,21 @@
     <!-- mac策略 -->
     <el-dialog :title="$t('securitySetting.isMacRule')" :visible.sync="isMacRule">
       <el-form :model="addForm" ref="addForm" :rules="validateRules">
-        <el-form-item prop="mac" :label="$t('securitySetting.mac')">
-          <el-input v-model="addForm.mac"></el-input>
+        <el-form-item  prop="mac" :label="$t('securitySetting.mac')">
+          <el-input  v-model="addForm.mac"></el-input>
         </el-form-item>
+        <el-form-item  :label="$t('securitySetting.direct')">
+        <el-select  class="mac1" v-model="directChoosen" placeholder="请选择报文方向">
+        <el-option v-for="item in directList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+      </el-select>
+      </el-form-item>
+       <el-form-item  :label="$t('securitySetting.mangle')">
+      <el-select  class="mac1" v-model="mangleChoosen" placeholder="请选择策略类型">
+        <el-option v-for="item in mangleList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+      </el-select>
+      </el-form-item>
       </el-form>
+      
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="addCancel">{{$t('operation.cancel')}}</el-button>
         <el-button @click.native="addSubmit" type="primary">{{$t('operation.submit')}}</el-button>
@@ -183,7 +231,7 @@
 </template>
 
 <script>
-import { handle, showInfo, enable, getPorts } from '@/api/api.js'
+import { handle, showInfo, getPorts } from '@/api/api.js'
 import validate from '@/utils/rules.js'
 export default {
   name: 'firewall',
@@ -191,6 +239,26 @@ export default {
     return {
       rulesList: [],
       rulesTable: {},
+      directList: [
+        {
+          value: 'input',
+          name: '报文输入'
+        },
+        {
+          value: 'output',
+          name: '报文输出'
+        }
+      ],
+      mangleList: [
+        {
+          value: 'allow',
+          name: '允许通过'
+        },
+        {
+          value: 'deny',
+          name: '禁止通过'
+        }
+      ],
       list: [
         {
           value: 'ip',
@@ -218,11 +286,14 @@ export default {
       isMacRule: false,
       currentFunction: '',
       nameList: [], // 当前ports的名称
+      selectList: [], // 搜索用的port
       disablePort: '',
       enablePort: '',
       disablePortList: '',
       enablePortList: '',
 
+      directChoosen: '',
+      mangleChoosen: '',
       rulesChoosen: '',
       ifaceChoosen: '',
 
@@ -254,30 +325,7 @@ export default {
             trigger: 'blur'
           }
         ],
-        udps: [
-          {
-            validator: validate('ip', '请输入正确IP', 'IP不能为空！'),
-            trigger: 'blur'
-          }
-        ],
-        udpe: [
-          {
-            validator: validate('ip', '请输入正确IP', 'IP不能为空！'),
-            trigger: 'blur'
-          }
-        ],
-        tcps: [
-          {
-            validator: validate('ip', '请输入正确IP', 'IP不能为空！'),
-            trigger: 'blur'
-          }
-        ],
-        tcpe: [
-          {
-            validator: validate('ip', '请输入正确IP', 'IP不能为空！'),
-            trigger: 'blur'
-          }
-        ],
+
         mac: [
           {
             validator: validate('mac', '请输入正确MAC', 'MAC不能为空！'),
@@ -352,8 +400,8 @@ export default {
           object.optype = 'add'
           object.rules = setRules(this.rulesChoosen)
           object.iface = this.ifaceChoosen
-          object.direct = 'output'
-          object.mangle = 'deny'
+          object.direct = this.directChoosen
+          object.mangle = this.mangleChoosen
           // console.log('submit rules is ' + object.rules)
           para.data.push(object)
           // console.log('编号是 ' + this.rulesChoosen)
@@ -585,10 +633,11 @@ export default {
     search() {
       let para = {}
       para.iface = []
-      if (this.portChoosen !== '') {
+      console.log(this.portChoosen)
+      if (this.portChoosen !== '' && this.portChoosen !== 'All') {
         para.iface.push(this.portChoosen)
         para.ifacestr = '(' + "'" + this.portChoosen + "'" + ')'
-      } else {
+      }  else {
         this.getInfo()
       }
       // para.page = this.currentPage
@@ -608,6 +657,8 @@ export default {
                 this.getInfo()
                 return
               }
+            } else {
+              this.rules = []
             }
             this.total = res.data.total
             this.rulesList = []
@@ -677,6 +728,12 @@ export default {
           if (res.data.code === 200) {
             this.ports = res.data.interfaces
             this.ports.forEach(this.getPortsName)
+            let all = {
+              name: 'All',
+              enable: 0
+            }
+            this.selectList.push(all)
+            console.log(this.selectList)
           }
         })
         .catch(err => {
@@ -685,6 +742,44 @@ export default {
 
       await this.getInfo()
     },
+    // wyk翻译报文方向策略类型
+    translate1() {
+      /* if (this.$store.state.app.language === 'en') {
+        console.log('123')
+        for (let i = 0; i < this.rulesList.length; i++) {
+          console.log('456')
+          if (this.rulesList[i].direct === 'input') {
+            console.log('789')
+            this.rulesList[i].direct = 'Input'
+          } else {
+            this.rulesList[i].direct = 'Output'
+          }
+          if (this.rulesList[i].mangle === 'allow') {
+            this.rulesList[i].mangle = 'Allow'
+          } else {
+            this.rulesList[i].mangle = 'Deny'
+          }
+        }
+      } */
+      console.log(this.rulesList.length)
+      for (let i = 0; i < this.rulesList.length; i++) {
+        console.log('123')
+        if (this.rulesList[i].direct === 'input') {
+          console.log('456')
+          this.rulesList[i].direct = '报文输入'
+        } else {
+          this.rulesList[i].direct = '报文输出'
+        }
+        if (this.rulesList[i].mangle === 'allow') {
+          console.log('789')
+          this.rulesList[i].mangle = '允许通过'
+        } else {
+          this.rulesList[i].mangle = '禁止通过'
+        }
+      }
+      console.log('rulelist')
+      console.log(this.rulesList)
+    },
     getPortsName(item) {
       // console.log('item ' + item)
       let para = {}
@@ -692,8 +787,10 @@ export default {
       this.enlist.push(item.webname)
       para.enable = getEnable(item)
 
+      this.selectList.push(para)
       this.nameList.push(para)
-      // console.log(para)
+
+      // console.log('yyy')
       // console.log(this.nameList)
 
       function getEnable(val) {
@@ -716,5 +813,23 @@ export default {
 .el-input {
   display: inline-block;
   width: 40%;
+}
+.tcp1{
+margin-left: 15px;
+}
+.tcp2{
+margin-left: 27px;
+}
+.udp1{
+margin-left: 17px;
+}
+.udp2{
+margin-left: 30px;
+}
+.mac1{
+margin-left: 4px;
+}
+.ip1{
+margin-left: 13px;
 }
 </style>

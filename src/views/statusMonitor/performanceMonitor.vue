@@ -100,8 +100,12 @@ export default {
               let len = 12
               while (len--) {
                 res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''))
+                // console.log('res')
+                // console.log(res)
                 now = new Date(now - 2000)
               }
+              console.log('res1')
+              console.log(res)
               return res
             })()
           }
@@ -187,6 +191,8 @@ export default {
       //     console.log(userNum)
       //   }
       // })
+      console.log('axisData')
+      console.log(axisData)
       let data1 = option.series[0].data
       if (data1.length > 11) {
         data1.shift()
@@ -195,8 +201,14 @@ export default {
       console.log(data1)
 
       option.xAxis[0].data.shift()
+      console.log('option.xAxis[0].data1')
+      console.log(option.xAxis[0].data)
       option.xAxis[0].data.push(axisData)
-
+      console.log('option.xAxis[0].data2')
+      console.log(option.xAxis[0].data)
+      // option.xAxis[0].data = this.res
+      // console.log('option.xAxis[0].data3')
+      // console.log(option.xAxis[0].data)
       myChart.setOption(option)
 
       this.form[0].cpu = (this.$store.state.app.systemData.cpu) + '%'
@@ -222,9 +234,11 @@ export default {
   },
 
   mounted: function() {
+    this.getInfo()                             // wyk换了下顺序，解决后两个时间相同的bug
     this.drawCharts()
     // 18.09.17 pky 太烦，生成环境恢复
-    this.getInfo()
+    // setInterval(console.log('kaishi'), 2000)
+
     // this.getSystemInfo()
   }
 }

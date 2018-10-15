@@ -49,7 +49,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :title="$t('systemSetting.updateFinished')" :visible.sync="uploadVisual">
+    <el-dialog :title="$t('systemSetting.updateFinished')" :visible.sync="uploadVisual" >
       <p>{{$t('systemSetting.refreshAfter')}}{{ timeLeft }}{{$t('systemSetting.sDoNotTurnOff')}}</p>
      
     </el-dialog>
@@ -59,6 +59,7 @@
 
 <script>
 import { getVersion } from '@/api/api.js'
+let stopSingal// wyk删除定时器
 export default {
   name: 'update',
   data() {
@@ -70,8 +71,18 @@ export default {
       version: ''
     }
   },
-
+  watch: {                                       // wyk检测关掉dialo停止计时
+    uploadVisual(a, b) {
+      if (a === false) {
+        console.log('out')
+        clearInterval(stopSingal)
+      } else {
+        console.log('in')
+      }
+    }
+  },
   methods: {
+
     cancel() {
       this.versionVisual = false
       this.$refs.upload.abort(this.fileList)
@@ -81,18 +92,21 @@ export default {
     },
     submitUpload() {
       this.$refs.upload.submit()
+      this.timeLeft = 60
       this.uploadVisual = true
 
       setTimeout(() => {
       }, 500)
 
       let duration = 60
-      let stopSingal = setInterval(() => {
-        if (duration >= 0) {
+      stopSingal = setInterval(() => {
+        if (duration > 0) {
           duration--
           this.timeLeft = duration
         } else {
+          console.log('897')
           clearInterval(stopSingal)
+          location.reload()
         }
       }, 1000)
     },

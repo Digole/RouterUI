@@ -91,6 +91,7 @@ import {
   getKidVPNInfo
 } from '../../../../api/api.js'
 import validate from '../../../../utils/rules.js'
+let timerDel     // 删除定时器
 export default {
   name: 'client',
   data() {
@@ -306,14 +307,19 @@ export default {
           console.log(error)
         })
     },
-
+    startgetInfo() {
+      timerDel = setInterval(this.getInfo, 1000)
+    },
     // 处理兄弟组件的bus事件
     liseterUpdate() {
       this.bus.$on('update', this.getInfo())
     }
   },
   mounted() {
-    this.getInfo()
+    this.startgetInfo()
+  },
+  destroyed() {
+    clearInterval(timerDel)              // wyk关定时器
   }
 }
 </script>

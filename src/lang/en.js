@@ -294,7 +294,7 @@ export default {
       WAN: 'WAN enable',
       LAN: 'LAN enable',
       DHCP: 'The DHCP pool',
-      average: 'Bandwidth average usage'
+      average: 'Bandwidth'
     },
     bottom: {
       chartsTitle: 'Flow distribution',
@@ -441,7 +441,8 @@ export default {
     blacklist: 'Blacklist',
     time: 'Time',
     role: 'Role',
-    direct: 'Direction'
+    direct: 'Direction',
+    mangle: 'Mangle'
   },
   powerSetting: {
     submitChange: 'Submit changes',

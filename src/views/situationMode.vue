@@ -57,7 +57,7 @@
 import { generateTitle } from '@/utils/i18n'
 import { getMonitorInfo, logout } from '../api/api.js'
 import { conversion } from '../utils/rateUnitExchange.js'
-
+let obj // 从情景模式html获得的数据
 export default {
   name: 'home',
   data() {
@@ -101,10 +101,20 @@ export default {
       }
     }
   },
+  watch: {
+    obj(a, b) {
+      if (a === 1) {
+        console.log(obj)
+      } else {
+        console.log(obj)
+      }
+    }
+  },
   methods: {
     callchild() {
-      let obj1 = window.frames['child']// 获得对应iframe的window对象
-      alert(obj1.n)
+      obj = window.frames['child']// 获得对应iframe的window对象
+      alert(obj.n)
+      console.log(obj.n)
     },
     onSubmit() {
       console.log('submit!')
@@ -212,7 +222,7 @@ export default {
     this.sysUserName = '翼辉Admin'
     // this.sysUserAvatar = 'static/avatar.jpg'
     this.sysUserAvatar = 'static/acoinfo.png'
-
+    // this.callchild()
     this.getInfo()
   }
 }
